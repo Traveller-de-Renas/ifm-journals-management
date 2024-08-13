@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('abstract')->nullable();
             $table->text('keywords')->nullable();
 
+            $table->foreignId('journal_id')->constrained(table: 'journals');
             $table->foreignId('issue_id')->constrained(table: 'issues');
             $table->foreignId('country_id')->constrained(table: 'countries');
 

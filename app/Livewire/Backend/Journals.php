@@ -8,6 +8,7 @@ use Livewire\Component;
 use App\Models\Category;
 use App\Models\JournalIndex;
 use App\Models\JournalInstruction;
+use App\Models\SubmissionConfirmation;
 
 class Journals extends Component
 {
@@ -29,10 +30,14 @@ class Journals extends Component
     public $year;
     public $publisher;
     public $issn;
+    public $eissn;
+    public $email;
+    public $website;
     public $scope;
 
     public $instruction_title = [];
     public $instruction_description = [];
+    public $confirmation_description = [];
 
     public $index_title = [];
     public $index_description = [];
@@ -43,6 +48,7 @@ class Journals extends Component
     public $categories;
     public $panel;
     public $indecies = [''];
+    public $confirmations = [''];
     public $instructions = [''];
 
     public function mount()
@@ -68,7 +74,6 @@ class Journals extends Component
 
     public function store()
     {
-        //dd($this->instruction_title);
 
         $this->validate([
             'title'       => 'required',
@@ -91,12 +96,16 @@ class Journals extends Component
         $journal = Journal::create([
             'title'       => $this->title,
             'code'        => $this->code,
+            'issn'        => $this->issn,
+            'eissn'       => $this->eissn,
             'category_id' => $this->category,
             'status'      => $this->status,
             'description' => $this->description,
             'scope'       => $this->scope,
             'year'        => $this->year,
             'publisher'   => $this->publisher,
+            'email'       => $this->email,
+            'website'     => $this->website,
         ]);
 
         foreach($this->instruction_title as $key => $instruction)
@@ -104,6 +113,14 @@ class Journals extends Component
             JournalInstruction::create([
                 'title' => $instruction,
                 'description' => $this->instruction_description[$key],
+                'journal_id' => $journal->id
+            ]);
+        }
+
+        foreach($this->confirmation_description as $key => $description)
+        {
+            SubmissionConfirmation::create([
+                'description' => $description,
                 'journal_id' => $journal->id
             ]);
         }

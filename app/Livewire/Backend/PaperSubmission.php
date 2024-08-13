@@ -3,6 +3,7 @@
 namespace App\Livewire\Backend;
 
 use App\Models\Article;
+use App\Models\Country;
 use App\Models\Journal;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -31,6 +32,8 @@ class PaperSubmission extends Component
         if(empty($this->record)){
             abort(404);
         }
+
+        $this->countries = Country::all()->pluck('name', 'id')->toArray();
     }
     
     public function render()
@@ -49,10 +52,10 @@ class PaperSubmission extends Component
             'title' => $this->title,
             'abstract' => $this->abstract,
             'country_id' => $this->country_id,
+            'journal_id' => $this->record->id,
             'keywords' => $this->Keywords,
             'status' => 'Submitted',
         ]);
-
         
     }
 

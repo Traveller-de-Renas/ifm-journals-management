@@ -30,4 +30,15 @@ class JournalController extends Controller
     {
         return view('backend.paper_submission');
     }
+
+    public function articles()
+    {
+        return view('backend.articles');
+    }
+
+    public function article()
+    {
+        return view('backend.article_details');
+    }
+    
 }

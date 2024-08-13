@@ -52,4 +52,10 @@ class JournalDetails extends Component
 
         //dd($this->record->id);
     }
+
+    public function removeEditor(User $editor)
+    {
+        $editor->journals()->detach($this->record->id);
+
+    }
 }

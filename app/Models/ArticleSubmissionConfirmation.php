@@ -8,13 +8,14 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class SubmissionConfirmation extends Model
+class ArticleSubmissionConfirmation extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
-        'journal_id',
-        'description'
+        'article_id',
+        'submission_confirmation_id',
+        'value',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -23,8 +24,4 @@ class SubmissionConfirmation extends Model
         ->logAll();
     }
 
-    public function journal()
-    {
-        return $this->belongsTo(Journal::class);
-    }
 }

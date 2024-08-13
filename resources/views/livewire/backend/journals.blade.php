@@ -67,6 +67,19 @@
                 <x-input-error for="scope" />
             </div>
 
+            <div class="grid grid-cols-2 space-x-2">
+                <div class="mt-4">
+                    <x-label for="email" value="Email" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-input type="text" id="email" class="w-full" wire:model="email" />
+                    <x-input-error for="email" />
+                </div>
+                <div class="mt-4">
+                    <x-label for="website" value="Website" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-input type="text" id="website" class="w-full" wire:model="website" />
+                    <x-input-error for="website" />
+                </div>
+            </div>
+
             <div class="grid grid-cols-3 space-x-2">
                 <div class="mt-4">
                     <x-label for="image" value="Image" class="mb-2 block font-medium text-sm text-gray-700" />
@@ -118,7 +131,7 @@
 
         <div class="text-right mt-4">
             <x-button type="button" wire:click="addRows('instructions')" wire:loading.attr="disabled">
-                {{ __('Add More Instructions') }}
+                {{ __('Add Instructions') }}
             </x-button>
         </div>
     </li>
@@ -156,7 +169,7 @@
         @endforeach
 
         <div class="text-right mt-4">
-            <x-button type="button" wire:click="addRows('indexies')" wire:loading.attr="disabled">
+            <x-button type="button" wire:click="addRows('indecies')" wire:loading.attr="disabled">
                 {{ __('Add More Index') }}
             </x-button>
         </div>
@@ -169,6 +182,24 @@
             </svg>
         </span>
         <h3 class="font-medium leading-tight">Confirmation & Submission</h3>
+
+        @foreach ($confirmations as $key => $confirmation)
+        
+        <div class="gap-4">
+            <div class="mt-4" @if(!$form) wire:ignore @endif>
+                <x-textarea type="text" id="confirmation_description" class="w-full h-10" wire:model="confirmation_description.{{ $key }}" placeholder="Enter Confirmation Description" />
+                <x-input-error for="confirmation_description" />
+            </div>
+        </div>
+
+        @endforeach
+
+        <div class="text-right mt-4">
+            <x-button type="button" wire:click="addRows('confirmations')" wire:loading.attr="disabled">
+                {{ __('Add Description') }}
+            </x-button>
+        </div>
+
         <div class="grid grid-cols-2 mt-4">
             <div class="text-sm ">Before submission please check and confirm details of the journal</div>
             <div class="text-right">

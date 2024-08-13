@@ -4,27 +4,55 @@
         {{ __($record->title) }}
     </x-slot>
         
-    <div class="w-full mb-2">
-        <p class="text-sm">ISSN : {{ $record->issn }}</p>
-        <p class="text-sm">EMAIL: {{ $record->email }}</p>
-        <p class="text-sm">CREATED AT: {{ $record->created_at }}</p>
-        <div class="w-full text-justify mt-4">
-            {{ $record->description }}
+    <div class="w-full mb-2 bg-gray-200 p-4">
+
+        <div class="grid grid-cols-12 gap-2">
+            <p class="text-sm">ISSN: </p>
+            <p class="col-span-11">{{ $record->issn }}</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-2">
+            <p class="text-sm">EISSN: </p>
+            <p class="col-span-11">{{ $record->eissn }}</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-2">
+            <p class="text-sm">EMAIL: </p>
+            <p class="col-span-11">{{ $record->email }}</p>
+        </div>
+
+        <div class="grid grid-cols-12 gap-2">
+            <p class="text-sm">CREATED AT: </p>
+            <p class="col-span-11">{{ $record->created_at }}</p>
         </div>
         
     </div>
 
-    <a href="{{ route('journals.submission', $record->uuid) }}">
-        <x-button class="mb-4">Submit a Paper </x-button>
-    </a>
+    <div class="w-full text-justify mt-4 mb-4">
+        {{ $record->description }}
+    </div>
 
-    <div class="md:grid md:grid-cols-12 gap-2 w-full ">
+    <div>
+        <x-button>Enroll to this Journal </x-button>
+
+        <x-button>Request to be a Reviewer </x-button>
+        <x-button>Request to be an Editor </x-button>
+
+        <a href="{{ route('journals.submission', $record->uuid) }}">
+            <x-button class="mb-4">Submit a Paper </x-button>
+        </a>
+    </div>
+    
+
+    <div class="md:grid md:grid-cols-12 gap-4 w-full ">
 
         <div class="col-span-9">
             <div class="w-full mb-4">
                 <p class="text-lg font-bold mb-2">Aim and Scope</p>
 
-                {{ $record->scope }}
+                <div class="text-justify">
+                    {{ $record->scope }}
+                </div>
             </div>
 
             <div class="w-full mb-4">
@@ -56,11 +84,16 @@
 
                 <div class="mt-6">
                    @foreach ($record->journal_users as $journal_user)
-                        <div class="w-full border bg-green-300 border-slate-200 dark:border-slate-700 p-2 mb-2">
+                   <div class="flex items-center">
+                        <div class="w-full border bg-green-300 border-slate-200 dark:border-slate-700 p-2 rounded-lg">
                         {{ $journal_user->first_name }}
                         {{ $journal_user->middle_name }}
                         {{ $journal_user->last_name }}
                         </div>
+                        <div>
+                            <x-button-plain class="ml-2 bg-red-600" wire:click="removeEditor({{ $journal_user->id }})">Remove</x-button-plain>
+                        </div>
+                    </div>
                     @endforeach 
                 </div>
                 
@@ -70,8 +103,8 @@
             <div class="w-full mb-4">
                 <p class="text-lg font-bold mb-2">Indexing</p>
 
-                @if(!empty($record->journal_indicies))
-                    @foreach ($record->journal_indicies as $index)
+                @if(!empty($record->journal_indices))
+                    @foreach ($record->journal_indices as $index)
                         <div class="rounded-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cx95x ctysv mb-2" x-data="{ open: false }">
                             <button class="flex items-center cmgwo c3ff8 c2djl ci4cg" @click.prevent="open = !open" :aria-expanded="open">
                                 <div class="text-sm text-slate-800 dark:text-slate-100 cw92y">
@@ -114,7 +147,17 @@
                 <p class="text-center">Recent Articles</p>
 
             </div>
+            @foreach ($record->articles as $key => $article)
+
+            <div class="text-sm font-bold text-blue-700 hover:text-blue-600 hover:bg-gray-100 cursor-pointer p-2 border rounded-lg mb-2 mt-2">
+                {{ $article->title }}
+            </div>
+                
+            @endforeach
+
+            <a href="{{ route('journals.articles', $record->uuid) }}">
             <x-button class="mb-4 w-full ">View All </x-button>
+            </a>
         </div>
 
     </div>

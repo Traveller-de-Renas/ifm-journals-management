@@ -20,7 +20,10 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->text('scope')->nullable();
             $table->string('issn')->nullable();
+            $table->string('eissn')->nullable();
             $table->string('publisher')->nullable();
+            $table->string('email')->nullable();
+            $table->string('website')->nullable();
             $table->year('year')->nullable();
             $table->text('guidlines')->nullable();
 		    $table->foreignId('category_id')->constrained(table: 'categories');

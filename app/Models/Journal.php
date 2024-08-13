@@ -20,7 +20,10 @@ class Journal extends Model
         'code',
         'scope',
         'issn',
+        'eissn',
         'publisher',
+        'email',
+        'website',
 		'year',
 		'guidlines',
 		'category_id',
@@ -51,5 +54,15 @@ class Journal extends Model
     public function journal_users()
     {
         return $this->belongsToMany(User::class, 'journal_user', 'journal_id', 'user_id');
+    }
+
+    public function submission_confirmations()
+    {
+        return $this->hasMany(SubmissionConfirmation::class);
+    }
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
     }
 }
