@@ -19,6 +19,7 @@ class Journal extends Model
         'description',
         'code',
         'scope',
+        'doi',
         'issn',
         'eissn',
         'publisher',
@@ -27,6 +28,7 @@ class Journal extends Model
 		'year',
 		'guidlines',
 		'category_id',
+		'subject_id',
         'status',
     ];
 
@@ -41,14 +43,24 @@ class Journal extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function journal_instructions()
+    public function instructions()
     {
         return $this->hasMany(JournalInstruction::class);
     }
 
-    public function journal_indices()
+    public function indecies()
     {
         return $this->hasMany(JournalIndex::class);
+    }
+
+    public function article_types()
+    {
+        return $this->hasMany(ArticleType::class);
+    }
+
+    public function file_categories()
+    {
+        return $this->hasMany(FileCategory::class);
     }
 
     public function journal_users()
@@ -56,7 +68,7 @@ class Journal extends Model
         return $this->belongsToMany(User::class, 'journal_user', 'journal_id', 'user_id');
     }
 
-    public function submission_confirmations()
+    public function confirmations()
     {
         return $this->hasMany(SubmissionConfirmation::class);
     }

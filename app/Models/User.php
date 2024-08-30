@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\Uuid;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasProfilePhoto;
 use Spatie\Permission\Traits\HasRoles;
@@ -19,6 +20,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRoles;
+    use Uuid;
 
     /**
      * The attributes that are mass assignable.
@@ -35,9 +37,10 @@ class User extends Authenticatable
         'password',
         'salutation_id',
         'country_id',
+        'affiliation',
         'degree',
         'interests',
-        'profile_photo_path'
+        'profile_photo_path',
     ];
 
     /**
@@ -76,6 +79,16 @@ class User extends Authenticatable
 
     public function journals()
     {
-        return $this->belongsToMany(Journal::class);
+        return $this->belongsToMany(Journal::class)->withTimestamps();;
+    }
+
+    public function articles()
+    {
+        return $this->belongsToMany(Article::class)->withTimestamps();;
+    }
+
+    public function salutation()
+    {
+        return $this->belongsTo(Salutation::class);
     }
 }

@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('article_submission_confirmations', function (Blueprint $table) {
+        Schema::create('article_types', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('article_id')->constrained(table: 'articles');
-            $table->foreignId('submission_confirmation_id')->constrained(table: 'submission_confirmations');
-            $table->enum('value', ['Yes','No'])->nullable();
+            $table->foreignId('journal_id')->constrained(table: 'journals');
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('article_submission_confirmations');
+        Schema::dropIfExists('article_types');
     }
 };

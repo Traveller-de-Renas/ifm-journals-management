@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->text('scope')->nullable();
             $table->string('issn')->nullable();
+            $table->string('doi')->nullable();
             $table->string('eissn')->nullable();
             $table->string('publisher')->nullable();
             $table->string('email')->nullable();
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->year('year')->nullable();
             $table->text('guidlines')->nullable();
 		    $table->foreignId('category_id')->constrained(table: 'categories');
+		    $table->foreignId('subject_id')->constrained(table: 'subjects');
             
             $table->enum('status', ['1','0'])->default('1');
             $table->uuid('uuid')->nullable();

@@ -2,14 +2,17 @@
     'align' => 'right'
 ])
 
+
 <div class="relative inline-flex" x-data="{ open: false }">
+    @if(Auth::user())
     <button
         class="inline-flex justify-center items-center group"
         aria-haspopup="true"
         @click.prevent="open = !open"
-        :aria-expanded="open"                        
+        :aria-expanded="open"
     >
         <img class="w-8 h-8 rounded-full" src="{{ Auth::user()->profile_photo_url }}" width="32" height="32" alt="{{ Auth::user()->name }}" />
+    
         <div class="flex items-center truncate">
             <span class="truncate ml-2 text-sm font-medium text-gray-600 dark:text-gray-100 group-hover:text-gray-800 dark:group-hover:text-white">{{ Auth::user()->name }}</span>
             <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500" viewBox="0 0 12 12">
@@ -54,4 +57,5 @@
             </li>
         </ul>                
     </div>
+    @endif
 </div>

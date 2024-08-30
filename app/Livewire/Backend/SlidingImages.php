@@ -4,7 +4,6 @@ namespace App\Livewire\Backend;
 
 use Livewire\Component;
 use App\Models\SlidingImage;
-use App\Models\Link;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 

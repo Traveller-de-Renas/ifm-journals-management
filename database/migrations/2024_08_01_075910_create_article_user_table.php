@@ -16,6 +16,8 @@ return new class extends Migration
 
             $table->foreignId('article_id')->constrained(table: 'articles');
             $table->foreignId('user_id')->constrained(table: 'users');
+            $table->string('category')->nullable();
+            $table->string('role')->nullable();
             $table->string('affiliation')->nullable();
             $table->text('biography')->nullable();
 

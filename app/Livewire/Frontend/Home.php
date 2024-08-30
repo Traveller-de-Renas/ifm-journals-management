@@ -15,7 +15,7 @@ class Home extends Component
     public function render()
     {
         $sliding_image = SlidingImage::where('status', 1)->orderBy('order', 'ASC')->get();
-        $journals = Journal::where('status', 1)->orderBy('id', 'DESC')->limit(4)->get();
+        $journals = Journal::where('status', 1)->orderBy('id', 'DESC')->limit(6)->get();
 
         return view('livewire.frontend.home', compact('sliding_image', 'journals'));
     }

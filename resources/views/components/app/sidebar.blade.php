@@ -134,11 +134,13 @@
                                     <a href="{{ route('admin.salutations') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Salutations</a>
                                 </li>
 
+                                <li>
+                                    <a href="{{ route('admin.review_sections') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Review Sections</a>
+                                </li>
                                 
                                 <li>
                                     <a href="{{ route('admin.roles') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Roles</a>
                                 </li>
-
                                 
                                 <li>
                                     <a href="{{ route('admin.permissions') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Permissions</a>

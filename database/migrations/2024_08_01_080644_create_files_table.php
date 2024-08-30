@@ -16,6 +16,8 @@ return new class extends Migration
 
             $table->foreignId('article_id')->constrained(table: 'articles');
             $table->foreignId('file_category_id')->constrained(table: 'file_categories');
+            
+            $table->string('file_description')->nullable();
             $table->string('file_path')->nullable();
             $table->string('file_type')->nullable();
 

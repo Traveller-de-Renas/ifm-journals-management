@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('journal_id')->constrained(table: 'journals');
             $table->foreignId('user_id')->constrained(table: 'users');
             $table->enum('role', ['chief editor','editor','reviewer', 'author'])->nullable();
-
+            $table->string('category')->nullable();
             $table->string('affiliation')->nullable();
             $table->text('biography')->nullable();
 

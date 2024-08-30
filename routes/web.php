@@ -31,16 +31,28 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/index', [JournalController::class, 'index'])->name('journals.index');
+    Route::get('/form/{journal}', [JournalController::class, 'form'])->name('journals.form');
     Route::get('/subjects', [JournalController::class, 'subjects'])->name('journals.subjects');
     Route::get('/categories', [JournalController::class, 'categories'])->name('journals.categories');
-    Route::get('/details{journal}', [JournalController::class, 'details'])->name('journals.details');
-    Route::get('/submission{journal}', [JournalController::class, 'submission'])->name('journals.submission');
-    Route::get('/articles{journal}', [JournalController::class, 'articles'])->name('journals.articles');
-    Route::get('/article{article}', [JournalController::class, 'article'])->name('journals.article');
+    Route::get('/details/{journal}', [JournalController::class, 'details'])->name('journals.details');
+    Route::get('/submission/{journal}/{article?}', [JournalController::class, 'submission'])->name('journals.submission');
+    Route::get('/articles/{journal}', [JournalController::class, 'articles'])->name('journals.articles');
+    Route::get('/article/{article}', [JournalController::class, 'article'])->name('journals.article');
+    Route::get('/article_evaluation/{article}/{reviewer}', [JournalController::class, 'article_evaluation'])->name('journals.article_evaluation');
 });
+
+
+Route::group(['prefix' => 'journals'], function () {
+    Route::get('/viewall', [JournalController::class, 'viewall'])->name('journal.viewall');
+    Route::get('/detail/{journal}', [JournalController::class, 'journal_detail'])->name('journal.detail');
+    Route::get('/articles/{journal}', [JournalController::class, 'journal_articles'])->name('journal.articles');
+    Route::get('/article/{article}', [JournalController::class, 'journal_article'])->name('journal.article');
+});
+
 
 Route::group(['prefix' => 'configurations', 'middleware' => 'auth'], function () {
     Route::get('/salutations', [ConfigurationController::class, 'salutations'])->name('admin.salutations');
+    Route::get('/review_sections', [ConfigurationController::class, 'review_sections'])->name('admin.review_sections');
     Route::get('/roles', [ConfigurationController::class, 'roles'])->name('admin.roles');
     Route::get('/permissions', [ConfigurationController::class, 'permissions'])->name('admin.permissions');
 });

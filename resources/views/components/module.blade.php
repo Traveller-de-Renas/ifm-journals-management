@@ -1,10 +1,13 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+        <div class="bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg">
 
             <div class="px-4 py-4 w-full">
-            
-                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight mb-4">{{ $title }}</h2>
+                
+                @if (isset($title))
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4 w-full text-wrap">{{ $title }}</h2>
+                @endif
+
                 <div class="mt-1 flex sm:mt-0 sm:flex-row sm:flex-wrap">
                         
                     @if (session('success'))

@@ -20,4 +20,9 @@ class ConfigurationController extends Controller
     {
         return view('backend.salutations');
     }
+
+    public function review_sections()
+    {
+        return view('backend.review_sections');
+    }
 }
