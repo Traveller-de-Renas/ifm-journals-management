@@ -19,7 +19,9 @@ class AdminSeeder extends Seeder
             'last_name'     => 'Administrator',
             'email'         => 'admin@ifm.ac.tz',
             'gender'        => 'Male',
+            'country_id'    => '1',
             'salutation_id' => '1',
+            'category'      => 'IFM Staff',
             'password'      => Hash::make('admin@ifm123EMS'),
         ]);
 
