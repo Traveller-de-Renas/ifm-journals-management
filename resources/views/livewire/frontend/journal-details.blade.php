@@ -1,65 +1,7 @@
 <x-module>
     <x-slot name="title">
-        {{ __($record->title) }}
+        {{ __($record->title) }} ({{ $record->code }})
     </x-slot>
-
-    <div class="w-full grid grid-cols-3 gap-4 mb-6">
-        <div class="bg-gray-200 p-2 rounded-md shadow-md">
-            New Submission
-
-            <div class="border-b border-gray-300 mt-1"></div>
-
-            <a href="{{ route('journal.articles', $record->uuid) }}">
-                <div class="flex text-xs py-2" >
-                    <div class="w-full">Incomplete</div>
-                    <div class="w-1/12">0</div>
-                </div>
-            </a>
-
-            <div class="flex text-xs">
-                <div class="w-full">Sent Back</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">In Process</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">Declined</div>
-                <div class="w-1/12">0</div>
-            </div>
-        </div>
-        <div class="bg-gray-200 p-2 rounded-md shadow-md">
-            Revisions
-            <div class="border-b border-gray-300 mt-1"></div>
-
-            <div class="flex text-xs">
-                <div class="w-full">Requiring Revision</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">Sent Back</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">In Process</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">Declined Revision</div>
-                <div class="w-1/12">0</div>
-            </div>
-        </div>
-        <div class="bg-gray-200 p-2 rounded-md shadow-md">
-            Completed
-            <div class="border-b border-gray-300 mt-1"></div>
-
-            <div class="flex text-xs">
-                <div class="w-full">Completed</div>
-                <div class="w-1/12">0</div>
-            </div>
-        </div>
-    </div>
     
     <div class="grid grid-cols-12 gap-2 bg-gray-200 rounded">
         <div class="col-span-1">
@@ -107,10 +49,6 @@
             @endif
         @endif
 
-        <x-button>Request to Review </x-button>
-
-        <x-button>Request to Edit </x-button>
-
         <a href="{{ route('journals.submission', $record->uuid) }}">
             <x-button class="mb-4">Submit a Paper </x-button>
         </a>
@@ -134,10 +72,13 @@
                 <p class="text-lg font-bold mb-2">Editorial Board</p>
 
                 @if(auth()->user())
+                @if ($record->chief_editor?->id == auth()->user()->id || Auth()->user()->hasPermissionTo('Add Editorial Board'))
                 <div class="flex gap-2" >
                     <x-input type="text" class="rounded-none" wire:model="seditor" wire:keyup="searchEditor($event.target.value)" placeholder="Search User" />
                     <x-button wire:click="createJuser();">Create</x-button>
                 </div>
+                @endif 
+
                 <div class="results">
                     @if(!empty($editor_names) && $seditor != '')
 
@@ -149,7 +90,7 @@
                                     <x-input type="checkbox" wire:model="editor_ids" id="editor{{ $editor->id }}" value="{{ $editor->id }}" />
                                 </div>
                                 <div>
-                                    {{ $editor->first_name }}
+                                    {{ $editor->salutation?->title }} {{ $editor->first_name }} {{ $editor->middle_name }} {{ $editor->last_name }}
                                 </div>
                                 
                             </label>
@@ -160,26 +101,50 @@
                 </div>
                 @endif
 
-                <div class="mt-6">
+                <div class="w-full mt-2">
                    @foreach ($record->journal_users()->where('role', 'editor')->get() as $key => $journal_user)
-                   <div class="flex items-center" wire:click="editorDetails({{ $key }});">
-                        <div class="w-full border bg-gray-200 hover:bg-gray-300 border-slate-200 dark:border-slate-700 p-2 px-4 rounded-sm cursor-pointer">
-                            {{ $journal_user->first_name }}
-                            {{ $journal_user->middle_name }}
-                            {{ $journal_user->last_name }}
+                   
+                        <div class="flex w-full" >
+                            <div class="w-full border bg-gray-100 hover:bg-gray-200 border-slate-200 px-4 rounded-sm cursor-pointer" wire:click="editorDetails({{ $key }});">
+                                {{ $journal_user->salutation?->title }}
+                                {{ $journal_user->first_name }}
+                                {{ $journal_user->middle_name }}
+                                {{ $journal_user->last_name }}
+
+                                {{ $journal_user->affiliation != '' ? '('.$journal_user->affiliation.')' : '' }}
+
+                                @if ($journal_user->id == $record->user_id)
+                                    <p class="text-xs text-green-400">Chief Editor</p>
+                                @else
+                                    <p class="text-xs text-blue-400">Editor</p>
+                                @endif
+                            </div>
+
+                            @if(auth()->user())
+                            @if (Auth()->user()->id == $record->user_id || Auth()->user()->hasPermissionTo('Add Editorial Board'))
+                            
+                                <x-button class="ml-2 " wire:click="chiefEditor({{ $journal_user->id }})" >
+                                    Chief
+                                </x-button>
+
+                                <x-button-plain class="ml-2 bg-red-600" wire:click="removeEditor({{ $journal_user->id }})">
+                                    <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
+                                </x-button-plain>
+                            
+                            @endif
+                            @endif
                         </div>
-                        @if(auth()->user())
-                        <div>
-                            <x-button-plain class="ml-2 bg-red-600" wire:click="removeEditor({{ $journal_user->id }})">Remove</x-button-plain>
+                    
+                        <div class="p-2 text-sm border @if($key != $editor_detail) hidden @endif" >
+                            <div class="w-full">
+                                <div class="text-sm w-full">Affiliation : {{ $journal_user->affiliation }}</div>
+                                <div class="text-sm w-full">Degree : {{ $journal_user->degree }}</div>
+                                <div class="text-sm w-full">Email : {{ $journal_user->email }}</div>
+                                <div class="text-sm w-full">Category : {{ $journal_user->category }}</div>
+                            </div>
                         </div>
-                        @endif
-                    </div>
-                    <div class="p-2 text-sm @if($key != $editor_detail) hidden @endif" >
-                        Editor Details
-                    </div>
                     @endforeach 
                 </div>
-                
             </div>
 
             @if(!empty($record->indecies))
@@ -187,16 +152,13 @@
                 <p class="text-lg font-bold mb-2">Indexing</p>
                 
                 @foreach ($record->indecies as $index)
-                    <div class="rounded-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cx95x ctysv mb-2" x-data="{ open: false }">
-                        <button class="flex items-center cmgwo c3ff8 c2djl ci4cg" @click.prevent="open = !open" :aria-expanded="open">
-                            <div class="text-sm text-slate-800 dark:text-slate-100 cw92y">
+                    <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
+                        <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
+                            <div class="text-slate-800">
                                 <a href="{{ $index->link }}" target="_blank" >{{ $index->title }}</a>
                             </div>
-                            <svg class="ml-3 c1bvt cc44c ciz4v czgoy c3wll c7n6y chmgx c6dxj" :class="{ 'cb4kj': open }" viewBox="0 0 32 32">
-                                <path d="M16 20l-5.4-5.4 1.4-1.4 4 4 4-4 1.4 1.4z"></path>
-                            </svg>
-                        </button>
-                        <div class="text-sm" x-show="open" x-cloak="">
+                        </div>
+                        <div class="text-sm p-2" x-show="open" x-cloak="">
                             {{ $index->description }}
                         </div>
                     </div>
@@ -210,14 +172,11 @@
                 <p class="text-lg font-bold mb-2">Authors' Guidelines</p>
 
                 @foreach ($record->instructions as $instruction)
-                    <div class="rounded-sm dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cx95x ctysv mb-2" x-data="{ open: false }">
-                        <button class="flex items-center cmgwo c3ff8 c2djl ci4cg" @click.prevent="open = !open" :aria-expanded="open">
-                            <div class="text-sm text-slate-800 dark:text-slate-100 cw92y">{{ $instruction->title }}</div>
-                            <svg class="ml-3 c1bvt cc44c ciz4v czgoy c3wll c7n6y chmgx c6dxj" :class="{ 'cb4kj': open }" viewBox="0 0 32 32">
-                                <path d="M16 20l-5.4-5.4 1.4-1.4 4 4 4-4 1.4 1.4z"></path>
-                            </svg>
-                        </button>
-                        <div class="text-sm text-justify" x-show="open" x-cloak="">
+                    <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
+                        <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
+                            <div class=" text-slate-800">{{ $instruction->title }}</div>
+                        </div>
+                        <div class="text-sm text-justify p-2" x-show="open" x-cloak="">
                             {{ $instruction->description }}
                         </div>
                     </div>
@@ -228,22 +187,9 @@
 
         <div class="col-span-3">
             <div class="bg-gray-100 border rounded p-2">
-                <p class="text-center">Acceptable Article Types</p>
-            </div>
-
-            @foreach ($record->article_types as $key => $article_type)
-                <div class="text-sm font-bold text-blue-700 hover:text-blue-600 hover:bg-gray-100 cursor-pointer p-2 border rounded-md mb-2 mt-2">
-                    {{ $article_type->name }}
-                </div>
-            @endforeach
-
-            <br>
-            <br>
-
-            <div class="bg-gray-100 border rounded p-2">
                 <p class="text-center">Recent Articles</p>
             </div>
-            @foreach ($record->articles as $key => $article)
+            @foreach ($record->articles()->orderBy('created_at', 'desc')->limit(5)->get() as $key => $article)
                 <a href="{{ route('journal.article', $article->uuid) }}">
                     <div class="text-sm font-bold text-blue-700 hover:text-blue-600 hover:bg-gray-100 cursor-pointer p-2 border rounded-md mb-2 mt-2">
                         {{ $article->title }}
@@ -254,6 +200,19 @@
             <a href="{{ route('journal.articles', $record->uuid) }}">
                 <x-button class="mb-4 w-full ">View All </x-button>
             </a>
+
+            <br>
+            <br>
+
+            <div class="bg-gray-100 border rounded p-2">
+                <p class="text-center">Acceptable Article Types</p>
+            </div>
+
+            @foreach ($record->article_types as $key => $article_type)
+                <div class="text-sm font-bold text-blue-700 hover:text-blue-600 hover:bg-gray-100 cursor-pointer p-2 border rounded-md mb-2 mt-2">
+                    {{ $article_type->name }}
+                </div>
+            @endforeach
         </div>
     </div>
 

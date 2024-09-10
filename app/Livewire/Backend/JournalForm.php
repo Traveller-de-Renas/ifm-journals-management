@@ -126,14 +126,15 @@ class JournalForm extends Component
         $journal->doi       = $this->doi;
         $journal->issn      = $this->issn;
         $journal->eissn     = $this->eissn;
-        $journal->category_id  = $this->category;
+        $journal->category_id = $this->category;
         $journal->status    = $this->status;
-        $journal->description  = $this->description;
+        $journal->description = $this->description;
         $journal->scope     = $this->scope;
         $journal->year      = $this->year;
         $journal->publisher = $this->publisher;
         $journal->email     = $this->email;
         $journal->website   = $this->website;
+        $journal->user_id   = auth()->user()->id;
 
         $journal->save();
 
@@ -196,22 +197,6 @@ class JournalForm extends Component
             'description' => 'required',
         ]);
 
-        if($this->attachment){
-            foreach($this->attachment as $y => $file){
-                $_name = $file->getClientOriginalName();
-                $_type = $file->getClientOriginalExtension();
-                $_file = str_replace(' ', '_', $_name);
-
-                $file->storeAs('public/advertisements/', $_file);
-
-                AdvertisementAttachment::create([
-                    'name'              => $this->attachment_name[$y],
-                    'file'              => $_file,
-                    'file_type'         => $_type,
-                    'advertisement_id'  => $data->id,
-                ]);
-            }
-        }
 
         if($this->image){
             $file  = $this->image;
@@ -223,7 +208,6 @@ class JournalForm extends Component
 
             $journal->image = $_file;
         }
-
         
         $journal->title     = $this->title;
         $journal->code      = $this->code;

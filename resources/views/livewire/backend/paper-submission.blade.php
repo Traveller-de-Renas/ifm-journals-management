@@ -2,63 +2,15 @@
     
     <x-slot name="title">
         {{ __($journal->title) }}
-        <p class="text-sm font-light">Submit New Article</p>
+        
+        @if(!empty($record))
+        <div class="text-sm">
+            {{ $record->author?->salutation->title }} {{ $record->author?->first_name }} {{ $record->author?->middle_name }} {{ $record->author?->last_name }} ({{ $record->author?->affiliation }})
+        </div>
+        @endif
+        
+        <p class="text-sm font-light">Article Submission</p>
     </x-slot>
-
-
-    <div class="w-full grid grid-cols-3 gap-2 mb-6">
-        <div class="bg-gray-200 p-2 rounded-md shadow-md">
-            New Submission
-
-            <a href="{{ route('journals.articles', $journal->uuid) }}">
-            
-            <div class="flex text-xs py-2" >
-                <div class="w-full">Incomplete</div>
-                <div class="w-1/12">0</div>
-            </div>
-
-            </a>
-
-            <div class="flex text-xs">
-                <div class="w-full">Sent Back</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">In Process</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">Declined</div>
-                <div class="w-1/12">0</div>
-            </div>
-        </div>
-        <div class="bg-gray-200 p-2 rounded-md shadow-md">
-            Revisions
-            <div class="flex text-xs">
-                <div class="w-full">Requiring Revision</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">Sent Back</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">In Process</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">Declined Revision</div>
-                <div class="w-1/12">0</div>
-            </div>
-        </div>
-        <div class="bg-gray-200 p-2 rounded-md shadow-md">
-            Completed
-            <div class="flex text-xs">
-                <div class="w-full">Completed</div>
-                <div class="w-1/12">0</div>
-            </div>
-        </div>
-    </div>
 
 <div class="w-full">
     <div class="flex items-center mb-6 w-full">
@@ -148,7 +100,7 @@
                                         <x-input type="checkbox" wire:model="author_ids" id="author{{ $author->id }}" value="{{ $author->id }}" />
                                     </div>
                                     <div>
-                                        {{ $author->first_name }}
+                                        {{ $author?->salutation?->title }} {{ $author->first_name }} {{ $author->middle_name }} {{ $author->last_name }}
                                     </div>
                                     
                                 </label>
@@ -280,21 +232,23 @@
 
         @if(!empty($record))
 
-            <x-button type="submit" wire:click="update({{ $record->id }})" wire:loading.attr="disabled">
-                {{ __('Save & Submit') }}
-            </x-button>
+            @if ($record->author?->id == auth()->user()->id)
+                <x-button type="submit" wire:click="update('Submitted')" wire:loading.attr="disabled">
+                    {{ __('Save & Submit') }}
+                </x-button>
+            @endif
 
-            <x-button type="submit" wire:click="update({{ $record->id }})" wire:loading.attr="disabled">
+            <x-button type="submit" wire:click="update('Pending')" wire:loading.attr="disabled">
                 {{ __('Save as Draft') }}
             </x-button>
         
         @else
 
-            <x-button type="submit" wire:click="store('submit')" wire:loading.attr="disabled">
+            <x-button type="submit" wire:click="store('Submitted')" wire:loading.attr="disabled">
                 {{ __('Save & Submit') }}
             </x-button>
     
-            <x-button type="submit" wire:click="store('draft')" wire:loading.attr="disabled">
+            <x-button type="submit" wire:click="store('Pending')" wire:loading.attr="disabled">
                 {{ __('Save as Draft') }}
             </x-button>
         

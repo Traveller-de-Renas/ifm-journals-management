@@ -23,9 +23,11 @@ class Article extends Model
         'tables',
         'figures',
         'issue_id',
+        'volume_id',
         'journal_id',
         'article_type_id',
         'country_id',
+        'user_id',
         'status',
     ];
 
@@ -35,14 +37,19 @@ class Article extends Model
         ->logAll();
     }
 
-    public function issue()
-    {
-        return $this->belongsTo(Issue::class);
-    }
-
     public function journal()
     {
         return $this->belongsTo(Journal::class);
+    }
+
+    public function volume()
+    {
+        return $this->belongsTo(Volume::class);
+    }
+
+    public function issue()
+    {
+        return $this->belongsTo(Issue::class);
     }
 
     public function articleType()
@@ -65,8 +72,23 @@ class Article extends Model
         return $this->belongsToMany(SubmissionConfirmation::class)->withTimestamps();;
     }
 
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function article_users()
     {
         return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->withPivot('role')->withTimestamps();
+    }
+
+    public function coauthors()
+    {
+        return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->wherePivot('role', 'author')->withPivot('role')->withTimestamps();
+    }
+
+    public function reviewers()
+    {
+        return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->wherePivot('role', 'reviewer')->withPivot('role')->withTimestamps();
     }
 }

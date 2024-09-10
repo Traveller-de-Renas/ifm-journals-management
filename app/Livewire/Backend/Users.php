@@ -24,17 +24,7 @@ class Users extends Component
 
     public $user;
     public $record;
-    public $first_name;
-    public $middle_name;
-    public $last_name;
-    public $status;
-    public $gender;
     public $email;
-    public $phone;
-    public $salutation;
-    public $country;
-    public $degree;
-    public $interests;
     public $password;
     public $password_confirmation;
 
@@ -75,26 +65,15 @@ class Users extends Component
 
     public function confirmEdit(User $data)
     {
-        $this->record = $data->id;
-        $this->first_name = $data->first_name;
-        $this->middle_name = $data->middle_name;
-        $this->last_name = $data->last_name;
-        $this->email = $data->email;
-        $this->phone = $data->phone;
-        $this->gender = $data->gender;
-        $this->salutation = $data->salutation_id;
-        $this->status = $data->status;
-        $this->country = $data->country_id;
-        $this->interests = $data->interests;
-        $this->degree = $data->degree;
-
+        $this->record = $data;
+        $this->email  = $data->email;
 
         $this->Edit = true;
     }
 
     public function confirmDelete(User $data)
     {
-        $this->record = $data->id;
+        $this->record = $data;
         $this->Delete = true;
     }
 
@@ -123,12 +102,7 @@ class Users extends Component
     public function rules()
     {
         return [
-            'first_name'  => 'required|string',
-            'middle_name' => 'nullable|string',
-            'last_name'   => 'required|string',
-            'gender' => 'required',
-            'phone'  => 'nullable|string',
-            'email'  => 'required|email|unique:users',
+            'email'     => 'required|email|unique:users,email,'.$this->record->id,
             'password'  => [
                 'sometimes',
                 'nullable',
@@ -140,44 +114,11 @@ class Users extends Component
         ];
     }
 
-    public function store()
-    {
-        $this->validate();
-        $data = new User;
-        $data->create([
-            'first_name'    => $this->first_name,
-            'middle_name'   => $this->middle_name,
-            'last_name'     => $this->last_name,
-            'gender'        => $this->gender,
-            'email'         => $this->email,
-            'phone'         => $this->phone,
-            'degree'        => $this->degree,
-            'status'        => $this->status,
-            'interests'     => $this->interests,
-            'country_id'    => $this->country,
-            'salutation_id' => $this->salutation,
-            'password' => Hash::make($this->password),
-        ]);
-        
-        session()->flash('success', 'Saved Successifully');
-        $this->Add = false;
-    }
-
     public function update(User $data)
     {
         $this->validate();
         $data->update([
-            'first_name'  => $this->first_name,
-            'middle_name' => $this->middle_name,
-            'last_name'   => $this->last_name,
-            'gender'   => $this->gender,
             'email'    => $this->email,
-            'phone'    => $this->phone,
-            'degree'    => $this->degree,
-            'status'   => $this->status,
-            'interests'   => $this->interests,
-            'country_id'   => $this->country,
-            'salutation_id'   => $this->salutation,
             'password' => Hash::make($this->password),
         ]);
         
@@ -237,5 +178,11 @@ class Users extends Component
         }else{
             return response()->json(['message'=>'Permission does not Exists']);
         }
+    }
+
+    public function userStatus($status, User $user)
+    {
+        $user->status = $status;
+        $user->update();
     }
 }

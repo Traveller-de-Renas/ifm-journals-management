@@ -8,15 +8,12 @@
             <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
         </div>
         <div class=""></div>
-        <a href="{{ route('journals.form', 'create') }}">
-            <x-button class="float-right" wire:loading.attr="disabled" >Create New</x-button>
-        </a>
     </div>
 
     <div class="grid grid-cols-12 gap-4 w-full">
         <div class="col-span-3">
             <div class="bg-white border rounded p-2 shadow-sm">
-            <div class="text-sm text-slate-800 dark:text-slate-100 cqosy cvavu">Subjects</div>
+            <div class="text-sm text-slate-800 font-bold dark:text-slate-100">Subjects</div>
             <ul class="cbfhc">
 
                 @foreach ($subjects as $key => $subject)
@@ -30,7 +27,7 @@
                 
             </ul>
 
-            <div class="text-sm text-slate-800 dark:text-slate-100 cqosy cvavu mt-6">Categories</div>
+            <div class="text-sm text-slate-800 font-bold dark:text-slate-100 mt-6">Categories</div>
             <ul class="cbfhc">
 
                 @foreach ($categories as $key => $categ)
@@ -58,7 +55,9 @@
                             <img class="c7n6y" src="{{ asset('storage/journals/'.$row->image) }}" width="40" height="40" alt="{{ $row->code }}">
                         @endif
                         <div class="">
-                            <p class="ml-2 text-lg font-bold text-blue-700 hover:text-blue-600 cursor-pointer"> {{ $row->title }} </p>
+                            <a href="{{ route('journal.detail', $row->uuid) }}">
+                            <p class="ml-2 text-lg font-bold text-blue-700 hover:text-blue-600 cursor-pointer"> {{ $row->title }} ({{ $row->code }})</p>
+                            </a>
                             <div class="ml-2 text-xs">
                                 @if(!empty($row?->journal_users))
                                     @foreach ($row->journal_users as $key => $user)
@@ -73,11 +72,7 @@
                         <p class="text-justify">{!! $row->description !!}</p>
                     </div>
 
-                    <a href="{{ route('journals.form', $row->uuid) }}" >
-                        <x-button>Edit</x-button>
-                    </a>
-
-                    <a href="{{ route('journals.details', $row->uuid) }}">
+                    <a href="{{ route('journal.detail', $row->uuid) }}">
                         <x-button>Preview</x-button>
                     </a>
 
@@ -97,27 +92,6 @@
             {{ $data->links() }}
         </div>
     </div>
-
-    <x-dialog-modal wire:model="Delete">
-        <x-slot name="title">
-            {{ __('Delete Data') }}
-        </x-slot>
-        <x-slot name="content">
-            <div class="mt-4">
-                <p class="text-center">Are you sure you want to delete this record.?</p>
-            </div>
-        </x-slot>
-        <x-slot name="footer">
-            
-            <x-button-danger type="submit" wire:click="delete({{ $record }})" wire:loading.attr="disabled" >
-                {{ __('Delete') }}
-            </x-button-danger>
-            <x-secondary-button class="ml-3" wire:click="$toggle('Edit')" wire:loading.attr="disabled">
-                {{ __('Cancel') }}
-            </x-secondary-button>
-
-        </x-slot>
-    </x-dialog-modal>
 
     <x-dialog-modal wire:model="signupModal">
         <x-slot name="title">

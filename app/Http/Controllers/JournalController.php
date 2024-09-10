@@ -70,4 +70,14 @@ class JournalController extends Controller
     {
         return view('frontend.article_details');
     }
+
+    public function archive()
+    {
+        return view('backend.volumes');
+    }
+
+    public function journal_archive()
+    {
+        return view('frontend.volumes');
+    }
 }

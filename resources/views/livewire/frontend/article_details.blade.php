@@ -28,7 +28,7 @@
         </x-button>
 
         <x-button-plain class="bg-red-700 hover:bg-red-600">
-            Decline
+            Decline Article
         </x-button-plain>
     </div>
     @endif
@@ -49,7 +49,6 @@
                 </div>
             </div>
         
-        
             <div class="w-full mb-4">
                 <p class="text-lg font-bold">Areas</p>
                 <div class="text-sm font-bold text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
@@ -69,6 +68,7 @@
             </div>
         </div>
         <div class="col-span-4">
+            @if ($record->article_users()->wherePivot('role', 'reviewer')->get()->count() > 0)
             @if(auth()->user())
             <p class="text-lg font-bold mb-2">Reviewers</p>
             @foreach ($record->article_users()->wherePivot('role', 'reviewer')->get() as $key => $user)
@@ -87,11 +87,10 @@
                 </div>
             @endforeach
             @endif
+            @endif
         </div>
     </div>
     
-    
-
     <div class="w-full mb-4">
         <p class="text-lg font-bold">Attached Files</p>
         <div class="text-sm text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2"></div>
@@ -122,7 +121,7 @@
                 Select Reviewer
                 <select class="rounded w-full border-gray-300" wire:model="reviewer_id">
                     @foreach($reviewers as $key => $reviewer)
-                    <option>{{ $reviewer->salutation->title }} {{ $reviewer->first_name }} {{ $reviewer->middle_name }} {{ $reviewer->last_name }}</option>
+                    <option>{{ $reviewer->salutation?->title }} {{ $reviewer->first_name }} {{ $reviewer->middle_name }} {{ $reviewer->last_name }}</option>
                     @endforeach
                 </select>
             </div>

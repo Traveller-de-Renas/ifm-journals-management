@@ -8,10 +8,10 @@
                     <h2 class="text-3xl font-bold text-gray-900 mb-4 w-full text-wrap">{{ $title }}</h2>
                 @endif
 
-                <div class="mt-1 flex sm:mt-0 sm:flex-row sm:flex-wrap">
+                <div class="mt-1">
                         
                     @if (session('success'))
-                        <div class="p-4 rounded-md mb-4 shadow bg-green-300 w-full">
+                        <div class="p-4 rounded-md text-sm mb-4 shadow bg-green-300 w-full">
                             {{ session('success') }}
                         </div>
                     @endif

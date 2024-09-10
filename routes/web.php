@@ -39,14 +39,16 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/articles/{journal}', [JournalController::class, 'articles'])->name('journals.articles');
     Route::get('/article/{article}', [JournalController::class, 'article'])->name('journals.article');
     Route::get('/article_evaluation/{article}/{reviewer}', [JournalController::class, 'article_evaluation'])->name('journals.article_evaluation');
+    Route::get('/archive/{journal}', [JournalController::class, 'archive'])->name('journals.archive');
 });
 
 
-Route::group(['prefix' => 'journals'], function () {
+Route::group(['prefix' => 'journal'], function () {
     Route::get('/viewall', [JournalController::class, 'viewall'])->name('journal.viewall');
     Route::get('/detail/{journal}', [JournalController::class, 'journal_detail'])->name('journal.detail');
     Route::get('/articles/{journal}', [JournalController::class, 'journal_articles'])->name('journal.articles');
     Route::get('/article/{article}', [JournalController::class, 'journal_article'])->name('journal.article');
+    Route::get('/archive/{journal}', [JournalController::class, 'journal_archive'])->name('journal.archive');
 });
 
 
@@ -55,11 +57,14 @@ Route::group(['prefix' => 'configurations', 'middleware' => 'auth'], function ()
     Route::get('/review_sections', [ConfigurationController::class, 'review_sections'])->name('admin.review_sections');
     Route::get('/roles', [ConfigurationController::class, 'roles'])->name('admin.roles');
     Route::get('/permissions', [ConfigurationController::class, 'permissions'])->name('admin.permissions');
+    Route::get('/staff_list', [ConfigurationController::class, 'staff_list'])->name('admin.staff_list');
 });
 
 Route::group(['prefix' => 'users', 'middleware' => 'auth'], function () {
     Route::get('/index', [UserController::class, 'index'])->name('admin.users');
     Route::get('/logs', [UserController::class, 'logs'])->name('admin.logs');
+    Route::get('/profile', [UserController::class, 'profile'])->name('admin.profile');
+    Route::get('/user_preview/{user?}', [UserController::class, 'user_preview'])->name('admin.user_preview');
 });
 
 Route::group(['prefix' => 'website', 'middleware' => 'auth'], function () {

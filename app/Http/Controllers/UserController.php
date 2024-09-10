@@ -15,4 +15,14 @@ class UserController extends Controller
     {
         return view('backend.logs');
     }
+
+    public function profile()
+    {
+        return view('backend.profile');
+    }
+
+    public function user_preview()
+    {
+        return view('backend.user_preview');
+    }
 }

@@ -35,71 +35,9 @@
         {!! $record->description !!}
     </div>
 
-    <div class="w-full grid grid-cols-3 gap-4 mb-6">
-        <div class="bg-gray-200 p-2 rounded-md shadow-md">
-            New Submission
-
-            <div class="border-b border-gray-300 mt-1"></div>
-
-            <a href="{{ route('journal.articles', $record->uuid) }}">
-            
-            <div class="flex text-xs py-2" >
-                <div class="w-full">Incomplete</div>
-                <div class="w-1/12">0</div>
-            </div>
-
-            </a>
-
-            <div class="flex text-xs">
-                <div class="w-full">Sent Back</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">In Process</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">Declined</div>
-                <div class="w-1/12">0</div>
-            </div>
-        </div>
-        <div class="bg-gray-200 p-2 rounded-md shadow-md">
-            Revisions
-            <div class="border-b border-gray-300 mt-1"></div>
-
-            <div class="flex text-xs">
-                <div class="w-full">Requiring Revision</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">Sent Back</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">In Process</div>
-                <div class="w-1/12">0</div>
-            </div>
-            <div class="flex text-xs">
-                <div class="w-full">Declined Revision</div>
-                <div class="w-1/12">0</div>
-            </div>
-        </div>
-        <div class="bg-gray-200 p-2 rounded-md shadow-md">
-            Completed
-            <div class="border-b border-gray-300 mt-1"></div>
-
-            <div class="flex text-xs">
-                <div class="w-full">Completed</div>
-                <div class="w-1/12">0</div>
-            </div>
-        </div>
-    </div>
-
-    
-
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
-            <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
+            
         </div>
         <div class=""></div>
         <div class="text-right">
@@ -111,15 +49,15 @@
 
     <div class="md:grid md:grid-cols-12 gap-4 w-full ">
         <div class="col-span-9">
-            
+            @if ($articles->count() > 0)
             @foreach ($articles as $key => $article)
             
+            <a href="{{ route('journal.article', $article->uuid) }}">
                 <div class="hover:bg-gray-100 cursor-pointer p-2 border rounded-lg mb-4 ">
-                    <a href="{{ route('journal.article', $article->uuid) }}">
-                        <div class="text-sm font-bold ">
-                            {{ $article->title }}
-                        </div>
-                    </a>
+                    
+                    <div class="text-sm font-bold ">
+                        {{ $article->title }}
+                    </div>
 
                     <div class="text-xs text-blue-700 hover:text-blue-600 mb-4">
                         
@@ -129,48 +67,59 @@
 
                     </div>
                     
-                    <div class="w-full flex gap-2">
-                        <span class="w-1/12 bg-blue-400 text-xs p-2 rounded">{{ $article->status }}</span>
-                        <div class="w-full flex gap-2 justify-end">
-                            <x-button-plain class="bg-blue-700">
-                                <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />  <polyline points="7 10 12 15 17 10" />  <line x1="12" y1="15" x2="12" y2="3" /></svg>
-                            </x-button-plain>
-                            <a href="{{ route('journals.submission', [$record->uuid, $article->uuid]) }}">
-                            <x-button-plain class="bg-blue-700">
-                                <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" /></svg>
-                            </x-button-plain>
-                            </a>
-                            <x-button-plain class="bg-red-700" wire:click="confirmDelete({{ $article->id }})" >
-                                <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                            </x-button-plain>
-                        </div>
+                    <div class="w-full text-xs text-gray-500">
+                        {{ $record->issue?->created_at }}
                     </div>
                 </div>
+            </a>
                 
             @endforeach
 
             <div class="mt-4 w-full">
                 {{ $articles->links() }}
             </div>
+            @else
+            
+                <div class="w-full bg-blue-400 rounded shadow p-2">No Articles Found</div>
+
+            @endif
         </div>
 
         <div class="col-span-3">
-            <div class="bg-gray-100 border rounded p-2 mb-4">
+            <div class="bg-gray-100 rounded border mb-4">
 
-                <p class="text-center">Current Volume</p>
+                <p class="p-2">Current Volume :
+                    {{ $record->volume?->description }}
+                </p>
 
-            </div>
-        
-            <div class="bg-gray-100 border rounded p-2 mb-4">
+                @if (auth()->user())
+                @if ($record?->chief_editor?->id == auth()->user()->id)
+                <div class="flex gap-2 justify-between border-t p-2">
+                    <x-button class="w-full">Close Volume </x-button>
+                    <x-button class="w-full" wire:click="createVolume();">Create New </x-button>
+                </div>
+                @endif
+                @endif
+            
 
-                <p class="text-center">Current Issue</p>
+                <p class="p-2">Current Issue :
+                    {{ $record->issue?->description }}
+                </p>
 
-            </div>
-        
-            <div class="bg-gray-100 border rounded p-2">
-
-                <p class="text-center">Recent Articles</p>
-
+                @if (auth()->user())
+                @if ($record?->chief_editor?->id == auth()->user()->id)
+                <div class="flex gap-2 justify-between border-t p-2">
+                    @if(!empty($record->issue))
+                    <x-button class="w-full" wire:click="publishIssue({{ $record->issue?->id }})">Publish </x-button>
+                    @endif
+                    <x-button class="w-full" wire:click="createIssue();">Create New </x-button>
+                </div>
+                @endif
+                @endif
+                
+                <a href="{{ route('journal.archive', $record->uuid) }}">
+                <x-button class="w-full mt-4" >Go to Archive </x-button>
+                </a>
             </div>
         </div>
     </div>

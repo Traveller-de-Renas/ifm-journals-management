@@ -38,9 +38,12 @@ class User extends Authenticatable
         'salutation_id',
         'country_id',
         'affiliation',
+        'pf_number',
         'degree',
         'interests',
+        'biography',
         'profile_photo_path',
+        'status',
     ];
 
     /**
@@ -79,12 +82,12 @@ class User extends Authenticatable
 
     public function journals()
     {
-        return $this->belongsToMany(Journal::class)->withTimestamps();;
+        return $this->belongsToMany(Journal::class)->withTimestamps();
     }
 
     public function articles()
     {
-        return $this->belongsToMany(Article::class)->withTimestamps();;
+        return $this->belongsToMany(Article::class)->withTimestamps();
     }
 
     public function salutation()

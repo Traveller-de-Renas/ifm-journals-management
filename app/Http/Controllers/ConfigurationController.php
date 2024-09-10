@@ -25,4 +25,9 @@ class ConfigurationController extends Controller
     {
         return view('backend.review_sections');
     }
+
+    public function staff_list()
+    {
+        return view('backend.staff_lists');
+    }
 }

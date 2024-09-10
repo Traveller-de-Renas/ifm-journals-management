@@ -15,6 +15,7 @@ use App\Models\FileCategory;
 use Illuminate\Http\Request;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class PaperSubmission extends Component
@@ -89,10 +90,8 @@ class PaperSubmission extends Component
         return view('livewire.backend.paper-submission');
     }
 
-    public function store()
+    public function store($status)
     {
-        Auth::user()->journals()->sync([$this->record->id => ['role' => 'author']]);
-        
         $article = Article::create([
             'title'             => $this->title,
             'abstract'          => $this->abstract,
@@ -105,10 +104,13 @@ class PaperSubmission extends Component
             'words'             => $this->words,
             'tables'            => $this->tables,
             'figures'           => $this->figures,
-            'status'            => 'Pending',
+            'status'            => $status,
+            'user_id'           => auth()->user()->id
         ]);
 
         $this->record = $article;
+
+        Auth::user()->journals()->sync([$this->journal->id => ['role' => 'author']]);
 
         foreach($this->journal->confirmations as $key => $confirmation){
             $value = 'No';
@@ -138,7 +140,7 @@ class PaperSubmission extends Component
     }
 
 
-    public function update()
+    public function update($status)
     {
         $this->record->update([
             'title'             => $this->title,
@@ -151,6 +153,7 @@ class PaperSubmission extends Component
             'words'             => $this->words,
             'tables'            => $this->tables,
             'figures'           => $this->figures,
+            'status'            => $status
         ]);
 
         foreach($this->journal->confirmations as $key => $confirmation){
@@ -179,7 +182,7 @@ class PaperSubmission extends Component
         ]);
     
         if ($this->record == null) {
-            $this->store();
+            $this->store('Pending');
         }
     
         $file  = $this->attachment;
@@ -241,10 +244,10 @@ class PaperSubmission extends Component
         $this->sauthor = '';
 
         if ($this->record == null) {
-            $this->store();
+            $this->store('Pending');
         }
 
-        $author->articles()->sync([$this->record->id], false);
+        $author->articles()->sync([$this->record->id => ['role' => 'author']], false);
     }
 
     public function removeAuthor(User $author)

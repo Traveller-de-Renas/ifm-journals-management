@@ -21,7 +21,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <!-- Styles -->
-        @livewireStyles        
+        @livewireStyles
 
         <script>
             if (localStorage.getItem('dark-mode') === 'false' || !('dark-mode' in localStorage)) {
@@ -33,11 +33,9 @@
             }
         </script>
     </head>
-    <body class="font-inter antialiased bg-gray-100 dark:bg-gray-900">
+    <body class="bg-gray-100">
 
         <main class="bg-white dark:bg-gray-900">
-
-
             <nav class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
                 <div class="w-full bg-[#175883]">
                     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">

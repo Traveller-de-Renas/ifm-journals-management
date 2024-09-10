@@ -114,6 +114,15 @@ class JournalDetails extends Component
         $this->create_juser = false;
     }
 
+    public function chiefEditor($user)
+    {
+        $this->record->user_id = $user;
+        if($this->record->save())
+        {
+            session()->flash('success', 'Chief Editor Successfully Assigned');
+        }
+    }
+
     public function signup()
     {
         $this->signupModal = true;

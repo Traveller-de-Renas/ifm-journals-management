@@ -19,8 +19,10 @@ return new class extends Migration
             $table->text('keywords')->nullable();
 
             $table->foreignId('journal_id')->constrained(table: 'journals');
+            $table->foreignId('volume_id')->constrained(table: 'volumes');
             $table->foreignId('issue_id')->constrained(table: 'issues');
             $table->foreignId('country_id')->constrained(table: 'countries');
+            $table->foreignId('user_id')->constrained(table: 'users');
 
             $table->integer('pages')->default(0)->nullable();
             $table->integer('words')->default(0)->nullable();
@@ -30,8 +32,6 @@ return new class extends Migration
             $table->enum('status', ['Submitted','Under Review','Accepted','Published','Rejected','Pending'])->default('Submitted');
             $table->enum('editor_status', ['Pending','Done','Rejected'])->default('Pending');
             $table->enum('reviewer_status', ['Pending','Done','Rejected'])->default('Pending');
-            
-
             
             $table->uuid('uuid')->nullable();
             $table->timestamps();

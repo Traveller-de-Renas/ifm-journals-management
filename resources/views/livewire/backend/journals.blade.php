@@ -10,9 +10,13 @@
             <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
         </div>
         <div class=""></div>
+
+        @if (Auth()->user()->hasPermissionTo('Add Journals'))
         <a href="{{ route('journals.form', 'create') }}">
             <x-button class="float-right" wire:loading.attr="disabled" >Create New</x-button>
         </a>
+        @endif
+
     </div>
 
     <div class="grid grid-cols-12 gap-4 w-full">
@@ -71,11 +75,14 @@
                         <div class="">
                             <p class="ml-2 text-lg font-bold text-blue-700 hover:text-blue-600 cursor-pointer"> {{ $row->title }} </p>
                             <div class="ml-2 text-xs">
-                                @if(!empty($row?->journal_users))
+                                <a href="{{ route('admin.user_preview', $row->chief_editor?->uuid) }}" >
+                                {{ $row->chief_editor?->salutation?->title }} {{ $row->chief_editor?->first_name }} {{ $row->chief_editor?->middle_name }} {{ $row->chief_editor?->last_name }} {{ $row->chief_editor?->affiliation != '' ? '('. $row->chief_editor?->affiliation.')' : '' }}
+                                </a>
+                                {{-- @if(!empty($row?->journal_users))
                                     @foreach ($row->journal_users as $key => $user)
                                         {{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }} ({{ $user->affiliation }}),
                                     @endforeach
-                                @endif
+                                @endif --}}
                             </div>
                         </div>
                     </div>
@@ -84,9 +91,12 @@
                         <p class="text-justify">{!! $row->description !!}</p>
                     </div>
 
+                    {{-- @if ($row?->chief_editor?->id == auth()->user()->id) --}}
+                    @if (Auth()->user()->hasPermissionTo('Edit Journals'))
                     <a href="{{ route('journals.form', $row->uuid) }}" >
                         <x-button>Edit</x-button>
                     </a>
+                    @endif
 
                     <a href="{{ route('journals.details', $row->uuid) }}">
                         <x-button>Preview</x-button>

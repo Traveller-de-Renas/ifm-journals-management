@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
 
             $table->string('title')->nullable();
+            $table->enum('confidential', ['Yes','No'])->default('No');
+
             $table->foreignId('review_section_id')->constrained(table: 'review_sections');
 
             $table->timestamps();

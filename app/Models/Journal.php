@@ -29,6 +29,7 @@ class Journal extends Model
 		'guidlines',
 		'category_id',
 		'subject_id',
+        'user_id',
         'status',
     ];
 
@@ -65,8 +66,25 @@ class Journal extends Model
 
     public function journal_users()
     {
-        return $this->belongsToMany(User::class, 'journal_user', 'journal_id', 'user_id');
+        return $this->belongsToMany(User::class, 'journal_user', 'journal_id', 'user_id')->withPivot('role');
     }
+
+
+    public function chief_editor()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function editors()
+    {
+        return $this->belongsToMany(User::class, 'journal_user', 'journal_id', 'user_id')->wherePivot('role', 'editor')->withPivot('role');
+    }
+
+    public function authors()
+    {
+        return $this->belongsToMany(User::class, 'journal_user', 'journal_id', 'user_id')->wherePivot('role', 'author')->withPivot('role');
+    }
+
 
     public function confirmations()
     {
@@ -76,5 +94,25 @@ class Journal extends Model
     public function articles()
     {
         return $this->hasMany(Article::class);
+    }
+
+    public function volumes()
+    {
+        return $this->hasMany(Volume::class);
+    }
+
+    public function issues()
+    {
+        return $this->hasMany(Issue::class);
+    }
+
+    public function volume()
+    {
+        return $this->belongsTo(Volume::class);
+    }
+
+    public function issue()
+    {
+        return $this->belongsTo(Issue::class);
     }
 }

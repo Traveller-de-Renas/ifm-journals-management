@@ -5,6 +5,13 @@
             {{ session('status') }}
         </div>
     @endif
+
+    @if (session('success'))
+        <div class="p-4 rounded-md text-sm mb-4 shadow bg-green-300 w-full">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <!-- Form -->
     <form method="POST" action="{{ route('login') }}">
         @csrf

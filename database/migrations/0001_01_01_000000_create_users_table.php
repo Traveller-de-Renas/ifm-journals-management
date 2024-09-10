@@ -17,11 +17,13 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->string('gender');
-            $table->string('affiliation');
+            $table->string('affiliation')->nullable();
+            $table->string('pf_number')->nullable();
 
             $table->foreignId('country_id')->constrained(table: 'countries')->nullable();
             $table->foreignId('salutation_id')->constrained(table: 'salutations')->nullable();
             $table->text('interests')->nullable();
+            $table->text('biography')->nullable();
 
             $table->string('degree')->nullable();
             $table->string('phone')->nullable();
@@ -30,10 +32,13 @@ return new class extends Migration
             $table->string('password');
             $table->integer('login_attempts')->default(0);
             $table->rememberToken();
+            
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
+            $table->string('status')->default('Active')->nullable();
 
             $table->enum('category', ['IFM Staff','Non IFM Staff'])->default('Submitted');
+
 
             $table->uuid('uuid')->nullable();
             $table->timestamps();

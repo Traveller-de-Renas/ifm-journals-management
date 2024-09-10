@@ -80,18 +80,22 @@
                                     <a href="{{ route('journals.index') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Journals List</a>
                                 </li>
 
+                                @if (Auth()->user()->hasPermissionTo('Subjects'))
                                 <li>
                                     <a href="{{ route('journals.subjects') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Subjects</a>
                                 </li>
+                                @endif
 
+                                @if (Auth()->user()->hasPermissionTo('Categories'))
                                 <li>
                                     <a href="{{ route('journals.categories') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Categories</a>
                                 </li>
+                                @endif
 
                             </ul>
                         </li>
 
-                       
+                        @if (Auth()->user()->hasPermissionTo('website'))
                         <li>
                             <button type="button" class="flex items-center w-full p-3 text-base text-white hover:text-black transition duration-75 rounded-lg group hover:bg-gray-100 " aria-controls="dropdown-9" data-collapse-toggle="dropdown-10">
                                 <svg class="flex-shrink-0 w-5 h-5 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -116,9 +120,9 @@
                                 </li>
                             </ul>
                         </li>
-                        
+                        @endif
 
-                        
+                        @if (Auth()->user()->hasPermissionTo('configurations'))
                         <li>
                             <button type="button" class="flex items-center w-full p-3 text-base text-white hover:text-black transition duration-75 rounded-lg group hover:bg-gray-100 " aria-controls="dropdown-9" data-collapse-toggle="dropdown-9">
                                 <svg class="flex-shrink-0 w-5 h-5 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -137,6 +141,10 @@
                                 <li>
                                     <a href="{{ route('admin.review_sections') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Review Sections</a>
                                 </li>
+
+                                <li>
+                                    <a href="{{ route('admin.staff_list') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Staff List</a>
+                                </li>
                                 
                                 <li>
                                     <a href="{{ route('admin.roles') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Roles</a>
@@ -147,8 +155,9 @@
                                 </li>
                             </ul>
                         </li>
+                        @endif
 
-                        
+                        @if (Auth()->user()->hasPermissionTo('users'))
                         <li>
                             <button type="button" class="flex items-center w-full p-3 text-base text-white hover:text-black transition duration-75 rounded-lg group hover:bg-gray-100 " aria-controls="dropdown-8" data-collapse-toggle="dropdown-8">
                                 <svg class="flex-shrink-0 w-5 h-5 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
@@ -169,6 +178,7 @@
                                 </li>
                             </ul>
                         </li>
+                        @endif
                         
                     </ul>
             </div>

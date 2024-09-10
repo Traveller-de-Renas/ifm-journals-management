@@ -38,9 +38,9 @@
         <label class="relative block">
             <span class="sr-only">Search</span>
             <span class="absolute inset-y-0 left-0 flex items-center pl-2 pr-2">
-                <svg class="h-6 w-6 text-[#175883]"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="11" cy="11" r="8" />  <line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                <svg class="h-6 w-6 text-[#175883]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"  stroke-linejoin="round">  <circle cx="11" cy="11" r="8" />  <line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
             </span>
-            <input class="placeholder:text-[#175883] placeholder:text-xl placeholder:text-bold block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 p-4" placeholder="Find a Journal Here..." type="text" wire:model="search" wire:keyup="searchJournals($event.target.value)" />
+            <input class="placeholder:text-[#175883] placeholder:text-xl placeholder:text-bold block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 p-4" placeholder="Find a Journal Here..." type="text" wire:model="search" wire:keyup="searchJournal($event.target.value)" />
         </label>
     </div>
 
@@ -49,7 +49,7 @@
                 
             @if (count($all_journals) > 0 && $search != '')
                 @foreach ($all_journals as $one_journal)
-                    <a href="journal?value={{ $one_journal->uuid }}" >
+                    <a href="{{ route('journal.detail', $one_journal->uuid) }}">
                         <div class="border-b p-4 text-[#175883] hover:bg-[#175883] hover:text-white cursor-pointer">{{ $one_journal->title }} ({{ $one_journal->code }})</div>
                     </a>
                 @endforeach
@@ -136,7 +136,6 @@
                 <p class="w-full text-center">View More Journals</p>
             </a>
         </div>
-
     </div>
 
 
@@ -145,25 +144,27 @@
             <a href="#">
                 <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Journals</h5>
             </a>
-            <p class="font-bold text-gray-500 dark:text-gray-400 text-center">3</p>
-            
+            <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
+                {{ $journals_count }}
+            </p>
         </div>
-
 
         <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
             <a href="#">
                 <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Issues </h5>
             </a>
-            <p class="font-bold text-gray-500 dark:text-gray-400 text-center">25</p>
-           
+            <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
+                {{ $issues_count }}
+            </p>
         </div>
 
         <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
             <a href="#">
                 <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Articles </h5>
             </a>
-            <p class="font-bold text-gray-500 dark:text-gray-400 text-center">107</p>
-            
+            <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
+                {{ $articles_count }}
+            </p>
         </div>
     </div>
 </div>

@@ -8,12 +8,18 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ReviewSection;
+use App\Models\ArticleMovementLog;
 
 class ArticleEvaluation extends Component
 {
     public $record;
     public $reviewer;
     public $selectedOption = [];
+    public $commentWritten = [];
+
+    public $description;
+    
+    public $declineModal = false;
     
     public function mount(Request $request){
 
@@ -48,7 +54,7 @@ class ArticleEvaluation extends Component
     public function upOptions($key, $value)
     {
         // Handle logic after a selection is updated
-    $this->selectedOption[$key] = $value;
+        $this->selectedOption[$key] = $value;
     }
 
     public function store()
@@ -58,6 +64,33 @@ class ArticleEvaluation extends Component
         //review_section_query_id
         //review_section_option_id
         //value
+
+        
+
+        dd($this->commentWritten);
         dd($this->selectedOption);
+    }
+
+    public function declineArticle()
+    {
+        $this->dispatch('contentChanged');
+        $this->declineModal = true;
+    }
+
+    public function decline()
+    {
+        $mlog = ArticleMovementLog::create([
+            'article_id' => $this->record->id,
+            'user_id' => auth()->user()->id,
+            'description' => $this->description,
+        ]);
+
+        $this->record->status = 'Declined Revision';
+        $this->record->save();
+        session()->flash('success', 'This Article is Declined');
+
+        $this->reset(['description']);
+
+        $this->declineModal = false;
     }
 }

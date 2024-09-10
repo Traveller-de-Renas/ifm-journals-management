@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Frontend;
 
+use App\Models\Issue;
+use App\Models\Article;
 use App\Models\Journal;
 use Livewire\Component;
 use App\Models\SlidingImage;
@@ -11,11 +13,19 @@ class Home extends Component
     public $query;
     public $search;
     public $all_journals = [];
+    
+    public $journals_count;
+    public $issues_count;
+    public $articles_count;
 
     public function render()
     {
         $sliding_image = SlidingImage::where('status', 1)->orderBy('order', 'ASC')->get();
         $journals = Journal::where('status', 1)->orderBy('id', 'DESC')->limit(6)->get();
+
+        $this->journals_count = Journal::where('status', 1)->count();
+        $this->issues_count = Issue::count();
+        $this->articles_count = Article::count();
 
         return view('livewire.frontend.home', compact('sliding_image', 'journals'));
     }

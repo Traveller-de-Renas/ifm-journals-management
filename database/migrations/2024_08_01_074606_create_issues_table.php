@@ -14,10 +14,13 @@ return new class extends Migration
         Schema::create('issues', function (Blueprint $table) {
             $table->id();
 
+            $table->integer('number')->nullable();
+            $table->string('description')->nullable();
             $table->foreignId('journal_id')->constrained(table: 'journals');
-            $table->string('volume')->nullable();
-            $table->string('number')->nullable();
+            $table->foreignId('volume_id')->constrained(table: 'volumes');
+            
             $table->date('publication_date')->nullable();
+            $table->enum('status', ['Published','Unpublished','Pending'])->default('pending');
 
             $table->uuid('uuid')->nullable();
             $table->timestamps();

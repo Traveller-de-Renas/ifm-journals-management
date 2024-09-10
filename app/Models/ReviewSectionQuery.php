@@ -14,6 +14,7 @@ class ReviewSectionQuery extends Model
 
     protected $fillable = [
         'title',
+        'confidential',
         'review_section_id',
     ];
 

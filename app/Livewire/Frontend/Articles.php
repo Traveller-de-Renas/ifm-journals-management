@@ -21,6 +21,8 @@ class Articles extends Component
     public $deleteModal = false;
 
     public $record;
+    public $volume;
+    public $issue;
     
     public function mount(Request $request){
 
@@ -37,8 +39,7 @@ class Articles extends Component
     public function render()
     {
         
-        $articles = Article::where('journal_id', $this->record->id)->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
-        
+        $articles = Article::where('journal_id', $this->record->id)->where('status', 'Published')->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         $articles = $articles->paginate(20);
 
         return view('livewire.frontend.articles', compact('articles'));
