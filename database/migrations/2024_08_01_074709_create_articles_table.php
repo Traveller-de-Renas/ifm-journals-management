@@ -17,11 +17,15 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->text('abstract')->nullable();
             $table->text('keywords')->nullable();
+            $table->text('areas')->nullable();
 
             $table->foreignId('journal_id')->constrained(table: 'journals');
-            $table->foreignId('volume_id')->constrained(table: 'volumes');
-            $table->foreignId('issue_id')->constrained(table: 'issues');
+            $table->foreignId('article_type_id')->nullable()->constrained(table: 'article_types');
+            $table->foreignId('volume_id')->nullable()->constrained(table: 'volumes');
+            $table->foreignId('issue_id')->nullable()->constrained(table: 'issues');
+
             $table->foreignId('country_id')->constrained(table: 'countries');
+
             $table->foreignId('user_id')->constrained(table: 'users');
 
             $table->integer('pages')->default(0)->nullable();

@@ -113,6 +113,7 @@ class Articles extends Component
             $issue->description = 'Issue '.$new_issue;
             $issue->volume_id   = $this->record->volume_id;
             $issue->journal_id  = $this->record->id;
+            $issue->status      = 'Pending';
 
             if($issue->save()){
                 $this->record->issue_id = $issue->id;

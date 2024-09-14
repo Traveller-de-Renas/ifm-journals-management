@@ -175,15 +175,15 @@
 
                 <div class="@if ($step != 3) hidden @endif">
                     <div class="grid grid-cols-12 gap-4">
-                        <div class="3">
+                        <div class="col-span-3">
                             <x-label for="index_title" value="Title" class="mb-2 block font-medium text-sm text-gray-700" />
                         </div>
 
-                        <div class="5">
+                        <div class="col-span-5">
                             <x-label for="index_description" value="Description" class="mb-2 block font-medium text-sm text-gray-700" />
                         </div>
 
-                        <div class="3">
+                        <div class="col-span-3">
                             <x-label for="index_link" value="Link" class="mb-2 block font-medium text-sm text-gray-700" />
                         </div>
 

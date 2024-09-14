@@ -28,8 +28,8 @@ return new class extends Migration
             $table->year('year')->nullable();
             $table->text('guidlines')->nullable();
 
-		    $table->foreignId('category_id')->constrained(table: 'categories');
-		    $table->foreignId('subject_id')->constrained(table: 'subjects');
+		    $table->foreignId('category_id')->nullable()->constrained(table: 'categories');
+		    $table->foreignId('subject_id')->nullable()->constrained(table: 'subjects');
             $table->foreignId('user_id')->constrained(table: 'users');
             
             $table->enum('status', ['1','0'])->default('1');

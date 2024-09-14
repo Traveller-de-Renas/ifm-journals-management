@@ -73,7 +73,11 @@
                         <img class="c7n6y" src="{{ asset('storage/journals/'.$row->image) }}" width="40" height="40" alt="{{ $row->code }}">
                         @endif
                         <div class="">
-                            <p class="ml-2 text-lg font-bold text-blue-700 hover:text-blue-600 cursor-pointer"> {{ $row->title }} </p>
+                            <p class="ml-2 text-lg font-bold text-blue-700 hover:text-blue-600 cursor-pointer"> 
+                                <a href="{{ route('journals.details', $row->uuid) }}">
+                                {{ $row->title }}
+                                </a>
+                            </p>
                             <div class="ml-2 text-xs">
                                 <a href="{{ route('admin.user_preview', $row->chief_editor?->uuid) }}" >
                                 {{ $row->chief_editor?->salutation?->title }} {{ $row->chief_editor?->first_name }} {{ $row->chief_editor?->middle_name }} {{ $row->chief_editor?->last_name }} {{ $row->chief_editor?->affiliation != '' ? '('. $row->chief_editor?->affiliation.')' : '' }}

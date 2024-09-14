@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('affiliation')->nullable();
             $table->string('pf_number')->nullable();
 
-            $table->foreignId('country_id')->constrained(table: 'countries')->nullable();
-            $table->foreignId('salutation_id')->constrained(table: 'salutations')->nullable();
+            $table->foreignId('country_id')->nullable()->constrained(table: 'countries');
+            $table->foreignId('salutation_id')->nullable()->constrained(table: 'salutations');
             $table->text('interests')->nullable();
             $table->text('biography')->nullable();
 
@@ -37,7 +37,7 @@ return new class extends Migration
             $table->string('profile_photo_path', 2048)->nullable();
             $table->string('status')->default('Active')->nullable();
 
-            $table->enum('category', ['IFM Staff','Non IFM Staff'])->default('Submitted');
+            $table->enum('category', ['IFM Staff','Non IFM Staff'])->default('IFM Staff');
 
 
             $table->uuid('uuid')->nullable();

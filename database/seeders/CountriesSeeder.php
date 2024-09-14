@@ -113,6 +113,7 @@ class CountriesSeeder extends Seeder
             array('name'=>'Syria','nationality'=>'Syrian'),
             array('name'=>'Taiwan','nationality'=>'Taiwanese'),
             array('name'=>'Tajikistan','nationality'=>'Tajikistani'),
+            array('name'=>'Tanzania','nationality'=>'Tanzanian'),
             array('name'=>'Thailand','nationality'=>'Thai'),
             array('name'=>'Tonga','nationality'=>'Tongan'),
             array('name'=>'Tunisia','nationality'=>'Tunisian'),

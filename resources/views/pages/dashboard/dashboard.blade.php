@@ -13,7 +13,7 @@
         
         <!-- Cards -->
 
-            <div class="w-full grid grid-cols-3 gap-2 mb-6">
+            {{-- <div class="w-full grid grid-cols-3 gap-2 mb-6">
                 <div class="bg-white p-3 rounded-md shadow-md">
                     Assigned Journals
 
@@ -21,10 +21,10 @@
         
                     <a href="">
                     
-                    <div class="flex text-xs py-2" >
-                        <div class="w-full">Incomplete</div>
-                        <div class="w-1/12">0</div>
-                    </div>
+                        <div class="flex text-xs py-2" >
+                            <div class="w-full">Incomplete</div>
+                            <div class="w-1/12">0</div>
+                        </div>
         
                     </a>
         
@@ -72,7 +72,7 @@
                         <div class="w-1/12">0</div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
 
     </div>

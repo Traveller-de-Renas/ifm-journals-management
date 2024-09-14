@@ -97,22 +97,22 @@
         </div>
         <div class="col-span-11 w-full mb-2 mt-2">
             <div class="grid grid-cols-12 gap-2">
-                <p class="text-sm">ISSN </p>
+                <p class="text-sm font-bold">ISSN </p>
                 <p class="col-span-11">: {{ $record->issn }}</p>
             </div>
 
             <div class="grid grid-cols-12 gap-2">
-                <p class="text-sm">EISSN </p>
+                <p class="text-sm font-bold">EISSN </p>
                 <p class="col-span-11">: {{ $record->eissn }}</p>
             </div>
 
             <div class="grid grid-cols-12 gap-2">
-                <p class="text-sm">EMAIL </p>
+                <p class="text-sm font-bold">EMAIL </p>
                 <p class="col-span-11">: {{ $record->email }}</p>
             </div>
 
             <div class="grid grid-cols-12 gap-2">
-                <p class="text-sm">CREATED </p>
+                <p class="text-sm font-bold">CREATED </p>
                 <p class="col-span-11">: {{ $record->created_at }}</p>
             </div>
         </div>
@@ -393,7 +393,7 @@
             <x-button type="submit" wire:click="confirmSignUp({{ $record->id }})" wire:loading.attr="disabled" >
                 {{ __('Confirm') }}
             </x-button>
-            <x-secondary-button class="ml-3" wire:click="$toggle('Edit')" wire:loading.attr="disabled">
+            <x-secondary-button class="ml-3" wire:click="$toggle('signupModal')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 

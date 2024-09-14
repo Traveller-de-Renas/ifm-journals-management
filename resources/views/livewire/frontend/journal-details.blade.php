@@ -1,66 +1,39 @@
 <x-module>
-    <x-slot name="title">
-        {{ __($record->title) }} ({{ $record->code }})
-    </x-slot>
-    
-    <div class="grid grid-cols-12 gap-2 bg-gray-200 rounded">
-        <div class="col-span-1">
-            @if($record->image == '')
-            <div class="p-2">
-                <svg class="w-full text-white dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                    <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
-                </svg>
-            </div>
-            @else
-                <img class="h-full w-full rounded-tl-md rounded-bl-md" src="{{ asset('storage/journals/'.$record->image) }}" width="40" height="40" alt="{{ $record->code }}">
-            @endif
-        </div>
-        <div class="col-span-11 w-full mb-2 mt-2">
+    <div class="grid grid-cols-12 gap-2 ">
+        
+        <div class="col-span-9 w-full mb-2 mt-2">
+            <p class="text-2xl font-bold">
+                {{ __($record->title) }} ({{ $record->code }})
+            </p>
+
             <div class="grid grid-cols-12 gap-2">
-                <p class="text-sm">ISSN </p>
+                <p class="text-sm font-bold">ISSN </p>
                 <p class="col-span-11">: {{ $record->issn }}</p>
             </div>
 
             <div class="grid grid-cols-12 gap-2">
-                <p class="text-sm">EISSN </p>
+                <p class="text-sm font-bold">EISSN </p>
                 <p class="col-span-11">: {{ $record->eissn }}</p>
             </div>
 
             <div class="grid grid-cols-12 gap-2">
-                <p class="text-sm">EMAIL </p>
+                <p class="text-sm font-bold">EMAIL </p>
                 <p class="col-span-11">: {{ $record->email }}</p>
             </div>
 
             <div class="grid grid-cols-12 gap-2">
-                <p class="text-sm">CREATED </p>
+                <p class="text-sm font-bold">CREATED </p>
                 <p class="col-span-11">: {{ $record->created_at }}</p>
             </div>
-        </div>
-    </div>
 
-    <div class="w-full text-justify mt-4 mb-4">
-        {!! $record->description !!}
-    </div>
 
-    <div>
-        @if(auth()->user())
-            @if (!$record->journal_users->contains(auth()->user()->id))
-                <x-button wire:click="signup()" >Register </x-button>
-            @endif
-        @endif
+            <br>
+            <hr>
 
-        <a href="{{ route('journals.submission', $record->uuid) }}">
-            <x-button class="mb-4">Submit a Paper </x-button>
-        </a>
+            <div class="w-full text-justify mt-4 mb-4">
+                {!! $record->description !!}
+            </div>
 
-        <a href="{{ route('journal.articles', $record->uuid) }}">
-            <x-button class="mb-4">Publications </x-button>
-        </a>
-    </div>
-
-    <div class="md:grid md:grid-cols-12 gap-4 w-full ">
-
-        <div class="col-span-9">
             <div class="w-full mb-4">
                 <p class="text-lg font-bold mb-2">Aim and Scope</p>
                 <div class="text-justify">
@@ -68,6 +41,140 @@
                 </div>
             </div>
 
+            
+        </div>
+        <div class="col-span-3">
+            @if($record->image == '')
+            <div class="p-2">
+                <svg class="w-full text-white dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                    <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
+                </svg>
+            </div>
+            @else
+                <img class="w-full rounded-tl-md rounded-bl-md" src="{{ asset('storage/journals/'.$record->image) }}" width="40" height="40" alt="{{ $record->code }}">
+            @endif
+
+            <a href="{{ route('journals.submission', $record->uuid) }}">
+                <x-button class="mb-4 mt-2 w-full">Submit a Paper </x-button>
+            </a>
+        </div>
+
+    </div>
+
+    <div class="md:grid md:grid-cols-12 gap-4 w-full ">
+
+        <div class="col-span-9">
+            
+
+            @if(!empty($record->indecies) && count($record->indecies) > 0)
+            <div class="w-full mb-4">
+                <p class="text-lg font-bold mb-2">Indexing</p>
+                
+                @foreach ($record->indecies as $index)
+                    <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
+                        <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
+                            <div class="text-slate-800">
+                                <a href="{{ $index->link }}" target="_blank" >{{ $index->title }}</a>
+                            </div>
+                        </div>
+                        <div class="text-sm p-2" x-show="open" x-cloak="">
+                            {{ $index->description }}
+                        </div>
+                    </div>
+                @endforeach
+                
+            </div>
+            @endif
+
+            @if(!empty($record->instructions))
+            <div class="w-full mb-4">
+                <p class="text-lg font-bold mb-2">Authors' Guidelinesz</p>
+
+                @foreach ($record->instructions as $instruction)
+                    <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
+                        <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
+                            <div class=" text-slate-800">{{ $instruction->title }}</div>
+                        </div>
+                        <div class="text-sm text-justify p-2" x-show="open" x-cloak="">
+                            {{ $instruction->description }}
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            @endif
+
+            <div class="w-full mb-2">
+                <p class="text-lg font-bold mb-2">Publications</p>
+
+                @if ($record->volumes != '')
+                @foreach ($record->volumes as $key => $volume)
+                        <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
+                            <div class="w-full p-2 cursor-pointer hover:bg-slate-200" @click.prevent="open = !open" :aria-expanded="open">
+                                <div class="text-slate-800 font-bold">
+                                    <a href="" target="_blank" >{{ $volume->description }}</a>
+                                </div>
+                            </div>
+                            <div class="text-sm" x-show="open" x-cloak="">
+                                @foreach ($volume->issues()->where(function($query) use($record){
+                                    if(auth()->user()?->id != $record->chief_editor?->id){
+                                        $query->where('status', 'Published');
+                                    }
+                                })->get() as $key => $issue)
+                                <div class="rounded-sm border-b border-t border-slate-200 mb-2" x-data="{ open: false }">
+                                    <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
+                                        <div class="text-slate-800">
+                                            <a href="" target="_blank" >{{ $issue->description }}</a>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="text-sm p-2" x-show="open" x-cloak="">
+                                        <div class="flex justify-between">
+                                            <p class="text-slate-800 font-bold">{{ $issue->description }} Articles</p>
+                                            <div class="text-right">
+
+                                                @if(auth()->user()?->id == $record->chief_editor?->id)
+                                                @if($issue->status == 'Unpublished')
+                                                <x-button class="" wire:click="publishIssue({{ $issue->id }}, 'Published')">Publish Issue</x-button>
+                                                @endif
+
+                                                @if($issue->status == 'Published')
+                                                <x-button-plain class="bg-red-700 hover:bg-red-500" wire:click="publishIssue({{ $issue->id }}, 'Unpublished')">Unpublish Issue</x-button-plain>
+                                                @endif
+                                                @endif
+
+                                            </div>
+                                        </div>
+                                        
+
+                                        @foreach ($issue->articles()->where('status', 'Published')->get() as $key => $article)
+                                        <div class="w-full">
+                                            <a href="{{ route('journal.article', $article->uuid) }}">
+                                            <p class="text-blue-700 hover:text-blue-500 text-lg font-bold cursor-pointer">{{ $article->title }}</p>
+                                            </a>
+                                            
+                                            <div class="text-sm text-green-700">
+                                                {{ $article->author?->salutation->title }} {{ $article->author?->first_name }} {{ $article->author?->middle_name }} {{ $article->author?->last_name }} 
+                                                {{ $article->author?->affiliation != '' ? '('. $article->author?->affiliation.')' : '' }}
+                                            </div>
+
+                                            <div class="mt-2 text-justify">
+                                                {!! $article->abstract !!}
+                                            </div>
+                                        </div>
+                                        @endforeach
+
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+
+            </div>
+        </div>
+
+        <div class="col-span-3">
             <div class="w-full mb-4">
                 <p class="text-lg font-bold mb-2">Editorial Board</p>
 
@@ -147,66 +254,26 @@
                 </div>
             </div>
 
-            @if(!empty($record->indecies))
             <div class="w-full mb-4">
-                <p class="text-lg font-bold mb-2">Indexing</p>
+            <p class="text-lg font-bold mb-2">Recent Articles</p>
                 
-                @foreach ($record->indecies as $index)
-                    <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
-                        <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
-                            <div class="text-slate-800">
-                                <a href="{{ $index->link }}" target="_blank" >{{ $index->title }}</a>
-                            </div>
+                @foreach ($record->articles()->orderBy('created_at', 'desc')->limit(5)->get() as $key => $article)
+                    <a href="{{ route('journal.article', $article->uuid) }}">
+                        <div class="text-sm font-bold text-blue-700 hover:text-blue-600 hover:bg-gray-100 cursor-pointer p-2 mb-2 mt-2">
+                            {{ $article->title }}
                         </div>
-                        <div class="text-sm p-2" x-show="open" x-cloak="">
-                            {{ $index->description }}
-                        </div>
-                    </div>
+                    </a>
                 @endforeach
-                
-            </div>
-            @endif
 
-            @if(!empty($record->instructions))
-            <div class="w-full mb-2">
-                <p class="text-lg font-bold mb-2">Authors' Guidelines</p>
-
-                @foreach ($record->instructions as $instruction)
-                    <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
-                        <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
-                            <div class=" text-slate-800">{{ $instruction->title }}</div>
-                        </div>
-                        <div class="text-sm text-justify p-2" x-show="open" x-cloak="">
-                            {{ $instruction->description }}
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-            @endif
-        </div>
-
-        <div class="col-span-3">
-            <div class="bg-gray-100 border rounded p-2">
-                <p class="text-center">Recent Articles</p>
-            </div>
-            @foreach ($record->articles()->orderBy('created_at', 'desc')->limit(5)->get() as $key => $article)
-                <a href="{{ route('journal.article', $article->uuid) }}">
-                    <div class="text-sm font-bold text-blue-700 hover:text-blue-600 hover:bg-gray-100 cursor-pointer p-2 border rounded-md mb-2 mt-2">
-                        {{ $article->title }}
-                    </div>
+                <a href="{{ route('journal.articles', $record->uuid) }}">
+                    <x-button class="mb-4 w-full ">View All </x-button>
                 </a>
-            @endforeach
-
-            <a href="{{ route('journal.articles', $record->uuid) }}">
-                <x-button class="mb-4 w-full ">View All </x-button>
-            </a>
-
-            <br>
-            <br>
-
-            <div class="bg-gray-100 border rounded p-2">
-                <p class="text-center">Acceptable Article Types</p>
             </div>
+
+            <br>
+            <br>
+
+            <p class="text-lg font-bold mb-2">Acceptable Article Types</p>
 
             @foreach ($record->article_types as $key => $article_type)
                 <div class="text-sm font-bold text-blue-700 hover:text-blue-600 hover:bg-gray-100 cursor-pointer p-2 border rounded-md mb-2 mt-2">
@@ -308,7 +375,7 @@
             <x-button type="submit" wire:click="confirmSignUp({{ $record->id }})" wire:loading.attr="disabled" >
                 {{ __('Confirm') }}
             </x-button>
-            <x-secondary-button class="ml-3" wire:click="$toggle('Edit')" wire:loading.attr="disabled">
+            <x-secondary-button class="ml-3" wire:click="$toggle('signupModal')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 

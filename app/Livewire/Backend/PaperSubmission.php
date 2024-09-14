@@ -165,6 +165,8 @@ class PaperSubmission extends Component
                 
             $this->record->submission_confirmations()->sync([$confirmation->id => ['value' => $value]], false);
         }
+
+        session()->flash('success', 'Saved successfully');
     }
 
 

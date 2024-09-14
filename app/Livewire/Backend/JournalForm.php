@@ -165,23 +165,64 @@ class JournalForm extends Component
             ]);
         }
 
-        foreach($this->type_name as $key => $type)
-        {
-            ArticleType::create([
-                'name' => $type,
-                'description' => $this->type_description[$key],
-                'journal_id' => $journal->id
-            ]);
+        if($this->type_name){
+
+            foreach($this->type_name as $key => $type)
+            {
+                ArticleType::create([
+                    'name' => $type,
+                    'description' => $this->type_description[$key],
+                    'journal_id' => $journal->id
+                ]);
+            }
+
+        }else{
+            $article_types = [
+                'Original Article',
+                'Review Article',
+                'Case Study',
+                'Methodology',
+                'Other'
+            ];
+
+            foreach($article_types as $key => $type)
+            {
+                ArticleType::create([
+                    'name' => $type,
+                    'description' => $type,
+                    'journal_id' => $journal->id
+                ]);
+            }
         }
 
-        foreach($this->file_category_name as $key => $file_category)
-        {
-            ArticleType::create([
-                'name' => $file_category,
-                'description' => $this->file_category_description[$key],
-                'journal_id' => $journal->id
-            ]);
+        if($this->file_category_name){
+            foreach($this->file_category_name as $key => $file_category)
+            {
+                FileCategory::create([
+                    'name' => $file_category,
+                    'description' => $this->file_category_description[$key],
+                    'journal_id' => $journal->id
+                ]);
+            }
+        }else{
+            $file_categories = [
+                'Title with author details',
+                'Manuscript Anonymous',
+                'Cover Letter',
+                'Supplementary File'
+            ];
+
+            foreach($file_categories as $key => $category)
+            {
+                FileCategory::create([
+                    'name' => $category,
+                    'description' => $category,
+                    'journal_id' => $journal->id
+                ]);
+            }
         }
+
+        session()->flash('success', 'Journal saved successfully');
 
         $this->form = false;
         $this->reset();
@@ -283,6 +324,23 @@ class JournalForm extends Component
                     $typ->save();
                 }
             }
+        }else{
+            $article_types = [
+                'Original Article',
+                'Review Article',
+                'Case Study',
+                'Methodology',
+                'Other'
+            ];
+
+            foreach($article_types as $key => $type)
+            {
+                ArticleType::create([
+                    'name' => $type,
+                    'description' => $type,
+                    'journal_id' => $journal->id
+                ]);
+            }
         }
 
         if(!empty($this->file_category_name)){
@@ -297,6 +355,22 @@ class JournalForm extends Component
                     $fil->journal_id   = $journal->id;
                     $fil->save();
                 }
+            }
+        }else{
+            $file_categories = [
+                'Title with author details',
+                'Manuscript Anonymous',
+                'Cover Letter',
+                'Supplementary File'
+            ];
+
+            foreach($file_categories as $key => $category)
+            {
+                FileCategory::create([
+                    'name' => $category,
+                    'description' => $category,
+                    'journal_id' => $journal->id
+                ]);
             }
         }
 

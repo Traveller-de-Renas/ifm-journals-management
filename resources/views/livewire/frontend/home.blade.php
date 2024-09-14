@@ -62,7 +62,7 @@
     <div class="max-w-screen-2xl lg:max-w-screen-lg mx-auto mt-6 mb-6">
 
         <div class="md:grid md:grid-cols-12 gap-6">
-            <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
+            <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
                 <a href="#">
                     <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">ONLINE SUBMISSION</h5>
                 </a>
@@ -76,7 +76,7 @@
             </div>
     
     
-            <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
+            <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
                 <a href="#">
                     <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">PEER REVIEW</h5>
                 </a>
@@ -86,7 +86,7 @@
             </div>
     
           
-            <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
+            <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
                 <a href="#">
                     <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">PUBLISH WITH US</h5>
                 </a>
@@ -96,6 +96,26 @@
                     
                 </a>
             </div>
+        </div>
+
+        <div class="grid grid-cols-12 w-full rounded-r-lg shadow">
+
+            <div class="col-span-4">
+                <img class="object-cover object-center w-full h-full" src="{{ asset('images/auth-image.jpg') }}" width="760" height="1024" alt="Authentication image" />
+            </div>
+
+            <div class="col-span-8 p-6 bg-white border border-gray-200 rounded-r-lg ">
+                <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 ">CALL FOR PAPERS</h5>
+                <p class="font-normal text-sm text-gray-500">
+                    Here are the latest calls for papers and special issues from our extensive journal and case study range.
+                </p>
+                <a href="{{ route('journal.viewall') }}" >
+                    <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center w-full">Calls for papers </p>
+                    
+                </a>
+
+            </div>
+
         </div>
     </div>
     </div>
@@ -139,8 +159,11 @@
     </div>
 
 
+
+
+
     <div class="w-full flex flex-nowrap justify-center gap-2 py-16 mx-auto mt-6 bg-gray-100">
-        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
+        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
             <a href="#">
                 <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Journals</h5>
             </a>
@@ -149,7 +172,7 @@
             </p>
         </div>
 
-        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
+        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
             <a href="#">
                 <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Issues </h5>
             </a>
@@ -158,7 +181,7 @@
             </p>
         </div>
 
-        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
+        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
             <a href="#">
                 <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Articles </h5>
             </a>

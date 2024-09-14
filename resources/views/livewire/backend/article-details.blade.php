@@ -28,7 +28,10 @@
 
         <div class="flex items-center">
             <div class="flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
-                <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> <p class="ml-2 text-lg font-bold">Download Article</p>
+                <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> 
+                <p class="ml-2 text-lg font-bold">
+                    <a href="{{ asset('storage/articles/'.$record->files[0]->file_path) }}" > Dounload Article </a>
+                </p>
             </div>
             <p class="ml-2 text-lg font-bold"> | Published On {{ date("Y-m-d") }} </p>
         </div>
@@ -91,7 +94,7 @@
                     @foreach ($record->article_users()->wherePivot('role', '<>', 'reviewer')->get() as $key => $user)
                     <div class="flex items-center">
                         <a href="{{ route('admin.user_preview', $user->author?->uuid) }}" >
-                        {{ $user->salutation?->title }} {{ $user->first_name }}
+                        {{ $user->salutation?->title }} {{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}
                         {{ $user->affiliation != '' ? '('. $user->affiliation.')' : '' }}
                         </a>
                     </div>
@@ -154,7 +157,7 @@
                     <p class="text-sm text-gray-400">Uploaded on {{ $file->created_at }}</p>
                 </div>
                 <div class="w-2/12 text-right">
-                    <a href="{{ asset('storage/'.$file->path) }}" target="_blank" class="text-blue-700 hover:text-blue-600">
+                    <a href="{{ asset('storage/articles/'.$file->file_path) }}" target="_blank" class="text-blue-700 hover:text-blue-600">
                         <x-button>Download Article
                             <svg class="h-5 w-5 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="12" y1="5" x2="12" y2="19" />  <line x1="16" y1="15" x2="12" y2="19" />  <line x1="8" y1="15" x2="12" y2="19" /></svg>
                         </x-button>
