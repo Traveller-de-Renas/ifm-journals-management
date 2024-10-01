@@ -1,5 +1,17 @@
 <x-module>
     <x-slot name="title" >
+        <div class="w-full flex text-xs">
+            <p class="underline mr-1 cursor-pointer hover:text-gray-500">
+                <a href="{{ route('journals.details', $record?->journal->uuid) }}">
+                {{ $record?->journal->title }}
+                </a>
+            </p>
+            <p class="mr-1"> > </p> 
+            <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->volume?->description }} </p>
+            <p class="mr-1"> > </p>
+            <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->description }} </p>
+        </div>
+        
         <p class="text-blue-700">
             {{ __($record->title) }}
         </p>

@@ -109,9 +109,8 @@
                 <p class="font-normal text-sm text-gray-500">
                     Here are the latest calls for papers and special issues from our extensive journal and case study range.
                 </p>
-                <a href="{{ route('journal.viewall') }}" >
+                <a href="{{ route('journal.callfor_paper') }}" >
                     <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center w-full">Calls for papers </p>
-                    
                 </a>
 
             </div>

@@ -140,7 +140,7 @@
             <x-button-danger type="submit" wire:click="delete({{ $record?->id }})" wire:loading.attr="disabled" >
                 {{ __('Delete') }}
             </x-button-danger>
-            <x-secondary-button class="ml-3" wire:click="$toggle('Edit')" wire:loading.attr="disabled">
+            <x-secondary-button class="ml-3" wire:click="$toggle('Delete')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 
@@ -225,7 +225,7 @@
         </x-slot>
 
         <x-slot name="footer">
-            <x-secondary-button wire:click="$toggle('confirmingView')" wire:loading.attr="disabled">
+            <x-secondary-button wire:click="$toggle('View')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
         </x-slot>

@@ -30,7 +30,7 @@
             <div class="flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
                 <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> 
                 <p class="ml-2 text-lg font-bold">
-                    <a href="{{ asset('storage/articles/'.$record->files[0]->file_path) }}" > Dounload Article </a>
+                    <a href="{{ asset('storage/articles/'.$record->files[0]->file_path) }}" > Download Article </a>
                 </p>
             </div>
             <p class="ml-2 text-lg font-bold"> | Published On {{ date("Y-m-d") }} </p>
@@ -103,6 +103,16 @@
             </div>
         </div>
         <div class="col-span-4">
+            <div class="flex gap-2 justify-between w-full">
+                <a class="block w-full" href="{{ route('journals.submission', $record->journal->uuid) }}">
+                    <x-button class="mb-4 w-full">Submit a Paper </x-button>
+                </a>
+        
+                <a class="block w-full" href="{{ route('journals.articles', $record->journal->uuid) }}">
+                    <x-button class="mb-4 w-full">Publications </x-button>
+                </a>
+            </div>
+
             @if ($record?->journal->chief_editor?->id == auth()->user()->id)
             <p class="text-lg font-bold mb-4">Volume & Issue</p>
             <x-select wire:model.live="volume" :options="$volumes" :selected="$record->issue?->volume_id" :placeholder="'Select Volume'" class="w-full mb-4" />

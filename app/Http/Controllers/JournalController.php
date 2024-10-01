@@ -80,4 +80,19 @@ class JournalController extends Controller
     {
         return view('frontend.volumes');
     }
+
+    public function callfor_papers()
+    {
+        return view('backend.callfor_papers');
+    }
+
+    public function callfor_paper()
+    {
+        return view('frontend.callfor_paper');
+    }
+
+    public function call_detail()
+    {
+        return view('frontend.call_detail');
+    }
 }

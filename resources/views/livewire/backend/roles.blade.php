@@ -187,7 +187,7 @@
             <x-button-danger type="submit" wire:click="delete({{ $record }})" wire:loading.attr="disabled" >
                 {{ __('Delete') }}
             </x-button-danger>
-            <x-secondary-button class="ml-3" wire:click="$toggle('Edit')" wire:loading.attr="disabled">
+            <x-secondary-button class="ml-3" wire:click="$toggle('Delete')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 

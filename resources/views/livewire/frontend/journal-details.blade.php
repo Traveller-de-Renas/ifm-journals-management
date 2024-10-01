@@ -51,7 +51,7 @@
                 </svg>
             </div>
             @else
-                <img class="w-full rounded-tl-md rounded-bl-md" src="{{ asset('storage/journals/'.$record->image) }}" width="40" height="40" alt="{{ $record->code }}">
+                <img class="w-full rounded-md rounded-bl-md" src="{{ asset('storage/journals/'.$record->image) }}" width="40" height="40" alt="{{ $record->code }}">
             @endif
 
             <a href="{{ route('journals.submission', $record->uuid) }}">
@@ -153,7 +153,7 @@
                                             </a>
                                             
                                             <div class="text-sm text-green-700">
-                                                {{ $article->author?->salutation->title }} {{ $article->author?->first_name }} {{ $article->author?->middle_name }} {{ $article->author?->last_name }} 
+                                                {{ $article->author?->salutation?->title }} {{ $article->author?->first_name }} {{ $article->author?->middle_name }} {{ $article->author?->last_name }} 
                                                 {{ $article->author?->affiliation != '' ? '('. $article->author?->affiliation.')' : '' }}
                                             </div>
 
@@ -259,7 +259,7 @@
                 
                 @foreach ($record->articles()->orderBy('created_at', 'desc')->limit(5)->get() as $key => $article)
                     <a href="{{ route('journal.article', $article->uuid) }}">
-                        <div class="text-sm font-bold text-blue-700 hover:text-blue-600 hover:bg-gray-100 cursor-pointer p-2 mb-2 mt-2">
+                        <div class="text-sm text-justify font-bold text-blue-700 hover:text-blue-600 bg-gray-50 hover:bg-gray-100 cursor-pointer p-2 mb-2 mt-2">
                             {{ $article->title }}
                         </div>
                     </a>

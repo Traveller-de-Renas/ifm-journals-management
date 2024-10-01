@@ -48,7 +48,14 @@ Route::group(['prefix' => 'journal'], function () {
     Route::get('/detail/{journal}', [JournalController::class, 'journal_detail'])->name('journal.detail');
     Route::get('/articles/{journal}', [JournalController::class, 'journal_articles'])->name('journal.articles');
     Route::get('/article/{article}', [JournalController::class, 'journal_article'])->name('journal.article');
+    Route::get('/callfor_paper', [JournalController::class, 'callfor_paper'])->name('journal.callfor_paper');
+    Route::get('/call_detail/{call}', [JournalController::class, 'call_detail'])->name('journal.call_detail');
     Route::get('/archive/{journal}', [JournalController::class, 'journal_archive'])->name('journal.archive');
+});
+
+
+Route::group(['prefix' => 'callfor_papers', 'middleware' => 'auth'], function () {
+    Route::get('/index', [JournalController::class, 'callfor_papers'])->name('journals.callfor_papers');
 });
 
 
