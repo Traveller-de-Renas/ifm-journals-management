@@ -30,7 +30,7 @@
             <div class="flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
                 <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> 
                 <p class="ml-2 text-lg font-bold">
-                    <a href="{{ asset('storage/articles/'.$record->files[0]->file_path) }}" > Download Article </a>
+                    <a href="{{ asset('storage/articles/') }}" > Download Article </a>
                 </p>
             </div>
             <p class="ml-2 text-lg font-bold"> | Published On {{ date("Y-m-d") }} </p>

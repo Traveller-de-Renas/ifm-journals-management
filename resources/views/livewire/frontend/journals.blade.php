@@ -52,17 +52,17 @@
                                 <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
                             </svg>
                         @else
-                            <img class="c7n6y" src="{{ asset('storage/journals/'.$row->image) }}" width="40" height="40" alt="{{ $row->code }}">
+                            <img class="c7n6y" src="{{ asset('storage/journals/'.$row->image) }}" width="40" height="40" alt="{{ strtoupper($row->code) }}">
                         @endif
                         <div class="">
                             <a href="{{ route('journal.detail', $row->uuid) }}">
-                            <p class="ml-2 text-lg font-bold text-blue-700 hover:text-blue-600 cursor-pointer"> {{ $row->title }} ({{ $row->code }})</p>
+                            <p class="ml-2 text-lg font-bold text-blue-700 hover:text-blue-600 cursor-pointer"> {{ $row->title }} ({{ strtoupper($row->code) }})</p>
                             </a>
                             <div class="ml-2 text-xs">
-                                @if(!empty($row?->journal_users))
-                                    @foreach ($row->journal_users as $key => $user)
-                                        {{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }} ({{ $user->affiliation }}),
-                                    @endforeach
+                                
+                                {{ $row->chief_editor?->salutation?->title }}. {{ $row->chief_editor?->first_name }} {{ $row->chief_editor?->middle_name }} {{ $row->chief_editor?->last_name }} 
+                                @if ($row->chief_editor?->affiliation != '')
+                                    ({{ $row->chief_editor?->affiliation }})
                                 @endif
                             </div>
                         </div>

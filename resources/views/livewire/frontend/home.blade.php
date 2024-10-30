@@ -50,7 +50,7 @@
             @if (count($all_journals) > 0 && $search != '')
                 @foreach ($all_journals as $one_journal)
                     <a href="{{ route('journal.detail', $one_journal->uuid) }}">
-                        <div class="border-b p-4 text-[#175883] hover:bg-[#175883] hover:text-white cursor-pointer">{{ $one_journal->title }} ({{ $one_journal->code }})</div>
+                        <div class="border-b p-4 text-[#175883] hover:bg-[#175883] hover:text-white cursor-pointer">{{ $one_journal->title }} ({{ strtoupper($one_journal->code) }})</div>
                     </a>
                 @endforeach
             @endif
@@ -135,7 +135,7 @@
                             @endif
                         </div>
                         <div class="p-5">
-                            <p class="mb-2 text-md text-center font-bold tracking-tight text-gray-900">{{ Str::words(strtoupper($journal?->title), '15'); }}</p>
+                            <p class="mb-2 text-md text-center font-bold tracking-tight text-gray-900">{{ Str::words(strtoupper($journal?->title), '15'); }} ({{ strtoupper($journal?->code) }})</p>
                             
                             <div class="flex text-sm items-center justify-center">
                                 <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

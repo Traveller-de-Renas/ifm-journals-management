@@ -2,11 +2,20 @@
 
 namespace App\Livewire\Backend;
 
+use App\Models\User;
+use App\Models\Issue;
+use App\Models\Volume;
+use App\Models\Article;
 use App\Models\Journal;
 use App\Models\Subject;
 use Livewire\Component;
 use App\Models\Category;
+use App\Models\Salutation;
+use App\Models\ArticleType;
+use App\Models\JournalInstruction;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 
 class Journals extends Component
 {
@@ -90,6 +99,169 @@ class Journals extends Component
             }
         }
 
+    }
+
+
+    public function loadFromJSON(){
+        $file = File::get('storage/journals.json');
+
+        $journals = json_decode($file);
+
+        foreach($journals->getJournals as $journal){
+
+            $the_journal = Journal::updateOrCreate([
+                'code' => $journal->code
+            ],[
+                'title' => $journal->title,
+                'code' => $journal->code,
+                'doi' => $journal->doi,
+                'issn' => $journal->issn,
+                'eissn' => $journal->eissn,
+                'description' => $journal->description,
+                'scope' => $journal->scope,
+                'year' => $journal->year,
+                'email' => $journal->code.'@ifm.ac.tz',
+                'user_id' => auth()->user()->id,
+                'image' => $journal->image
+            ]);
+
+
+
+            if($journal->guidlines){
+                foreach($journal->guidlines as $key => $instruction)
+                {
+                    JournalInstruction::create([
+                        'title' => $instruction->Heading,
+                        'description' => $instruction->Contents,
+                        'journal_id'  => $the_journal->id
+                    ]);
+                }
+            }
+
+
+            foreach($journal->volumes as $key => $volume)
+            {
+                $volumex = Volume::create([
+                    'number' => $volume->volume_number,
+                    'description' => 'Volume '.$volume->volume_number,
+                    'journal_id'  => $the_journal->id
+                ]);
+
+                foreach($volume->issues as $key => $issue)
+                {
+                    Issue::create([
+                        'number' => $issue->IssueNumber,
+                        'description' => 'Issue '.$issue->IssueNumber,
+                        'journal_id' => $the_journal->id,
+                        'volume_id' => $volumex->id,
+                        'publication_date' => $issue->DatePublished,
+                        'status' => 'Published'
+                    ]);
+                }
+            }
+
+
+            if($journal->articles){
+                foreach($journal->articles as $key => $article){
+
+                    $article_type = ArticleType::firstOrCreate([
+                        'name'=> $article->article_type,
+                        'journal_id' => $the_journal->id
+                    ],[
+                        'name'=> $article->article_type,
+                        'journal_id' => $the_journal->id,
+                        'description' => $article->article_type,
+                    ]);
+
+
+
+                    $salutation = Salutation::firstOrCreate([
+                        'title'=> $article->salutation
+                    ],[
+                        'title'=> $article->salutation
+                    ]);
+
+
+
+                    $gender = 'Male';
+
+                    if($article->salutation == 'Mr'){
+                        $gender = 'Male';
+                    }
+
+                    if($article->salutation == 'Ms'){
+                        $gender = 'Female';
+                    }
+
+
+                    $email = $article->email;
+                    if($article->email == ''){
+                        $email = strtolower($article->first_name.$article->middle_name.$article->last_name).'@ifm.ac.tz';
+                    }
+
+
+                    $user = User::firstOrCreate([
+                        'email'=> $email
+                    ],[
+                        'email'=> $email,
+                        'first_name' => $article->first_name,
+                        'middle_name' => $article->middle_name,
+                        'last_name' => $article->last_name,
+                        'gender' => $gender,
+                        'salutation_id' => $salutation->id,
+                        'password' => Hash::make('123@Journals')
+                    ]);
+
+
+
+                    $volume = Volume::firstOrCreate(
+                        [
+                            'number' => $article->volume->VolumeNumber,
+                            'journal_id' => $the_journal->id
+                        ],
+                        [
+                            'number' => $article->volume->VolumeNumber,
+                            'description' => 'Volume '.$article->volume->VolumeNumber,
+                            'journal_id'  => $the_journal->id
+                        ]
+                    );
+
+
+
+                    $issue = Issue::firstOrCreate(
+                        [
+                            'number' => $article->issue->IssueNumber,
+                            'volume_id' => $volume->id,
+                            'journal_id' => $the_journal->id
+                        ],
+                        [
+                            'number' => $article->issue->IssueNumber,
+                            'volume_id' => $volume->id,
+                            'journal_id' => $the_journal->id,
+                            'status' => 'Published'
+                        ]
+                    );
+
+
+                    $artc = Article::create([
+                        'title'             => $article->article_title,
+                        'abstract'          => $article->abstract,
+                        'article_type_id'   => $article_type->id,
+                        'journal_id'        => $the_journal->id,
+                        'keywords'          => $article->keywords,
+                        'areas'             => $article->areas,
+                        'status'            => 'Published',
+                        'user_id'           => $user->id,
+                        'volume_id'         => $volume->id,
+                        'issue_id'          => $issue->id
+                    ]);
+            
+                    $user->journals()->sync([$the_journal->id => ['role' => 'author']]);
+
+                }
+            }
+
+        }
     }
 
 }

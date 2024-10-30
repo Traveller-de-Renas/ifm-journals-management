@@ -3,7 +3,7 @@
         
         <div class="col-span-9 w-full mb-2 mt-2">
             <p class="text-2xl font-bold">
-                {{ __($record->title) }} ({{ $record->code }})
+                {{ __($record->title) }} ({{ strtoupper($record->code) }})
             </p>
 
             <div class="grid grid-cols-12 gap-2">
@@ -88,7 +88,7 @@
 
             @if(!empty($record->instructions))
             <div class="w-full mb-4">
-                <p class="text-lg font-bold mb-2">Authors' Guidelinesz</p>
+                <p class="text-lg font-bold mb-2">Authors' Guidelines</p>
 
                 @foreach ($record->instructions as $instruction)
                     <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
@@ -259,7 +259,7 @@
                 
                 @foreach ($record->articles()->orderBy('created_at', 'desc')->limit(5)->get() as $key => $article)
                     <a href="{{ route('journal.article', $article->uuid) }}">
-                        <div class="text-sm text-justify font-bold text-blue-700 hover:text-blue-600 bg-gray-50 hover:bg-gray-100 cursor-pointer p-2 mb-2 mt-2">
+                        <div class="text-sm font-bold text-blue-700 hover:text-blue-600 bg-gray-50 hover:bg-gray-100 cursor-pointer p-2 mb-2 mt-2">
                             {{ $article->title }}
                         </div>
                     </a>

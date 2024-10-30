@@ -1,7 +1,7 @@
 <x-module>
     
     <x-slot name="title">
-        {{ __($record->title) }}
+        {{ __($record->title) }} ({{ strtoupper($record->code) }})
     </x-slot>
         
     <div class="grid grid-cols-12 gap-2 bg-gray-200 rounded">

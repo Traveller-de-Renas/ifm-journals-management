@@ -14,7 +14,7 @@ class Volume extends Model
     use HasFactory, SoftDeletes, LogsActivity, Uuid;
 
     protected $fillable = [
-        'title',
+        'number',
         'description',
 		'journal_id',
 		'volume_id',

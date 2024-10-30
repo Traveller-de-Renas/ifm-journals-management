@@ -1,6 +1,6 @@
 <x-module>
     <x-slot name="title">
-        {{ __($record->title) }}
+        {{ __($record->title) }} ({{ strtoupper($record->code) }})
     </x-slot>
 
     <div class="mb-2">
