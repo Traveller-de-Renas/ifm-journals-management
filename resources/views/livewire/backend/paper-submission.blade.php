@@ -5,7 +5,7 @@
         
         @if(!empty($record))
         <div class="text-sm">
-            {{ $record->author?->salutation->title }} {{ $record->author?->first_name }} {{ $record->author?->middle_name }} {{ $record->author?->last_name }} ({{ $record->author?->affiliation }})
+            {{ $record->author?->salutation?->title }} {{ $record->author?->first_name }} {{ $record->author?->middle_name }} {{ $record->author?->last_name }} ({{ $record->author?->affiliation }})
         </div>
         @endif
         
@@ -94,13 +94,13 @@
     
                         <div class="w-full bg-gray-200 shadow-lg">
                             @foreach ($author_names as $key => $author)
-                                <label class="w-full bg-gray-200 p-2 hover:bg-gray-300 cursor-pointer flex gap-4" for="author{{ $author->id }}" wire:click="assignAuthor({{ $author->id }})">
+                                <label class="w-full bg-gray-200 p-2 hover:bg-gray-300 cursor-pointer flex gap-4" for="author{{ $author?->id }}" wire:click="assignAuthor({{ $author->id }})">
                                     
                                     <div>
-                                        <x-input type="checkbox" wire:model="author_ids" id="author{{ $author->id }}" value="{{ $author->id }}" />
+                                        <x-input type="checkbox" wire:model="author_ids" id="author{{ $author?->id }}" value="{{ $author?->id }}" />
                                     </div>
                                     <div>
-                                        {{ $author?->salutation?->title }} {{ $author->first_name }} {{ $author->middle_name }} {{ $author->last_name }}
+                                        {{ $author?->salutation?->title }} {{ $author?->first_name }} {{ $author?->middle_name }} {{ $author?->last_name }}
                                     </div>
                                     
                                 </label>

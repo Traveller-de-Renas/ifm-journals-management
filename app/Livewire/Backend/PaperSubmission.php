@@ -92,6 +92,9 @@ class PaperSubmission extends Component
 
     public function store($status)
     {
+        //validate()
+        
+
         $article = Article::create([
             'title'             => $this->title,
             'abstract'          => $this->abstract,
