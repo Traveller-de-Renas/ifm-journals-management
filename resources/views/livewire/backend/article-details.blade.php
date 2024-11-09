@@ -30,7 +30,7 @@
             $file = $record->files()->where('publish', 1)->first();
         @endphp
         <div class="flex items-center">
-            <a href="{{ route('journal.article_download', $file->id) }}" >
+            <a href="{{ route('journal.article_download', $file?->id) }}" >
                 <div class="flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
                     <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> <p class="ml-2 text-lg font-bold">Download Article</p>
                 </div>
