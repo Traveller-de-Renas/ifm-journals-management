@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class JournalController extends Controller
 {
@@ -94,5 +96,15 @@ class JournalController extends Controller
     public function call_detail()
     {
         return view('frontend.call_detail');
+    }
+
+    public function article_download(Request $request)
+    {
+        $aticle = $request->article;
+        $file = File::findOrFail($aticle);
+
+        $file->increment('downloads');
+
+        return Storage::download('public/articles/'.$file->file_path);
     }
 }

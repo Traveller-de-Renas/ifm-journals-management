@@ -26,14 +26,16 @@
             </a>
         </div>
 
+        @php 
+            $file = $record->files()->where('publish', 1)->first();
+        @endphp
         <div class="flex items-center">
-            <div class="flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
-                <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> 
-                <p class="ml-2 text-lg font-bold">
-                    <a href="{{ asset('storage/articles/') }}" > Download Article </a>
-                </p>
-            </div>
-            <p class="ml-2 text-lg font-bold"> | Published On {{ date("Y-m-d") }} </p>
+            <a href="{{ route('journal.article_download', $file->id) }}" >
+                <div class="flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
+                    <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> <p class="ml-2 text-lg font-bold">Download Article</p>
+                </div>
+            </a>
+            <p class="ml-2 text-lg text-gray-600 font-bold">| {{ $file->downloads }} Downloads | Published On {{ date("Y-m-d") }} </p>
         </div>
     </div>
 
@@ -115,8 +117,10 @@
 
             @if ($record?->journal->chief_editor?->id == auth()->user()->id)
             <p class="text-lg font-bold mb-4">Volume & Issue</p>
+            <div class="flex gap-2 justify-between w-full">
             <x-select wire:model.live="volume" :options="$volumes" :selected="$record->issue?->volume_id" :placeholder="'Select Volume'" class="w-full mb-4" />
             <x-select wire:model.live="issue" :options="$issues" :selected="$record->issue_id" :placeholder="'Select Issue'" class="w-full mb-4" />
+            </div>
 
             <div class="text-right">
                 <x-button wire:click="updateVolume()" wire:loading.attr="disabled" >

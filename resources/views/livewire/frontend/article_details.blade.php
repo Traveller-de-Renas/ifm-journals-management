@@ -21,13 +21,20 @@
         @foreach ($record->article_users as $key => $user)
             {{ $user->first_name }} ({{ $user->affiliation }})
         @endforeach
+
+        @php 
+            $file = $record->files()->where('publish', 1)->first();
+        @endphp
         <div class="flex items-center">
-            <div class="flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
-                <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> <p class="ml-2 text-lg font-bold">Download Article</p>
-            </div>
-            <p class="ml-2 text-lg font-bold"> | Published On {{ date("Y-m-d") }} </p>
+            <a href="{{ route('journal.article_download', $file->id) }}" >
+                <div class="flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
+                    <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> <p class="ml-2 text-lg font-bold">Download Article</p>
+                </div>
+            </a>
+            <p class="ml-2 text-lg text-gray-600 font-bold">| {{ $file->downloads }} Downloads | Published On {{ date("Y-m-d") }} </p>
         </div>
     </div>
+    
 
     @if(auth()->user())
     <div class="flex gap-2 w-full mb-4">
@@ -54,30 +61,42 @@
 
     <div class="w-full grid grid-cols-12 gap-2">
         <div class="col-span-8">
+
+            @if($record->keywords != '')
             <div class="w-full mb-4">
                 <p class="text-lg font-bold">Keywords</p>
                 <div class="text-sm font-bold text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
                     {{ $record->keywords }}
                 </div>
             </div>
-        
+            @endif
+            
+            @if($record->areas != '')
             <div class="w-full mb-4">
                 <p class="text-lg font-bold">Areas</p>
                 <div class="text-sm font-bold text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
                     {{ $record->areas }}
                 </div>
             </div>
-        
+            @endif
+
+            @php
+                $coauthors = $record->article_users()->wherePivot('role', '<>', 'reviewer')->get()
+            @endphp
+            
+            @if(count($coauthors) > 0)
             <div class="w-full mb-4">
                 <p class="text-lg font-bold">Co Authors</p>
                 <div class="text-sm text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
-                    @foreach ($record->article_users()->wherePivot('role', '<>', 'reviewer')->get() as $key => $user)
+                    @foreach ($coauthors as $key => $user)
                     <div class="flex items-center">
                         {{ $user->salutation?->title }} {{ $user->first_name }} ({{ $user->affiliation }})
                     </div>
                     @endforeach
                 </div>
             </div>
+            @endif
+
         </div>
         <div class="col-span-4">
             @if ($record->article_users()->wherePivot('role', 'reviewer')->get()->count() > 0)
@@ -103,25 +122,28 @@
         </div>
     </div>
     
-    <div class="w-full mb-4">
-        <p class="text-lg font-bold">Attached Files</p>
-        <div class="text-sm text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2"></div>
-            @foreach ($record->files as $key => $file)
-            <div class="flex items-center border-b pb-2 w-full">
-                <div class="w-full">
-                    {{ $file->file_category?->name }}
-                    <p class="text-sm text-gray-400">Uploaded on {{ $file->created_at }}</p>
+        {{-- <div class="w-full mb-4">
+            @php
+                $files_ = $record->files;
+            @endphp
+            @if(count($files_) > 0)
+                <p class="text-lg font-bold">Attached Files</p>
+                <div class="text-sm text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2"></div>
+                @foreach ($files_ as $key => $file)
+                <div class="flex items-center border-b pb-2 w-full">
+                    <div class="w-full">
+                        {{ $file->file_category?->name }}
+                        <p class="text-sm text-gray-400">Uploaded on {{ $file->created_at }}</p>
+                    </div>
+                    <div class="w-2/12 text-right">
+                        <a href="{{ asset('storage/'.$file->path) }}" target="_blank" class="text-blue-700 hover:text-blue-600">
+                            <x-button>Download </x-button>
+                        </a>
+                    </div>
                 </div>
-                <div class="w-2/12 text-right">
-                    <a href="{{ asset('storage/'.$file->path) }}" target="_blank" class="text-blue-700 hover:text-blue-600">
-                        <x-button>Download
-                            {{-- <svg class="h-5 w-5 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="12" y1="5" x2="12" y2="19" />  <line x1="16" y1="15" x2="12" y2="19" />  <line x1="8" y1="15" x2="12" y2="19" /></svg> --}}
-                        </x-button>
-                    </a>
-                </div>
-            </div>
-            @endforeach
-        </div>
+                @endforeach
+            @endif
+        </div> --}}
     </div>
 
     <x-dialog-modal wire:model="reviewerModal">

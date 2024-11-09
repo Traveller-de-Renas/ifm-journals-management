@@ -51,6 +51,7 @@ Route::group(['prefix' => 'journal'], function () {
     Route::get('/callfor_paper', [JournalController::class, 'callfor_paper'])->name('journal.callfor_paper');
     Route::get('/call_detail/{call}', [JournalController::class, 'call_detail'])->name('journal.call_detail');
     Route::get('/archive/{journal}', [JournalController::class, 'journal_archive'])->name('journal.archive');
+    Route::get('/article_download/{article}', [JournalController::class, 'article_download'])->name('journal.article_download');
 });
 
 

@@ -27,15 +27,15 @@
                 </div>
                 <div class=" top-0 left-12 w-full h-1 bg-{{ $step > 2 ? 'blue-700' : 'gray-300' }}"></div>
             </div>
-            <div class="flex items-center w-full cursor-pointer" wire:click="setStep(3)">
+            {{-- <div class="flex items-center w-full cursor-pointer" wire:click="setStep(3)">
                 <div class="rounded-full h-12 w-12 flex items-center justify-center {{ $step >= 3 ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-600' }}">
                     3
                 </div>
                 <div class=" top-0 left-12 w-full h-1 bg-{{ $step > 3 ? 'blue-700' : 'gray-300' }}"></div>
-            </div>
-            <div class="flex cursor-pointer" wire:click="setStep(4)">
-                <div class="rounded-full h-12 w-12 flex items-center justify-center {{ $step >= 4 ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-600' }}">
-                    4
+            </div> --}}
+            <div class="flex cursor-pointer" wire:click="setStep(3)">
+                <div class="rounded-full h-12 w-12 flex items-center justify-center {{ $step >= 3 ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-600' }}">
+                    3
                 </div>
             </div>
         </div>
@@ -149,7 +149,12 @@
                         <x-input class="" wire:model="file_description" id="file_description" type="text" placeholder="File Description" />
                         <x-input-error for="file_description" />
                     </div>
-                    <div class="mt-4 col-span-2 text-right">
+                    <div class="mt-4">
+                        <x-label for="publish" value="To Publish" class="mb-2 block font-medium text-sm text-gray-700" />
+                        <x-select wire:model="publish" id="publish" class="w-full" :options="['1'=>'Yes', '0'=>'No']" />
+                        <x-input-error for="publish" />
+                    </div>
+                    <div class="mt-4 text-right">
                         <x-button class="mt-8" wire:click="uploadDocument()" >Upload</x-button>
                     </div>
 
@@ -221,7 +226,7 @@
                 </div>
             </div>
 
-        @elseif ($step == 4)
+        {{-- @elseif ($step == 4) --}}
         @endif
     </div>
     

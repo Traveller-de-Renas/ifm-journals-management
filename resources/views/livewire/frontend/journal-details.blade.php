@@ -147,7 +147,7 @@
                                         
 
                                         @foreach ($issue->articles()->where('status', 'Published')->get() as $key => $article)
-                                        <div class="w-full">
+                                        <div class="w-full mb-6 pb-6 border-b">
                                             <a href="{{ route('journal.article', $article->uuid) }}">
                                             <p class="text-blue-700 hover:text-blue-500 text-lg font-bold cursor-pointer">{{ $article->title }}</p>
                                             </a>

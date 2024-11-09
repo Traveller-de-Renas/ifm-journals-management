@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('journals', function (Blueprint $table) {
-            $table->foreignId('volume_id')->nullable()->constrained(table: 'volumes');
-            $table->foreignId('issue_id')->nullable()->constrained(table: 'issues');
+        Schema::table('files', function (Blueprint $table) {
+            $table->foreignId('publish')->default(0);
         });
     }
 
@@ -22,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('journals', function (Blueprint $table) {
-            $table->dropColumn(['volume_id', 'issue_id']);
+        Schema::table('files', function (Blueprint $table) {
+            $table->dropColumn(['publish']);
         });
     }
 };

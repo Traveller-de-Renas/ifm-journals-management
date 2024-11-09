@@ -17,6 +17,7 @@ use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class PaperSubmission extends Component
 {
@@ -38,6 +39,7 @@ class PaperSubmission extends Component
     public $attachment;
     public $file_description;
     public $file_category_id;
+    public $publish;
 
     public $confirmations = [];
     public $issues = [];
@@ -92,8 +94,60 @@ class PaperSubmission extends Component
 
     public function store($status)
     {
-        //validate()
+        // $this->validate([
+        //     'title' => 'required',
+        //     'article_type_id' => 'required',
+        //     'country_id' => 'required|integer',
+        //     'keywords' => 'required|string',
+        //     'areas'  => 'required|string',
+        //     'tables' => 'nullable|integer',
+        //     'figures' => 'nullable|integer',
+        //     'words' => 'nullable|integer',
+        //     'pages' => 'nullable|integer',
+        // ], attributes: [
+        //     'article_type_id' => 'Article Type',
+        //     'country_id' => 'Country'
+        // ]);
+
+
+
+
+        $validator = Validator::make(
+            [
+                'title' => $this->title,
+                'article_type_id' => $this->article_type_id,
+                'country_id' => $this->country_id,
+                'keywords' => $this->keywords,
+                'areas'  => $this->areas,
+                'tables' => $this->tables,
+                'figures' => $this->figures,
+                'words' => $this->words,
+                'pages' => $this->pages,
+            ],
+            [
+                'title' => 'required',
+                'article_type_id' => 'required',
+                'country_id' => 'required|integer',
+                'keywords' => 'required|string',
+                'areas'  => 'required|string',
+                'tables' => 'nullable|integer',
+                'figures' => 'nullable|integer',
+                'words' => 'nullable|integer',
+                'pages' => 'nullable|integer',
+            ], attributes: [
+                'article_type_id' => 'Article Type',
+                'country_id' => 'Country'
+            ]);
+    
+        if ($validator->fails()) {
+            $this->setStep(1);
+        } 
         
+        $validator->validate();
+
+
+
+
 
         $article = Article::create([
             'title'             => $this->title,
@@ -196,6 +250,10 @@ class PaperSubmission extends Component
         $_file = str_replace(' ', '_', $_name);
     
         $file->storeAs('public/articles/', $_file);
+
+        if($this->publish == 1){
+            File::where('publish', '=', 1)->update(['publish' => 0]);
+        }
     
         $article_file = new File;
         
@@ -204,6 +262,7 @@ class PaperSubmission extends Component
         $article_file->file_description = $this->file_description;
         $article_file->file_category_id = $this->file_category_id;
         $article_file->article_id       = $this->record->id;
+        $article_file->publish          = $this->publish;
 
         $article_file->save();
     
