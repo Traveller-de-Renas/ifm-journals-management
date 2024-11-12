@@ -79,7 +79,7 @@ class Article extends Model
 
     public function article_users()
     {
-        return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->withPivot('role')->withTimestamps();
+        return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->withPivot('id', 'role', 'number')->withTimestamps();
     }
 
     public function coauthors()

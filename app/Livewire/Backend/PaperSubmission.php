@@ -50,6 +50,7 @@ class PaperSubmission extends Component
     public $sauthor;
     public $author_search;
     public $author_names;
+    public $author_number;
 
     public $salutations = [];
     public $create_juser = false;
@@ -167,7 +168,7 @@ class PaperSubmission extends Component
 
         $this->record = $article;
 
-        Auth::user()->journals()->sync([$this->journal->id => ['role' => 'author']]);
+        Auth::user()->journals()->sync([$this->journal->id => ['role' => 'author', 'order' => 1]]);
 
         foreach($this->journal->confirmations as $key => $confirmation){
             $value = 'No';
@@ -311,13 +312,49 @@ class PaperSubmission extends Component
             $this->store('Pending');
         }
 
-        $author->articles()->sync([$this->record->id => ['role' => 'author']], false);
+        $max_number = $this->record->article_users()->where('role', 'author')->count();
+        $this->author_number = $max_number + 1;
+
+        $this->record->article_users()->sync([
+            $author->id => [
+                'role' => 'author',
+            ]
+        ], false);
+
+        $this->record->article_users()
+        ->where('role', 'author')
+        ->wherePivot('user_id', $author->id)
+        ->wherePivot('article_id', $this->record->id)
+        ->updateExistingPivot($author->id,
+            ['role' => 'author', 'number' => $this->author_number]
+        );
     }
 
     public function removeAuthor(User $author)
     {
-        $author->articles()->detach($this->record->id);
+        $_author = $this->record->article_users()
+            ->where('role', 'author')
+            ->wherePivot('user_id', $author->id)
+            ->wherePivot('article_id', $this->record->id)->first();
 
+
+        $others = $this->record->article_users()
+            ->where('role', 'author')
+            ->wherePivot('article_id', $_author->pivot->article_id)
+            ->wherePivot('number', '>', $_author->pivot->number)->orderBy('number')->get();
+
+        foreach($others as $key => $value){
+            $this->record->article_users()
+            ->where('role', 'author')
+            ->wherePivot('id', $value->pivot->id)
+            ->updateExistingPivot($value->pivot->user_id,
+                ['role' => 'author', 'number' => $value->pivot->number - 1]
+            );
+        }
+
+        $author->article_users()->detach($this->record->id);
+
+        //dd($others);
     }
 
 
@@ -354,6 +391,63 @@ class PaperSubmission extends Component
         $this->assignAuthor($juser);
 
         $this->create_juser = false;
+    }
+
+
+    public function changeOrder($pivot, $type)
+    {
+        $pivot =  (object) $pivot;
+
+        if($type == 'up'){
+            $other = $this->record->article_users()
+            ->where('role', 'author')
+            ->wherePivot('article_id', $pivot->article_id)
+            ->wherePivot('number', $pivot->number - 1)->first();
+
+            $this->record->article_users()
+            ->where('role', 'author')
+            ->wherePivot('id', $other->pivot->id)
+            ->updateExistingPivot($other->pivot->user_id,
+                ['role' => 'author', 'number' => $other->pivot->number + 1]
+            );
+
+            $this->record->article_users()
+            ->where('role', 'author')
+            ->wherePivot('id', $pivot->id)
+            ->updateExistingPivot($pivot->user_id,
+                ['role' => 'author', 'number' => $pivot->number - 1]
+            );
+            
+        }
+
+        if($type == 'down'){
+            // $this->record->article_users()
+            // ->where('role', 'author')
+            // ->wherePivot('user_id', $pivot->user_id)
+            // ->wherePivot('article_id', $pivot->article_id)
+            // ->updateExistingPivot($pivot->user_id,
+            //     ['role' => 'author', 'number' => $pivot->number + 1]
+            // );
+
+            $other = $this->record->article_users()
+            ->where('role', 'author')
+            ->wherePivot('article_id', $pivot->article_id)
+            ->wherePivot('number', $pivot->number + 1)->first();
+
+            $this->record->article_users()
+            ->where('role', 'author')
+            ->wherePivot('id', $other->pivot->id)
+            ->updateExistingPivot($other->pivot->user_id,
+                ['role' => 'author', 'number' => $other->pivot->number - 1]
+            );
+
+            $this->record->article_users()
+            ->where('role', 'author')
+            ->wherePivot('id', $pivot->id)
+            ->updateExistingPivot($pivot->user_id,
+                ['role' => 'author', 'number' => $pivot->number + 1]
+            );
+        }
     }
 
 }

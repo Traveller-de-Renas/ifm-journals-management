@@ -85,9 +85,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Journal::class)->withTimestamps();
     }
 
-    public function articles()
+    public function article_users()
     {
-        return $this->belongsToMany(Article::class)->withTimestamps();
+        return $this->belongsToMany(Article::class)->withPivot('id', 'role', 'number')->withTimestamps();
     }
 
     public function salutation()

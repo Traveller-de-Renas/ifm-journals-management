@@ -86,15 +86,15 @@
                 <div class="mt-4 mb-4">
                     <x-label for="sauthor" value="Authors List" class="mb-2 block font-medium text-sm text-gray-700" />
                     <div class="flex gap-2" >
-                        <x-input type="text" class="rounded-none" wire:model="sauthor" wire:keyup="searchAuthor($event.target.value)" placeholder="Search User" />
+                        <x-input type="text" class="" wire:model="sauthor" wire:keyup="searchAuthor($event.target.value)" placeholder="Search User" />
                         <x-button wire:click="createJuser();">Create</x-button>
                     </div>
                     <div class="results">
                         @if(!empty($author_names) && $sauthor != '')
     
-                        <div class="w-full bg-gray-200 shadow-lg">
+                        <div class="w-full bg-gray-200 rounded-md mt-1 shadow-lg">
                             @foreach ($author_names as $key => $author)
-                                <label class="w-full bg-gray-200 p-2 hover:bg-gray-300 cursor-pointer flex gap-4" for="author{{ $author?->id }}" wire:click="assignAuthor({{ $author->id }})">
+                                <label class="w-full bg-gray-200 rounded-md p-2 hover:bg-gray-300 cursor-pointer flex gap-4" for="author{{ $author?->id }}" wire:click="assignAuthor({{ $author->id }})">
                                     
                                     <div>
                                         <x-input type="checkbox" wire:model="author_ids" id="author{{ $author?->id }}" value="{{ $author?->id }}" />
@@ -112,15 +112,49 @@
                     
                     @if(!empty($record?->article_users))
                     <div class="mt-6">
-                       @foreach ($record->article_users as $article_user)
+                       @foreach ($record->article_users()->orderByPivot('number')->get() as $key => $article_user)
                        <div class="flex items-center">
-                            <div class="w-full border bg-gray-200 hover:bg-gray-300 border-slate-200 dark:border-slate-700 p-2 rounded-md">
+                            <div class="w-full border bg-gray-200 hover:bg-gray-300 border-slate-200 dark:border-slate-700 p-2 mb-1 rounded-md">
                             {{ $article_user->first_name }}
                             {{ $article_user->middle_name }}
                             {{ $article_user->last_name }}
                             </div>
+                            <div class="w-1/5 border bg-gray-200 hover:bg-gray-300 border-slate-200 dark:border-slate-700 p-2 mb-1 ml-2 rounded-md">
+                                Author No.{{ $article_user->pivot->number }}
+                            </div>
                             <div>
-                                <x-button-plain class="ml-2 bg-red-600" wire:click="removeAuthor({{ $article_user->id }})">Remove</x-button-plain>
+                                @if(($key + 1) == count($record?->article_users))
+                                <x-button class="ml-2 bg-[#3180b5]">
+                                    <svg class="h-6 w-6 text-gray-200"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                                    </svg>
+                                </x-button>
+                                @else
+                                <x-button class="ml-2" wire:click="changeOrder({{ $article_user->pivot }}, 'down')">
+                                    <svg class="h-6 w-6 text-gray-200"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                                    </svg>
+                                </x-button>
+                                @endif
+                            </div>
+                            <div>
+                                @if(($key + 1) == 1)
+                                <x-button class="ml-2 bg-[#3180b5]"  >
+                                    <svg class="h-6 w-6 text-gray-200"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                                    </svg>
+                                </x-button>
+                                @else 
+                                <x-button class="ml-2" wire:click="changeOrder({{ $article_user->pivot }}, 'up')"  >
+                                    <svg class="h-6 w-6 text-gray-200"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                                    </svg>
+                                </x-button>
+                                @endif
+                                
+                            </div>
+                            <div>
+                                <x-button-plain class="ml-2 bg-red-600 text-xs" wire:click="removeAuthor({{ $article_user->id }})">Remove</x-button-plain>
                             </div>
                         </div>
                         @endforeach 
