@@ -49,16 +49,40 @@
         {!! $record->description !!}
     </div>
 
-    <div class="w-full grid grid-cols-3 gap-4" >
-        <div class="">
-            
-        </div>
-        <div class=""></div>
-        <div class="text-right">
-            <a href="{{ route('journals.submission', $record->uuid) }}">
-                <x-button class="mb-4">Submit a Paper </x-button>
-            </a>
-        </div>
+    <div class="flex justify-between gap-2">
+        @if(auth()->user())
+            @if (!$record->journal_users->contains(auth()->user()->id))
+                <x-button wire:click="signup()" >Register </x-button>
+            @endif
+        @endif
+
+        <a href="{{ route('journals.submission', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Submit a Paper </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', [$record->uuid, 'Pending']) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Pending </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', [$record->uuid, 'Submitted']) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Received </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Rejected </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Under Review </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">On Pub. Process </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', [$record->uuid, 'Published']) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Published </x-button>
+        </a>
     </div>
 
     @if (session('danger'))
@@ -138,7 +162,7 @@
                                             </a>
                                             
                                             <div class="text-sm text-green-700">
-                                                {{ $article->author?->salutation->title }} {{ $article->author?->first_name }} {{ $article->author?->middle_name }} {{ $article->author?->last_name }} 
+                                                {{ $article->author?->salutation?->title }} {{ $article->author?->first_name }} {{ $article->author?->middle_name }} {{ $article->author?->last_name }} 
                                                 {{ $article->author?->affiliation != '' ? '('. $article->author?->affiliation.')' : '' }}
                                             </div>
 

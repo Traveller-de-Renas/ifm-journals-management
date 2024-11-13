@@ -35,12 +35,12 @@ class Article extends Model
     {
         return LogOptions::defaults()
         ->logAll();
-    }
+    } 
 
     public function journal()
     {
         return $this->belongsTo(Journal::class);
-    }
+    } 
 
     public function volume()
     {
@@ -55,17 +55,17 @@ class Article extends Model
     public function articleType()
     {
         return $this->belongsTo(ArticleType::class);
-    }
+    } 
 
     public function country()
     {
         return $this->belongsTo(Country::class);
-    }
+    } 
 
     public function files()
     {
         return $this->hasMany(File::class);
-    }
+    } 
 
     public function submission_confirmations()
     {

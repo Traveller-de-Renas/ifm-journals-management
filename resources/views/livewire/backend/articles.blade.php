@@ -49,16 +49,40 @@
         {!! $record->description !!}
     </div>
 
+    <div class="flex justify-between gap-2">
+        @if(auth()->user())
+            @if (!$record->journal_users->contains(auth()->user()->id))
+                <x-button wire:click="signup()" >Register </x-button>
+            @endif
+        @endif
 
-    <div class="w-full grid grid-cols-3 gap-4" >
-        <div class="">
-        </div>
-        <div class=""></div>
-        <div class="text-right">
-            <a href="{{ route('journals.submission', $record->uuid) }}">
-                <x-button class="mb-4">Submit a Paper </x-button>
-            </a>
-        </div>
+        <a href="{{ route('journals.submission', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Submit a Paper </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', [$record->uuid, 'Pending']) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Pending </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', [$record->uuid, 'Submitted']) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Received </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Rejected </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Under Review </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">On Pub. Process </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', [$record->uuid, 'Published']) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Published </x-button>
+        </a>
     </div>
 
     @if (session('danger'))
@@ -76,12 +100,12 @@
                 
                     <div class="hover:bg-gray-100 cursor-pointer p-2 border rounded-lg mb-4 ">
                         <a href="{{ route('journals.article', $article->uuid) }}">
-                            <div class="text-sm font-bold ">
+                            <div class="text-sm font-bold hover:text-blue-600 ">
                                 {{ $article->title }}
                             </div>
                         </a>
 
-                        <div class="text-xs text-blue-700 hover:text-blue-600 mb-4">
+                        <div class="text-xs text-blue-700 hover:text-blue-600 mb-2">
 
                             {{ $article?->author?->salutation?->title }} {{ $article?->author?->first_name }} {{ $article?->author?->middle_name }} {{ $article?->author?->last_name }},
                             
@@ -185,7 +209,7 @@
                 @endif
                 
                 <a href="{{ route('journals.archive', $record->uuid) }}">
-                <x-button class="w-full mt-4" >Go to Archive </x-button>
+                    <x-button class="w-full mt-4" >Go to Archive </x-button>
                 </a>
             </div>
         </div>

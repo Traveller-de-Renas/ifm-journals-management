@@ -122,22 +122,39 @@
         {!! $record->description !!}
     </div>
 
-    <div>
+    <div class="flex justify-between gap-2">
         @if(auth()->user())
             @if (!$record->journal_users->contains(auth()->user()->id))
                 <x-button wire:click="signup()" >Register </x-button>
             @endif
         @endif
 
-        {{-- <x-button>Request to Review </x-button>
-        <x-button>Request to Edit </x-button> --}}
-
-        <a href="{{ route('journals.submission', $record->uuid) }}">
-            <x-button class="mb-4">Submit a Paper </x-button>
+        <a href="{{ route('journals.submission', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Submit a Paper </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', $record->uuid) }}">
-            <x-button class="mb-4">Publications </x-button>
+        <a href="{{ route('journals.articles', [$record->uuid, 'Pending']) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Pending </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', [$record->uuid, 'Submitted']) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Received </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Rejected </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Under Review </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">On Pub. Process </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', [$record->uuid, 'Published']) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Published </x-button>
         </a>
     </div>
 
@@ -156,17 +173,17 @@
 
                 @if ($record->chief_editor?->id == auth()->user()->id || Auth()->user()->hasPermissionTo('Add Editorial Board'))
                 <div class="flex gap-2" >
-                    <x-input type="text" class="rounded-none" wire:model="seditor" wire:keyup="searchEditor($event.target.value)" placeholder="Search User" />
+                    <x-input type="text" class="rounded-lg" wire:model="seditor" wire:keyup="searchEditor($event.target.value)" placeholder="Search User" />
                     <x-button wire:click="createJuser();">Create</x-button>
                 </div>
                 @endif 
 
-                <div class="results">
+                <div class="results mt-2 rounded-lg">
                     @if(!empty($editor_names) && $seditor != '')
 
-                    <div class="w-full bg-gray-200 shadow-lg">
+                    <div class="w-full bg-gray-200 shadow-lg rounded-lg">
                         @foreach ($editor_names as $key => $editor)
-                            <label class="w-full bg-gray-200 p-2 hover:bg-gray-300 cursor-pointer flex gap-4" for="editor{{ $editor->id }}" wire:click="assignEditor({{ $editor->id }})">
+                            <label class="w-full bg-gray-200 p-2 hover:bg-gray-300 cursor-pointer flex gap-4 rounded-lg" for="editor{{ $editor->id }}" wire:click="assignEditor({{ $editor->id }})">
                                 
                                 <div>
                                     <x-input type="checkbox" wire:model="editor_ids" id="editor{{ $editor->id }}" value="{{ $editor->id }}" />
@@ -185,8 +202,8 @@
                 <div class="w-full mt-2">
                    @foreach ($record->journal_users()->where('role', 'editor')->get() as $key => $journal_user)
                    
-                        <div class="flex w-full" >
-                            <div class="w-full border bg-gray-100 hover:bg-gray-200 border-slate-200 px-4 rounded-sm cursor-pointer" wire:click="editorDetails({{ $key }});">
+                        <div class="flex w-full mb-2" >
+                            <div class="w-full border bg-gray-100 hover:bg-gray-200 border-slate-200 px-4 cursor-pointer rounded-lg" wire:click="editorDetails({{ $key }});">
                                 {{ $journal_user->salutation?->title }}
                                 {{ $journal_user->first_name }}
                                 {{ $journal_user->middle_name }}
@@ -214,7 +231,7 @@
                             @endif
                         </div>
                     
-                        <div class="p-2 text-sm border @if($key != $editor_detail) hidden @endif" >
+                        <div class="p-2 text-sm border mb-2 rounded-lg @if($key != $editor_detail) hidden @endif" >
                             <div class="w-full">
                                 <div class="text-sm w-full">Affiliation : {{ $journal_user->affiliation }}</div>
                                 <div class="text-sm w-full">Degree : {{ $journal_user->degree }}</div>

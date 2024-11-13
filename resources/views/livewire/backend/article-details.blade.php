@@ -40,25 +40,33 @@
     </div>
 
     @if ($record?->journal->chief_editor?->id == auth()->user()->id)
-        <div class="flex gap-2 w-full mb-4">
-            <x-button wire:click="sendBack()">
+        <div class="flex justify-between gap-2 w-full mb-4">
+            <x-button wire:click="sendBack()" class="flex-1">
                 Send Back to Author
             </x-button>
 
-            <x-button wire:click="assignReviewer()">
+            <x-button wire:click="assignReviewer()" class="flex-1">
                 Assign Reviewer
             </x-button>
 
-            <x-button-plain class="bg-red-700 hover:bg-red-600" wire:click="declineArticle()">
+            <x-button wire:click="assignEditor()" class="flex-1">
+                Assign Editor
+            </x-button>
+
+            <x-button wire:click="eFeedback()" class="flex-1">
+                Editor Recommendation
+            </x-button>
+
+            <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="declineArticle()">
                 Decline Article
             </x-button-plain>
 
             @if($record->status == 'Unpublished')
-            <x-button wire:click="changeStatus('Published')">
+            <x-button wire:click="changeStatus('Published')" class="flex-1">
                 Publish
             </x-button>
             @else
-            <x-button-plain class="bg-red-700 hover:bg-red-600" wire:click="changeStatus('Unpublished')">
+            <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="changeStatus('Unpublished')">
                 Unpublish
             </x-button-plain>
             @endif
@@ -194,6 +202,7 @@
                     <option value="{{ $reviewer->id }}">{{ $reviewer?->salutation?->title }} {{ $reviewer?->first_name }} {{ $reviewer?->middle_name }} {{ $reviewer?->last_name }}</option>
                     @endforeach
                 </select>
+                <br>
             </div>
         </x-slot>
         <x-slot name="footer">
@@ -202,6 +211,39 @@
                 {{ __('Assign') }}
             </x-button>
             <x-secondary-button class="ml-3" wire:click="$toggle('reviewerModal')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-secondary-button>
+
+        </x-slot>
+    </x-dialog-modal>
+
+    <x-dialog-modal wire:model="assignModal">
+        <x-slot name="title">
+            {{ __('Assign Editor') }}
+        </x-slot>
+        <x-slot name="content">
+            <div class="mt-4">
+
+                @if(!empty($users))
+                Select Editor
+
+                <select class="rounded w-full border-gray-300" wire:model="user_id">
+                    @foreach($users as $key => $user)
+                    <option value="{{ $user->id }}">{{ $user?->salutation?->title }} {{ $user?->first_name }} {{ $user?->middle_name }} {{ $user?->last_name }}</option>
+                    @endforeach
+                </select>
+                @else
+                <div class="text-sm text-red-600">No Editors Available</div>
+                @endif
+                <br>
+            </div>
+        </x-slot>
+        <x-slot name="footer">
+            
+            <x-button type="submit" wire:click="attachUser()" wire:loading.attr="disabled" >
+                {{ __('Assign') }}
+            </x-button>
+            <x-secondary-button class="ml-3" wire:click="$toggle('assignModal')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 
@@ -252,6 +294,39 @@
                 {{ __('Submit') }}
             </x-button>
             <x-secondary-button class="ml-3" wire:click="$toggle('sendModal')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-secondary-button>
+
+        </x-slot>
+    </x-dialog-modal>
+
+
+    <x-dialog-modal wire:model="editorFeedback">
+        <x-slot name="title">
+            {{ __('Return Article to Chief Editor') }}
+        </x-slot>
+        <x-slot name="content">
+
+            Editor Decision
+
+            <select class="rounded w-full border-gray-300" wire:model="decision">
+                <option value="proceed">Send to Reviewer</option>
+                <option value="rejected">Rejected</option>
+            </select>
+            
+            <div class="mt-4" wire:ignore>
+                <x-label for="description" value="Description" class="mb-2 block font-medium text-sm text-gray-700" />
+                <x-textarea type="text" id="description" class="w-full" wire:model="description" placeholder="Enter Description" rows="7" />
+                <x-input-error for="description" />
+            </div>
+
+        </x-slot>
+        <x-slot name="footer">
+            
+            <x-button type="submit" wire:click="toChiefEditor()" wire:loading.attr="disabled" >
+                {{ __('Submit') }}
+            </x-button>
+            <x-secondary-button class="ml-3" wire:click="$toggle('editorFeedback')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 

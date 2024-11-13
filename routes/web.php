@@ -36,7 +36,7 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/categories', [JournalController::class, 'categories'])->name('journals.categories');
     Route::get('/details/{journal}', [JournalController::class, 'details'])->name('journals.details');
     Route::get('/submission/{journal}/{article?}', [JournalController::class, 'submission'])->name('journals.submission');
-    Route::get('/articles/{journal}', [JournalController::class, 'articles'])->name('journals.articles');
+    Route::get('/articles/{journal}/{status?}', [JournalController::class, 'articles'])->name('journals.articles');
     Route::get('/article/{article}', [JournalController::class, 'article'])->name('journals.article');
     Route::get('/article_evaluation/{article}/{reviewer}', [JournalController::class, 'article_evaluation'])->name('journals.article_evaluation');
     Route::get('/archive/{journal}', [JournalController::class, 'archive'])->name('journals.archive');

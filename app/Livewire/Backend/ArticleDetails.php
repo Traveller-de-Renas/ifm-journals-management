@@ -21,6 +21,11 @@ class ArticleDetails extends Component
     public $reviewerModal = false;
     public $declineModal = false;
     public $sendModal = false;
+    public $assignModal = false;
+    public $editorFeedback = false;
+
+    public $users;
+    public $role;
 
     public $volume;
     public $issue;
@@ -54,6 +59,16 @@ class ArticleDetails extends Component
         $this->reviewerModal = true;
     }
 
+    public function assignEditor()
+    {
+        // $this->reviewers = User::all();
+        // $chief = $this->record->journal->chief_editor)->first()->id;
+
+        $this->users = $this->record->journal->editors;
+        $this->role = 'editor';
+        $this->assignModal = true;
+    }
+
     public function declineArticle()
     {
         $this->dispatch('contentChanged');
@@ -72,6 +87,20 @@ class ArticleDetails extends Component
         
         session()->flash('success', 'Reviewer is Assigned successfully');
         $this->reviewerModal = false;
+    }
+
+    public function eFeedback()
+    {
+        $this->dispatch('contentChanged');
+        $this->editorFeedback = true;
+    }
+
+    public function attachUser()
+    {
+        $this->record->article_users()->sync([$this->user_id => ['role' => $this->role]], false);
+        
+        session()->flash('success', 'Assigned successfully to this Article');
+        $this->assignModal = false;
     }
 
     public function decline()
@@ -99,9 +128,26 @@ class ArticleDetails extends Component
             'description' => $this->description,
         ]);
 
+        $this->record->status = 'From Editorial Board';
+        $this->record->save();
+        session()->flash('success', 'Done!');
+
+        $this->reset(['description']);
+
+        $this->declineModal = false;
+    }
+
+    public function toChiefEditor()
+    {
+        $mlog = ArticleMovementLog::create([
+            'article_id' => $this->record->id,
+            'user_id' => auth()->user()->id,
+            'description' => $this->description,
+        ]);
+
         $this->record->status = 'From Editor';
         $this->record->save();
-        session()->flash('success', 'This Article is Declined');
+        session()->flash('success', 'Successifully Sent to Chief Editor');
 
         $this->reset(['description']);
 
@@ -110,7 +156,6 @@ class ArticleDetails extends Component
 
     public function updateVolume()
     {
-        //$this->record->volume_id = $this->volume;
         $this->record->issue_id  = $this->issue;
         $this->record->save();
 
@@ -120,7 +165,6 @@ class ArticleDetails extends Component
 
     public function changeStatus($status)
     {
-        //dd($this->record);
         $this->record->status = $status;
         $this->record->update();
         session()->flash('success', 'Article Successifully '.$status.'ed');

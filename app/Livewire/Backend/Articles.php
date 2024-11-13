@@ -25,6 +25,7 @@ class Articles extends Component
     public $record;
     public $volume;
     public $issue;
+    public $status;
     
     public function mount(Request $request){
 
@@ -35,6 +36,10 @@ class Articles extends Component
         $this->record = Journal::where('uuid', $request->journal)->first();
         if(empty($this->record)){
             abort(404);
+        }
+
+        if($request->status != '' && in_array($request->status, ['Pending', 'Submitted', 'Rejected', 'Published'])){
+            $this->status = $request->status;
         }
     }
     
@@ -54,7 +59,9 @@ class Articles extends Component
         //     )->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         // }
 
-        $articles = Article::where('journal_id', $this->record->id)->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
+        $articles = Article::when($this->status, function($query){ 
+            return $query->where('status', $this->status);
+        })->where('journal_id', $this->record->id)->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         
         $articles = $articles->paginate(20);
 
