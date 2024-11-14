@@ -178,36 +178,6 @@
             <div class="w-full mb-4">
                 <p class="text-lg font-bold mb-2">Editorial Board</p>
 
-                @if(auth()->user())
-                @if ($record->chief_editor?->id == auth()->user()->id || Auth()->user()->hasPermissionTo('Add Editorial Board'))
-                <div class="flex gap-2" >
-                    <x-input type="text" class="rounded-none" wire:model="seditor" wire:keyup="searchEditor($event.target.value)" placeholder="Search User" />
-                    <x-button wire:click="createJuser();">Create</x-button>
-                </div>
-                @endif 
-
-                <div class="results">
-                    @if(!empty($editor_names) && $seditor != '')
-
-                    <div class="w-full bg-gray-200 shadow-lg">
-                        @foreach ($editor_names as $key => $editor)
-                            <label class="w-full bg-gray-200 p-2 hover:bg-gray-300 cursor-pointer flex gap-4" for="editor{{ $editor->id }}" wire:click="assignEditor({{ $editor->id }})">
-                                
-                                <div>
-                                    <x-input type="checkbox" wire:model="editor_ids" id="editor{{ $editor->id }}" value="{{ $editor->id }}" />
-                                </div>
-                                <div>
-                                    {{ $editor->salutation?->title }} {{ $editor->first_name }} {{ $editor->middle_name }} {{ $editor->last_name }}
-                                </div>
-                                
-                            </label>
-                        @endforeach
-                    </div>
-                    
-                    @endif
-                </div>
-                @endif
-
                 <div class="w-full mt-2">
                    @foreach ($record->journal_users()->where('role', 'editor')->get() as $key => $journal_user)
                    
@@ -226,20 +196,6 @@
                                     <p class="text-xs text-blue-400">Editor</p>
                                 @endif
                             </div>
-
-                            @if(auth()->user())
-                            @if (Auth()->user()->id == $record->user_id || Auth()->user()->hasPermissionTo('Add Editorial Board'))
-                            
-                                <x-button class="ml-2 " wire:click="chiefEditor({{ $journal_user->id }})" >
-                                    Chief
-                                </x-button>
-
-                                <x-button-plain class="ml-2 bg-red-600" wire:click="removeEditor({{ $journal_user->id }})">
-                                    <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                                </x-button-plain>
-                            
-                            @endif
-                            @endif
                         </div>
                     
                         <div class="p-2 text-sm border @if($key != $editor_detail) hidden @endif" >
@@ -282,104 +238,5 @@
             @endforeach
         </div>
     </div>
-
-    <x-dialog-modal wire:model="create_juser">
-        <x-slot name="title">
-            {{ __('Create New Editor') }}
-        </x-slot>
-        <x-slot name="content">
-            <div class="grid grid-cols-2 gap-2">
-                <div class="mt-4">
-                    <x-label for="juser_title" value="Title" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-select id="juser_title" class="w-full" :options="$salutations" wire:model="juser_salutation_id" />
-                    <x-input-error for="juser_title" />
-                </div>
-    
-                <div class="mt-4">
-                    <x-label for="juser_gender" value="Gender" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-select id="juser_gender" class="w-full" :options="['Male' => 'Male', 'Female' => 'Female']" wire:model="juser_gender" />
-                    <x-input-error for="juser_gender" />
-                </div>
-            </div>
-                
-                <div class="mt-4">
-                    <x-label for="juser_lname" value="Last Name" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="text" id="juser_lname" class="w-full" wire:model="juser_lname" />
-                    <x-input-error for="juser_lname" />
-                </div>
-            
-            
-            <div class="grid grid-cols-2 gap-2">
-                <div class="mt-4">
-                    <x-label for="juser_fname" value="First Name" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="text" id="juser_fname" class="w-full" wire:model="juser_fname" />
-                    <x-input-error for="juser_fname" />
-                </div>
-                <div class="mt-4">
-                    <x-label for="juser_mname" value="Middle Name" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="text" id="juser_mname" class="w-full" wire:model="juser_mname" />
-                    <x-input-error for="juser_mname" />
-                </div>
-            </div>
-    
-            <div class="grid grid-cols-2 space-x-2">
-                <div class="mt-4">
-                    <x-label for="juser_email" value="Email" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="text" id="juser_email" class="w-full" wire:model="juser_email" />
-                    <x-input-error for="juser_email" />
-                </div>
-                <div class="mt-4">
-                    <x-label for="juser_phone" value="Phone" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="text" id="juser_phone" class="w-full" wire:model="juser_phone" />
-                    <x-input-error for="juser_phone" />
-                </div>
-            </div>
-    
-            <div class="grid grid-cols-2 space-x-2">
-                <div class="mt-4">
-                    <x-label for="juser_affiliation" value="Affiliation" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="text" id="juser_affiliation" class="w-full" wire:model="juser_affiliation" />
-                    <x-input-error for="juser_affiliation" />
-                </div>
-                <div class="mt-4">
-                    <x-label for="country_id" value="Country" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-select id="country_id" class="w-full" :options="$countries" wire:model="juser_country_id" />
-                    <x-input-error for="country_id" />
-                </div>
-            </div>
-        </x-slot>
-        <x-slot name="footer">
-            
-            <x-button type="submit" wire:click="storeJuser()" wire:loading.attr="disabled">
-                {{ __('Submit') }}
-            </x-button>
-            <x-secondary-button class="ml-3" wire:click="$toggle('create_juser')" wire:loading.attr="disabled">
-                {{ __('Cancel') }}
-            </x-secondary-button>
-    
-        </x-slot>
-    </x-dialog-modal>
-
-
-    <x-dialog-modal wire:model="signupModal">
-        <x-slot name="title">
-            {{ __('Delete Data') }}
-        </x-slot>
-        <x-slot name="content">
-            <div class="mt-4">
-                <p class="text-center">Are you sure you want to sign up for this journal.?</p>
-            </div>
-        </x-slot>
-        <x-slot name="footer">
-            
-            <x-button type="submit" wire:click="confirmSignUp({{ $record->id }})" wire:loading.attr="disabled" >
-                {{ __('Confirm') }}
-            </x-button>
-            <x-secondary-button class="ml-3" wire:click="$toggle('signupModal')" wire:loading.attr="disabled">
-                {{ __('Cancel') }}
-            </x-secondary-button>
-
-        </x-slot>
-    </x-dialog-modal>
 
 </x-module>

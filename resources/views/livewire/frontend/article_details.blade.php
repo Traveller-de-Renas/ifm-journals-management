@@ -17,7 +17,7 @@
         </p>
     </x-slot>
 
-    <div class="mb-8">
+    <div class="mb-6">
         @foreach ($record->article_users as $key => $user)
             {{ $user->first_name }} ({{ $user->affiliation }})
         @endforeach
@@ -34,23 +34,6 @@
             <p class="ml-2 text-lg text-gray-600 font-bold">| {{ $file?->downloads }} Downloads | Published On {{ date("Y-m-d") }} </p>
         </div>
     </div>
-    
-
-    @if(auth()->user())
-    <div class="flex gap-2 w-full mb-4">
-        <x-button>
-            Send Back to Author
-        </x-button>
-
-        <x-button wire:click="assignReviewer({{ $record->id }})">
-            Assign Reviewer
-        </x-button>
-
-        <x-button-plain class="bg-red-700 hover:bg-red-600">
-            Decline Article
-        </x-button-plain>
-    </div>
-    @endif
 
     <div class="w-full">
         <p class="text-lg font-bold mb-2">Abstract</p>
@@ -121,29 +104,6 @@
             @endif
         </div>
     </div>
-    
-        {{-- <div class="w-full mb-4">
-            @php
-                $files_ = $record->files;
-            @endphp
-            @if(count($files_) > 0)
-                <p class="text-lg font-bold">Attached Files</p>
-                <div class="text-sm text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2"></div>
-                @foreach ($files_ as $key => $file)
-                <div class="flex items-center border-b pb-2 w-full">
-                    <div class="w-full">
-                        {{ $file->file_category?->name }}
-                        <p class="text-sm text-gray-400">Uploaded on {{ $file->created_at }}</p>
-                    </div>
-                    <div class="w-2/12 text-right">
-                        <a href="{{ asset('storage/'.$file->path) }}" target="_blank" class="text-blue-700 hover:text-blue-600">
-                            <x-button>Download </x-button>
-                        </a>
-                    </div>
-                </div>
-                @endforeach
-            @endif
-        </div> --}}
     </div>
 
     <x-dialog-modal wire:model="reviewerModal">

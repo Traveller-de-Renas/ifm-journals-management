@@ -39,6 +39,56 @@
         </div>
     </div>
 
+    <div class="flex justify-between gap-2">
+        @if(auth()->user())
+            @if (!$record->journal->journal_users->contains(auth()->user()->id))
+                <x-button wire:click="signup()" >Register </x-button>
+            @endif
+        @endif
+
+        <a href="{{ route('journals.submission', $record->journal->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Submit a Paper </x-button>
+        </a>
+        
+        <a href="{{ route('journals.articles', [$record->journal->uuid, 'Pending']) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Pending </x-button>
+        </a>
+
+        {{--! chief editor --}}
+        <a href="{{ route('journals.articles', [$record->journal->uuid, 'Submitted']) }}" class="flex-1">
+            <x-button class="mb-4 w-full"> 
+                @if($record->journal->chief_editor->id == auth()->user()->id)
+                Received
+                @else
+                Submitted
+                @endif
+            </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->journal->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Rejected </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->journal->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Under Review </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', $record->journal->uuid) }}" class="flex-1">
+            <x-button class="mb-4 w-full">On Pub. Process </x-button>
+        </a>
+
+        <a href="{{ route('journals.articles', [$record->journal->uuid, 'Published']) }}" class="flex-1">
+            <x-button class="mb-4 w-full">Published </x-button>
+        </a>
+    </div>
+
+    <div class="w-full">
+        <p class="text-lg font-bold mb-2">Abstract</p>
+        <div class="w-full text-justify mb-4">
+            {!! $record->abstract !!}
+        </div>
+    </div>
+
     @if ($record?->journal->chief_editor?->id == auth()->user()->id)
         <div class="flex justify-between gap-2 w-full mb-4">
             <x-button wire:click="sendBack()" class="flex-1">
@@ -70,16 +120,8 @@
                 Unpublish
             </x-button-plain>
             @endif
-
         </div>
     @endif
-
-    <div class="w-full">
-        <p class="text-lg font-bold mb-2">Abstract</p>
-        <div class="w-full text-justify mb-4">
-            {!! $record->abstract !!}
-        </div>
-    </div>
 
     <div class="w-full grid grid-cols-12 gap-2">
         <div class="col-span-8">
@@ -97,11 +139,12 @@
                     {{ $record->areas }}
                 </div>
             </div>
+
         
             <div class="w-full mb-4">
                 <p class="text-lg font-bold">Co Authors</p>
                 <div class="text-sm text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
-                    @foreach ($record->article_users()->wherePivot('role', '<>', 'reviewer')->get() as $key => $user)
+                    @foreach ($record->article_users()->wherePivot('role', 'author')->get() as $key => $user)
                     <div class="flex items-center">
                         <a href="{{ route('admin.user_preview', $user->author?->uuid) }}" >
                         {{ $user->salutation?->title }} {{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}
@@ -113,15 +156,6 @@
             </div>
         </div>
         <div class="col-span-4">
-            <div class="flex gap-2 justify-between w-full">
-                <a class="block w-full" href="{{ route('journals.submission', $record->journal->uuid) }}">
-                    <x-button class="mb-4 w-full">Submit a Paper </x-button>
-                </a>
-        
-                <a class="block w-full" href="{{ route('journals.articles', $record->journal->uuid) }}">
-                    <x-button class="mb-4 w-full">Publications </x-button>
-                </a>
-            </div>
 
             @if ($record?->journal->chief_editor?->id == auth()->user()->id)
             <p class="text-lg font-bold mb-4">Volume & Issue</p>
@@ -236,6 +270,20 @@
                 <div class="text-sm text-red-600">No Editors Available</div>
                 @endif
                 <br>
+                <br>
+
+                <p class="font-bold">Currently Assigned Editor</p>
+                @php
+                $assigned_editor = $record->article_users()->wherePivot('role', 'editor')->first();
+                @endphp
+
+                <div class="flex items-center">
+                    <a href="{{ route('admin.user_preview', $assigned_editor?->uuid) }}" >
+                    {{ $assigned_editor?->salutation?->title }} {{ $assigned_editor?->first_name }} {{ $assigned_editor?->middle_name }} {{ $assigned_editor?->last_name }}
+                    {{ $assigned_editor?->affiliation != '' ? '('. $assigned_editor?->affiliation.')' : '' }}
+                    </a>
+                </div>
+
             </div>
         </x-slot>
         <x-slot name="footer">

@@ -31,6 +31,8 @@ class ArticleDetails extends Component
     public $issue;
     public $volumes = [];
     public $issues  = [];
+
+    public $user_id;
     
     public function mount(Request $request){
         if(!Str::isUuid($request->article)){

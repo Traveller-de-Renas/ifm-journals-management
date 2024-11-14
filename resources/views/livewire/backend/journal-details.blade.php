@@ -138,7 +138,13 @@
         </a>
 
         <a href="{{ route('journals.articles', [$record->uuid, 'Submitted']) }}" class="flex-1">
-            <x-button class="mb-4 w-full">Received </x-button>
+            <x-button class="mb-4 w-full">
+                @if($record->chief_editor->id == auth()->user()->id)
+                Received
+                @else
+                Submitted
+                @endif
+            </x-button>
         </a>
 
         <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
