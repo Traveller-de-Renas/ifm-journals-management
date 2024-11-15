@@ -59,8 +59,19 @@ class Articles extends Component
         //     )->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         // }
 
+
+
         $articles = Article::when($this->status, function($query){ 
-            return $query->where('status', $this->status);
+            
+            $query->where('status', $this->status);
+
+            if($this->status == 'Submitted' && $this->record->editors->contains(auth()->user()->id) && $this->record->chief_editor->id != auth()->user()->id){
+                $query->whereHas('editors', function($query){
+                    $query->where('user_id', auth()->user()->id);
+                });
+            }
+
+            return $query;
         })->where('journal_id', $this->record->id)->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         
         $articles = $articles->paginate(20);

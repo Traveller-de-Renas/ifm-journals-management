@@ -89,6 +89,10 @@
         </div>
     </div>
 
+    <x-button wire:click="sendEmail()" class="flex-1">
+        Send Email
+    </x-button>
+
     @if ($record?->journal->chief_editor?->id == auth()->user()->id)
         <div class="flex justify-between gap-2 w-full mb-4">
             <x-button wire:click="sendBack()" class="flex-1">

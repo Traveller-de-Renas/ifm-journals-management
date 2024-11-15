@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Backend;
 
+use App\Mail\EditorMail;
 use App\Models\User;
 use App\Models\Article;
 use App\Models\ArticleMovementLog;
@@ -10,6 +11,7 @@ use App\Models\Volume;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ArticleDetails extends Component
 {
@@ -100,6 +102,8 @@ class ArticleDetails extends Component
     public function attachUser()
     {
         $this->record->article_users()->sync([$this->user_id => ['role' => $this->role]], false);
+
+        Mail::to('mrenatuskiheka@yahoo.com')->send(new EditorMail($this->record));
         
         session()->flash('success', 'Assigned successfully to this Article');
         $this->assignModal = false;
@@ -170,5 +174,12 @@ class ArticleDetails extends Component
         $this->record->status = $status;
         $this->record->update();
         session()->flash('success', 'Article Successifully '.$status.'ed');
+    }
+
+
+    public function sendEmail()
+    {
+        //dd($this->record);
+        Mail::to('mrenatuskiheka@yahoo.com')->send(new EditorMail($this->record));
     }
 }

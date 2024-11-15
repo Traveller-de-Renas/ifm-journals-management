@@ -66,11 +66,15 @@
             <x-button class="mb-4 w-full">Pending </x-button>
         </a>
 
+        {{-- {{ $record->editors }} --}}
+
+
+
 
         {{--! chief editor --}}
         <a href="{{ route('journals.articles', [$record->uuid, 'Submitted']) }}" class="flex-1">
             <x-button class="mb-4 w-full"> 
-                @if($record->chief_editor->id == auth()->user()->id)
+                @if($record->chief_editor->id == auth()->user()->id || $record->editors->contains(auth()->user()->id))
                 Received
                 @else
                 Submitted
@@ -115,12 +119,14 @@
                             </div>
                         </a>
 
+                        {{-- {{ print_r() }} --}}
+
                         <div class="text-xs text-blue-700 hover:text-blue-600 mb-2">
 
                             {{ $article?->author?->salutation?->title }} {{ $article?->author?->first_name }} {{ $article?->author?->middle_name }} {{ $article?->author?->last_name }},
                             
-                            @foreach ($article->article_users as $key => $article_user)
-                            {{ $article_user->salutation?->title }} {{ $article_user->first_name }} {{ $article_user->middle_name }} {{ $article_user->last_name }},
+                            @foreach ($article->article_users()->wherePivot('role', 'author')->get() as $key => $article_user)
+                                {{ $article_user->salutation?->title }} {{ $article_user->first_name }} {{ $article_user->middle_name }} {{ $article_user->last_name }},
                             @endforeach
 
                         </div>
@@ -130,11 +136,11 @@
                                 <span class="
 
                                 @if ($article->status == 'Published')
-                                    bg-green-700
+                                    bg-green-700 text-white
                                 @elseif($article->status == 'Pending') 
                                     bg-yellow-700
                                 @elseif($article->status == 'Submitted') 
-                                    bg-blue-500
+                                    bg-blue-500 text-white
                                 @elseif($article->status == 'Banned')
                                     bg-red-900
                                 @elseif($article->status == 'On Review')
@@ -160,11 +166,16 @@
                                 <x-button-plain class="bg-blue-700">
                                     <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />  <polyline points="7 10 12 15 17 10" />  <line x1="12" y1="15" x2="12" y2="3" /></svg>
                                 </x-button-plain>
+
+                                @if(in_array(auth()->user()->id, $article->article_users()->wherePivot('role', 'author')->get()->pluck('id')->toArray()) || $article->author?->id == auth()->user()->id)
+
                                 <a href="{{ route('journals.submission', [$record->uuid, $article->uuid]) }}">
                                 <x-button-plain class="bg-blue-700">
                                     <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" /></svg>
                                 </x-button-plain>
                                 </a>
+
+                                @endif
 
                                 @if ($article->author?->id == auth()->user()->id)
                                 

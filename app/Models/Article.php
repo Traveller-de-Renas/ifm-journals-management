@@ -87,6 +87,11 @@ class Article extends Model
         return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->wherePivot('role', 'author')->withPivot('role')->withTimestamps();
     }
 
+    public function editors()
+    {
+        return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->wherePivot('role', 'editor')->withPivot('role')->withTimestamps();
+    }
+
     public function reviewers()
     {
         return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->wherePivot('role', 'reviewer')->withPivot('role')->withTimestamps();
