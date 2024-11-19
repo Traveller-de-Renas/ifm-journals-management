@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Backend;
 
-use App\Mail\EditorMail;
 use App\Models\User;
-use App\Models\Article;
-use App\Models\ArticleMovementLog;
 use App\Models\Issue;
 use App\Models\Volume;
+use App\Models\Article;
 use Livewire\Component;
+use App\Mail\EditorMail;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ArticleStatus;
+use App\Models\ArticleMovementLog;
 use Illuminate\Support\Facades\Mail;
 
 class ArticleDetails extends Component
@@ -116,7 +117,7 @@ class ArticleDetails extends Component
             'description' => $this->description,
         ]);
 
-        $this->record->status = 'Declined';
+        $this->record->article_status_id = $this->articleStatus('007')->id;
         $this->record->save();
         session()->flash('success', 'This Article is Declined');
 
@@ -133,7 +134,7 @@ class ArticleDetails extends Component
             'description' => $this->description,
         ]);
 
-        $this->record->status = 'From Editorial Board';
+        $this->record->article_status_id = $this->articleStatus('013')->id;
         $this->record->save();
         session()->flash('success', 'Done!');
 
@@ -150,7 +151,7 @@ class ArticleDetails extends Component
             'description' => $this->description,
         ]);
 
-        $this->record->status = 'From Editor';
+        $this->record->article_status_id = $this->articleStatus('003')->id;
         $this->record->save();
         session()->flash('success', 'Successifully Sent to Chief Editor');
 
@@ -170,7 +171,7 @@ class ArticleDetails extends Component
 
     public function changeStatus($status)
     {
-        $this->record->status = $status;
+        $this->record->article_status_id = $this->articleStatus($status)->id;
         $this->record->update();
         session()->flash('success', 'Article Successifully '.$status.'ed');
     }
@@ -178,7 +179,10 @@ class ArticleDetails extends Component
 
     public function sendEmail()
     {
-        //dd($this->record);
         Mail::to('mrenatuskiheka@yahoo.com')->send(new EditorMail($this->record));
+    }
+
+    public function articleStatus($code){
+        return ArticleStatus::where('code', $code)->first();
     }
 }

@@ -179,6 +179,7 @@ class Users extends Component
             return response()->json(['message'=>'Permission does not Exists']);
         }
     }
+    
 
     public function userStatus($status, User $user)
     {

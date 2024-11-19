@@ -28,7 +28,7 @@ class Article extends Model
         'article_type_id',
         'country_id',
         'user_id',
-        'status',
+        'article_status_id',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -95,5 +95,10 @@ class Article extends Model
     public function reviewers()
     {
         return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->wherePivot('role', 'reviewer')->withPivot('role')->withTimestamps();
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(ArticleStatus::class);
     }
 }

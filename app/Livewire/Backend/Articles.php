@@ -10,6 +10,7 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Livewire\WithPagination;
+use App\Models\ArticleStatus;
 
 class Articles extends Component
 {
@@ -41,8 +42,10 @@ class Articles extends Component
             abort(404);
         }
 
-        if($request->status != '' && in_array($request->status, ['Pending', 'Submitted', 'Rejected', 'Published'])){
-            $this->status = $request->status;
+        $article_states = ArticleStatus::all()->pluck('code')->toArray();
+
+        if($request->status != '' && in_array($request->status, $article_states)){
+            $this->status = ArticleStatus::where('code', $request->status)->first();
         }
     }
     
@@ -66,9 +69,9 @@ class Articles extends Component
 
         $articles = Article::when($this->status, function($query){
             
-            $query->where('status', $this->status);
+            $query->where('article_status_id', $this->status->id);
 
-            if($this->status == 'Submitted' && $this->record->editors->contains(auth()->user()->id) && $this->record->chief_editor->id != auth()->user()->id){
+            if($this->status->code == '002' && $this->record->editors->contains(auth()->user()->id) && $this->record->chief_editor->id != auth()->user()->id){
                 $query->whereHas('editors', function($query){
                     $query->where('user_id', auth()->user()->id);
                 });
@@ -119,8 +122,10 @@ class Articles extends Component
 
     public function cancelSubmission()
     {
+        $status = $this->articleStatus('012');
+
         $this->article->update([
-            "status" => "Cancelled Submission"
+            "article_status_id" => $status->id
         ]);
 
         session()->flash('success', 'Submission Cancelled...!');
@@ -171,17 +176,21 @@ class Articles extends Component
                 session()->flash('success', 'New Issue has been created successfully!');
             }
         }
-        
     }
 
     public function publishIssue(Issue $issue)
     {
         $issue->status = 'Published';
 
+        $state = $this->articleStatus('006');
+
         if($issue->save()){
-            $issue->articles()->update(['status' => 'Published']);
+            $issue->articles()->update(['article_status_id' => $state->id]);
             session()->flash('success', 'Issue has been published successfully!');
         }
-        
+    }
+
+    public function articleStatus($code){
+        return ArticleStatus::where('code', $code)->first();
     }
 }

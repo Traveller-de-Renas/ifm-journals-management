@@ -89,18 +89,14 @@
         </div>
     </div>
 
-    <x-button wire:click="sendEmail()" class="flex-1">
+    {{-- <x-button wire:click="sendEmail()" class="flex-1">
         Send Email
-    </x-button>
+    </x-button> --}}
 
     @if ($record?->journal->chief_editor?->id == auth()->user()->id)
         <div class="flex justify-between gap-2 w-full mb-4">
             <x-button wire:click="sendBack()" class="flex-1">
                 Send Back to Author
-            </x-button>
-
-            <x-button wire:click="assignReviewer()" class="flex-1">
-                Assign Reviewer
             </x-button>
 
             <x-button wire:click="assignEditor()" class="flex-1">
@@ -111,19 +107,25 @@
                 Editor Recommendation
             </x-button>
 
+            <x-button wire:click="assignReviewer()" class="flex-1">
+                Assign Reviewer
+            </x-button>
+
+            
+
+            @if($record->status->code == '006')
+            <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="changeStatus('009')">
+                Unpublish
+            </x-button-plain>
+            @else
+            <x-button wire:click="changeStatus('006')" class="flex-1">
+                Publish Article
+            </x-button>
+            @endif
+
             <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="declineArticle()">
                 Decline Article
             </x-button-plain>
-
-            @if($record->status == 'Unpublished')
-            <x-button wire:click="changeStatus('Published')" class="flex-1">
-                Publish
-            </x-button>
-            @else
-            <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="changeStatus('Unpublished')">
-                Unpublish
-            </x-button-plain>
-            @endif
         </div>
     @endif
 

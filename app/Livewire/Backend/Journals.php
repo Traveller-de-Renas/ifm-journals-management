@@ -12,6 +12,7 @@ use Livewire\Component;
 use App\Models\Category;
 use App\Models\Salutation;
 use App\Models\ArticleType;
+use App\Models\ArticleStatus;
 use App\Models\JournalInstruction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -242,7 +243,7 @@ class Journals extends Component
                         ]
                     );
 
-
+                    $status = ArticleStatus::where('code', '006')->first();
                     $artc = Article::create([
                         'title'             => $article->article_title,
                         'abstract'          => $article->abstract,
@@ -250,17 +251,15 @@ class Journals extends Component
                         'journal_id'        => $the_journal->id,
                         'keywords'          => $article->keywords,
                         'areas'             => $article->areas,
-                        'status'            => 'Published',
+                        'article_status_id' => $status->id,
                         'user_id'           => $user->id,
                         'volume_id'         => $volume->id,
                         'issue_id'          => $issue->id
                     ]);
             
                     $user->journals()->sync([$the_journal->id => ['role' => 'author']]);
-
                 }
             }
-
         }
     }
 

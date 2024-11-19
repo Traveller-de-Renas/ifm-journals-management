@@ -14,25 +14,27 @@ class ArticleStatusSeeder extends Seeder
     public function run(): void
     {
         $statuses = array(
-            ['Pending', 'yellow'],
-            ['Submitted', 'blue'],
-            ['From Editor', 'indigo'],
-            ['On Review', 'purple'],
-            ['From Reviewer', 'pink'],
-            ['Published', 'green'],
-            ['Declined', 'gray'],
-            ['Declined Revision', 'red'],
-            ['Unpublished', 'red'],
-            ['Banned', 'black'],
-            ['Publication Process', 'blue'],
+            ['Pending', '001', 'yellow'],
+            ['Submitted', '002', 'blue'],
+            ['From Editor', '003', 'indigo'],
+            ['On Review', '004', 'purple'],
+            ['From Reviewer', '005', 'pink'],
+            ['Published', '006', 'green'],
+            ['Declined', '007', 'gray'],
+            ['Declined Revision', '008', 'red'],
+            ['Unpublished', '009', 'red'],
+            ['Banned', '010', 'black'],
+            ['Publication Process', '011', 'blue'],
+            ['Cancelled Submission', '012', 'gray'],
         );
 
         
         foreach($statuses as $status){
             $data = ArticleStatus::create([
                 'name' => $status[0],
+                'code' => $status[1],
                 'description' => $status[0],
-                'color' => $status[1]
+                'color' => $status[2]
             ]);
         }
     }

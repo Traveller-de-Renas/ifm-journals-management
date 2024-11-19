@@ -274,22 +274,22 @@
         @if(!empty($record))
 
             @if ($record->author?->id == auth()->user()->id)
-                <x-button type="submit" wire:click="update('Submitted')" wire:loading.attr="disabled">
+                <x-button type="submit" wire:click="update('002')" wire:loading.attr="disabled">
                     {{ __('Save & Submit') }}
                 </x-button>
             @endif
 
-            <x-button type="submit" wire:click="update('Pending')" wire:loading.attr="disabled">
+            <x-button type="submit" wire:click="update('002')" wire:loading.attr="disabled">
                 {{ __('Save as Draft') }}
             </x-button>
         
         @else
 
-            <x-button type="submit" wire:click="store('Submitted')" wire:loading.attr="disabled">
+            <x-button type="submit" wire:click="store('002')" wire:loading.attr="disabled">
                 {{ __('Save & Submit') }}
             </x-button>
     
-            <x-button type="submit" wire:click="store('Pending')" wire:loading.attr="disabled">
+            <x-button type="submit" wire:click="store('001')" wire:loading.attr="disabled">
                 {{ __('Save as Draft') }}
             </x-button>
         
@@ -323,11 +323,11 @@
             </div>
         </div>
             
-            <div class="mt-4">
-                <x-label for="juser_lname" value="Last Name" class="mb-2 block font-medium text-sm text-gray-700" />
-                <x-input type="text" id="juser_lname" class="w-full" wire:model="juser_lname" />
-                <x-input-error for="juser_lname" />
-            </div>
+        <div class="mt-4">
+            <x-label for="juser_lname" value="Last Name" class="mb-2 block font-medium text-sm text-gray-700" />
+            <x-input type="text" id="juser_lname" class="w-full" wire:model="juser_lname" />
+            <x-input-error for="juser_lname" />
+        </div>
         
         
         <div class="grid grid-cols-2 gap-2">

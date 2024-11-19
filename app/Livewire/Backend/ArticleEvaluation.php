@@ -7,6 +7,7 @@ use App\Models\Article;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ArticleStatus;
 use App\Models\ReviewSection;
 use App\Models\ArticleMovementLog;
 
@@ -85,12 +86,16 @@ class ArticleEvaluation extends Component
             'description' => $this->description,
         ]);
 
-        $this->record->status = 'Declined Revision';
+        $this->record->article_status_id = $this->articleStatus('008')->id;
         $this->record->save();
         session()->flash('success', 'This Article is Declined');
 
         $this->reset(['description']);
 
         $this->declineModal = false;
+    }
+
+    public function articleStatus($code){
+        return ArticleStatus::where('code', $code)->first();
     }
 }

@@ -60,12 +60,12 @@
             <x-button class="mb-4 w-full">Submit a Paper </x-button>
         </a>
         
-        <a href="{{ route('journals.articles', [$record->uuid, 'Pending']) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->uuid, '001']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Pending </x-button>
         </a>
 
         {{--! chief editor --}}
-        <a href="{{ route('journals.articles', [$record->uuid, 'Submitted']) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->uuid, '002']) }}" class="flex-1">
             <x-button class="mb-4 w-full"> 
                 @if($record->chief_editor->id == auth()->user()->id || $record->editors->contains(auth()->user()->id))
                 Received
@@ -75,19 +75,19 @@
             </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', [$record->uuid, 'Rejected']) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->uuid, '007']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Rejected </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', [$record->uuid, 'On Review']) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->uuid, '004']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Under Review </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', [$record->uuid, 'Publication Process']) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->uuid, '011']) }}" class="flex-1">
             <x-button class="mb-4 w-full">On Pub. Process </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', [$record->uuid, 'Published']) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->uuid, '006']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Published </x-button>
         </a>
     </div>
@@ -120,6 +120,8 @@
                                     @foreach ($article->article_users()->wherePivot('role', 'author')->get() as $key => $article_user)
                                         {{ $article_user->salutation?->title }} {{ $article_user->first_name }} {{ $article_user->middle_name }} {{ $article_user->last_name }},
                                     @endforeach
+
+
 
                                 </div>
                             </div>
@@ -156,12 +158,22 @@
                                 @endif
                                 ">{{ $article->status }}</span>
                             </div>
+
+                            
+                            @if ($record?->chief_editor?->id == auth()->user()->id)
+                            <div class="w-8/12 bg-blue-100 text-xs p-1 px-2 rounded-lg items-center">
+                                @php
+                                    $a_editor = $article->editors()->first();
+                                @endphp
+                                Assigned to : {{ $a_editor->salutation?->title }} {{ $a_editor->first_name }} {{ $a_editor->middle_name }} {{ $a_editor->last_name }}
+                            </div>
+                            @endif
+                            
                             
                             <div class="w-full flex gap-2 justify-end">
                                 <x-button-plain class="bg-blue-700">
                                     <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />  <polyline points="7 10 12 15 17 10" />  <line x1="12" y1="15" x2="12" y2="3" /></svg>
                                 </x-button-plain>
-
 
 
                                 @if((in_array(auth()->user()->id, $article->article_users()->wherePivot('role', 'author')->get()->pluck('id')->toArray()) || $article->author?->id == auth()->user()->id) && $article->status == 'Pending')

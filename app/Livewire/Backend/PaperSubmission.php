@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use App\Models\FileCategory;
 use Illuminate\Http\Request;
 use Livewire\WithPagination;
+use App\Models\ArticleStatus;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -110,7 +111,8 @@ class PaperSubmission extends Component
         //     'country_id' => 'Country'
         // ]);
 
-
+        
+        $state = $this->articleStatus($status);
 
 
         $validator = Validator::make(
@@ -148,8 +150,6 @@ class PaperSubmission extends Component
 
 
 
-
-
         $article = Article::create([
             'title'             => $this->title,
             'abstract'          => $this->abstract,
@@ -162,7 +162,7 @@ class PaperSubmission extends Component
             'words'             => $this->words,
             'tables'            => $this->tables,
             'figures'           => $this->figures,
-            'status'            => $status,
+            'article_status_id' => $state->id,
             'user_id'           => auth()->user()->id
         ]);
 
@@ -200,6 +200,8 @@ class PaperSubmission extends Component
 
     public function update($status)
     {
+        $state = $this->articleStatus($status);
+
         $this->record->update([
             'title'             => $this->title,
             'abstract'          => $this->abstract,
@@ -211,7 +213,7 @@ class PaperSubmission extends Component
             'words'             => $this->words,
             'tables'            => $this->tables,
             'figures'           => $this->figures,
-            'status'            => $status
+            'article_status_id' => $state->id
         ]);
 
         foreach($this->journal->confirmations as $key => $confirmation){
@@ -353,8 +355,6 @@ class PaperSubmission extends Component
         }
 
         $author->article_users()->detach($this->record->id);
-
-        //dd($others);
     }
 
 
@@ -450,4 +450,7 @@ class PaperSubmission extends Component
         }
     }
 
+    public function articleStatus($code){
+        return ArticleStatus::where('code', $code)->first();
+    }
 }
