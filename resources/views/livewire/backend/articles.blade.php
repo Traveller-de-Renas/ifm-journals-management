@@ -59,17 +59,10 @@
         <a href="{{ route('journals.submission', $record->uuid) }}" class="flex-1">
             <x-button class="mb-4 w-full">Submit a Paper </x-button>
         </a>
-
-
         
         <a href="{{ route('journals.articles', [$record->uuid, 'Pending']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Pending </x-button>
         </a>
-
-        {{-- {{ $record->editors }} --}}
-
-
-
 
         {{--! chief editor --}}
         <a href="{{ route('journals.articles', [$record->uuid, 'Submitted']) }}" class="flex-1">
@@ -82,15 +75,15 @@
             </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->uuid, 'Rejected']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Rejected </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->uuid, 'On Review']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Under Review </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', $record->uuid) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->uuid, 'Publication Process']) }}" class="flex-1">
             <x-button class="mb-4 w-full">On Pub. Process </x-button>
         </a>
 
@@ -112,28 +105,29 @@
             
                 @foreach ($articles as $key => $article)
                 
-                    <div class="hover:bg-gray-100 cursor-pointer p-2 border rounded-lg mb-4 ">
+                    <div class="border rounded-lg mb-4 ">
                         <a href="{{ route('journals.article', $article->uuid) }}">
-                            <div class="text-sm font-bold hover:text-blue-600 ">
-                                {{ $article->title }}
+                            <div class="p-2 text-sm font-bold hover:bg-gray-100 rounded-t-lg">
+                                
+                                <div class="text-sm font-bold hover:text-blue-600 ">
+                                    {{ $article->title }}
+                                </div>
+
+                                <div class="text-xs text-blue-700 hover:text-blue-600 mb-2">
+
+                                    {{ $article?->author?->salutation?->title }} {{ $article?->author?->first_name }} {{ $article?->author?->middle_name }} {{ $article?->author?->last_name }},
+                                    
+                                    @foreach ($article->article_users()->wherePivot('role', 'author')->get() as $key => $article_user)
+                                        {{ $article_user->salutation?->title }} {{ $article_user->first_name }} {{ $article_user->middle_name }} {{ $article_user->last_name }},
+                                    @endforeach
+
+                                </div>
                             </div>
                         </a>
-
-                        {{-- {{ print_r() }} --}}
-
-                        <div class="text-xs text-blue-700 hover:text-blue-600 mb-2">
-
-                            {{ $article?->author?->salutation?->title }} {{ $article?->author?->first_name }} {{ $article?->author?->middle_name }} {{ $article?->author?->last_name }},
-                            
-                            @foreach ($article->article_users()->wherePivot('role', 'author')->get() as $key => $article_user)
-                                {{ $article_user->salutation?->title }} {{ $article_user->first_name }} {{ $article_user->middle_name }} {{ $article_user->last_name }},
-                            @endforeach
-
-                        </div>
                         
-                        <div class="w-full flex gap-2">
-                            <div class="w-1/12">
-                                <span class="
+                        <div class="w-full p-2 flex gap-2 ">
+                            <div class="w-3/12">
+                                <span class="w-full text-gray-900 text-xs px-2 py-1 rounded
 
                                 @if ($article->status == 'Published')
                                     bg-green-700 text-white
@@ -155,35 +149,45 @@
                                     bg-red-400
                                 @elseif($article->status == 'Unpublished')
                                     bg-red-400
+                                @elseif($article->status == 'Publication Process')
+                                    bg-red-400
                                 @else
                                     bg-gray-200
                                 @endif
-                                text-gray-900
-                                 text-xs p-1 rounded">{{ $article->status }}</span>
+                                ">{{ $article->status }}</span>
                             </div>
                             
                             <div class="w-full flex gap-2 justify-end">
                                 <x-button-plain class="bg-blue-700">
-                                    <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />  <polyline points="7 10 12 15 17 10" />  <line x1="12" y1="15" x2="12" y2="3" /></svg>
+                                    <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />  <polyline points="7 10 12 15 17 10" />  <line x1="12" y1="15" x2="12" y2="3" /></svg>
                                 </x-button-plain>
 
-                                @if(in_array(auth()->user()->id, $article->article_users()->wherePivot('role', 'author')->get()->pluck('id')->toArray()) || $article->author?->id == auth()->user()->id)
 
-                                <a href="{{ route('journals.submission', [$record->uuid, $article->uuid]) }}">
-                                <x-button-plain class="bg-blue-700">
-                                    <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" /></svg>
-                                </x-button-plain>
-                                </a>
 
+                                @if((in_array(auth()->user()->id, $article->article_users()->wherePivot('role', 'author')->get()->pluck('id')->toArray()) || $article->author?->id == auth()->user()->id) && $article->status == 'Pending')
+                                    <a href="{{ route('journals.submission', [$record->uuid, $article->uuid]) }}">
+                                        <x-button-plain class="bg-blue-700">
+                                            <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" /></svg>
+                                        </x-button-plain>
+                                    </a>
                                 @endif
 
-                                @if ($article->author?->id == auth()->user()->id)
-                                
-                                <x-button-plain class="bg-red-700" wire:click="confirmDelete({{ $article->id }})" >
-                                    <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                                </x-button-plain>
 
+
+                                @if ($article->author?->id == auth()->user()->id && $article->status == 'Pending')
+                                    <x-button-plain class="bg-red-700" wire:click="confirmDelete({{ $article->id }})" >
+                                        <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
+                                    </x-button-plain>
                                 @endif
+
+
+
+                                @if ($article->author?->id == auth()->user()->id && $article->status == 'Submitted')
+                                    <button class="bg-red-700 hover:bg-red-800 text-white text-xs py-1 px-2 rounded" wire:click="confirm({{ $article->id }}, 'Cancel Submission', 'cancelSubmission')" >
+                                        <span class="text-xs">Cancel Submission</span>
+                                    </button>
+                                @endif
+
                             </div>
                         </div>
                     </div>
@@ -249,6 +253,27 @@
             
             <x-button-danger type="submit" wire:click="delete({{ $article?->id }})" wire:loading.attr="disabled" >
                 {{ __('Delete') }}
+            </x-button-danger>
+            <x-secondary-button class="ml-3" wire:click="$toggle('deleteModal')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-secondary-button>
+
+        </x-slot>
+    </x-dialog-modal>
+
+    <x-dialog-modal wire:model="confirmModal">
+        <x-slot name="title">
+            {{ __($modal_title) }}
+        </x-slot>
+        <x-slot name="content">
+            <div class="mt-4">
+                <p class="text-center">Are you sure you want to Perform this action.?</p>
+            </div>
+        </x-slot>
+        <x-slot name="footer">
+            
+            <x-button-danger type="submit" wire:click="confirmAction()" wire:loading.attr="disabled" >
+                {{ __('Yes '.$modal_title) }}
             </x-button-danger>
             <x-secondary-button class="ml-3" wire:click="$toggle('deleteModal')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}

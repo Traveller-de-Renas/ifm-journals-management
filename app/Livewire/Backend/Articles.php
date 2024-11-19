@@ -21,6 +21,9 @@ class Articles extends Component
 
     public $article;
     public $deleteModal = false;
+    public $confirmModal = false;
+    public $modal_title;
+    public $action;
 
     public $record;
     public $volume;
@@ -61,7 +64,7 @@ class Articles extends Component
 
 
 
-        $articles = Article::when($this->status, function($query){ 
+        $articles = Article::when($this->status, function($query){
             
             $query->where('status', $this->status);
 
@@ -93,6 +96,34 @@ class Articles extends Component
     {
         $this->article = $article;
         $this->deleteModal = true;
+    }
+
+
+    public function confirm(Article $article, $title, $action)
+    {
+        $this->article      = $article;
+        $this->modal_title  = $title;
+        $this->action       = $action;
+
+        $this->confirmModal = true;
+    }
+
+    public function confirmAction()
+    {
+        $action = $this->action;
+        
+        $this->$action();
+        $this->confirmModal = false;
+    }
+
+
+    public function cancelSubmission()
+    {
+        $this->article->update([
+            "status" => "Cancelled Submission"
+        ]);
+
+        session()->flash('success', 'Submission Cancelled...!');
     }
 
 

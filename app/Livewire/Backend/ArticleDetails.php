@@ -57,7 +57,6 @@ class ArticleDetails extends Component
         return view('livewire.backend.article-details');
     }
 
-
     public function assignReviewer()
     {
         $this->reviewerModal = true;
