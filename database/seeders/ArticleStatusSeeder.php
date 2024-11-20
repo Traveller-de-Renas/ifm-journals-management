@@ -14,18 +14,19 @@ class ArticleStatusSeeder extends Seeder
     public function run(): void
     {
         $statuses = array(
-            ['Pending', '001', 'yellow'],
-            ['Submitted', '002', 'blue'],
-            ['From Editor', '003', 'indigo'],
-            ['On Review', '004', 'purple'],
-            ['From Reviewer', '005', 'pink'],
-            ['Published', '006', 'green'],
-            ['Declined', '007', 'gray'],
-            ['Declined Revision', '008', 'red'],
-            ['Unpublished', '009', 'red'],
-            ['Banned', '010', 'black'],
-            ['Publication Process', '011', 'blue'],
-            ['Cancelled Submission', '012', 'gray'],
+            ['Pending', '001', 'bg-yellow-200'],
+            ['Submitted', '002', 'bg-blue-400'],
+            ['From Editor', '003', 'bg-indigo-500'],
+            ['On Review', '004', 'bg-purple-700'],
+            ['From Reviewer', '005', 'bg-pink-600'],
+            ['Published', '006', 'bg-green-700'],
+            ['Declined', '007', 'bg-gray-200'],
+            ['Declined Revision', '008', 'bg-red-700'],
+            ['Unpublished', '009', 'bg-red-300'],
+            ['Banned', '010', 'bg-gray-700'],
+            ['Publication Process', '011', 'bg-green-200'],
+            ['Cancelled Submission', '012', 'bg-gray-200'],
+            ['From Editorial Board', '013', 'bg-yellow-200'],
         );
 
         

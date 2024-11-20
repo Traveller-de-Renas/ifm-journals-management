@@ -146,7 +146,7 @@
                                 @php
                                     $a_editor = $article->editors()->first();
                                 @endphp
-                                Assigned to : {{ $a_editor->salutation?->title }} {{ $a_editor->first_name }} {{ $a_editor->middle_name }} {{ $a_editor->last_name }}
+                                Assigned to : {{ $a_editor?->salutation?->title }} {{ $a_editor?->first_name }} {{ $a_editor?->middle_name }} {{ $a_editor?->last_name }}
                             </div>
                             @endif
                             
