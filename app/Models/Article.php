@@ -97,7 +97,7 @@ class Article extends Model
         return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->wherePivot('role', 'reviewer')->withPivot('role')->withTimestamps();
     }
 
-    public function status()
+    public function article_status()
     {
         return $this->belongsTo(ArticleStatus::class);
     }

@@ -71,7 +71,7 @@ class Articles extends Component
             
             $query->where('article_status_id', $this->status->id);
 
-            if($this->status->code == '002' && $this->record->editors->contains(auth()->user()->id) && $this->record->chief_editor->id != auth()->user()->id){
+            if(($this->status->code == '002') && $this->record->editors->contains(auth()->user()->id) && $this->record->chief_editor->id != auth()->user()->id){
                 $query->whereHas('editors', function($query){
                     $query->where('user_id', auth()->user()->id);
                 });

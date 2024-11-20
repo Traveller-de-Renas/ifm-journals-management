@@ -129,34 +129,8 @@
                         
                         <div class="w-full p-2 flex gap-2 ">
                             <div class="w-3/12">
-                                <span class="w-full text-gray-900 text-xs px-2 py-1 rounded
-
-                                @if ($article->status == 'Published')
-                                    bg-green-700 text-white
-                                @elseif($article->status == 'Pending') 
-                                    bg-yellow-700
-                                @elseif($article->status == 'Submitted') 
-                                    bg-blue-500 text-white
-                                @elseif($article->status == 'Banned')
-                                    bg-red-900
-                                @elseif($article->status == 'On Review')
-                                    bg-purple-500
-                                @elseif($article->status == 'From Reviewer')
-                                    bg-pink-500
-                                @elseif($article->status == 'From Editor')
-                                    bg-indigo-500
-                                @elseif($article->status == 'Declined')
-                                    bg-gray-500
-                                @elseif($article->status == 'Declined Revision')
-                                    bg-red-400
-                                @elseif($article->status == 'Unpublished')
-                                    bg-red-400
-                                @elseif($article->status == 'Publication Process')
-                                    bg-red-400
-                                @else
-                                    bg-gray-200
-                                @endif
-                                ">{{ $article->status }}</span>
+                                <span class="w-full text-gray-900 text-xs px-2 py-1 rounded {{ $article->article_status->color }}
+                                ">{{ $article->article_status->name }}</span>
                             </div>
 
                             

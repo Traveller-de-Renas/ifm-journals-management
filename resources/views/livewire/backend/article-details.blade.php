@@ -50,12 +50,12 @@
             <x-button class="mb-4 w-full">Submit a Paper </x-button>
         </a>
         
-        <a href="{{ route('journals.articles', [$record->journal->uuid, 'Pending']) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->journal->uuid, '001']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Pending </x-button>
         </a>
 
         {{--! chief editor --}}
-        <a href="{{ route('journals.articles', [$record->journal->uuid, 'Submitted']) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->journal->uuid, '002']) }}" class="flex-1">
             <x-button class="mb-4 w-full"> 
                 @if($record->journal->chief_editor->id == auth()->user()->id)
                 Received
@@ -65,19 +65,19 @@
             </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', $record->journal->uuid) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->journal->uuid, '007']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Rejected </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', $record->journal->uuid) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->journal->uuid, '004']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Under Review </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', $record->journal->uuid) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->journal->uuid, '011']) }}" class="flex-1">
             <x-button class="mb-4 w-full">On Pub. Process </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', [$record->journal->uuid, 'Published']) }}" class="flex-1">
+        <a href="{{ route('journals.articles', [$record->journal->uuid, '006']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Published </x-button>
         </a>
     </div>
