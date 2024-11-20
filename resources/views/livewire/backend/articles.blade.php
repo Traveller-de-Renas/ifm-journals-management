@@ -140,12 +140,11 @@
                                 ">{{ $article->article_status->name }}</span>
                             </div>
 
-                            
-                            @if ($record?->chief_editor?->id == auth()->user()->id)
+                            @php
+                                $a_editor = $article->editors()->first();
+                            @endphp
+                            @if ($record?->chief_editor?->id == auth()->user()->id && !empty($a_editor))
                             <div class="w-8/12 bg-blue-100 text-xs p-1 px-2 rounded-lg items-center">
-                                @php
-                                    $a_editor = $article->editors()->first();
-                                @endphp
                                 Assigned to : {{ $a_editor?->salutation?->title }} {{ $a_editor?->first_name }} {{ $a_editor?->middle_name }} {{ $a_editor?->last_name }}
                             </div>
                             @endif
