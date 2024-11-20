@@ -65,7 +65,7 @@ class Articles extends Component
         //     )->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         // }
 
-
+        $statuses = ArticleStatus::all();
 
         $articles = Article::when($this->status, function($query){
             
@@ -82,8 +82,7 @@ class Articles extends Component
         
         $articles = $articles->paginate(20);
 
-        return view('livewire.backend.articles', compact('articles'));
-        
+        return view('livewire.backend.articles', compact('articles', 'statuses'));
     }
 
     public function delete(Article $article)
