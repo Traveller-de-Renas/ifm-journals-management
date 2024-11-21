@@ -136,14 +136,14 @@
         {!! $record->description !!}
     </div>
 
-    <div class="flex flex-wrap justify-between gap-2">
+    <div class="grid grid-cols-12 justify-between gap-2 w-full mb-4">
         @if(auth()->user() && auth()->user()->id != $record->chief_editor->id)
             @if (!$record->journal_users->contains(auth()->user()->id))
-                <x-button wire:click="signup()" class="flex-1">Register </x-button>
+                <x-button wire:click="signup()" class="col-span-2">Register </x-button>
             @endif
         @endif
 
-        <a href="{{ route('journals.submission', $record->uuid) }}" class="flex-1">
+        <a href="{{ route('journals.submission', $record->uuid) }}" class="col-span-2">
             <x-button class="mb-4 w-full">Submit a Paper </x-button>
         </a>
 
