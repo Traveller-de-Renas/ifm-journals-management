@@ -20,7 +20,9 @@
             <div class="flex text-xs py-1" >
                 <div class="w-full">New Submission</div>
                 <div class="w-1/12">
-                    {{ $record->articles()->where('status', 'Submitted')->count() }}
+                    {{ $record->articles()->whereHas('article_status', function($query){
+                        $query->where('code', '002');
+                    })->count() }}
                 </div>
             </div>
             </a>
@@ -29,7 +31,9 @@
             <div class="flex text-xs py-1">
                 <div class="w-full">Sent Back</div>
                 <div class="w-1/12">
-                    {{ $record->articles()->where('status', 'From Editor')->count() }}
+                    {{ $record->articles()->whereHas('article_status', function($query){
+                        $query->where('code', '013');
+                    })->count() }}
                 </div>
             </div>
             </a>
@@ -38,7 +42,9 @@
             <div class="flex text-xs py-1">
                 <div class="w-full">Declined</div>
                 <div class="w-1/12">
-                    {{ $record->articles()->where('status', 'Declined')->count() }}
+                    {{ $record->articles()->whereHas('article_status', function($query){
+                        $query->where('code', '007');
+                    })->count() }}
                 </div>
             </div>
             </a>
@@ -50,21 +56,27 @@
             <div class="flex text-xs py-1">
                 <div class="w-full">In Revision</div>
                 <div class="w-1/12">
-                    {{ $record->articles()->where('status', 'On Review')->count() }}
+                    {{ $record->articles()->whereHas('article_status', function($query){
+                        $query->where('code', '004');
+                    })->count() }}
                 </div>
             </div>
 
             <div class="flex text-xs py-1">
                 <div class="w-full">Sent Back</div>
                 <div class="w-1/12">
-                    {{ $record->articles()->where('status', 'From Reviewer')->count() }}
+                    {{ $record->articles()->whereHas('article_status', function($query){
+                        $query->where('code', '005');
+                    })->count() }}
                 </div>
             </div>
 
             <div class="flex text-xs py-1">
                 <div class="w-full">Declined Revision</div>
                 <div class="w-1/12">
-                    {{ $record->articles()->where('status', 'Declined Revision')->count() }}
+                    {{ $record->articles()->whereHas('article_status', function($query){
+                        $query->where('code', '008');
+                    })->count() }}
                 </div>
             </div>
 
@@ -76,7 +88,9 @@
             <div class="flex text-xs py-1">
                 <div class="w-full">Completed</div>
                 <div class="w-1/12">
-                    {{ $record->articles()->where('status', 'Published')->count() }}
+                    {{ $record->articles()->whereHas('article_status', function($query){
+                        $query->where('code', '006');
+                    })->count() }}
                 </div>
             </div>
             
@@ -123,7 +137,7 @@
     </div>
 
     <div class="flex flex-wrap justify-between gap-2">
-        @if(auth()->user())
+        @if(auth()->user() && auth()->user()->id != $record->chief_editor->id)
             @if (!$record->journal_users->contains(auth()->user()->id))
                 <x-button wire:click="signup()" class="flex-1">Register </x-button>
             @endif
