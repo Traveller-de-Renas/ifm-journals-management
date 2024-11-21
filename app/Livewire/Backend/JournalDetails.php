@@ -9,6 +9,7 @@ use Livewire\Component;
 use App\Models\Salutation;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ArticleStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -44,7 +45,8 @@ class JournalDetails extends Component
 
     public function render()
     {
-        return view('livewire.backend.journal-details');
+        $statuses = ArticleStatus::all();
+        return view('livewire.backend.journal-details', compact('statuses'));
     }
 
     public function searchEditor($string)

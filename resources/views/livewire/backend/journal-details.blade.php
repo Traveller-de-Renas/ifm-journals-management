@@ -133,7 +133,13 @@
             <x-button class="mb-4 w-full">Submit a Paper </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', [$record->uuid, 'Pending']) }}" class="flex-1">
+        @foreach ($statuses as $statex)
+            <a href="{{ route('journals.articles', [$record->uuid, $statex->code]) }}" class="col-span-2">
+                <x-button class="w-full">{{ $statex->name }} </x-button>
+            </a>
+        @endforeach
+
+        {{-- <a href="{{ route('journals.articles', [$record->uuid, 'Pending']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Pending </x-button>
         </a>
 
@@ -161,7 +167,7 @@
 
         <a href="{{ route('journals.articles', [$record->uuid, 'Published']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Published </x-button>
-        </a>
+        </a> --}}
     </div>
 
     <div class="md:grid md:grid-cols-12 gap-4 w-full ">

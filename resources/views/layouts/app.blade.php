@@ -25,13 +25,6 @@
 
         <!-- Styles -->
         @livewireStyles
-
-        {{-- Loads Inter --}}
-        @googlefonts
-        
-        {{-- Loads IBM Plex Mono --}}
-        @googlefonts('code')
-
         <script>
             if (localStorage.getItem('dark-mode') === 'false' || !('dark-mode' in localStorage)) {
                 document.querySelector('html').classList.remove('dark');
