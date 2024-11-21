@@ -122,7 +122,7 @@
         {!! $record->description !!}
     </div>
 
-    <div class="flex justify-between gap-2">
+    <div class="flex flex-wrap justify-between gap-2">
         @if(auth()->user())
             @if (!$record->journal_users->contains(auth()->user()->id))
                 <x-button wire:click="signup()" >Register </x-button>
@@ -134,7 +134,7 @@
         </a>
 
         @foreach ($statuses as $statex)
-            <a href="{{ route('journals.articles', [$record->uuid, $statex->code]) }}" class="col-span-2">
+            <a href="{{ route('journals.articles', [$record->uuid, $statex->code]) }}" class="col-span-2 flex-1">
                 <x-button class="w-full">{{ $statex->name }} </x-button>
             </a>
         @endforeach
