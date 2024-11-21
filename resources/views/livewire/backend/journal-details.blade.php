@@ -125,7 +125,7 @@
     <div class="flex flex-wrap justify-between gap-2">
         @if(auth()->user())
             @if (!$record->journal_users->contains(auth()->user()->id))
-                <x-button wire:click="signup()" >Register </x-button>
+                <x-button wire:click="signup()" class="flex-1">Register </x-button>
             @endif
         @endif
 
