@@ -39,22 +39,71 @@
         </div>
     </div>
 
-    <div class="flex justify-between gap-2">
+
+    @if ($record?->journal->chief_editor?->id == auth()->user()->id)
+        <div class="flex justify-between gap-2 w-full mb-4">
+            <x-button wire:click="sendBack()" class="flex-1">
+                Send Back to Author
+            </x-button>
+
+            <x-button wire:click="assignEditor()" class="flex-1">
+                Assign Editor
+            </x-button>
+
+            <x-button wire:click="eFeedback()" class="flex-1">
+                Editor Recommendation
+            </x-button>
+
+            <x-button wire:click="assignReviewer()" class="flex-1">
+                Assign Reviewer
+            </x-button>
+
+            @if($record->article_status->code == '006')
+            <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="changeStatus('009')">
+                Unpublish
+            </x-button-plain>
+            @else
+            <x-button wire:click="changeStatus('006')" class="flex-1">
+                Publish Article
+            </x-button>
+            @endif
+
+            <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="declineArticle()">
+                Decline Article
+            </x-button-plain>
+        </div>
+    @endif
+
+
+    <div class="w-full">
+        <p class="text-lg font-bold mb-2">Abstract</p>
+        <div class="w-full text-justify mb-4">
+            {!! $record->abstract !!}
+        </div>
+    </div>
+    
+
+    <div class="grid grid-cols-12 justify-between gap-2 mb-4">
         @if(auth()->user())
             @if (!$record->journal->journal_users->contains(auth()->user()->id))
-                <x-button wire:click="signup()" >Register </x-button>
+                <x-button wire:click="signup()" class="col-span-2">Register </x-button>
             @endif
         @endif
 
-        <a href="{{ route('journals.submission', $record->journal->uuid) }}" class="flex-1">
-            <x-button class="mb-4 w-full">Submit a Paper </x-button>
+        <a href="{{ route('journals.submission', $record->journal->uuid) }}" class="col-span-2">
+            <x-button class="w-full">Submit a Paper </x-button>
         </a>
+
+        @foreach ($statuses as $statex)
+            <a href="{{ route('journals.articles', [$record->journal->uuid, $statex->code]) }}" class="col-span-2">
+                <x-button class="w-full">{{ $statex->name }} </x-button>
+            </a>
+        @endforeach
         
-        <a href="{{ route('journals.articles', [$record->journal->uuid, '001']) }}" class="flex-1">
+        {{-- <a href="{{ route('journals.articles', [$record->journal->uuid, '001']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Pending </x-button>
         </a>
 
-        {{--! chief editor --}}
         <a href="{{ route('journals.articles', [$record->journal->uuid, '002']) }}" class="flex-1">
             <x-button class="mb-4 w-full"> 
                 @if($record->journal->chief_editor->id == auth()->user()->id)
@@ -79,55 +128,8 @@
 
         <a href="{{ route('journals.articles', [$record->journal->uuid, '006']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Published </x-button>
-        </a>
+        </a> --}}
     </div>
-
-    <div class="w-full">
-        <p class="text-lg font-bold mb-2">Abstract</p>
-        <div class="w-full text-justify mb-4">
-            {!! $record->abstract !!}
-        </div>
-    </div>
-
-    {{-- <x-button wire:click="sendEmail()" class="flex-1">
-        Send Email
-    </x-button> --}}
-
-    @if ($record?->journal->chief_editor?->id == auth()->user()->id)
-        <div class="flex justify-between gap-2 w-full mb-4">
-            <x-button wire:click="sendBack()" class="flex-1">
-                Send Back to Author
-            </x-button>
-
-            <x-button wire:click="assignEditor()" class="flex-1">
-                Assign Editor
-            </x-button>
-
-            <x-button wire:click="eFeedback()" class="flex-1">
-                Editor Recommendation
-            </x-button>
-
-            <x-button wire:click="assignReviewer()" class="flex-1">
-                Assign Reviewer
-            </x-button>
-
-            
-
-            @if($record->article_status->code == '006')
-            <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="changeStatus('009')">
-                Unpublish
-            </x-button-plain>
-            @else
-            <x-button wire:click="changeStatus('006')" class="flex-1">
-                Publish Article
-            </x-button>
-            @endif
-
-            <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="declineArticle()">
-                Decline Article
-            </x-button-plain>
-        </div>
-    @endif
 
     <div class="w-full grid grid-cols-12 gap-2">
         <div class="col-span-8">

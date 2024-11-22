@@ -8,6 +8,7 @@ use App\Models\Volume;
 use App\Models\Article;
 use Livewire\Component;
 use App\Mail\EditorMail;
+use App\Mail\ReviewerMail;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ArticleStatus;
@@ -55,7 +56,10 @@ class ArticleDetails extends Component
         $volume_all    = $this->record->journal->volumes;
         $this->volumes = $volume_all->pluck('description', 'id')->toArray();
         $this->issues  = Issue::where('volume_id', $this->volume)->get()->pluck('description', 'id')->toArray();
-        return view('livewire.backend.article-details');
+
+        $statuses = ArticleStatus::all();
+
+        return view('livewire.backend.article-details', compact('statuses'));
     }
 
     public function assignReviewer()
@@ -88,6 +92,8 @@ class ArticleDetails extends Component
     public function assignRev()
     {
         $this->record->article_users()->sync([$this->reviewer_id => ['role' => 'reviewer']], false);
+
+        Mail::to('mrenatuskiheka@yahoo.com')->send(new ReviewerMail($this->record));
         
         session()->flash('success', 'Reviewer is Assigned successfully');
         $this->reviewerModal = false;

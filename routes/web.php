@@ -28,7 +28,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 });
 
 
-
 Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/index', [JournalController::class, 'index'])->name('journals.index');
     Route::get('/form/{journal}', [JournalController::class, 'form'])->name('journals.form');
