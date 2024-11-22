@@ -113,7 +113,7 @@
 
             
 
-            @if($record->status->code == '006')
+            @if($record->article_status->code == '006')
             <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="changeStatus('009')">
                 Unpublish
             </x-button-plain>
