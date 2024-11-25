@@ -65,36 +65,6 @@
                 <x-button class="w-full">{{ $statex->name }} </x-button>
             </a>
         @endforeach
-        
-        {{-- <a href="{{ route('journals.articles', [$record->uuid, '001']) }}" class="flex-1">
-            <x-button class="mb-4 w-full">Pending </x-button>
-        </a>
-
-        <a href="{{ route('journals.articles', [$record->uuid, '002']) }}" class="flex-1">
-            <x-button class="mb-4 w-full"> 
-                @if($record->chief_editor->id == auth()->user()->id || $record->editors->contains(auth()->user()->id))
-                Received
-                @else
-                Submitted
-                @endif
-            </x-button>
-        </a>
-
-        <a href="{{ route('journals.articles', [$record->uuid, '007']) }}" class="flex-1">
-            <x-button class="mb-4 w-full">Rejected </x-button>
-        </a>
-
-        <a href="{{ route('journals.articles', [$record->uuid, '004']) }}" class="flex-1">
-            <x-button class="mb-4 w-full">Under Review </x-button>
-        </a>
-
-        <a href="{{ route('journals.articles', [$record->uuid, '011']) }}" class="flex-1">
-            <x-button class="mb-4 w-full">On Pub. Process </x-button>
-        </a>
-
-        <a href="{{ route('journals.articles', [$record->uuid, '006']) }}" class="flex-1">
-            <x-button class="mb-4 w-full">Published </x-button>
-        </a> --}}
     </div>
 
     
@@ -128,8 +98,6 @@
                                         {{ $article_user->salutation?->title }} {{ $article_user->first_name }} {{ $article_user->middle_name }} {{ $article_user->last_name }},
                                     @endforeach
 
-
-
                                 </div>
                             </div>
                         </a>
@@ -156,7 +124,7 @@
                                 </x-button-plain>
 
 
-                                @if((in_array(auth()->user()->id, $article->article_users()->wherePivot('role', 'author')->get()->pluck('id')->toArray()) || $article->author?->id == auth()->user()->id) && $article->status == 'Pending')
+                                @if((in_array(auth()->user()->id, $article->article_users()->wherePivot('role', 'author')->get()->pluck('id')->toArray()) || $article->author?->id == auth()->user()->id) && $article->article_status->code == '001')
                                     <a href="{{ route('journals.submission', [$record->uuid, $article->uuid]) }}">
                                         <x-button-plain class="bg-blue-700">
                                             <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" /></svg>
@@ -166,7 +134,7 @@
 
 
 
-                                @if ($article->author?->id == auth()->user()->id && $article->status == 'Pending')
+                                @if ($article->author?->id == auth()->user()->id && $article->article_status->code == '001')
                                     <x-button-plain class="bg-red-700" wire:click="confirmDelete({{ $article->id }})" >
                                         <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
                                     </x-button-plain>
@@ -174,7 +142,7 @@
 
 
 
-                                @if ($article->author?->id == auth()->user()->id && $article->status == 'Submitted')
+                                @if ($article->author?->id == auth()->user()->id && $article->article_status->code == '002')
                                     <button class="bg-red-700 hover:bg-red-800 text-white text-xs py-1 px-2 rounded" wire:click="confirm({{ $article->id }}, 'Cancel Submission', 'cancelSubmission')" >
                                         <span class="text-xs">Cancel Submission</span>
                                     </button>
