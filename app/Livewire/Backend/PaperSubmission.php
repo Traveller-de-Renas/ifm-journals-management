@@ -168,7 +168,7 @@ class PaperSubmission extends Component
 
         $this->record = $article;
 
-        Auth::user()->journals()->sync([$this->journal->id => ['role' => 'author', 'number' => 1]]);
+        Auth::user()->journals()->sync([$this->journal->id => ['role' => 'author']]);
 
         foreach($this->journal->confirmations as $key => $confirmation){
             $value = 'No';

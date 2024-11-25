@@ -57,7 +57,7 @@
         @endif
 
         <a href="{{ route('journals.submission', $record->uuid) }}" class="col-span-2">
-            <x-button class="mb-4 w-full">Submit a Paper </x-button>
+            <x-button class="w-full">Submit a Paper </x-button>
         </a>
 
         @foreach ($statuses as $statex)
