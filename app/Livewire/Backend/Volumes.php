@@ -10,6 +10,7 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Livewire\WithPagination;
+use App\Models\ArticleStatus;
 
 class Volumes extends Component
 {
@@ -48,10 +49,12 @@ class Volumes extends Component
         //     $articles = Article::where('journal_id', $this->record->id)->where('status', 'Submitted')->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         // }
 
+        $statuses = ArticleStatus::all();
+
         $this->issue  =  (Issue::max('number') != '')? Issue::where('number', Issue::max('number'))->first() : 'None' ;
         $this->volume =  (Volume::max('number') != '')? Volume::where('number', Volume::max('number'))->first() : 'None' ;
 
-        return view('livewire.backend.volumes');
+        return view('livewire.backend.volumes', compact('statuses'));
     }
 
     public function delete(Article $article)
