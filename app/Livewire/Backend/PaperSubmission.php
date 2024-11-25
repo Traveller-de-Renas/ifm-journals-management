@@ -244,7 +244,7 @@ class PaperSubmission extends Component
         ]);
     
         if ($this->record == null) {
-            $this->store('Pending');
+            $this->store('001');
         }
     
         $file  = $this->attachment;
@@ -311,7 +311,7 @@ class PaperSubmission extends Component
         $this->sauthor = '';
 
         if ($this->record == null) {
-            $this->store('Pending');
+            $this->store('001');
         }
 
         $max_number = $this->record->article_users()->where('role', 'author')->count();
