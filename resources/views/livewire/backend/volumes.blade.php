@@ -49,18 +49,24 @@
         {!! $record->description !!}
     </div>
 
-    <div class="flex justify-between gap-2">
+    <div class="grid grid-cols-12 justify-between gap-2 w-full mb-4">
         @if(auth()->user())
             @if (!$record->journal_users->contains(auth()->user()->id))
-                <x-button wire:click="signup()" >Register </x-button>
+                <x-button wire:click="signup()" class="col-span-2">Register </x-button>
             @endif
         @endif
 
-        <a href="{{ route('journals.submission', $record->uuid) }}" class="flex-1">
+        <a href="{{ route('journals.submission', $record->uuid) }}" class="col-span-2">
             <x-button class="mb-4 w-full">Submit a Paper </x-button>
         </a>
 
-        <a href="{{ route('journals.articles', [$record->uuid, 'Pending']) }}" class="flex-1">
+        @foreach ($statuses as $statex)
+            <a href="{{ route('journals.articles', [$record->uuid, $statex->code]) }}" class="col-span-2">
+                <x-button class="w-full">{{ $statex->name }} </x-button>
+            </a>
+        @endforeach
+
+        {{-- <a href="{{ route('journals.articles', [$record->uuid, 'Pending']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Pending </x-button>
         </a>
 
@@ -82,7 +88,7 @@
 
         <a href="{{ route('journals.articles', [$record->uuid, 'Published']) }}" class="flex-1">
             <x-button class="mb-4 w-full">Published </x-button>
-        </a>
+        </a> --}}
     </div>
 
     @if (session('danger'))
