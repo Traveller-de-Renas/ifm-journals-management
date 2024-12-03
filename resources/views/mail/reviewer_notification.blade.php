@@ -15,8 +15,11 @@ Please find the Review Link / Evaluation Form, Click on the link to access the f
 we expect you will reach out to us if you have any questions or concerns. 
 <br>
 <br>
+
+<b>
 From chief Editor of the Journal Editorial Board.
 <br>
 Regards,
 <br>
 {{ $record->journal->chief_editor->salutation?->title }}. {{ $record->journal->chief_editor->first_name }} {{ $record->journal->chief_editor->middle_name }} {{ $record->journal->chief_editor->last_name }}
+</b>
