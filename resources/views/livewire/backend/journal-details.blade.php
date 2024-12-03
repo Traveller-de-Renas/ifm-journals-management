@@ -311,7 +311,7 @@
         <div class="col-span-3">
             @if(auth()->user() && auth()->user()->id != $record->chief_editor->id)
                 @if (!$record->journal_users->contains(auth()->user()->id))
-                    <x-button wire:click="signup()" class="col-span-2">Register </x-button>
+                    <x-button wire:click="signup()" class="col-span-2 w-full mb-4">Register </x-button>
                 @endif
             @endif
 

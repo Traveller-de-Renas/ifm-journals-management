@@ -12,10 +12,9 @@
         <div class=""></div>
 
         <div class="flex items-start justify-between  gap-4">
-            <x-button class="w-full" wire:loading.attr="disabled" wire:click="loadFromJSON()">Load From JSON</x-button>
-            
-
             @if (Auth()->user()->hasPermissionTo('Add Journals'))
+            <x-button class="w-full" wire:loading.attr="disabled" wire:click="loadFromJSON()">Load From JSON</x-button>
+
             <a href="{{ route('journals.form', 'create') }}">
                 <x-button class="w-full" wire:loading.attr="disabled" >Create New</x-button>
             </a>
@@ -111,13 +110,13 @@
                         <x-button>Preview</x-button>
                     </a>
 
-                    @if (!$row->journal_users->contains(auth()->user()->id))
-                        <x-button wire:click="signup({{ $row->id }})" >Register </x-button>
-                    @endif
-
                     <a href="{{ route('journals.submission', $row->uuid) }}">
                         <x-button>Submit a Paper </x-button>
                     </a>
+
+                    @if (!$row->journal_users->contains(auth()->user()->id))
+                        <x-button wire:click="signup({{ $row->id }})" >Register </x-button>
+                    @endif
 
                 </div>
             @endforeach
