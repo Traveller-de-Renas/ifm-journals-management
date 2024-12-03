@@ -25,24 +25,20 @@ class ArticleEvaluation extends Component
     public function mount(Request $request){
 
         if(!Str::isUuid($request->article)){
-            dd('article not uuid');
             abort(404);
         }
 
         if(!Str::isUuid($request->reviewer)){
-            dd('reviewer not uuid');
             abort(404);
         }
         
         $this->record = Article::where('uuid', $request->article)->first();
         if(empty($this->record)){
-            dd('article not found');
             abort(404);
         }
 
         $this->reviewer = User::where('uuid', $request->reviewer)->first();
         if(empty($this->reviewer)){
-            dd('reviewer not found');
             abort(404);
         }
     }

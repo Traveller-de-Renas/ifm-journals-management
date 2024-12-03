@@ -1,27 +1,86 @@
-<x-module>
-    
-    <p class="font-bold text-lg mb-2">
-        <span class="font-bold">Journal : </span>{{ $record->journal->title }}
-    </p>
+<div class="w-full">
+    <div class="bg-gray-800 text-white py-12 bg-blend-overlay" style="background-image: url({{ asset('images/auth-image.jpg') }}); background-position: top;">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            
+            <div class="w-full flex text-lg">
+                <p class="underline mr-1 cursor-pointer hover:text-gray-500">
+                    <a href="{{ route('journal.detail', $record?->journal->uuid) }}">
+                    {{ $record?->journal->title }}
+                    </a>
+                </p>
+                <p class="mr-1"> > </p> 
+                <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->volume?->description }} </p>
+                <p class="mr-1"> > </p>
+                <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->description }} </p>
+            </div>
+            
+            <p class="text-white text-3xl font-bold mt-4 mb-4">
+                {{ __($record->title) }}
+            </p>
 
-    <p class="font-bold text-2xl mb-2">
-        {{ $record->title }}
-    </p>
+            <a href="{{ route('journal.detail', $record?->journal->uuid) }}">
+                <p class="text-xl text-gray-300">{{ $record?->journal->title }}</p>
+            </a>
 
-    <p class="mb-2 text-lg">
-        <span class="font-bold">Editor : </span>{{ $editor->salutation?->title }} {{ $editor->first_name }} {{ $editor->middle_name }} {{ $editor->last_name }}
-    </p>
+            <div class="flex gap-2">
+                <div class="w-1/12">
+                    ISSN
+                </div>
+                <div class="w-full">
+                    {{ $record?->journal->issn }}
+                </div>
+            </div>
 
-    <p class="mb-2 text-lg">
-        <span class="font-bold">Reviewer : </span>{{ $reviewer->salutation?->title }} {{ $reviewer->first_name }} {{ $reviewer->middle_name }} {{ $reviewer->last_name }}
-    </p>
+            <div class="flex gap-2">
+                <div class="w-1/12">
+                    EDITOR
+                </div>
+                <div class="w-full">
+                    {{ $editor->salutation?->title }} {{ $editor->first_name }} {{ $editor->middle_name }} {{ $editor->last_name }}
+                    <p class="text-sm text-gray-400">{{ $editor->affiliation }}</p>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <div class="w-1/12">
+                    REVIEWER
+                </div>
+                <div class="w-full">{{ $reviewer->salutation?->title }} {{ $reviewer->first_name }} {{ $reviewer->middle_name }} {{ $reviewer->last_name }}</div>
+            </div>
 
-    <div class="flex mb-4 text-lg">
-        <p class="font-bold">Original Submission : </p>
-        <a href="{{ asset('storage/articles/'.$submission?->file_path) }}" target="_blank" class="text-blue-700 hover:text-blue-600"> 
-            {{ $submission?->file_path }}
-        </a>
+            <div class="mt-6 mb-6">
+                <p class="text-lg text-gray-400 font-bold">Published On {{ date("Y-m-d") }} </p>
+            </div>
+
+        </div>
     </div>
+
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
+        @php
+            $file = $record->files()->where('publish', 1)->first();
+        @endphp
+        <div class="flex gap-2 items-center">
+            
+            <div class="flex-1 flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
+                <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5">
+                <p class="ml-2 text-lg font-bold">
+                    <a href="{{ asset('storage/articles/'.$submission?->file_path) }}" target="_blank" title="{{ $submission?->file_path }}" class="text-blue-700 hover:text-blue-600"> 
+                        Download Original Submission 
+                    </a>
+                </p>
+            </div>
+
+            <div class="flex-1 text-right w-full">
+                <x-button-plain class="bg-red-700 hover:bg-red-600 text-xs" wire:click="declineArticle()">
+                    Decline
+                </x-button-plain>
+            </div>
+
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
 
     @if(session('success'))
         <div class="p-4 rounded-md mb-4 shadow bg-green-300 w-full">
@@ -29,11 +88,7 @@
         </div>
     @endif
 
-    <div class="py-2 text-right">
-        <x-button-plain class="bg-red-700 hover:bg-red-600" wire:click="declineArticle()">
-            Decline
-        </x-button-plain>
-    </div>
+    
 
     <div class="p-3 bg-[#175883] text-white ">
         {{ "Article Evaluation Form" }}
@@ -115,7 +170,8 @@
 
         </x-slot>
     </x-dialog-modal>
-</x-module>
+    <div>
+</div>
 
 <script>
     window.addEventListener('contentChanged', (e) => {

@@ -20,8 +20,8 @@
 
         <select wire:live.model="category" class="w-full mt-4 rounded-lg border-gray-200" wire:change="checkCategory($event.target.value)">
             <option value="">Select Section Category</option>
-            <option value="options" @if($record->category == 'options') selected @endif >Options</option>
-            <option value="comments" @if($record->category == 'comments') selected @endif >Comments</option>
+            <option value="options" @if($record?->category == 'options') selected @endif >Options</option>
+            <option value="comments" @if($record?->category == 'comments') selected @endif >Comments</option>
         </select>
         
         @if($category == 'options')
@@ -29,7 +29,7 @@
 
         <div class="">
 
-            
+            @if(!empty($saved_section_options))
 
             @foreach ($saved_section_options as $key => $section_option)
             
@@ -50,7 +50,7 @@
 
             @endforeach
 
-
+            @endif
 
             @foreach ($section_options as $key => $section_option)
             
@@ -88,6 +88,7 @@
         </div>
 
         <div class="">
+            @if(!empty($saved_queries))
             @foreach ($saved_queries as $key => $query_data)
             <div class="grid grid-cols-12 gap-2 mb-2">
                 <div class="col-span-7">
@@ -108,6 +109,7 @@
                 </div>
             </div>
             @endforeach 
+            @endif
 
             @foreach ($queries as $key => $query_data)
             

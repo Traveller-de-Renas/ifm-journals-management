@@ -192,4 +192,9 @@ class ReviewSections extends Component
         session()->flash('success', 'Updated successfully');
         $this->form = false;
     }
+
+    public function checkCategory($category)
+    {
+        $this->category = $category;
+    }
 }

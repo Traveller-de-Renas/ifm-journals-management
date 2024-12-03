@@ -40,8 +40,9 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/archive/{journal}', [JournalController::class, 'archive'])->name('journals.archive');
 });
 
-Route::get('/article_evaluation/{article}/{reviewer}', [JournalController::class, 'article_evaluation'])->name('journals.article_evaluation');
-
+Route::group(['prefix' => 'journals'], function () {
+    Route::get('/article_evaluation/{article}/{reviewer}', [JournalController::class, 'article_evaluation'])->name('journals.article_evaluation');
+});
 
 Route::group(['prefix' => 'journal'], function () {
     Route::get('/viewall', [JournalController::class, 'viewall'])->name('journal.viewall');
