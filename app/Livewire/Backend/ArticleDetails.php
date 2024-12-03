@@ -93,7 +93,8 @@ class ArticleDetails extends Component
     {
         $this->record->article_users()->sync([$this->reviewer_id => ['role' => 'reviewer']], false);
 
-        Mail::to('mrenatuskiheka@yahoo.com')->send(new ReviewerMail($this->record));
+        // Mail::to('mrenatuskiheka@yahoo.com')->send(new ReviewerMail($this->record));
+        Mail::to('mandariherman@gmail.com')->send(new ReviewerMail($this->record));
         
         session()->flash('success', 'Reviewer is Assigned successfully');
         $this->reviewerModal = false;
