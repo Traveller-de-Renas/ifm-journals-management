@@ -170,7 +170,7 @@
                     
                     <div class="mt-4 col-span-3">
                         <x-label for="file_attachment" value="File" class="mb-2 block font-medium text-sm text-gray-700" />
-                        <x-input-file wire:model="attachment" id="file_attachment" />
+                        <x-input-file wire:model="file_attachment" id="file_attachment" />
                         <x-input-error for="file_attachment" />
                     </div>
                     <div class="mt-4 col-span-3">

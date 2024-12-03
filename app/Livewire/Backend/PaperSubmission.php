@@ -37,7 +37,7 @@ class PaperSubmission extends Component
     public $words;
     public $tables;
     public $figures;
-    public $attachment;
+    public $file_attachment;
     public $file_description;
     public $file_category_id;
     public $publish;
@@ -239,7 +239,7 @@ class PaperSubmission extends Component
     public function uploadDocument()
     {
         $this->validate([
-            'attachment' => 'nullable|file|max:4024|mimes:pdf,doc,docx',
+            'file_attachment'  => 'nullable|file|max:14024|mimes:pdf,doc,docx',
             'file_category_id' => 'required'
         ]);
     
@@ -247,7 +247,7 @@ class PaperSubmission extends Component
             $this->store('001');
         }
     
-        $file  = $this->attachment;
+        $file  = $this->file_attachment;
         $_name = $file->getClientOriginalName();
         $_type = $file->getClientOriginalExtension();
         $_file = str_replace(' ', '_', $_name);
@@ -269,7 +269,7 @@ class PaperSubmission extends Component
 
         $article_file->save();
     
-        $this->attachment       = null;
+        $this->file_attachment  = null;
         $this->file_category_id = null;
         $this->file_description = null;
     

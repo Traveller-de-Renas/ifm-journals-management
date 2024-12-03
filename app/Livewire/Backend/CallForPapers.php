@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Backend;
 
-use App\Models\CallForPaper;
 use Livewire\Component;
+use App\Models\CallForPaper;
+use Livewire\WithFileUploads;
 
 class CallForPapers extends Component
 {
+    use WithFileUploads;
+    
     public $query;
     public $sortBy  = 'id';
     public $sortAsc = false;

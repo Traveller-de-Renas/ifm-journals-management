@@ -32,8 +32,8 @@
                     <a href="{{ url('/') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
                         <img src="{{ asset('storage/logo.png' ) }}" class="w-12 md:w-24 md:h-24" >
                         <div>
-                            <p class="text-white text-2xl font-bold">The institute of Finance Management</p>
-                            <p class="text-white">Journals Management System</p>
+                            <p class="text-white text-4xl font-bold">The institute of Finance Management</p>
+                            <p class="text-white text-lg">Journals Management System</p>
                         </div>
                     </a>
                     
@@ -77,7 +77,7 @@
                 <div class="w-full">
                     <div class="min-h-[100dvh] h-full flex flex-col after:flex-1">
 
-                        <div class="fixed right-2 z-50 md:flex flex-col gap-2 justify-center items-center w-50 text-md hidden">
+                        <div class="fixed right-2 z-50 md:flex flex-col gap-2 justify-center items-center w-50 mt-12 text-md hidden">
 
                             @foreach ($social_media as $media)
                             <a href="{{ $media->link }}" target="_blank">

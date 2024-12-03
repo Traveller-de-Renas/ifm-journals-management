@@ -35,7 +35,7 @@
     </head>
     <body class="bg-gray-100 text-gray-600">
 
-        <main class="bg-white dark:bg-gray-900">
+        <main class="bg-white dark:bg-gray-900 ">
 
 
             <nav class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
@@ -44,8 +44,8 @@
                     <a href="{{ url('/') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
                         <img src="{{ asset('storage/logo.png' ) }}" class="w-12 md:w-24 md:h-24" >
                         <div>
-                            <p class="text-white text-2xl font-bold">The institute of Finance Management</p>
-                            <p class="text-white">Journals Management System</p>
+                            <p class="text-white text-4xl font-bold">The institute of Finance Management</p>
+                            <p class="text-white text-lg">Journals Management System</p>
                         </div>
                     </a>
                     
@@ -86,14 +86,14 @@
             </nav>
   
 
-            <div class="relative flex">
+            <div class="relative flex flex-col h-screen">
 
                 <!-- Content -->
-                <div class="w-full md:w-1/2">
+                <div class="w-full md:w-1/2 flex-1 ">
 
-                    <div class="min-h-[100dvh] h-full flex flex-col after:flex-1">
+                    <div class="flex flex-col after:flex-1">
 
-                        <div class="max-w-sm mx-auto w-full px-4 py-8">
+                        <div class="max-w-sm mx-auto w-full px-4 py-12">
                             {{ $slot }}
                         </div>
 
@@ -102,10 +102,76 @@
                 </div>
 
                 <!-- Image -->
-                <div class="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2" aria-hidden="true">
+                <div class="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2 flex-1 h-full" aria-hidden="true">
                     <img class="object-cover object-center w-full h-full" src="{{ asset('images/auth-image.jpg') }}" width="760" height="1024" alt="Authentication image" />
                 </div>
 
+            </div>
+
+            <div class="p-4 bg-[#175883]">
+                <div class="max-w-screen-2xl lg:max-w-screen-lg mx-auto text-white">
+
+                    <div class="grid md:grid-cols-5 w-full space-x-8 md:space-x-8 justify-center mt-6 mb-8">
+                        <div class="mb-6">
+                            <center>
+                                <img src="{{ asset('storage/logo.png' ) }}" class="w-12 md:w-32 md:h-32" >
+                            </center>
+                        </div>
+                        <div class="mb-6">
+                            <h5 class="mb-2 text-xl font-bold tracking-tight text-white">{{ __('Contacts') }}</h5>
+                            <p class=""> P.O Box 3918, 5 Shaaban Robert Street</p>
+                            <p class=""> 11101 Dar es salaam</p>
+                            <p class=""> +255 22 2112931-4</p>
+                            <p class=""> Fax : +255 22 2112935</p>
+                            <p class=""> rector@ifm.ac.tz</p>
+                        </div>
+                        <div class="mb-6 col-span-2">
+                            <h5 class="mb-2 text-xl font-bold tracking-tight text-white">{{ __('Quick Links') }}</h5>
+                            
+                            <a href="" class="w-full text-sm text-wrap hover:text-gray-400">
+                                Frequently Asked Questions 
+                            </a>
+                            <br>
+                            <a href="" class="w-full text-sm text-wrap hover:text-gray-400">
+                                Research Areas
+                            </a>
+                            <br>
+                        </div>
+                        <div class="mb-6">
+                            <h5 class="mb-2 text-xl font-bold tracking-tight text-white">{{ __('Related Links') }}</h5>
+                            
+                        </div>
+                    </div>
+
+                    <div class="border"></div>
+
+                    <div class="z-50 flex gap-2 justify-center items-center w-50 text-md mt-4 mb-4 md:hidden">
+
+                        @foreach ($social_media as $media)
+                        <a href="{{ $media->link }}" target="_blank">
+                        <div class="relative rounded-full bg-gray-100 hover:bg-gray-400 p-2 w-full cursor-pointer border-2">
+                            @if($media->type == 'image')
+                            <img class="rounded-full max-h-[35px] mt-[2px]" src="{{ asset('storage/social_media/'.$media->icon) }}" alt="" />
+                            @else
+                                <div class="max-h-[45px] items-center w-full ">{!! $media->icon !!}</div>
+                            @endif
+                        </div>
+                        </a>
+                        @endforeach
+        
+                    </div>
+
+                    <div class="border md:hidden"></div>
+
+                    <div class="flex w-full m-auto md:space-x-12 mt-6 mb-6 items-center justify-center">
+                        
+                    </div>
+
+                    <div class="text-center mb-4">
+                        © {{ date('Y')}} The Institute of Finance Management. All rights reserved.
+                    </div>
+
+                </div>
             </div>
 
         </main> 
