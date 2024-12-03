@@ -48,7 +48,7 @@
             </div>
 
             <div class="mt-6 mb-6">
-                <p class="text-lg text-gray-400 font-bold">Published On {{ date("Y-m-d") }} </p>
+                <p class="text-lg text-gray-400 font-bold">{{ date("Y-m-d") }} </p>
             </div>
 
         </div>
