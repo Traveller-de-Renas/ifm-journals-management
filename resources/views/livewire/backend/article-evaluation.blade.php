@@ -8,10 +8,15 @@
                     {{ $record?->journal->title }}
                     </a>
                 </p>
+                @if($record->issue?->volume?->description)
                 <p class="mr-1"> > </p> 
                 <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->volume?->description }} </p>
+                @endif
+
+                @if($record->issue?->volume?->description)
                 <p class="mr-1"> > </p>
                 <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->description }} </p>
+                @endif
             </div>
             
             <p class="text-white text-3xl font-bold mt-4 mb-4">
@@ -70,6 +75,9 @@
             </div>
 
             <div class="flex-1 text-right w-full">
+                <x-button-plain class="bg-green-700 hover:bg-green-600 text-xs" wire:click="declineArticle()">
+                    Accept
+                </x-button-plain>
                 <x-button-plain class="bg-red-700 hover:bg-red-600 text-xs" wire:click="declineArticle()">
                     Decline
                 </x-button-plain>
@@ -135,15 +143,18 @@
 
     @endforeach
 
-    <div class="mt-4 p-6">
-        <x-label for="file_attachment" value="Attachments" class="mb-2 block text-sm text-gray-700" />
+    <div class="bg-gray-200 px-6 py-4 font-bold">
+        Attachments
+    </div>
+
+    <div class="p-6 border-b">
         <x-input-file wire:model="attachment" id="file_attachment" />
         <x-input-error for="file_attachment" />
     </div>
 
-    <div class="text-center mt-4 mb-4">
-        <x-button wire:click="store()">Save Only</x-button>
-        <x-button >Save & Submit</x-button>
+    <div class="text-center mt-6 mb-4">
+        <x-button wire:click="store()">Save and Submit Later</x-button>
+        <x-button-plain class="bg-green-700 hover:bg-green-600" wire:click="store()" >Save & Submit</x-button>
     </div>
 
     <x-dialog-modal wire:model="declineModal">

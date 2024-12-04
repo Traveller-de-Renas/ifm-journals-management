@@ -39,6 +39,8 @@
                     
                     </div>
                 </div>
+
+                @if(explode('/', request()->path())[1] != 'article_evaluation')
                 <div class="w-full bg-white shadow-lg">
                     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                         <a href="{{ url('/') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -70,7 +72,9 @@
                             </ul>
                         </div>
                     </div>
+                    
                 </div>
+                @endif
             </nav>
   
             <div class="relative">

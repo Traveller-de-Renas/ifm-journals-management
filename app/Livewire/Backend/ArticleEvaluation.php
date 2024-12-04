@@ -68,8 +68,7 @@ class ArticleEvaluation extends Component
 
         
 
-        dd($this->commentWritten);
-        dd($this->selectedOption);
+        dd($this->commentWritten, $this->selectedOption);
     }
 
     public function declineArticle()

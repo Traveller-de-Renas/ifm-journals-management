@@ -15,6 +15,7 @@ class GuestLayout extends Component
     {
         $social_media = SocialMedia::orderBy('id', 'desc')->get();
         $quick_links  = collect();
+        
         return view('layouts.guest', compact('social_media', 'quick_links'));
     }
 }

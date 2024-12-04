@@ -94,7 +94,9 @@ class ArticleDetails extends Component
         $this->record->article_users()->sync([$this->reviewer_id => ['role' => 'reviewer']], false);
 
         //Mail::to('mrenatuskiheka@yahoo.com')->send(new ReviewerMail($this->record));
-        Mail::to('mandariherman@gmail.com')->send(new ReviewerMail($this->record));
+        Mail::to('mandariherman@gmail.com')
+            ->cc('mrenatuskiheka@yahoo.com')
+            ->send(new ReviewerMail($this->record));
         
         session()->flash('success', 'Reviewer is Assigned successfully');
         $this->reviewerModal = false;
@@ -110,7 +112,8 @@ class ArticleDetails extends Component
     {
         $this->record->article_users()->sync([$this->user_id => ['role' => $this->role]], false);
 
-        Mail::to('mrenatuskiheka@yahoo.com')->send(new EditorMail($this->record));
+        Mail::to('mrenatuskiheka@yahoo.com')
+            ->send(new EditorMail($this->record));
         
         session()->flash('success', 'Assigned successfully to this Article');
         $this->assignModal = false;
@@ -181,12 +184,6 @@ class ArticleDetails extends Component
         $this->record->article_status_id = $this->articleStatus($status)->id;
         $this->record->update();
         session()->flash('success', 'Article Successifully '.$status.'ed');
-    }
-
-
-    public function sendEmail()
-    {
-        Mail::to('mrenatuskiheka@yahoo.com')->send(new EditorMail($this->record));
     }
 
     public function articleStatus($code){
