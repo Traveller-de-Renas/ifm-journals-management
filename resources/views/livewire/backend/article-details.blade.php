@@ -149,7 +149,7 @@
             </div>
             @endif
 
-            @if ($record->article_users()->wherePivot('role', 'reviewer')->get()->count() > 0)
+            @if ($record->article_users()->wherePivot('role', 'reviewer')->get()->count() > 0 && $record?->journal->chief_editor?->id == auth()->user()->id)
             
             <p class="text-lg font-bold mb-2">Reviewers</p>
             @foreach ($record->article_users()->wherePivot('role', 'reviewer')->get() as $key => $user)

@@ -129,6 +129,9 @@ class ArticleDetails extends Component
     {
         $this->record->article_users()->sync([$this->user_id => ['role' => $this->role]], false);
 
+        $this->record->article_status_id = $this->articleStatus('004')->id;
+        $this->record->save();
+
         Mail::to('mrenatuskiheka@yahoo.com')
             ->send(new EditorMail($this->record));
         
