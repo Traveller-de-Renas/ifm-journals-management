@@ -37,7 +37,7 @@ return new class extends Migration
 
 
             $table->enum('editor_status', ['Pending','Done','Rejected'])->default('Pending');
-            $table->enum('reviewer_status', ['Pending','Done','Rejected'])->default('Pending');
+            $table->string('reviewer_status')->nullable()->default('Pending');
             
             $table->uuid('uuid')->nullable();
             $table->timestamps();

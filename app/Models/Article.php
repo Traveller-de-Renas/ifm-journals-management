@@ -101,4 +101,14 @@ class Article extends Model
     {
         return $this->belongsTo(ArticleStatus::class);
     }
+
+    public function article_reviews()
+    {
+        return $this->hasMany(ArticleReview::class);
+    }
+
+    public function review_attachments()
+    {
+        return $this->hasMany(ReviewAttachment::class);
+    }
 }

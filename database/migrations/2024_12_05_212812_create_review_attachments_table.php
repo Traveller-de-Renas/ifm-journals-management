@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('article_evaluations', function (Blueprint $table) {
+        Schema::create('review_attachments', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('article_id')->constrained(table: 'articles');
-            $table->foreignId('review_section_id')->nullable()->constrained(table: 'review_sections');
-            $table->foreignId('review_section_query_id')->nullable()->constrained(table: 'review_section_queries');
-            $table->foreignId('review_section_option_id')->nullable()->constrained(table: 'review_section_options');
-
-            $table->text('comment')->nullable();
-            $table->string('option')->nullable();
+            $table->string('attachment')->nullable();
+            
             $table->foreignId('user_id')->constrained(table: 'users');
 
             $table->softDeletes();
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('article_evaluations');
+        Schema::dropIfExists('review_attachments');
     }
 };

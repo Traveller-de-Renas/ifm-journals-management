@@ -99,36 +99,6 @@
                 <x-button class="w-full">{{ $statex->name }} </x-button>
             </a>
         @endforeach
-        
-        {{-- <a href="{{ route('journals.articles', [$record->journal->uuid, '001']) }}" class="flex-1">
-            <x-button class="mb-4 w-full">Pending </x-button>
-        </a>
-
-        <a href="{{ route('journals.articles', [$record->journal->uuid, '002']) }}" class="flex-1">
-            <x-button class="mb-4 w-full"> 
-                @if($record->journal->chief_editor->id == auth()->user()->id)
-                Received
-                @else
-                Submitted
-                @endif
-            </x-button>
-        </a>
-
-        <a href="{{ route('journals.articles', [$record->journal->uuid, '007']) }}" class="flex-1">
-            <x-button class="mb-4 w-full">Rejected </x-button>
-        </a>
-
-        <a href="{{ route('journals.articles', [$record->journal->uuid, '004']) }}" class="flex-1">
-            <x-button class="mb-4 w-full">Under Review </x-button>
-        </a>
-
-        <a href="{{ route('journals.articles', [$record->journal->uuid, '011']) }}" class="flex-1">
-            <x-button class="mb-4 w-full">On Pub. Process </x-button>
-        </a>
-
-        <a href="{{ route('journals.articles', [$record->journal->uuid, '006']) }}" class="flex-1">
-            <x-button class="mb-4 w-full">Published </x-button>
-        </a> --}}
     </div>
 
     <div class="w-full grid grid-cols-12 gap-2">
@@ -197,8 +167,11 @@
                         <a href="{{ route('journals.article_evaluation', [$record->uuid, $user->uuid]) }}" >Evaluation Form</a>
                     </div>
 
-                    <div class="text-right">
-                        <x-button-plain class="bg-red-700 hover:bg-red-600 text-xs" wire:click="removeReviewer({{ $user->id }})">
+                    <div class="flex gap-2 mt-2">
+                        <x-button-plain class="bg-green-700 hover:bg-green-600 text-xs w-2/3" wire:click="reviewFeedback({{ $user->id }})">
+                            Review Feedback
+                        </x-button-plain>
+                        <x-button-plain class="bg-red-700 hover:bg-red-600 text-xs w-1/3" wire:click="removeReviewer({{ $user->id }})">
                             Remove
                         </x-button-plain>
                     </div>
@@ -383,6 +356,72 @@
                 {{ __('Submit') }}
             </x-button>
             <x-secondary-button class="ml-3" wire:click="$toggle('editorFeedback')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-secondary-button>
+
+        </x-slot>
+    </x-dialog-modal>
+
+
+    <x-dialog-modal wire:model="reviewerFeedback" :maxWidth="'4xl'" >
+        <x-slot name="title">
+            {{ __('Reviewer Feedback') }}
+        </x-slot>
+        <x-slot name="content">
+            
+            <div class="mt-4 text-xs">
+
+                @if(!empty($sections))
+
+                    @foreach ($sections as $key => $section)
+                
+                        <table class="min-w-full text-left font-light">
+                            <thead class="border-b font-medium grey:border-neutral-500">
+                                <tr class="bg-neutral-200 font-bold">
+                                    <th scope="col" class="whitespace-nowrap px-4 py-2 font-bold">
+                                        {{ $section->title }}
+                                    </th>
+                                    @foreach ($section->reviewSectionOption as $key => $option)
+                                        <th scope="col" class="whitespace-nowrap px-4 py-2 font-bold text-center">
+                                            {{ $option->title }}
+                                        </th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                @foreach ($section->reviewSectionQuery as $key => $data)
+                                <tr class="border-b transition duration-300 ease-in-out @if($section->category == 'options') hover:bg-neutral-100 @endif grey:border-neutral-500 grey:hover:bg-neutral-600">
+                                    <td class="whitespace-nowrap px-4 py-2 font-medium">
+                                        <p class="w-full @if($section->category == 'comments') font-bold @endif">{{ $data->title }}</p>
+
+                                        @if($section->category == 'comments')
+                                        <x-textarea type="text" id="description" class="w-full mt-2" wire:model="reviewComment.{{ $data->id }}" placeholder="Enter Description" rows="5" readonly />
+                                        @endif
+                                    </td>
+                                    @if($section->category == 'options')
+                                        @foreach ($section->reviewSectionOption as $key => $option)
+                                            <td class="whitespace-nowrap px-4 py-2 font-medium text-center">
+                                                <input type="radio" name="option{{ $data->id }}" wire:model.live="reviewOption.{{ $data->id }}" value="{{ $option->id }}" wire:click="upOptions({{ $data->id }}, {{ $option->id }})" />
+                                            </td>
+                                        @endforeach
+                                    @endif
+                                </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+
+                    @endforeach
+
+                @endif
+
+            </div>
+
+        </x-slot>
+        <x-slot name="footer">
+
+            <x-secondary-button class="ml-3" wire:click="$toggle('reviewerFeedback')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 

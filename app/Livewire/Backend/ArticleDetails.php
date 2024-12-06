@@ -11,7 +11,9 @@ use App\Mail\EditorMail;
 use App\Mail\ReviewerMail;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ArticleReview;
 use App\Models\ArticleStatus;
+use App\Models\ReviewSection;
 use App\Models\ArticleMovementLog;
 use Illuminate\Support\Facades\Mail;
 
@@ -27,6 +29,12 @@ class ArticleDetails extends Component
     public $sendModal = false;
     public $assignModal = false;
     public $editorFeedback = false;
+    public $reviewerFeedback = false;
+
+    public $sections;
+    public $reviewOption  = [];
+    public $reviewComment = [];
+    public $review_attachment;
 
     public $users;
     public $role;
@@ -106,6 +114,15 @@ class ArticleDetails extends Component
     {
         $this->dispatch('contentChanged');
         $this->editorFeedback = true;
+    }
+
+    public function reviewFeedback(User $reviewer)
+    {
+        $this->reviewOption = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
+
+        $this->reviewComment = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_query_id')->toArray();
+        $this->sections = ReviewSection::all();
+        $this->reviewerFeedback = true;
     }
 
     public function attachUser()
