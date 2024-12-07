@@ -31,6 +31,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/index', [JournalController::class, 'index'])->name('journals.index');
     Route::get('/form/{journal}', [JournalController::class, 'form'])->name('journals.form');
+
+    Route::get('/publication_process', [JournalController::class, 'publication_process'])->name('journals.publication_process');
     Route::get('/subjects', [JournalController::class, 'subjects'])->name('journals.subjects');
     Route::get('/categories', [JournalController::class, 'categories'])->name('journals.categories');
     Route::get('/details/{journal}', [JournalController::class, 'details'])->name('journals.details');

@@ -22,6 +22,7 @@ class RolesAndPermissionSeeder extends Seeder
             'users',
             'Editorial Board',
             'Journals',
+            'Publication Process',
             'Subjects',
             'Categories',
         );

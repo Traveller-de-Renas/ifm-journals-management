@@ -128,7 +128,7 @@ class ArticleEvaluation extends Component
 
             $this->record->save();
 
-            session()->flash('success', $this->description);
+            session()->flash('success', $this->description.', We would like to extend our sinciere thanks for your careful review of our manuscript. Your expert comments have been invaluable in refining the manuscript and ensuring its rigor and clarity.');
 
             Mail::to('mrenatuskiheka@yahoo.com')
                 ->send(new ReviewerResponseMail($this->record, $this->description));

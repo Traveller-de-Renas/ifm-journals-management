@@ -107,4 +107,9 @@ class JournalController extends Controller
 
         return Storage::download('public/articles/'.$file->file_path);
     }
+
+    public function publication_process()
+    {
+        return view('backend.publication_process');
+    }
 }

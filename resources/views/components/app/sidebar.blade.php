@@ -80,6 +80,12 @@
                                     <a href="{{ route('journals.index') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Journals List</a>
                                 </li>
 
+                                @if (Auth()->user()->hasPermissionTo('Publication Process'))
+                                <li>
+                                    <a href="{{ route('journals.publication_process') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Publication Process</a>
+                                </li>
+                                @endif
+
                                 @if (Auth()->user()->hasPermissionTo('Subjects'))
                                 <li>
                                     <a href="{{ route('journals.subjects') }}" class="flex items-center w-full p-2 text-white hover:text-black transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 ">Subjects</a>
