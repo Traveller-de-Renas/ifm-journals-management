@@ -6,7 +6,7 @@
         
     <div class="grid grid-cols-12 gap-2 bg-gray-200 rounded">
         <div class="col-span-1">
-            <img class="h-full w-full rounded-tl-md rounded-bl-md" src="{{ asset('storage/journals/'.$record->image) }}" width="40" height="40" alt="{{ $record->code }}">
+            <img class="h-full w-full rounded-tl-md rounded-bl-md" src="{{ asset('storage/journals/'.$record->image) }}" width="40" height="40" alt="{{ strtoupper($record->code) }}">
         </div>
         <div class="col-span-11 w-full mb-2 mt-2">
             <div class="grid grid-cols-12 gap-2">

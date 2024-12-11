@@ -130,65 +130,6 @@ class Articles extends Component
         session()->flash('success', 'Submission Cancelled...!');
     }
 
-
-    public function createVolume()
-    {
-        $max_volume = (Volume::max('number') != '')? Volume::max('number') : 0 ;
-
-        $new_volume = $max_volume + 1;
-
-        $volume = new Volume;
-
-        $volume->number      = $new_volume;
-        $volume->description = 'volume '.$new_volume;
-        $volume->journal_id  = $this->record->id;
-
-        if($volume->save()){
-            $this->record->volume_id = $volume->id;
-            $this->record->save();
-
-            session()->flash('success', 'New Volume has been created successfully!');
-        }
-    }
-
-    public function createIssue()
-    {
-        if($this->record->volume_id == ''){
-            session()->flash('danger', 'No Volume has been created!');
-        }else{
-            $max_issue = (Issue::max('number') != '')? Issue::max('number') : 0 ;
-
-            $new_issue = $max_issue + 1;
-
-            $issue = new Issue;
-
-            $issue->number      = $new_issue;
-            $issue->description = 'Issue '.$new_issue;
-            $issue->volume_id   = $this->record->volume_id;
-            $issue->journal_id  = $this->record->id;
-            $issue->status      = 'Pending';
-
-            if($issue->save()){
-                $this->record->issue_id = $issue->id;
-                $this->record->save();
-
-                session()->flash('success', 'New Issue has been created successfully!');
-            }
-        }
-    }
-
-    public function publishIssue(Issue $issue)
-    {
-        $issue->status = 'Published';
-
-        $state = $this->articleStatus('006');
-
-        if($issue->save()){
-            $issue->articles()->update(['article_status_id' => $state->id]);
-            session()->flash('success', 'Issue has been published successfully!');
-        }
-    }
-
     public function articleStatus($code){
         return ArticleStatus::where('code', $code)->first();
     }

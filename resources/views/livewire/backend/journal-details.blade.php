@@ -55,7 +55,7 @@
                         </svg>
                     </div>
                     @else
-                        <img class="w-full rounded-md rounded-bl-md mt-4" src="{{ asset('storage/journals/'.$record->image) }}" alt="{{ $record->code }}">
+                        <img class="w-full rounded-md rounded-bl-md mt-4" src="{{ asset('storage/journals/'.$record->image) }}" alt="{{ strtoupper($record->code) }}">
                     @endif
 
                     <a href="{{ route('journals.submission', $record->uuid) }}">

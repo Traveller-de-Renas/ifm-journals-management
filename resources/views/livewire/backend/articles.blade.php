@@ -55,7 +55,7 @@
                         </svg>
                     </div>
                     @else
-                        <img class="w-full rounded-md rounded-bl-md mt-4" src="{{ asset('storage/journals/'.$record->image) }}" alt="{{ $record->code }}">
+                        <img class="w-full rounded-md rounded-bl-md mt-4" src="{{ asset('storage/journals/'.$record->image) }}" alt="{{ strtoupper($record->code) }}">
                     @endif
 
                     <a href="{{ route('journals.submission', $record->uuid) }}">
@@ -81,10 +81,6 @@
                     <p class="w-full font-bold text-blue-700 hover:text-blue-500 p-1">{{ $statex->name }} </p>
                 </a>
             @endforeach
-
-            {{-- <a href="{{ route('journals.archive', $record->uuid) }}">
-                <x-button class="w-full mt-4" >Go to Archive </x-button>
-            </a> --}}
 
             <br>
 
@@ -180,40 +176,6 @@
                 {{ $articles->links() }}
             </div>
         </div>
-
-        {{-- <div class="col-span-3">
-            <div class="bg-gray-100 rounded border mb-4">
-
-                <p class="p-2">Current Volume :
-                    {{ $record->volume?->description }}
-                </p>
-
-                @if ($record?->chief_editor?->id == auth()->user()->id)
-                <div class="flex gap-2 justify-between border-t p-2">
-                    <x-button class="w-full">Close Volume </x-button>
-                    <x-button class="w-full" wire:click="createVolume();">Create New </x-button>
-                </div>
-                @endif
-            
-
-                <p class="p-2">Current Issue :
-                    {{ $record->issue?->description }}
-                </p>
-
-                @if ($record?->chief_editor?->id == auth()->user()->id)
-                <div class="flex gap-2 justify-between border-t p-2">
-                    @if(!empty($record->issue))
-                    <x-button class="w-full" wire:click="publishIssue({{ $record->issue?->id }})">Publish </x-button>
-                    @endif
-                    <x-button class="w-full" wire:click="createIssue();">Create New </x-button>
-                </div>
-                @endif
-                
-                <a href="{{ route('journals.archive', $record->uuid) }}">
-                    <x-button class="w-full mt-4" >Go to Archive </x-button>
-                </a>
-            </div>
-        </div> --}}
     </div>
 
     <x-dialog-modal wire:model="deleteModal">

@@ -155,7 +155,7 @@ class ArticleEvaluation extends Component
         $this->record->article_status_id = $this->articleStatus('008')->id;
         $this->record->save();
 
-        session()->flash('success', 'This Article is Declined');
+        session()->flash('success', 'This Article is Declined, Thanks we hope next time you will be able to assist us on reviewing relevant manuscript.');
 
         Mail::to('mrenatuskiheka@yahoo.com')
             ->send(new ReviewerResponseMail($this->record, $this->description));
