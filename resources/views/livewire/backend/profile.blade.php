@@ -4,9 +4,6 @@
         {{ __('PROFILE  INFORMATION') }}
     </x-slot>
 
-    
-
-
     <div class="grid grid-cols-3 gap-2 w-full">
         <div class="mt-4">
             <x-label for="juser_fname" value="First Name" class="mb-2 block font-medium text-sm text-gray-700" />

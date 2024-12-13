@@ -59,165 +59,230 @@
         </div>
     </div>
 
+
+
+<div class="border-b border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+            <li class="me-2">
+                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'overview') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('overview')">
+                    Overview
+                </a>
+            </li>
+            <li class="me-2">
+                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'table_of_contents') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('table_of_contents')">
+                    Table of Contents
+                </a>
+            </li>
+            <li class="me-2">
+                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'author_guidelines') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('author_guidelines')">
+                    Author Guidelines
+                </a>
+            </li>
+            <li class="me-2">
+                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'editorial_board') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('editorial_board')">
+                    Editorial Board
+                </a>
+            </li>
+            <li class="me-2">
+                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'reviewer_information') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('reviewer_information')">
+                    Reviewer Information
+                </a>
+            </li>
+            <li class="me-2">
+                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'calls_for_papers') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('calls_for_papers')">
+                    Calls for Papers
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
 
         <div class="md:grid md:grid-cols-12 gap-4 w-full ">
 
             <div class="col-span-9">
-                <div class="w-full mb-4">
-                    <p class="text-lg font-bold mb-2">Aim and Scope</p>
-                    <div class="text-justify">
-                        {!! $record->scope !!}
+
+                <div class="w-full mb-4 @if($tab != 'overview') hidden @endif">
+
+                    <div class="w-full mb-4">
+                        <p class="text-lg font-bold mb-2">Aim and Scope</p>
+                        <div class="text-justify">
+                            {!! $record->scope !!}
+                        </div>
                     </div>
-                </div>
-                
-                @if(!empty($record->indecies) && count($record->indecies) > 0)
-                <div class="w-full mb-4">
-                    <p class="text-lg font-bold mb-2">Indexing</p>
-                    
-                    @foreach ($record->indecies as $index)
-                        <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
-                            <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
-                                <div class="text-slate-800">
-                                    <a href="{{ $index->link }}" target="_blank" >{{ $index->title }}</a>
-                                </div>
-                            </div>
-                            <div class="text-sm p-2" x-show="open" x-cloak="">
-                                {{ $index->description }}
-                            </div>
-                        </div>
-                    @endforeach
-                    
-                </div>
-                @endif
 
-                @if(!empty($record->instructions))
-                <div class="w-full mb-4">
-                    <p class="text-lg font-bold mb-2">Authors' Guidelines</p>
-
-                    @foreach ($record->instructions as $instruction)
-                        <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
-                            <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
-                                <div class=" text-slate-800">{{ $instruction->title }}</div>
-                            </div>
-                            <div class="text-sm text-justify p-2" x-show="open" x-cloak="">
-                                {{ $instruction->description }}
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-                @endif
-
-                <div class="w-full mb-2">
-                    <p class="text-lg font-bold mb-2">Publications</p>
-
-                    @if ($record->volumes != '')
-                    @foreach ($record->volumes as $key => $volume)
+                    @if(!empty($record->indecies) && count($record->indecies) > 0)
+                    <div class="w-full mb-4">
+                        <p class="text-lg font-bold mb-2">Indexing</p>
+                        
+                        @foreach ($record->indecies as $index)
                             <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
-                                <div class="w-full p-2 cursor-pointer hover:bg-slate-200" @click.prevent="open = !open" :aria-expanded="open">
-                                    <div class="text-slate-800 font-bold">
-                                        <a href="" target="_blank" >{{ $volume->description }}</a>
+                                <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
+                                    <div class="text-slate-800">
+                                        <a href="{{ $index->link }}" target="_blank" >{{ $index->title }}</a>
                                     </div>
                                 </div>
-                                <div class="text-sm" x-show="open" x-cloak="">
-                                    @foreach ($volume->issues()->where(function($query) use($record){
-                                        if(auth()->user()?->id != $record->chief_editor?->id){
-                                            $query->where('status', 'Published');
-                                        }
-                                    })->get() as $key => $issue)
-                                    <div class="rounded-sm border-b border-t border-slate-200 mb-2" x-data="{ open: false }">
-                                        <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
-                                            <div class="text-slate-800">
-                                                <a href="" target="_blank" >{{ $issue->description }}</a>
-                                            </div>
-                                            
-                                        </div>
-                                        <div class="text-sm p-2" x-show="open" x-cloak="">
-                                            <div class="flex justify-between">
-                                                <p class="text-slate-800 font-bold">{{ $issue->description }} Articles</p>
-                                                <div class="text-right">
-
-                                                    @if(auth()->user()?->id == $record->chief_editor?->id)
-                                                    @if($issue->status == 'Unpublished')
-                                                    <x-button class="" wire:click="publishIssue({{ $issue->id }}, 'Published')">Publish Issue</x-button>
-                                                    @endif
-
-                                                    @if($issue->status == 'Published')
-                                                    <x-button-plain class="bg-red-700 hover:bg-red-500" wire:click="publishIssue({{ $issue->id }}, 'Unpublished')">Unpublish Issue</x-button-plain>
-                                                    @endif
-                                                    @endif
-
-                                                </div>
-                                            </div>
-
-                                            @php
-                                                $status = App\Models\ArticleStatus::where('code', '006')->first();
-                                            @endphp
-                                            
-
-                                            @foreach ($issue->articles()->where('article_status_id', $status->id)->get() as $key => $article)
-                                            <div class="w-full mb-6 pb-6 border-b">
-                                                <a href="{{ route('journal.article', $article->uuid) }}">
-                                                <p class="text-blue-700 hover:text-blue-500 text-lg font-bold cursor-pointer">{{ $article->title }}</p>
-                                                </a>
-                                                
-                                                <div class="text-sm text-green-700">
-                                                    {{ $article->author?->salutation?->title }} {{ $article->author?->first_name }} {{ $article->author?->middle_name }} {{ $article->author?->last_name }} 
-                                                    {{ $article->author?->affiliation != '' ? '('. $article->author?->affiliation.')' : '' }}
-                                                </div>
-
-                                                <div class="mt-2 text-justify">
-                                                    {!! $article->abstract !!}
-                                                </div>
-                                            </div>
-                                            @endforeach
-
-                                        </div>
-                                    </div>
-                                    @endforeach
+                                <div class="text-sm p-2" x-show="open" x-cloak="">
+                                    {{ $index->description }}
                                 </div>
                             </div>
                         @endforeach
+                        
+                    </div>
                     @endif
 
                 </div>
+
+                <div class="w-full mb-4 @if($tab != 'table_of_contents') hidden @endif">
+
+                    <div class="w-full mb-2">
+                        <p class="text-lg font-bold mb-2">Publications</p>
+    
+                        @if ($record->volumes != '')
+                        @foreach ($record->volumes as $key => $volume)
+                                <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
+                                    <div class="w-full p-2 cursor-pointer hover:bg-slate-200" @click.prevent="open = !open" :aria-expanded="open">
+                                        <div class="text-slate-800 font-bold">
+                                            <a href="" target="_blank" >{{ $volume->description }}</a>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm" x-show="open" x-cloak="">
+                                        @foreach ($volume->issues()->where(function($query) use($record){
+                                            if(auth()->user()?->id != $record->chief_editor?->id){
+                                                $query->where('status', 'Published');
+                                            }
+                                        })->get() as $key => $issue)
+                                        <div class="rounded-sm border-b border-t border-slate-200 mb-2" x-data="{ open: false }">
+                                            <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
+                                                <div class="text-slate-800">
+                                                    <a href="" target="_blank" >{{ $issue->description }}</a>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="text-sm p-2" x-show="open" x-cloak="">
+                                                <div class="flex justify-between">
+                                                    <p class="text-slate-800 font-bold">{{ $issue->description }} Articles</p>
+                                                    <div class="text-right">
+    
+                                                        @if(auth()->user()?->id == $record->chief_editor?->id)
+                                                        @if($issue->status == 'Unpublished')
+                                                        <x-button class="" wire:click="publishIssue({{ $issue->id }}, 'Published')">Publish Issue</x-button>
+                                                        @endif
+    
+                                                        @if($issue->status == 'Published')
+                                                        <x-button-plain class="bg-red-700 hover:bg-red-500" wire:click="publishIssue({{ $issue->id }}, 'Unpublished')">Unpublish Issue</x-button-plain>
+                                                        @endif
+                                                        @endif
+    
+                                                    </div>
+                                                </div>
+    
+                                                @php
+                                                    $status = App\Models\ArticleStatus::where('code', '006')->first();
+                                                @endphp
+                                                
+    
+                                                @foreach ($issue->articles()->where('article_status_id', $status->id)->get() as $key => $article)
+                                                <div class="w-full mb-6 pb-6 border-b">
+                                                    <a href="{{ route('journal.article', $article->uuid) }}">
+                                                    <p class="text-blue-700 hover:text-blue-500 text-lg font-bold cursor-pointer">{{ $article->title }}</p>
+                                                    </a>
+                                                    
+                                                    <div class="text-sm text-green-700">
+                                                        {{ $article->author?->salutation?->title }} {{ $article->author?->first_name }} {{ $article->author?->middle_name }} {{ $article->author?->last_name }} 
+                                                        {{ $article->author?->affiliation != '' ? '('. $article->author?->affiliation.')' : '' }}
+                                                    </div>
+    
+                                                    <div class="mt-2 text-justify">
+                                                        {!! $article->abstract !!}
+                                                    </div>
+                                                </div>
+                                                @endforeach
+    
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+    
+                    </div>
+
+                </div>
+
+                <div class="w-full mb-4 @if($tab != 'author_guidelines') hidden @endif">
+                    @if(!empty($record->instructions))
+                    <div class="w-full mb-4">
+                        <p class="text-lg font-bold mb-2">Authors' Guidelines</p>
+
+                        @foreach ($record->instructions as $instruction)
+                            <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
+                                <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
+                                    <div class=" text-slate-800">{{ $instruction->title }}</div>
+                                </div>
+                                <div class="text-sm text-justify p-2" x-show="open" x-cloak="">
+                                    {{ $instruction->description }}
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+
+                <div class="w-full mb-4 @if($tab != 'editorial_board') hidden @endif">
+                    <div class="w-full mb-4">
+                        <p class="text-lg font-bold mb-2">Editorial Board</p>
+    
+                        <div class="w-full mt-2">
+                        @foreach ($record->journal_users()->where('role', 'editor')->get() as $key => $journal_user)
+                        
+                                <div class="flex w-full" >
+                                    <div class="w-full border bg-gray-100 hover:bg-gray-200 border-slate-200 px-4 rounded-sm cursor-pointer" wire:click="editorDetails({{ $key }});">
+                                        {{ $journal_user->salutation?->title }}
+                                        {{ $journal_user->first_name }}
+                                        {{ $journal_user->middle_name }}
+                                        {{ $journal_user->last_name }}
+    
+                                        {{ $journal_user->affiliation != '' ? '('.$journal_user->affiliation.')' : '' }}
+    
+                                        @if ($journal_user->id == $record->user_id)
+                                            <p class="text-xs text-green-400">Chief Editor</p>
+                                        @else
+                                            <p class="text-xs text-blue-400">Editor</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            
+                                <div class="p-2 text-sm border @if($key != $editor_detail) hidden @endif" >
+                                    <div class="w-full flex">
+                                        <div class="text-sm w-1/5 ">Affiliation</div>
+                                        <div class="text-sm w-full">: {{ $journal_user->affiliation }}</div>
+                                    </div>
+                                    <div class="w-full flex">
+                                        <div class="text-sm w-1/5">Degree</div>
+                                        <div class="text-sm w-full">: {{ $journal_user->degree }}</div>
+                                    </div>
+                                    <div class="w-full flex">
+                                        <div class="text-sm w-1/5">Email</div>
+                                        <div class="text-sm w-full">: {{ $journal_user->email }}</div>
+                                    </div>
+                                    <div class="w-full flex">
+                                        <div class="text-sm w-1/5">Category</div>
+                                        <div class="text-sm w-full">: {{ $journal_user->category }}</div>
+                                    </div>
+                                </div>
+                            @endforeach 
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="col-span-3">
-                <div class="w-full mb-4">
-                    <p class="text-lg font-bold mb-2">Editorial Board</p>
-
-                    <div class="w-full mt-2">
-                    @foreach ($record->journal_users()->where('role', 'editor')->get() as $key => $journal_user)
-                    
-                            <div class="flex w-full" >
-                                <div class="w-full border bg-gray-100 hover:bg-gray-200 border-slate-200 px-4 rounded-sm cursor-pointer" wire:click="editorDetails({{ $key }});">
-                                    {{ $journal_user->salutation?->title }}
-                                    {{ $journal_user->first_name }}
-                                    {{ $journal_user->middle_name }}
-                                    {{ $journal_user->last_name }}
-
-                                    {{ $journal_user->affiliation != '' ? '('.$journal_user->affiliation.')' : '' }}
-
-                                    @if ($journal_user->id == $record->user_id)
-                                        <p class="text-xs text-green-400">Chief Editor</p>
-                                    @else
-                                        <p class="text-xs text-blue-400">Editor</p>
-                                    @endif
-                                </div>
-                            </div>
-                        
-                            <div class="p-2 text-sm border @if($key != $editor_detail) hidden @endif" >
-                                <div class="w-full">
-                                    <div class="text-sm w-full">Affiliation : {{ $journal_user->affiliation }}</div>
-                                    <div class="text-sm w-full">Degree : {{ $journal_user->degree }}</div>
-                                    <div class="text-sm w-full">Email : {{ $journal_user->email }}</div>
-                                    <div class="text-sm w-full">Category : {{ $journal_user->category }}</div>
-                                </div>
-                            </div>
-                        @endforeach 
-                    </div>
-                </div>
 
                 <div class="w-full mb-4">
                 <p class="text-lg font-bold mb-2">Recent Articles</p>
@@ -229,22 +294,12 @@
                             </div>
                         </a>
                     @endforeach
-
-                    <a href="{{ route('journal.articles', $record->uuid) }}">
-                        <x-button class="mb-4 w-full ">View All </x-button>
-                    </a>
+                    
+                    <x-button class="mb-4 w-full " wire:click="changeTab('table_of_contents')">View All </x-button>
                 </div>
 
                 <br>
                 <br>
-
-                <p class="text-lg font-bold mb-2">Acceptable Article Types</p>
-
-                @foreach ($record->article_types as $key => $article_type)
-                    <div class="text-sm font-bold text-blue-700 hover:text-blue-600 hover:bg-gray-100 cursor-pointer p-2 border rounded-md mb-2 mt-2">
-                        {{ $article_type->name }}
-                    </div>
-                @endforeach
             </div>
         </div>
     </div>

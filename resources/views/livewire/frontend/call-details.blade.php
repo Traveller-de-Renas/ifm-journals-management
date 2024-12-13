@@ -14,8 +14,8 @@
                     <div class="border-t mb-2"></div>
 
                     <div class="flex">
-                    <p class="w-1/2">Start Date : {{ $record->start_date }}</p>
-                    <p class="w-1/2">End Date : {{ $record->start_date }}</p>
+                        <p class="w-1/2">Start Date : {{ $record->start_date }}</p>
+                        <p class="w-1/2">End Date : {{ $record->start_date }}</p>
                     </div>
 
                 </div>

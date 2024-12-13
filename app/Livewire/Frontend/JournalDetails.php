@@ -27,6 +27,8 @@ class JournalDetails extends Component
     public $create_juser = false;
     public $juser_fname, $juser_mname, $juser_lname, $juser_email, $juser_phone, $juser_affiliation, $juser_gender, $juser_salutation_id, $juser_country_id;
 
+    public $tab = 'overview';
+
     public function mount(Request $request){
 
         if(!Str::isUuid($request->journal)){
@@ -125,5 +127,10 @@ class JournalDetails extends Component
         $this->signupModal = false;
         
         session()->flash('success', 'You are successfully registered as an author on this journal');
+    }
+
+    public function changeTab($tab)
+    {
+        $this->tab = $tab;
     }
 }

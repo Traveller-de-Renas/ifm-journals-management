@@ -123,26 +123,4 @@
             </div>
         </div>
     </div>
-
-    <x-dialog-modal wire:model="deleteModal">
-        <x-slot name="title">
-            {{ __('Delete Data') }}
-        </x-slot>
-        <x-slot name="content">
-            <div class="mt-4">
-                <p class="text-center">Are you sure you want to delete this record.?</p>
-            </div>
-        </x-slot>
-        <x-slot name="footer">
-            
-            <x-button-danger type="submit" wire:click="delete({{ $article?->id }})" wire:loading.attr="disabled" >
-                {{ __('Delete') }}
-            </x-button-danger>
-            <x-secondary-button class="ml-3" wire:click="$toggle('Edit')" wire:loading.attr="disabled">
-                {{ __('Cancel') }}
-            </x-secondary-button>
-
-        </x-slot>
-    </x-dialog-modal>
-
 </x-module>

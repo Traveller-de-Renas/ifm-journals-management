@@ -31,7 +31,7 @@
                         <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> <p class="ml-2 text-lg font-bold">Download Article</p>
                     </div>
                 </a>
-                <p class="ml-2 text-lg text-gray-600 font-bold">| {{ $file?->downloads }} Downloads | Published On {{ date("Y-m-d") }} </p>
+                <p class="ml-2 text-lg text-gray-600 font-bold">| {{ $file?->downloads }} Downloads | Aticle Publication Date : {{ date("Y-m-d") }} </p>
             </div>
         </div>
 

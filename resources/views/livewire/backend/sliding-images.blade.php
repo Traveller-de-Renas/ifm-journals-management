@@ -64,7 +64,6 @@
                         </svg>
                     </button>
                     
-                    <!-- Dropdown menu -->
                     <div id="dropdownDots{{ $item->id }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
                         <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown{{ $item->id }}">
                             <li>

@@ -8,10 +8,19 @@
                     {{ $record?->journal->title }}
                     </a>
                 </p>
-                <p class="mr-1"> > </p> 
-                <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->volume?->description }} </p>
-                <p class="mr-1"> > </p>
-                <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->description }} </p>
+                @if ($record->issue?->volume?->description)
+                    <p class="mr-1"> > </p> 
+                    <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->volume?->description }} </p>
+                @endif
+
+                @if ($record->issue?->description)
+                    <p class="mr-1"> > </p>
+                    <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->description }} </p>
+                @endif
+                
+
+                
+
             </div>
             
             <p class="text-white text-3xl font-bold mt-4 mb-4">
@@ -25,11 +34,15 @@
             <p> ISSN : {{ $record?->journal->issn }} </p>
 
             <div class="mt-6 mb-6">
-                @foreach ($record->article_users as $key => $user)
-                    {{ $user->first_name }} ({{ $user->affiliation }})
-                @endforeach
+                <span class="hover:text-blue-600 hover:underline cursor-pointer">
+                    @if($record->author->salutation) {{ $record->author->salutation?->title }}. @endif
+                    
+                    {{ $record->author->last_name }}, {{ strtoupper(substr($record->author->first_name, 0, 1)) }}.
+                    
+                    @if($record->author->affiliation) ({{ $record->author->affiliation }}) @endif
+                </span>
 
-                <p class="text-lg text-gray-400 font-bold">Published On {{ date("Y-m-d") }} </p>
+                <p class="text-lg text-gray-400 font-bold">Aticle Publication Date : {{ date("Y-m-d") }} </p>
             </div>
 
         </div>
@@ -55,30 +68,26 @@
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
 
-        <div class="w-full">
+        <div class="w-full mb-12">
             <p class="text-lg font-bold mb-2">Abstract</p>
             <div class="w-full text-justify mb-4">
                 {!! $record->abstract !!}
             </div>
         </div>
 
-        <div class="w-full grid grid-cols-12 gap-2">
+        <div class="w-full mb-12 grid grid-cols-12 gap-2">
             <div class="col-span-8">
 
                 @if($record->keywords != '')
                 <div class="w-full mb-4">
-                    <p class="text-lg font-bold">Keywords</p>
-                    <div class="text-sm font-bold text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
-                        {{ $record->keywords }}
-                    </div>
-                </div>
-                @endif
-                
-                @if($record->areas != '')
-                <div class="w-full mb-4">
-                    <p class="text-lg font-bold">Areas</p>
-                    <div class="text-sm font-bold text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
-                        {{ $record->areas }}
+                    <p class="text-lg font-bold mb-4">Keywords</p>
+                    <div class="flex gap-2">
+                        @php
+                            $keywords = explode(',', $record->keywords);
+                        @endphp
+                        @foreach ($keywords as $key => $keyword)
+                            <span class="shadow px-4 py-2 hover:bg-gray-100 cursor-pointer border rounded-xl"> {{ $keyword }} </span>
+                        @endforeach
                     </div>
                 </div>
                 @endif
@@ -86,8 +95,8 @@
                 @php
                     $coauthors = $record->article_users()->wherePivot('role', '<>', 'reviewer')->get()
                 @endphp
-                
-                @if(count($coauthors) > 0)
+
+                {{-- @if(count($coauthors) > 0)
                 <div class="w-full mb-4">
                     <p class="text-lg font-bold">Co Authors</p>
                     <div class="text-sm text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
@@ -98,58 +107,29 @@
                         @endforeach
                     </div>
                 </div>
-                @endif
+                @endif --}}
 
             </div>
-            <div class="col-span-4">
-                @if ($record->article_users()->wherePivot('role', 'reviewer')->get()->count() > 0)
-                @if(auth()->user())
-                <p class="text-lg font-bold mb-2">Reviewers</p>
-                @foreach ($record->article_users()->wherePivot('role', 'reviewer')->get() as $key => $user)
-                    <div class="w-full">
-                        <div class="w-full font-bold text-sm">
-                            {{ $user->salutation?->title }} {{ $user->first_name }} ({{ $user->affiliation }})
-                        </div>
+        </div>
 
-                        <div class="text-sm w-full">Affiliation : {{ $user->affiliation }}</div>
-                        <div class="text-sm w-full">Status : {{ 'Under Evaluation' }}</div>
-                        <div class="text-sm w-full">Assigned on : {{ $user->pivot->created_at }}</div>
 
-                        <div class="w-full text-blue-700 hover:text-blue-600 cursor-pointer">
-                            <a href="{{ route('journals.article_evaluation', [$record->uuid, $user->uuid]) }}" >Evaluation Form</a>
-                        </div>
-                    </div>
+        <div class="w-full mb-12 grid grid-cols-12 gap-2">
+            <div class="col-span-8">
+                <p class="text-lg font-bold">Citation</p>
+                <span class="hover:text-blue-600 hover:underline cursor-pointer">{{ $record->author->salutation?->title }} {{ $record->author->last_name }}, {{ strtoupper(substr($record->author->first_name, 0, 1)) }}.
+                </span>
+                @foreach ($coauthors as $key => $user)
+                    <span class="hover:text-blue-600 hover:underline cursor-pointer"> {{ $user->salutation?->title }} {{ $user->last_name }}, {{ strtoupper(substr($user->first_name, 0, 1)) }}.  </span>
                 @endforeach
-                @endif
-                @endif
+
+                ({{ \Carbon\Carbon::parse($record->publication_date)->format('Y') }}),
+
+                "{{ __($record->title) }}",
+
+                <span class="font-bold italic hover:text-blue-600 hover:underline cursor-pointer"><a href="{{ route('journal.detail', $record?->journal->uuid) }}">{{ __($record->journal?->title) }}</a></span>,
+                {{ $record->issue?->volume->description }}, {{ $record->issue?->description }}, {{ $record->issue?->volume->journal->issn }}. {{ $record->issue?->volume->journal->doi }}
             </div>
         </div>
     </div>
-
-    <x-dialog-modal wire:model="reviewerModal">
-        <x-slot name="title">
-            {{ __('Assign Reviewer') }}
-        </x-slot>
-        <x-slot name="content">
-            <div class="mt-4">
-                Select Reviewer
-                <select class="rounded w-full border-gray-300" wire:model="reviewer_id">
-                    @foreach($reviewers as $key => $reviewer)
-                    <option>{{ $reviewer->salutation?->title }} {{ $reviewer->first_name }} {{ $reviewer->middle_name }} {{ $reviewer->last_name }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </x-slot>
-        <x-slot name="footer">
-            
-            <x-button type="submit" wire:click="assignRev()" wire:loading.attr="disabled" >
-                {{ __('Assign') }}
-            </x-button>
-            <x-secondary-button class="ml-3" wire:click="$toggle('reviewerModal')" wire:loading.attr="disabled">
-                {{ __('Cancel') }}
-            </x-secondary-button>
-
-        </x-slot>
-    </x-dialog-modal>
 
 </div>
