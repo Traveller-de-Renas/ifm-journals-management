@@ -17,9 +17,6 @@
                     <p class="mr-1"> > </p>
                     <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->description }} </p>
                 @endif
-                
-
-                
 
             </div>
             
@@ -112,14 +109,13 @@
             </div>
         </div>
 
-
         <div class="w-full mb-12 grid grid-cols-12 gap-2">
             <div class="col-span-8">
                 <p class="text-lg font-bold">Citation</p>
-                <span class="hover:text-blue-600 hover:underline cursor-pointer">{{ $record->author->salutation?->title }} {{ $record->author->last_name }}, {{ strtoupper(substr($record->author->first_name, 0, 1)) }}.
+                <span class="hover:text-blue-600 hover:underline cursor-pointer">{{ $record->author->last_name }}, {{ strtoupper(substr($record->author->first_name, 0, 1)) }}.
                 </span>
                 @foreach ($coauthors as $key => $user)
-                    <span class="hover:text-blue-600 hover:underline cursor-pointer"> {{ $user->salutation?->title }} {{ $user->last_name }}, {{ strtoupper(substr($user->first_name, 0, 1)) }}.  </span>
+                    <span class="hover:text-blue-600 hover:underline cursor-pointer">{{ $user->last_name }}, {{ strtoupper(substr($user->first_name, 0, 1)) }}.  </span>
                 @endforeach
 
                 ({{ \Carbon\Carbon::parse($record->publication_date)->format('Y') }}),

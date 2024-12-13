@@ -160,7 +160,6 @@
                                                 <div class="text-slate-800">
                                                     <a href="" target="_blank" >{{ $issue->description }}</a>
                                                 </div>
-                                                
                                             </div>
                                             <div class="text-sm p-2" x-show="open" x-cloak="">
                                                 <div class="flex justify-between">
@@ -196,7 +195,7 @@
                                                         {{ $article->author?->affiliation != '' ? '('. $article->author?->affiliation.')' : '' }}
                                                     </div>
     
-                                                    <div class="mt-2 text-justify">
+                                                    <div class="mt-2 text-justify italic">
                                                         {!! $article->abstract !!}
                                                     </div>
                                                 </div>
