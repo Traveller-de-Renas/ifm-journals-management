@@ -71,12 +71,12 @@
             
             <div class="grid grid-cols-2 gap-2">
                 <div class="mt-4" >
-                    <x-label for="keywords" value="Keywords" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-label for="keywords" value="Keywords - Separate by using comma sign (,)" class="mb-2 block font-medium text-sm text-gray-700" />
                     <x-input type="text" id="keywords" class="w-full" wire:model="keywords" placeholder="Enter Keywords" />
                     <x-input-error for="keywords" />
                 </div>
                 <div class="mt-4" >
-                    <x-label for="areas" value="Areas" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-label for="areas" value="Areas - Separate by using comma sign (,)" class="mb-2 block font-medium text-sm text-gray-700" />
                     <x-input type="text" id="areas" class="w-full" wire:model="areas" placeholder="Enter areas" />
                     <x-input-error for="areas" />
                 </div>

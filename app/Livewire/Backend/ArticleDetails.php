@@ -100,6 +100,8 @@ class ArticleDetails extends Component
     public function assignRev()
     {
         $this->record->article_users()->sync([$this->reviewer_id => ['role' => 'reviewer']], false);
+        $this->record->article_status_id = $this->articleStatus('004')->id;
+        $this->record->save();
 
         //Mail::to('mrenatuskiheka@yahoo.com')->send(new ReviewerMail($this->record));
         Mail::to('mandariherman@gmail.com')
@@ -129,7 +131,7 @@ class ArticleDetails extends Component
     {
         $this->record->article_users()->sync([$this->user_id => ['role' => $this->role]], false);
 
-        $this->record->article_status_id = $this->articleStatus('004')->id;
+        $this->record->article_status_id = $this->articleStatus('014')->id;
         $this->record->save();
 
         Mail::to('mrenatuskiheka@yahoo.com')

@@ -7,17 +7,23 @@
                 {{ $record?->journal->title }}
                 </a>
             </p>
-            <p class="mr-1"> > </p> 
-            <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->volume?->description }} </p>
-            <p class="mr-1"> > </p>
-            <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->description }} </p>
+
+            @if ($record->issue?->volume?->description)
+                <p class="mr-1"> > </p> 
+                <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->volume?->description }} </p>
+            @endif
+
+            @if ($record->issue?->description)
+                <p class="mr-1"> > </p>
+                <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->description }} </p>
+            @endif
         </div>
 
         <h2 class="text-3xl font-bold text-gray-900 mb-2 w-full text-wrap">{{ $record->title }}</h2>
         
         <div class="mb-2">
             @if ($record->article_status->code == '006')
-                <p class="text-lg text-gray-600 font-bold w-full">Aticle Publication Date : {{ $article->publication_date }} </p>
+                <p class="text-lg text-gray-600 font-bold w-full">Aticle Publication Date : {{ $record->publication_date }} </p>
             @else
                 <p class="text-lg text-gray-600 font-bold w-full">Aticle Submission Date : {{ date("Y-m-d") }} </p>
             @endif
@@ -42,47 +48,71 @@
             </div>
         </div>
 
-
+        @php
+            $assigned_editor = $record->article_users()->wherePivot('role', 'editor')->first();
+        @endphp
         @if ($record?->journal->chief_editor?->id == auth()->user()->id && $record->article_status->code != '007')
-            <div class="flex justify-between gap-2 w-full mb-4">
-                @if ($record->article_status->code == '002')
-                <x-button wire:click="sendBack()" class="flex-1">
-                    Send Back to Author
-                </x-button>
+            <div class="grid grid-cols-12 justify-between gap-2 w-full mb-4">
+                
+                <div class="col-span-2">
+                    @if ($record->article_status->code == '002')
+                    <x-button wire:click="sendBack()" class="flex-1">
+                        Send Back to Author
+                    </x-button>
+                    @endif
+                </div>
 
-                <x-button wire:click="assignEditor()" class="flex-1">
-                    Assign Editor
-                </x-button>
+                <div class="col-span-2">
+                    @if ($record->article_status->code == '002')
+                    <x-button wire:click="assignEditor()" class="flex-1">
+                        Assign Editor
+                    </x-button>
+                    @endif
+                </div>
 
-                @endif
+                <div class="col-span-2">
+                    @if (auth()->user()->id == $assigned_editor?->id && $record->article_status->code == '014')
+                        <x-button wire:click="eFeedback()" class="flex-1">
+                            Editor Recommendation
+                        </x-button>
+                    @endif
+                </div>
 
-                <x-button wire:click="eFeedback()" class="flex-1">
-                    Editor Recommendation
-                </x-button>
+                <div class="col-span-2">
+                    @if($record->article_status->code == '003') 
+                        <x-button wire:click="assignReviewer()" class="flex-1">
+                            Assign Reviewer
+                        </x-button>
+                    @endif
+                </div>
 
-                <x-button wire:click="assignReviewer()" class="flex-1">
-                    Assign Reviewer
-                </x-button>
+                <div class="col-span-2">
+                    @if($record->article_status->code == '006')
+                        <x-button-plain class="bg-gray-700 hover:bg-gray-500 flex-1 w-full" wire:click="changeStatus('009')">
+                            Unpublish
+                        </x-button-plain>
+                    @else
+                        <x-button wire:click="changeStatus('006')" class="flex-1 w-full">
+                            Publish Article
+                        </x-button>
+                    @endif
+                </div>
 
-                @if($record->article_status->code == '006')
-                <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="changeStatus('009')">
-                    Unpublish
-                </x-button-plain>
-                @else
-                <x-button wire:click="changeStatus('006')" class="flex-1">
-                    Publish Article
-                </x-button>
-                @endif
-
-                <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1" wire:click="declineArticle()">
-                    Decline Article
-                </x-button-plain>
+                <div class="col-span-2">
+                    <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1 w-full" wire:click="declineArticle()">
+                        Decline Article
+                    </x-button-plain>
+                </div>
             </div>
         @endif
     </div>
     @if ($record->article_status->code == '007')
     <div class="p-4 mb-4 shadow bg-red-600 w-full text-center text-white">
         {{ 'This Manuscript is Declined' }}
+    </div>
+    @elseif($record->article_status->code == '009')
+    <div class="p-4 mb-4 shadow bg-gray-600 w-full text-center text-white">
+        {{ 'This Manuscript is Unpublished' }}
     </div>
     @endif
 
@@ -264,9 +294,6 @@
                     <br>
 
                     <p class="font-bold">Currently Assigned Editor</p>
-                    @php
-                    $assigned_editor = $record->article_users()->wherePivot('role', 'editor')->first();
-                    @endphp
 
                     <div class="flex items-center">
                         <a href="{{ route('admin.user_preview', $assigned_editor?->uuid) }}" >
