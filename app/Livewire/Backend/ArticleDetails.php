@@ -166,11 +166,11 @@ class ArticleDetails extends Component
 
         $this->record->article_status_id = $this->articleStatus('013')->id;
         $this->record->save();
-        session()->flash('success', 'Done!');
+        session()->flash('success', 'This manuscript is returned back to the author!');
 
         $this->reset(['description']);
 
-        $this->declineModal = false;
+        $this->sendModal = false;
     }
 
     public function toChiefEditor()

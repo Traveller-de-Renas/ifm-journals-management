@@ -162,15 +162,12 @@
         <div class="col-span-3">
             @foreach ($statuses as $statex)
                 <a href="{{ route('journals.articles', [$record->uuid, $statex->code]) }}" class="mb-1 ">
-                    <p class="w-full font-bold text-blue-700 hover:text-blue-500 p-1">{{ $statex->name }} </p>
+                    <p class="w-full font-bold text-blue-700 hover:text-blue-500 p-1">
+                        {{ $statex->name }}
+                        ({{ $statex->articles()->where('article_status_id', $statex->id)->where('journal_id', $record->id)->count() }})
+                    </p>
                 </a>
             @endforeach
-
-            {{-- @if(auth()->user() && auth()->user()->id != $record->chief_editor->id)
-                @if (!$record->journal_users->contains(auth()->user()->id))
-                    <x-button wire:click="signup()" class="col-span-2 w-full mb-4">Register </x-button>
-                @endif
-            @endif --}}
             <br>
 
             <a href="{{ route('journals.articles', $record->uuid) }}">
@@ -179,16 +176,6 @@
 
             <br>
             <br>
-
-            {{-- <div class="bg-gray-100 border rounded p-2">
-                <p class="text-center">Acceptable Article Types</p>
-            </div>
-
-            @foreach ($record->article_types as $key => $article_type)
-                <div class="text-sm font-bold text-blue-700 hover:text-blue-600 hover:bg-gray-100 cursor-pointer p-2 border rounded-md mb-2 mt-2">
-                    {{ $article_type->name }}
-                </div>
-            @endforeach --}}
         </div>
 
         <div class="col-span-9">

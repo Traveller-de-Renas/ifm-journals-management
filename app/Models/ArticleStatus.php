@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ArticleStatus extends Model
 {
     use HasFactory;
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
 }

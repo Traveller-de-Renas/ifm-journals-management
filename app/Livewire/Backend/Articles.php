@@ -133,4 +133,10 @@ class Articles extends Component
     public function articleStatus($code){
         return ArticleStatus::where('code', $code)->first();
     }
+
+    public function articleCount($xxxx){
+        //return Article::where('journal_id', $this->record->id)->count();
+
+        dd($xxxx);
+    }
 }

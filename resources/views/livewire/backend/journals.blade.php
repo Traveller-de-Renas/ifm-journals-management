@@ -107,7 +107,7 @@
                     @endif
 
                     <a href="{{ route('journals.details', $row->uuid) }}">
-                        <x-button>Preview</x-button>
+                        <x-button>Preview Journal</x-button>
                     </a>
 
                     <a href="{{ route('journals.submission', $row->uuid) }}">

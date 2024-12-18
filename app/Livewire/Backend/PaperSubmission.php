@@ -29,7 +29,9 @@ class PaperSubmission extends Component
     public $title;
     public $abstract;
     public $country_id;
+    public $country;
     public $article_type_id;
+    public $article_type;
     public $issue_id;
     public $keywords;
     public $areas;
@@ -40,7 +42,7 @@ class PaperSubmission extends Component
     public $file_attachment;
     public $file_description;
     public $file_category_id;
-    public $publish;
+    public $publish = 0;
 
     public $confirmations = [];
     public $issues = [];
@@ -91,6 +93,16 @@ class PaperSubmission extends Component
     
     public function render()
     {
+        if($this->article_type_id){
+            $this->article_type = ArticleType::find($this->article_type_id);
+        }
+
+        if($this->country_id){
+            $this->country = Country::find($this->country_id);
+        }
+
+        $this->dispatch('contentChanged');
+
         return view('livewire.backend.paper-submission');
     }
 
@@ -133,10 +145,10 @@ class PaperSubmission extends Component
                 'country_id' => 'required|integer',
                 'keywords' => 'required|string',
                 'areas'  => 'required|string',
-                'tables' => 'nullable|integer',
-                'figures' => 'nullable|integer',
-                'words' => 'nullable|integer',
-                'pages' => 'nullable|integer',
+                'tables' => 'required|integer',
+                'figures' => 'required|integer',
+                'words' => 'required|integer',
+                'pages' => 'required|integer',
             ], attributes: [
                 'article_type_id' => 'Article Type',
                 'country_id' => 'Country'
@@ -147,8 +159,6 @@ class PaperSubmission extends Component
         } 
         
         $validator->validate();
-
-
 
         $article = Article::create([
             'title'             => $this->title,
@@ -262,7 +272,7 @@ class PaperSubmission extends Component
         
         $article_file->file_path        = $_file;
         $article_file->file_type        = $_type;
-        $article_file->file_description = $this->file_description;
+        $article_file->file_description = $this->article_type->name;
         $article_file->file_category_id = $this->file_category_id;
         $article_file->article_id       = $this->record->id;
         $article_file->publish          = $this->publish;
@@ -280,16 +290,19 @@ class PaperSubmission extends Component
 
     public function incrementStep()
     {
+        $this->dispatch('contentChanged');
         $this->step++;
     }
 
     public function decrementStep()
     {
+        $this->dispatch('contentChanged');
         $this->step--;
     }
 
     public function setStep($step)
     {
+        $this->dispatch('contentChanged');
         $this->step = $step;
     }
 

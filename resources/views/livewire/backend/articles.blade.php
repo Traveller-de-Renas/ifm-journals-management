@@ -78,7 +78,10 @@
             <br>
             @foreach ($statuses as $statex)
                 <a href="{{ route('journals.articles', [$record->uuid, $statex->code]) }}" class="mb-1 ">
-                    <p class="w-full font-bold text-blue-700 hover:text-blue-500 p-1">{{ $statex->name }} </p>
+                    <p class="w-full font-bold text-blue-700 hover:text-blue-500 p-1">
+                        {{ $statex->name }}
+                        ({{ $statex->articles()->where('article_status_id', $statex->id)->where('journal_id', $record->id)->count() }})
+                    </p>
                 </a>
             @endforeach
 
@@ -129,13 +132,7 @@
                                 </div>
                             @endif
                             
-                            
                             <div class="w-full flex gap-2 justify-end">
-                                <x-button-plain class="bg-blue-700">
-                                    <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />  <polyline points="7 10 12 15 17 10" />  <line x1="12" y1="15" x2="12" y2="3" /></svg>
-                                </x-button-plain>
-
-
                                 @if((in_array(auth()->user()->id, $article->article_users()->wherePivot('role', 'author')->get()->pluck('id')->toArray()) || $article->author?->id == auth()->user()->id) && $article->article_status->code == '001')
                                     <a href="{{ route('journals.submission', [$record->uuid, $article->uuid]) }}">
                                         <x-button-plain class="bg-blue-700">
@@ -145,13 +142,11 @@
                                 @endif
 
 
-
                                 @if ($article->author?->id == auth()->user()->id && $article->article_status->code == '001')
                                     <x-button-plain class="bg-red-700" wire:click="confirmDelete({{ $article->id }})" >
                                         <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
                                     </x-button-plain>
                                 @endif
-
 
 
                                 @if ($article->author?->id == auth()->user()->id && $article->article_status->code == '002')

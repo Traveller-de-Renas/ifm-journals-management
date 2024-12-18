@@ -1,5 +1,5 @@
 <div class="w-full max-w-7xl mx-auto sm:px-6 lg:px-8">
-    <div class="w-full bg-white p-4 mt-4 shadow">
+    <div class="w-full bg-gray-100 p-4 mt-4 shadow">
         
         <div class="w-full flex text-xs font-bold">
             <p class="underline mr-1 cursor-pointer hover:text-gray-500">
@@ -15,12 +15,19 @@
 
         <h2 class="text-3xl font-bold text-gray-900 mb-2 w-full text-wrap">{{ $record->title }}</h2>
         
-        <div class="mb-8">
+        <div class="mb-2">
+            @if ($record->article_status->code == '006')
+                <p class="text-lg text-gray-600 font-bold w-full">Aticle Publication Date : {{ $article->publication_date }} </p>
+            @else
+                <p class="text-lg text-gray-600 font-bold w-full">Aticle Submission Date : {{ date("Y-m-d") }} </p>
+            @endif
+
             <div class="text-sm w-full hover:text-blue-600 hover:cursor-pointer mb-2">
                 <a href="{{ route('admin.user_preview', $record->author?->uuid) }}" >
                 {{ $record->author?->salutation?->title }} {{ $record->author?->first_name }} {{ $record->author?->middle_name }} {{ $record->author?->last_name }} ({{ $record->author?->affiliation }})
                 </a>
             </div>
+            <br>
 
             @php 
                 $file = $record->files()->where('publish', 1)->first();
@@ -31,13 +38,14 @@
                         <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> <p class="ml-2 text-lg font-bold">Download Article</p>
                     </div>
                 </a>
-                <p class="ml-2 text-lg text-gray-600 font-bold">| {{ $file?->downloads }} Downloads | Aticle Publication Date : {{ date("Y-m-d") }} </p>
+                <p class="ml-2 text-lg text-gray-600 font-bold">| {{ $file?->downloads }} Downloads </p>
             </div>
         </div>
 
 
-        @if ($record?->journal->chief_editor?->id == auth()->user()->id)
+        @if ($record?->journal->chief_editor?->id == auth()->user()->id && $record->article_status->code != '007')
             <div class="flex justify-between gap-2 w-full mb-4">
+                @if ($record->article_status->code == '002')
                 <x-button wire:click="sendBack()" class="flex-1">
                     Send Back to Author
                 </x-button>
@@ -45,6 +53,8 @@
                 <x-button wire:click="assignEditor()" class="flex-1">
                     Assign Editor
                 </x-button>
+
+                @endif
 
                 <x-button wire:click="eFeedback()" class="flex-1">
                     Editor Recommendation
@@ -70,6 +80,17 @@
             </div>
         @endif
     </div>
+    @if ($record->article_status->code == '007')
+    <div class="p-4 mb-4 shadow bg-red-600 w-full text-center text-white">
+        {{ 'This Manuscript is Declined' }}
+    </div>
+    @endif
+
+    @if(session('success'))
+        <div class="p-4 mb-4 shadow bg-green-300 w-full text-center">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <div class="w-full bg-white p-4 mt-4">
         <div class="w-full">
@@ -81,20 +102,32 @@
 
         <div class="w-full grid grid-cols-12 gap-2">
             <div class="col-span-8">
-                <div class="w-full mb-4">
-                    <p class="text-lg font-bold">Keywords</p>
-                    <div class="text-sm font-bold text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
-                        {{ $record->keywords }}
+                <div class="w-full mb-12 grid grid-cols-12 gap-2">
+                    <div class="col-span-12">
+        
+                        @if($record->keywords != '')
+                        <div class="w-full mb-4">
+                            <p class="text-lg font-bold mb-4">Keywords</p>
+                            <div class="flex gap-2">
+                                @php
+                                    $keywords = explode(',', $record->keywords);
+                                @endphp
+                                @foreach ($keywords as $key => $keyword)
+                                    <span class="shadow px-4 py-2 hover:bg-gray-100 cursor-pointer border rounded-xl"> {{ $keyword }} </span>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
             
             
-                <div class="w-full mb-4">
+                {{-- <div class="w-full mb-4">
                     <p class="text-lg font-bold">Areas</p>
                     <div class="text-sm font-bold text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
                         {{ $record->areas }}
                     </div>
-                </div>
+                </div> --}}
 
             
                 <div class="w-full mb-4">
@@ -113,7 +146,7 @@
             </div>
             <div class="col-span-4">
 
-                @if ($record?->journal->chief_editor?->id == auth()->user()->id)
+                {{-- @if ($record?->journal->chief_editor?->id == auth()->user()->id)
                     <p class="text-lg font-bold mb-4">Volume & Issue</p>
                     <div class="flex gap-2 justify-between w-full">
                         <x-select wire:model.live="volume" :options="$volumes" :selected="$record->issue?->volume_id" :placeholder="'Select Volume'" class="w-full mb-4" />
@@ -125,7 +158,7 @@
                             {{ __('Update Volume & Issue') }}
                         </x-button>
                     </div>
-                @endif
+                @endif --}}
 
                 @if ($record->article_users()->wherePivot('role', 'reviewer')->get()->count() > 0 && $record?->journal->chief_editor?->id == auth()->user()->id)
                 

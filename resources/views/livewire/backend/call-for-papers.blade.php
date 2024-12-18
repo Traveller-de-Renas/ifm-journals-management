@@ -6,6 +6,11 @@
 
     <div class="@if (!$form) hidden @endif">
         <div class="w-full border-b pb-4">
+            <div class="mt-4">
+                <x-label for="journal" value="Journal" class="mb-2 block font-medium text-sm text-gray-700" />
+                <x-select id="journal" class="w-full" :options="$journals" wire:model="journal" />
+                <x-input-error for="journal" />
+            </div>
 
             <div class="mt-4">
                 <x-label for="title" value="Title" class="mb-2 block font-medium text-sm text-gray-700" />

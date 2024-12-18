@@ -22,12 +22,18 @@ class CallForPaper extends Model
         'end_date',
         'user_id',
         'status',
+        'journal_id'
     ];
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
         ->logAll();
+    }
+
+    public function journal()
+    {
+        return $this->belongsTo(Journal::class);
     }
 
 }
