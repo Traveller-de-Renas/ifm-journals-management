@@ -127,11 +127,11 @@
             @foreach ($journals as $journal)
                 <div class="col-span-4 overflow-hidden mb-8 hover:shadow-lg bg-gray-200 border border-gray-200 rounded-lg">
                     <a href="{{ route('journal.detail', $journal->uuid) }}">
-                        <div class="flex justify-center min-w-40 bg-white">
+                        <div class="flex justify-center min-w-40 bg-white ">
                             @if($journal->image == '')
                                 <img class="max-h-[400px] lg:max-h-[250px] min-w-40 bg-gray-200" src="{{ asset('storage/favicon/placeholder-image.png') }}" width="40" height="40" alt="{{ $journal->code }}">
                             @else
-                                <img class="max-h-[400px] lg:max-h-[250px] min-w-40" src="{{ asset('storage/journals/'.$journal->image) }}" width="40" height="40" alt="{{ $journal->code }}">
+                                <img class="max-h-[400px] lg:max-h-[250px] min-w-40 " src="{{ asset('storage/journals/'.$journal->image) }}" width="40" height="40" alt="{{ $journal->code }}">
                             @endif
                         </div>
                         <div class="p-5">

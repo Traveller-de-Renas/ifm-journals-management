@@ -115,4 +115,9 @@ class Journal extends Model
     {
         return $this->belongsTo(Issue::class);
     }
+
+    public function call_for_papers()
+    {
+        return $this->hasMany(CallForPaper::class);
+    }
 }
