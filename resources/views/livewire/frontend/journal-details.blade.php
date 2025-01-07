@@ -65,34 +65,34 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
             <li class="me-2">
-                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'overview') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('overview')">
+                <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'overview') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('overview')">
                     Overview
-                </a>
+                </button>
             </li>
             <li class="me-2">
-                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'table_of_contents') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('table_of_contents')">
+                <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'table_of_contents') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('table_of_contents')">
                     Table of Contents
-                </a>
+                </button>
             </li>
             <li class="me-2">
-                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'author_guidelines') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('author_guidelines')">
+                <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'author_guidelines') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('author_guidelines')">
                     Author Guidelines
-                </a>
+                </button>
             </li>
             <li class="me-2">
-                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'editorial_board') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('editorial_board')">
+                <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'editorial_board') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('editorial_board')">
                     Editorial Board
-                </a>
+                </button>
             </li>
             <li class="me-2">
-                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'reviewer_information') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('reviewer_information')">
+                <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'reviewer_information') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('reviewer_information')">
                     Reviewer Information
-                </a>
+                </button>
             </li>
             <li class="me-2">
-                <a href="#" class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'calls_for_papers') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('calls_for_papers')">
+                <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'calls_for_papers') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('calls_for_papers')">
                     Calls for Papers
-                </a>
+                </button>
             </li>
         </ul>
     </div>

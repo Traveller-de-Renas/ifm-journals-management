@@ -24,7 +24,7 @@
             <div class="bg-green-400 p-3 rounded-md shadow-md">
                 <div class="flex">
                     <div class="w-full">
-                        <p class="font-bold text-xl">Call For Papers</p>
+                        <p class="font-bold text-xl">Call for Papers</p>
                         <p class="font-bold text-4xl">{{ $call_for_papers }}</p>
                     </div>
                     <div class="w-2/12">
