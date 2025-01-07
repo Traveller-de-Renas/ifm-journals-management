@@ -428,7 +428,7 @@
         
         <a href="{{ route('journals.details', $journal->uuid) }}">
             <x-button-plain class="bg-red-700" wire:loading.attr="disabled">
-                {{ __('Cancel Submission') }}
+                {{ __('Exit') }}
             </x-button-plain>
         </a>
     </div>
