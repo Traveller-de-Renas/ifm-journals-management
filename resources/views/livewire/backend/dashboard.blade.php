@@ -45,7 +45,7 @@
             </div>
         </div>
 
-        <div class="w-full grid grid-cols-12 gap-4 mb-6">
+        {{-- <div class="w-full grid grid-cols-12 gap-4 mb-6">
             <div class="col-span-6">
                 <div class="h-96">
                     <livewire:livewire-column-chart
@@ -60,6 +60,6 @@
                     />
                 </div>
             </div>
-        </div>
+        </div> --}}
 
     </div>
