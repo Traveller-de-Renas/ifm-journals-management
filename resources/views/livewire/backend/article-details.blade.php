@@ -55,7 +55,7 @@
             <div class="grid grid-cols-12 justify-between gap-2 w-full mb-4">
                 
                 <div class="col-span-2">
-                    @if ($record->article_status->code == '002')
+                    @if ($record->article_status->code == '002' && $record->author?->id != auth()->user()->id)
                     <x-button wire:click="sendBack()" class="flex-1">
                         Send Back to Author
                     </x-button>
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="col-span-2">
-                    @if ($record->article_status->code == '002')
+                    @if ($record->article_status->code == '002' && $record->author?->id != auth()->user()->id)
                     <x-button wire:click="assignEditor()" class="flex-1">
                         Assign Editor
                     </x-button>
@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="col-span-2">
-                    @if($record->article_status->code == '003') 
+                    @if($record->article_status->code == '003' && $record->author?->id != auth()->user()->id) 
                         <x-button wire:click="assignReviewer()" class="flex-1">
                             Assign Reviewer
                         </x-button>
@@ -87,11 +87,13 @@
                 </div>
 
                 <div class="col-span-2">
-                    @if($record->article_status->code == '006')
+                    @if($record->article_status->code == '006' && $record->author?->id != auth()->user()->id)
                         <x-button-plain class="bg-gray-700 hover:bg-gray-500 flex-1 w-full" wire:click="changeStatus('009')">
                             Unpublish
                         </x-button-plain>
-                    @else
+                    @endif
+
+                    @if($record->article_status->code == '011' && $record->author?->id != auth()->user()->id)
                         <x-button wire:click="changeStatus('006')" class="flex-1 w-full">
                             Publish Article
                         </x-button>
@@ -99,9 +101,11 @@
                 </div>
 
                 <div class="col-span-2">
-                    <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1 w-full" wire:click="declineArticle()">
-                        Decline Article
-                    </x-button-plain>
+                    @if($record->article_status->code == '011' && $record->author?->id != auth()->user()->id)
+                        <x-button-plain class="bg-red-700 hover:bg-red-600 flex-1 w-full" wire:click="declineArticle()">
+                            Decline Article
+                        </x-button-plain>
+                    @endif
                 </div>
             </div>
         @endif
@@ -120,6 +124,13 @@
         <div class="p-4 mb-4 shadow bg-green-300 w-full text-center">
             {{ session('success') }}
         </div>
+    @endif
+
+    
+    @if($record->article_status->code == '013' && $record->author?->id == auth()->user()->id)
+    <x-button class="mt-4" wire:click="viewFeedbacks()">
+        View Editor Feedbacks
+    </x-button>
     @endif
 
     <div class="w-full bg-white p-4 mt-4">
@@ -361,6 +372,36 @@
                 </x-button>
                 <x-secondary-button class="ml-3" wire:click="$toggle('sendModal')" wire:loading.attr="disabled">
                     {{ __('Cancel') }}
+                </x-secondary-button>
+
+            </x-slot>
+        </x-dialog-modal>
+
+        <x-dialog-modal wire:model="viewFeedback">
+            <x-slot name="title">
+                {{ __('Feedbacks') }}
+            </x-slot>
+            <x-slot name="content">
+                
+                <div class="mt-4">
+                    @if ($record?->movement_logs != null)
+
+                    @foreach ($record->movement_logs as $movement_log)
+                    <div class="p-2 text-sm text-justify bg-gray-100 mb-2">
+                        {!! $movement_log?->description !!}
+
+                        <div class="text-xs text-gray-400">{!! $movement_log?->created_at !!}</div>
+                    </div>
+                    @endforeach
+                    
+                    @endif
+                </div>
+
+            </x-slot>
+            <x-slot name="footer">
+            
+                <x-secondary-button class="ml-3" wire:click="$toggle('viewFeedback')" wire:loading.attr="disabled">
+                    {{ __('Close') }}
                 </x-secondary-button>
 
             </x-slot>

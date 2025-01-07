@@ -133,7 +133,7 @@
                             @endif
                             
                             <div class="w-full flex gap-2 justify-end">
-                                @if((in_array(auth()->user()->id, $article->article_users()->wherePivot('role', 'author')->get()->pluck('id')->toArray()) || $article->author?->id == auth()->user()->id) && $article->article_status->code == '001')
+                                @if((in_array(auth()->user()->id, $article->article_users()->wherePivot('role', 'author')->get()->pluck('id')->toArray()) || $article->author?->id == auth()->user()->id) && ($article->article_status->code == '001' || $article->article_status->code == '012' || $article->article_status->code == '013'))
                                     <a href="{{ route('journals.submission', [$record->uuid, $article->uuid]) }}">
                                         <x-button-plain class="bg-blue-700">
                                             <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" /></svg>

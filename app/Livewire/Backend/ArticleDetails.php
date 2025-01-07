@@ -30,6 +30,7 @@ class ArticleDetails extends Component
     public $assignModal = false;
     public $editorFeedback = false;
     public $reviewerFeedback = false;
+    public $viewFeedback = false;
 
     public $sections;
     public $reviewOption  = [];
@@ -110,6 +111,11 @@ class ArticleDetails extends Component
         
         session()->flash('success', 'Reviewer is Assigned successfully');
         $this->reviewerModal = false;
+    }
+
+    public function viewFeedbacks()
+    {
+        $this->viewFeedback = true;
     }
 
     public function eFeedback()

@@ -111,4 +111,9 @@ class Article extends Model
     {
         return $this->hasMany(ReviewAttachment::class);
     }
+
+    public function movement_logs()
+    {
+        return $this->hasMany(ArticleMovementLog::class);
+    }
 }

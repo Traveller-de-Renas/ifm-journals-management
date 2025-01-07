@@ -340,7 +340,7 @@
                 @endforeach
             </div>
 
-            {{-- @foreach ($journal->confirmations as $key => $confirmation)
+            @foreach ($journal->confirmations as $key => $confirmation)
                 <div class="w-full flex p-4 border rounded-lg mb-4">
                     <div class="w-11/12 text-justify">{!! $confirmation->description !!}</div>
                     <div class="flex w-1/12 items-start justify-center">
@@ -352,7 +352,7 @@
     
                     </div>
                 </div>
-            @endforeach --}}
+            @endforeach
 
             <div class="flex gap-2 justify-between w-full mt-4">
                 <div class="bg-gray-200 w-full p-2 rounded shadow">
