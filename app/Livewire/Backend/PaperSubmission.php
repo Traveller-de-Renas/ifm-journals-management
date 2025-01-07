@@ -83,7 +83,7 @@ class PaperSubmission extends Component
         }
 
         $this->article_types = ArticleType::where('journal_id', $this->journal->id)->get()->pluck('name', 'id')->toArray();
-        $this->file_categories = FileCategory::all()->pluck('name', 'id')->toArray();
+        $this->file_categories = $this->journal->file_categories->pluck('name', 'id')->toArray();
 
         $this->countries = Country::all()->pluck('name', 'id')->toArray();
         $this->salutations = Salutation::all()->pluck('title', 'id')->toArray();
