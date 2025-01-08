@@ -77,12 +77,14 @@
         <div class="col-span-3">
             <br>
             @foreach ($statuses as $statex)
+
                 <a href="{{ route('journals.articles', [$record->uuid, $statex->code]) }}" class="mb-1 ">
                     <p class="w-full font-bold text-blue-700 hover:text-blue-500 p-1">
                         {{ $statex->name }}
                         ({{ $statex->articles()->where('article_status_id', $statex->id)->where('journal_id', $record->id)->count() }})
                     </p>
                 </a>
+
             @endforeach
 
             <br>

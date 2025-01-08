@@ -414,29 +414,31 @@
 
     <div class="mt-4 text-center">
 
-        @if(!empty($record))
+        @if(($record->article_status->code == '001' || $record->article_status->code == '012' || $record->article_status->code == '013'))
+            @if(!empty($record))
 
-            @if ($record->author?->id == auth()->user()->id && $step == 4)
+                @if ($record->author?->id == auth()->user()->id && $step == 4)
+                    <x-button type="submit" wire:click="update('002')" wire:loading.attr="disabled">
+                        {{ __('Save & Submit') }}
+                    </x-button>
+                @endif
+
                 <x-button type="submit" wire:click="update('002')" wire:loading.attr="disabled">
-                    {{ __('Save & Submit') }}
+                    {{ __('Save & Submit Later') }}
                 </x-button>
-            @endif
-
-            <x-button type="submit" wire:click="update('002')" wire:loading.attr="disabled">
-                {{ __('Save & Submit Later') }}
-            </x-button>
+            
+            @else
+                @if ($step == 4)
+                    <x-button type="submit" wire:click="store('002')" wire:loading.attr="disabled">
+                        {{ __('Save & Submit') }}
+                    </x-button>
+                @endif
         
-        @else
-            @if ($step == 4)
-                <x-button type="submit" wire:click="store('002')" wire:loading.attr="disabled">
-                    {{ __('Save & Submit') }}
+                <x-button type="submit" wire:click="store('001')" wire:loading.attr="disabled">
+                    {{ __('Save & Submit Later') }}
                 </x-button>
+            
             @endif
-    
-            <x-button type="submit" wire:click="store('001')" wire:loading.attr="disabled">
-                {{ __('Save & Submit Later') }}
-            </x-button>
-        
         @endif
 
         

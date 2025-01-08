@@ -65,7 +65,15 @@ class Articles extends Component
         //     )->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         // }
 
-        $statuses = ArticleStatus::all();
+        if(auth()->user()->id != $this->record->chief_editor->id){
+            $statuses = ArticleStatus::where('show_author', '1')->get();
+
+        }else{
+            $statuses = ArticleStatus::all();
+        }
+        
+
+        $this->record->chief_editor;
 
         $articles = Article::when($this->status, function($query){
             

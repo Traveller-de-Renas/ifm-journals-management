@@ -45,7 +45,12 @@ class JournalDetails extends Component
 
     public function render()
     {
-        $statuses = ArticleStatus::all();
+        if(auth()->user()->id != $this->record->chief_editor->id){
+            $statuses = ArticleStatus::where('show_author', '1')->get();
+
+        }else{
+            $statuses = ArticleStatus::all();
+        }
         return view('livewire.backend.journal-details', compact('statuses'));
     }
 

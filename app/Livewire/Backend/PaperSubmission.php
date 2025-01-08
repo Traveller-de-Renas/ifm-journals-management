@@ -103,6 +103,12 @@ class PaperSubmission extends Component
 
         $this->dispatch('contentChanged');
 
+        if($this->record){
+            if($this->record->article_status->code == '002'){
+                $this->step = 4;
+            }
+        }
+
         return view('livewire.backend.paper-submission');
     }
 
