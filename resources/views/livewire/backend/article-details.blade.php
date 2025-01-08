@@ -293,11 +293,16 @@
                     @if(!empty($users))
                     Select Editor
 
-                    <select class="rounded w-full border-gray-300" wire:model="user_id">
-                        @foreach($users as $key => $user)
-                        <option value="{{ $user->id }}">{{ $user?->salutation?->title }} {{ $user?->first_name }} {{ $user?->middle_name }} {{ $user?->last_name }}</option>
-                        @endforeach
-                    </select>
+                    <div>
+                        <select class="rounded w-full border-gray-300" wire:model="user_id">
+                            <option>Select Editor</option>
+                            @foreach($users as $key => $user)
+                            <option value="{{ $user->id }}">{{ $user?->salutation?->title }} {{ $user?->first_name }} {{ $user?->middle_name }} {{ $user?->last_name }}</option>
+                            @endforeach
+                        </select>
+                        <x-input-error for="user_id" />
+                    </div>
+
                     @else
                     <div class="text-sm text-red-600">No Editors Available</div>
                     @endif

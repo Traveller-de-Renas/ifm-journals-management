@@ -135,6 +135,11 @@ class ArticleDetails extends Component
 
     public function attachUser()
     {
+
+        $this->validate([
+            'user_id' => 'required'
+        ]);
+        
         $this->record->article_users()->sync([$this->user_id => ['role' => $this->role]], false);
 
         $this->record->article_status_id = $this->articleStatus('014')->id;
