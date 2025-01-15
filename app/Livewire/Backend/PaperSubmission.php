@@ -35,10 +35,10 @@ class PaperSubmission extends Component
     public $issue_id;
     public $keywords;
     public $areas;
-    public $pages;
-    public $words;
-    public $tables;
-    public $figures;
+    public $pages = 0;
+    public $words = 0;
+    public $tables = 0;
+    public $figures = 0;
     public $file_attachment;
     public $file_description;
     public $file_category_id;
@@ -100,8 +100,6 @@ class PaperSubmission extends Component
         if($this->country_id){
             $this->country = Country::find($this->country_id);
         }
-
-        $this->dispatch('contentChanged');
 
         if($this->record){
             if($this->record->article_status->code == '002'){
@@ -196,7 +194,7 @@ class PaperSubmission extends Component
             $article->submission_confirmations()->sync([$confirmation->id => ['value' => $value]], false);
         }
 
-        session()->flash('success', 'Saved successfully');
+        session()->flash('success', 'Manuscript is Saved and Submitted successfully');
     }
 
 
@@ -242,7 +240,7 @@ class PaperSubmission extends Component
             $this->record->submission_confirmations()->sync([$confirmation->id => ['value' => $value]], false);
         }
 
-        session()->flash('success', 'Saved successfully');
+        session()->flash('success', 'Manuscript is Saved and Submitted successfully');
     }
 
 

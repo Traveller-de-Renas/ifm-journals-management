@@ -21,10 +21,19 @@ use App\Http\Controllers\ConfigurationController;
 */
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('/admin', [UserController::class, 'admin'])->name('admin');
+Route::post('/logout', [UserController::class, 'destroy'])->name('logout')->middleware('auth');
+
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
+
+
+Route::group(['prefix' => 'journal'], function () {
+    Route::get('/login/{journal}', [UserController::class, 'login'])->name('journal.login');
+    Route::get('/register/{journal}', [UserController::class, 'register'])->name('journal.register');
 });
 
 
@@ -40,11 +49,15 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/articles/{journal}/{status?}', [JournalController::class, 'articles'])->name('journals.articles');
     Route::get('/article/{article}', [JournalController::class, 'article'])->name('journals.article');
     Route::get('/archive/{journal}', [JournalController::class, 'archive'])->name('journals.archive');
+
+    Route::get('/editor/{journal}', [JournalController::class, 'editor'])->name('journals.editor');
 });
+
 
 Route::group(['prefix' => 'journals'], function () {
     Route::get('/article_evaluation/{article}/{reviewer}', [JournalController::class, 'article_evaluation'])->name('journals.article_evaluation');
 });
+
 
 Route::group(['prefix' => 'journal'], function () {
     Route::get('/viewall', [JournalController::class, 'viewall'])->name('journal.viewall');
@@ -71,12 +84,14 @@ Route::group(['prefix' => 'configurations', 'middleware' => 'auth'], function ()
     Route::get('/staff_list', [ConfigurationController::class, 'staff_list'])->name('admin.staff_list');
 });
 
+
 Route::group(['prefix' => 'users', 'middleware' => 'auth'], function () {
     Route::get('/index', [UserController::class, 'index'])->name('admin.users');
     Route::get('/logs', [UserController::class, 'logs'])->name('admin.logs');
     Route::get('/profile', [UserController::class, 'profile'])->name('admin.profile');
     Route::get('/user_preview/{user?}', [UserController::class, 'user_preview'])->name('admin.user_preview');
 });
+
 
 Route::group(['prefix' => 'website', 'middleware' => 'auth'], function () {
     Route::get('/sliding_images', [WebsiteController::class, 'sliding_images'])->name('admin.sliding_images');

@@ -42,51 +42,48 @@ class Articles extends Component
             abort(404);
         }
 
-        $article_states = ArticleStatus::all()->pluck('code')->toArray();
-
-        if($request->status != '' && in_array($request->status, $article_states)){
-            $this->status = ArticleStatus::where('code', $request->status)->first();
-        }
+        // $this->status      = $this->article_status('002');
     }
     
     public function render()
     {
-        // if($this->record->user_id != auth()->user()->id && !auth()->user()->hasRole('Administrator')){
-        //     $articles = Article::where('journal_id', $this->record->id)->where('user_id', auth()->user()->id)->orWhereHas('coauthors', function ($query) {
-        //         $query->where('user_id', auth()->user()->id);
-        //     })->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
-        // }else{
-        //     $articles = Article::where('journal_id', $this->record->id)->where(
-        //         function ($query) {
-        //             if(){
-        //                 $query->where('status', '<>', 'Pending');
-        //             }
-        //         }
-        //     )->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
-        // }
-
         if(auth()->user()->id != $this->record->chief_editor->id){
-            $statuses = ArticleStatus::where('show_author', '1')->get();
-
+            $statuses = ArticleStatus::where('show_author', '1')->where('sort_order', '<>', '0')->orderBy('sort_order', 'ASC')->get();
         }else{
-            $statuses = ArticleStatus::all();
+            $statuses = ArticleStatus::where('sort_order', '<>', '0')->orderBy('sort_order', 'ASC')->get();
         }
-        
 
-        $this->record->chief_editor;
+        // $articles = Article::when($this->status, function($query){
+            
+        //     $query->where('article_status_id', $this->status->id);
+
+        //     if(($this->status->code == '002') && $this->record->editors->contains(auth()->user()->id) && $this->record->chief_editor->id != auth()->user()->id){
+        //         $query->whereHas('editors', function($query){
+        //             $query->where('user_id', auth()->user()->id);
+        //         });
+        //     }
+
+        //     return $query;
+        // })->where('journal_id', $this->record->id)->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
+        
+        // $articles = $articles->paginate(20);
 
         $articles = Article::when($this->status, function($query){
-            
             $query->where('article_status_id', $this->status->id);
 
-            if(($this->status->code == '002') && $this->record->editors->contains(auth()->user()->id) && $this->record->chief_editor->id != auth()->user()->id){
-                $query->whereHas('editors', function($query){
-                    $query->where('user_id', auth()->user()->id);
-                });
-            }
+            // if($this->record->editors->contains(auth()->user()->id) && $this->record->chief_editor->id != auth()->user()->id){
+            //     $query->whereHas('editors', function($query){
+            //         $query->where('user_id', auth()->user()->id);
+            //     });
+            // }
 
             return $query;
-        })->where('journal_id', $this->record->id)->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
+        })
+        ->whereHas('author', function($query){
+            $query->where('user_id', auth()->user()->id);
+        })
+        ->where('journal_id', $this->record->id)
+        ->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         
         $articles = $articles->paginate(20);
 
@@ -142,9 +139,9 @@ class Articles extends Component
         return ArticleStatus::where('code', $code)->first();
     }
 
-    public function articleCount($xxxx){
-        //return Article::where('journal_id', $this->record->id)->count();
-
-        dd($xxxx);
+    public function article_status($code)
+    {
+        $status = ArticleStatus::where('code', $code)->first();
+        $this->status = $status;
     }
 }

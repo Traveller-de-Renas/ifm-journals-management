@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Backend;
+namespace App\Livewire\Backend\Editor;
 
 use App\Models\User;
 use App\Models\Article;
@@ -10,25 +10,16 @@ use Livewire\Component;
 use App\Models\Salutation;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Livewire\WithPagination;
 use App\Models\ArticleStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class JournalDetails extends Component
 {
-    use WithPagination;
-
     public $query;
     public $sortBy  = 'id';
     public $sortAsc = false;
 
-    public $article;
-    public $deleteModal = false;
-    public $confirmModal = false;
-    public $modal_title;
-    public $action;
-    
     public $record;
     public $seditor;
     public $editor_search;
@@ -54,17 +45,16 @@ class JournalDetails extends Component
             abort(404);
         }
 
-        $this->countries   = Country::all()->pluck('name', 'id')->toArray();
+        $this->countries = Country::all()->pluck('name', 'id')->toArray();
         $this->salutations = Salutation::all()->pluck('title', 'id')->toArray();
-        $this->status      = $this->article_status('001');
     }
 
     public function render()
     {
-        if(auth()->user()->id != $this->record->chief_editor->id){
-            $statuses = ArticleStatus::where('show_author', '1')->where('sort_order', '<>', '0')->orderBy('sort_order', 'ASC')->get();
-        }else{
+        if(auth()->user()->id == $this->record->chief_editor->id || auth()->user()->hasRole('Administrator')){
             $statuses = ArticleStatus::where('sort_order', '<>', '0')->orderBy('sort_order', 'ASC')->get();
+        }else{
+            $statuses = [];
         }
 
         $articles = Article::when($this->status, function($query){
@@ -72,15 +62,26 @@ class JournalDetails extends Component
 
             return $query;
         })
-        ->whereHas('author', function($query){
-            $query->where('user_id', auth()->user()->id);
-        })
-        ->where('journal_id', $this->record->id)
+        ->whereHas('article_status', function($query){
+            $query->where('code', '<>', '013');
+
+            if(auth()->user()->id != $this->record->chief_editor->id){
+                $query->where('code', '<>', '003');
+            }
+        });
+
+        if(auth()->user()->id != $this->record->chief_editor->id){
+            $articles->whereHas('article_users', function($query){
+                $query->where('user_id', auth()->user()->id)->where('role', 'editor');
+            });
+        }
+
+        $articles->where('journal_id', $this->record->id)
         ->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         
         $articles = $articles->paginate(15);
-
-        return view('livewire.backend.journal-details', compact('articles', 'statuses'));
+        
+        return view('livewire.backend.editor.journal-details', compact('articles', 'statuses'));
     }
 
     public function searchEditor($string)
@@ -176,35 +177,6 @@ class JournalDetails extends Component
     {
         $status = ArticleStatus::where('code', $code)->first();
         $this->status = $status;
-    }
-
-    public function confirm(Article $article, $title, $action)
-    {
-        $this->article      = $article;
-        $this->modal_title  = $title;
-        $this->action       = $action;
-
-        $this->confirmModal = true;
-    }
-
-    public function confirmAction()
-    {
-        $action = $this->action;
-        
-        $this->$action();
-        $this->confirmModal = false;
-    }
-
-
-    public function cancelSubmission()
-    {
-        $status = $this->articleStatus('012');
-
-        $this->article->update([
-            "article_status_id" => $status->id
-        ]);
-
-        session()->flash('success', 'Submission is Cancelled for this Manuscript...!');
     }
 
     public function articleStatus($code){

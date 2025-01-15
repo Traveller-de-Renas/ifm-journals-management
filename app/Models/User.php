@@ -44,6 +44,7 @@ class User extends Authenticatable
         'biography',
         'profile_photo_path',
         'status',
+        'journal'
     ];
 
     /**
@@ -83,6 +84,11 @@ class User extends Authenticatable
     public function journals()
     {
         return $this->belongsToMany(Journal::class)->withTimestamps();
+    }
+
+    public function journal_users()
+    {
+        return $this->belongsToMany(Journal::class)->withPivot('role');
     }
 
     public function article_users()

@@ -58,68 +58,68 @@
         </div>
     </div>
 
-    <div class="w-full flex flex-nowrap justify-center gap-2 py-16 mx-auto mb-6 bg-gray-100">
-    <div class="max-w-screen-2xl lg:max-w-screen-lg mx-auto mt-6 mb-6">
+    <div class="w-full py-16 mb-6 bg-gray-100">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-        <div class="md:grid md:grid-cols-12 gap-6">
-            <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
-                <a href="#">
-                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">ONLINE SUBMISSION</h5>
-                </a>
-                <p class="mb-3 font-normal text-gray-500 dark:text-gray-400 text-sm text-justify">
-                    We enable you to submit your manuscript online in any of our journals that are related to your manuscript. Make sure you follow all guidelines provided by specific journal.
-                </p>
-                <a href="{{ route('login') }}" >
-                    <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center">Submit a Paper</p>
-                    
-                </a>
+            <div class="md:grid md:grid-cols-12 gap-6">
+                <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
+                    <a href="#">
+                        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">ONLINE SUBMISSION</h5>
+                    </a>
+                    <p class="mb-3 font-normal text-gray-500 dark:text-gray-400 text-sm text-justify">
+                        We enable you to submit your manuscript online in any of our journals that are related to your manuscript. Make sure you follow all guidelines provided by specific journal.
+                    </p>
+                    <a href="{{ route('login') }}" >
+                        <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center">Submit a Paper</p>
+                        
+                    </a>
+                </div>
+        
+        
+                <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
+                    <a href="#">
+                        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">PEER REVIEW</h5>
+                    </a>
+                    <p class="mb-3 font-normal text-gray-500 dark:text-gray-400 text-sm text-justify">
+                        Our system allows peer review, each manuscript submitted in specific journal will be reviewed by more than one professional reviewer.
+                    </p>
+                </div>
+        
+            
+                <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
+                    <a href="#">
+                        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">PUBLISH WITH US</h5>
+                    </a>
+                    <p class="mb-3 col-span-4 font-normal text-gray-500 dark:text-gray-400 text-sm text-justify">Publish with us your research across our journals, books, teaching cases and open access options. Follow our guides and find the resources to help you submit, publish and promote your work.</p>
+                    <a href="{{ route('journal.viewall') }}" >
+                        <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center w-full">Journals</p>
+                        
+                    </a>
+                </div>
             </div>
-    
-    
-            <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
-                <a href="#">
-                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">PEER REVIEW</h5>
-                </a>
-                <p class="mb-3 font-normal text-gray-500 dark:text-gray-400 text-sm text-justify">
-                    Our system allows peer review, each manuscript submitted in specific journal will be reviewed by more than one professional reviewer.
-                </p>
-            </div>
-    
-          
-            <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
-                <a href="#">
-                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">PUBLISH WITH US</h5>
-                </a>
-                <p class="mb-3 col-span-4 font-normal text-gray-500 dark:text-gray-400 text-sm text-justify">Publish with us your research across our journals, books, teaching cases and open access options. Follow our guides and find the resources to help you submit, publish and promote your work.</p>
-                <a href="{{ route('journal.viewall') }}" >
-                    <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center w-full">Journals</p>
-                    
-                </a>
+
+            <div class="grid grid-cols-12 w-full rounded-r-lg shadow">
+
+                <div class="col-span-4">
+                    <img class="object-cover object-center w-full h-full" src="{{ asset('images/auth-image.jpg') }}" width="760" height="1024" alt="Authentication image" />
+                </div>
+
+                <div class="col-span-8 p-6 bg-white border border-gray-200 rounded-r-lg ">
+                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 ">CALL FOR PAPERS</h5>
+                    <p class="font-normal text-sm text-gray-500">
+                        Here are the latest calls for papers and special issues from our extensive journal and case study range.
+                    </p>
+                    <a href="{{ route('journal.callfor_paper') }}" >
+                        <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center w-full">Calls for papers </p>
+                    </a>
+
+                </div>
+
             </div>
         </div>
-
-        <div class="grid grid-cols-12 w-full rounded-r-lg shadow">
-
-            <div class="col-span-4">
-                <img class="object-cover object-center w-full h-full" src="{{ asset('images/auth-image.jpg') }}" width="760" height="1024" alt="Authentication image" />
-            </div>
-
-            <div class="col-span-8 p-6 bg-white border border-gray-200 rounded-r-lg ">
-                <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 ">CALL FOR PAPERS</h5>
-                <p class="font-normal text-sm text-gray-500">
-                    Here are the latest calls for papers and special issues from our extensive journal and case study range.
-                </p>
-                <a href="{{ route('journal.callfor_paper') }}" >
-                    <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center w-full">Calls for papers </p>
-                </a>
-
-            </div>
-
-        </div>
-    </div>
     </div>
 
-    <div class="max-w-screen-2xl lg:max-w-screen-lg mx-auto mt-6 mb-6 py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <p class="font-bold text-xl md:text-[32px] drop-shadow-lg text-center w-full">LATEST JOURNAL ISSUE RELEASES</p>
         <p class="text-center text-sm mt-2">Get Latest Journal Issue Releases from the Institute of Finance Management</p>
 
@@ -161,32 +161,34 @@
 
 
 
-    <div class="w-full flex flex-nowrap justify-center gap-2 py-16 mx-auto mt-6 bg-gray-100">
-        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
-            <a href="#">
-                <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Journals</h5>
-            </a>
-            <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
-                {{ $journals_count }}
-            </p>
-        </div>
+    <div class="max-w-7xl mx-auto mt-12 p-6">
+        <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-4 w-full p-6 bg-white border border-gray-200 rounded-lg shadow mb-4 text-center">
+                <a href="#">
+                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Journals</h5>
+                </a>
+                <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
+                    {{ $journals_count }}
+                </p>
+            </div>
 
-        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
-            <a href="#">
-                <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Issues </h5>
-            </a>
-            <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
-                {{ $issues_count }}
-            </p>
-        </div>
+            <div class="col-span-4 w-full p-6 bg-white border border-gray-200 rounded-lg shadow mb-4 text-center">
+                <a href="#">
+                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Issues </h5>
+                </a>
+                <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
+                    {{ $issues_count }}
+                </p>
+            </div>
 
-        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
-            <a href="#">
-                <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Articles </h5>
-            </a>
-            <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
-                {{ $articles_count }}
-            </p>
+            <div class="col-span-4 w-full p-6 bg-white border border-gray-200 rounded-lg shadow mb-4 text-center">
+                <a href="#">
+                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Articles </h5>
+                </a>
+                <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
+                    {{ $articles_count }}
+                </p>
+            </div>
         </div>
     </div>
 </div>

@@ -2,10 +2,18 @@
 
 namespace App\Livewire\Auth;
 
-use App\Models\StaffList;
 use App\Models\User;
+use App\Models\Country;
+use App\Models\Journal;
 use Livewire\Component;
+use App\Models\StaffList;
+use App\Models\Salutation;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Mail\JournalEnrollMail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class Register extends Component
 {
@@ -22,11 +30,33 @@ class Register extends Component
     public $interests;
     public $password;
     public $password_confirmation;
-    public $category = 'internal';
+    public $category = 'external';
     public $pf_number;
+
+    public $journal;
+    public $countries;
+    public $salutations;
+    public $user_check;
+
+    public function mount(Request $request){
+        if(!Str::isUuid($request->journal)){
+            abort(404);
+        }
+        
+        $this->journal = Journal::where('uuid', $request->journal)->first();
+        if(empty($this->journal)){
+            abort(404);
+        }
+
+        $this->countries = Country::all()->pluck('name', 'id')->toArray();
+        $this->salutations = Salutation::all()->pluck('title', 'id')->toArray();
+    }
 
     public function render()
     {
+        if($this->email){
+            $this->checkUser();
+        }
         return view('livewire.auth.register');
     }
 
@@ -88,16 +118,16 @@ class Register extends Component
             $message  = 'Your Account is Successifully Created login with the email and password you provided';
         }
         
-        $data->first_name  = $this->first_name;
-        $data->middle_name = $this->middle_name;
-        $data->last_name   = $this->last_name;
-        $data->gender      = $this->gender;
-        $data->email       = $this->email;
-        $data->phone       = $this->phone;
-        $data->degree      = $this->degree;
-        $data->interests   = $this->interests;
-        $data->country_id  = $this->country;
-        $data->pf_number   = $this->pf_number;
+        $data->first_name    = $this->first_name;
+        $data->middle_name   = $this->middle_name;
+        $data->last_name     = $this->last_name;
+        $data->gender        = $this->gender;
+        $data->email         = $this->email;
+        $data->phone         = $this->phone;
+        $data->degree        = $this->degree;
+        $data->interests     = $this->interests;
+        $data->country_id    = $this->country;
+        $data->pf_number     = $this->pf_number;
         $data->salutation_id = $this->salutation;
         $data->password      = $password;
 
@@ -107,6 +137,8 @@ class Register extends Component
             $data->update();
         }
         
+        $data->journals()->sync([$this->journal->id => ['role' => 'author']]);
+
         session()->flash('success', $message);
         return redirect()->to('/login');
     }
@@ -115,4 +147,39 @@ class Register extends Component
     {
         //dd($category);
     }
+
+    public function checkUser()
+    {
+        if(User::where('email', $this->email)->exists()){
+            $this->user_check = 'exists';
+        }else{
+            $this->user_check = 'nouser';
+        }
+    }
+
+    public function enrollConfirmation()
+    {
+        $user = User::where('email', $this->email)->first();
+        Mail::to('mrenatuskiheka@yahoo.com')
+            ->send(new JournalEnrollMail($this->journal, $user));
+        
+        session()->flash('success', 'A confirmation email is sent to the email you entered for enrollment confirmation on this journal');
+    }
+
+
+    public function enroll()
+    {
+        $this->validate([
+            'email' => 'email|required'
+        ]);
+
+        $user = User::where('email', $this->email)->first();
+        // Auth::user()->journal_users()->sync([$this->journal->id => ['role' => 'author']]);
+        $user->journal_users()->attach([$this->journal->id => ['role' => 'author']]);
+        
+        session()->flash('success', 'You are successfully registered as an author on this journal');
+    }
+
+
+
 }

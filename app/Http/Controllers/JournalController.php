@@ -112,4 +112,10 @@ class JournalController extends Controller
     {
         return view('backend.publication_process');
     }
+
+
+    public function editor()
+    {
+        return view('backend.editor');
+    }
 }

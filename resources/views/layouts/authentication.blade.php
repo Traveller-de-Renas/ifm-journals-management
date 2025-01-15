@@ -21,36 +21,25 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <!-- Styles -->
-        @livewireStyles        
-
-        <script>
-            if (localStorage.getItem('dark-mode') === 'false' || !('dark-mode' in localStorage)) {
-                document.querySelector('html').classList.remove('dark');
-                document.querySelector('html').style.colorScheme = 'light';
-            } else {
-                document.querySelector('html').classList.add('dark');
-                document.querySelector('html').style.colorScheme = 'dark';
-            }
-        </script>
+        @livewireStyles
     </head>
-    <body class="bg-gray-100 text-gray-600">
+    <body class="bg-gray-100">
 
-        <main class="bg-white dark:bg-gray-900 ">
-
-
+        <main class="bg-white dark:bg-gray-900">
             <nav class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
                 <div class="w-full bg-[#175883]">
                     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
-                    <a href="{{ url('/') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
-                        <img src="{{ asset('storage/logo.png' ) }}" class="w-12 md:w-24 md:h-24" >
-                        <div>
-                            <p class="text-white text-4xl font-bold">The institute of Finance Management</p>
-                            <p class="text-white text-lg">Journals Management System</p>
-                        </div>
-                    </a>
-                    
+                        <a href="{{ url('/') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
+                            <img src="{{ asset('storage/logo.png' ) }}" class="w-12 md:w-24 md:h-24" >
+                            <div>
+                                <p class="text-white text-4xl font-bold">The institute of Finance Management</p>
+                                <p class="text-white text-lg">Journals Management System</p>
+                            </div>
+                        </a>
                     </div>
                 </div>
+
+                
                 <div class="w-full bg-white shadow-lg">
                     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                         <a href="{{ url('/') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -73,39 +62,45 @@
                                 <li>
                                     <a href="{{ route('journal.callfor_paper') }}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Call for Papers</a>
                                 </li>
-                                <li>
-                                    <a href="{{ route('login') }}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Login</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('register') }}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Register</a>
-                                </li>
+                                @if (explode('/', request()->path())[0] == 'journal' && explode('/', request()->path())[1] == 'detail' && Str::isUuid(explode('/', request()->path())[2]))
+                                    <li>
+                                        <a href="{{ route('journal.login', explode('/', request()->path())[2]) }}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Login</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('journal.register', explode('/', request()->path())[2]) }}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Register</a>
+                                    </li>
+                                @endif
                             </ul>
                         </div>
                     </div>
+                    
                 </div>
             </nav>
   
+            <div class="relative">
+                <div class="w-full">
+                    <div class="min-h-[100dvh] h-full flex flex-col after:flex-1">
 
-            <div class="relative flex flex-col h-screen">
+                        <div class="fixed right-2 z-50 md:flex flex-col gap-2 justify-center items-center w-50 mt-12 text-md hidden">
 
-                <!-- Content -->
-                <div class="w-full md:w-1/2 flex-1 ">
-
-                    <div class="flex flex-col after:flex-1">
-
-                        <div class="max-w-sm mx-auto w-full px-4 py-12">
-                            {{ $slot }}
+                            @foreach ($social_media as $media)
+                            <a href="{{ $media->link }}" target="_blank">
+                            <div class="relative flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-300 p-2 w-full cursor-pointer border-2">
+                                @if($media->type == 'image')
+                                    <img class="rounded-full max-h-[35px] lg:max-h[20px] mt-[2px]" src="{{ asset('storage/social_media/'.$media->icon) }}" alt="" />
+                                @else
+                                    <div class="max-h-[30px] w-[30px] lg:max-h-[30px] items-center ">{!! $media->icon !!}</div>
+                                @endif
+                            </div>
+                            </a>
+                            @endforeach
+            
                         </div>
 
+                        {{ $slot }}
+
                     </div>
-
                 </div>
-
-                <!-- Image -->
-                <div class="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2 flex-1 h-full" aria-hidden="true">
-                    <img class="object-cover object-center w-full h-full" src="{{ asset('images/auth-image.jpg') }}" width="760" height="1024" alt="Authentication image" />
-                </div>
-
             </div>
 
             <div class="p-4 bg-[#175883]">

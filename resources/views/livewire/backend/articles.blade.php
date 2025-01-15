@@ -1,7 +1,6 @@
-<div class="w-full max-w-7xl mx-auto sm:px-6 lg:px-8">
-
+<div>
     <div class="bg-gray-800 text-white bg-blend-overlay py-4" style="background-image: url({{ asset('images/auth-image.jpg') }}); background-position: top;">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="w-full max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-12 gap-2 ">
                 
                 <div class="col-span-10 w-full mb-2 mt-2">
@@ -44,8 +43,6 @@
                     <div class="w-full text-justify mt-4 mb-4">
                         {!! $record->description !!}
                     </div>
-
-                    
                 </div>
                 <div class="col-span-2">
                     @if($record->image == '')
@@ -62,7 +59,6 @@
                         <x-button class="mb-4 mt-2 w-full">Submit a Paper </x-button>
                     </a>
                 </div>
-
             </div>
         </div>
     </div>
@@ -73,104 +69,99 @@
         </div>
     @endif
 
-    <div class="md:grid md:grid-cols-12 gap-4 w-full ">
-        <div class="col-span-3">
-            <br>
-            @foreach ($statuses as $statex)
-
-                <a href="{{ route('journals.articles', [$record->uuid, $statex->code]) }}" class="mb-1 ">
-                    <p class="w-full font-bold text-blue-700 hover:text-blue-500 p-1">
-                        {{ $statex->name }}
-                        ({{ $statex->articles()->where('article_status_id', $statex->id)->where('journal_id', $record->id)->count() }})
-                    </p>
-                </a>
-
-            @endforeach
-
-            <br>
-
-            <a href="{{ route('journals.articles', $record->uuid) }}" >
-                <x-button class="mb-4 w-full">View All </x-button>
-            </a>
-        </div>
-        <div class="col-span-9">
-            <br>
-            @if ($articles->count() > 0)
-            
-                @foreach ($articles as $key => $article)
+    <div class="w-full max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="md:grid md:grid-cols-12 gap-4 w-full ">
+            <div class="col-span-3">
+                <br>
+                <p class="font-bold p-2 border-b cursor-pointer text-blue-700 hover:text-blue-500" wire:click="article_status('')"> All Manuscript </p>
+                @foreach ($statuses as $statex)
+                    <div wire:click="article_status({{ $statex->code }})" class="mb-1 ">
+                        <p class="w-full font-bold p-2 border-b cursor-pointer text-blue-700 hover:text-blue-500">
+                            {{ $statex->name }}
+                            ({{ $statex->articles()->where('article_status_id', $statex->id)->where('journal_id', $record->id)->count() }})
+                        </p>
+                    </div>
+                @endforeach
+            </div>
+            <div class="col-span-9">
+                <br>
+                @if ($articles->count() > 0)
                 
-                    <div class="border rounded-lg mb-4 bg-gray-200">
-                        <a href="{{ route('journals.article', $article->uuid) }}">
-                            <div class="bg-white p-2 text-sm font-bold hover:bg-gray-100 rounded-t-lg">
-                                
-                                <div class="text-sm font-bold hover:text-blue-600 ">
-                                    {{ $article->title }}
-                                </div>
-
-                                <div class="text-xs text-blue-700 hover:text-blue-600 mb-2">
-
-                                    {{ $article?->author?->salutation?->title }} {{ $article?->author?->first_name }} {{ $article?->author?->middle_name }} {{ $article?->author?->last_name }},
+                    @foreach ($articles as $key => $article)
+                    
+                        <div class="border rounded-lg mb-4 bg-gray-200">
+                            <a href="{{ route('journals.article', $article->uuid) }}">
+                                <div class="bg-white p-2 text-sm font-bold hover:bg-gray-100 rounded-t-lg">
                                     
-                                    @foreach ($article->article_users()->wherePivot('role', 'author')->get() as $key => $article_user)
-                                        {{ $article_user->salutation?->title }} {{ $article_user->first_name }} {{ $article_user->middle_name }} {{ $article_user->last_name }},
-                                    @endforeach
+                                    <div class="text-sm font-bold hover:text-blue-600 ">
+                                        {{ $article->title }}
+                                    </div>
 
-                                </div>
-                            </div>
-                        </a>
-                        
-                        <div class="w-full p-2 flex gap-2 ">
-                            <div class="w-4/12">
-                                <span class="w-full text-gray-900 text-xs px-2 py-1 rounded {{ $article->article_status->color }}
-                                ">{{ $article->article_status->name }}</span>
-                            </div>
+                                    <div class="text-xs text-blue-700 hover:text-blue-600 mb-2">
 
-                            @php
-                                $a_editor = $article->editors()->first();
-                            @endphp
-                            @if ($record?->chief_editor?->id == auth()->user()->id && !empty($a_editor))
-                                <div class="w-8/12 bg-blue-100 text-xs p-1 px-2 rounded-lg items-center">
-                                    Assigned to : {{ $a_editor?->salutation?->title }} {{ $a_editor?->first_name }} {{ $a_editor?->middle_name }} {{ $a_editor?->last_name }}
+                                        {{ $article?->author?->salutation?->title }} {{ $article?->author?->first_name }} {{ $article?->author?->middle_name }} {{ $article?->author?->last_name }},
+                                        
+                                        @foreach ($article->article_users()->wherePivot('role', 'author')->get() as $key => $article_user)
+                                            {{ $article_user->salutation?->title }} {{ $article_user->first_name }} {{ $article_user->middle_name }} {{ $article_user->last_name }},
+                                        @endforeach
+
+                                    </div>
                                 </div>
-                            @endif
+                            </a>
                             
-                            <div class="w-full flex gap-2 justify-end">
-                                @if((in_array(auth()->user()->id, $article->article_users()->wherePivot('role', 'author')->get()->pluck('id')->toArray()) || $article->author?->id == auth()->user()->id) && ($article->article_status->code == '001' || $article->article_status->code == '012' || $article->article_status->code == '013'))
-                                    <a href="{{ route('journals.submission', [$record->uuid, $article->uuid]) }}">
-                                        <x-button-plain class="bg-blue-700">
-                                            <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" /></svg>
+                            <div class="w-full p-2 flex gap-2 ">
+                                <div class="w-4/12">
+                                    <span class="w-full text-gray-900 text-xs px-2 py-1 rounded {{ $article->article_status->color }}
+                                    ">{{ $article->article_status->name }}</span>
+                                </div>
+
+                                @php
+                                    $a_editor = $article->editors()->first();
+                                @endphp
+                                @if ($record?->chief_editor?->id == auth()->user()->id && !empty($a_editor))
+                                    <div class="w-8/12 bg-blue-100 text-xs p-1 px-2 rounded-lg items-center">
+                                        Assigned to : {{ $a_editor?->salutation?->title }} {{ $a_editor?->first_name }} {{ $a_editor?->middle_name }} {{ $a_editor?->last_name }}
+                                    </div>
+                                @endif
+                                
+                                <div class="w-full flex gap-2 justify-end">
+                                    @if((in_array(auth()->user()->id, $article->article_users()->wherePivot('role', 'author')->get()->pluck('id')->toArray()) || $article->author?->id == auth()->user()->id) && ($article->article_status->code == '001' || $article->article_status->code == '012' || $article->article_status->code == '013'))
+                                        <a href="{{ route('journals.submission', [$record->uuid, $article->uuid]) }}">
+                                            <x-button-plain class="bg-blue-700">
+                                                <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" /></svg>
+                                            </x-button-plain>
+                                        </a>
+                                    @endif
+
+
+                                    @if ($article->author?->id == auth()->user()->id && $article->article_status->code == '001')
+                                        <x-button-plain class="bg-red-700" wire:click="confirmDelete({{ $article->id }})" >
+                                            <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
                                         </x-button-plain>
-                                    </a>
-                                @endif
+                                    @endif
 
 
-                                @if ($article->author?->id == auth()->user()->id && $article->article_status->code == '001')
-                                    <x-button-plain class="bg-red-700" wire:click="confirmDelete({{ $article->id }})" >
-                                        <svg class="h-3 w-3 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                                    </x-button-plain>
-                                @endif
+                                    @if ($article->author?->id == auth()->user()->id && $article->article_status->code == '002')
+                                        <button class="bg-red-700 hover:bg-red-800 text-white text-xs py-1 px-2 rounded" wire:click="confirm({{ $article->id }}, 'Cancel Submission', 'cancelSubmission')" >
+                                            <span class="text-xs">Cancel Submission</span>
+                                        </button>
+                                    @endif
 
-
-                                @if ($article->author?->id == auth()->user()->id && $article->article_status->code == '002')
-                                    <button class="bg-red-700 hover:bg-red-800 text-white text-xs py-1 px-2 rounded" wire:click="confirm({{ $article->id }}, 'Cancel Submission', 'cancelSubmission')" >
-                                        <span class="text-xs">Cancel Submission</span>
-                                    </button>
-                                @endif
-
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                @endforeach
+                        
+                    @endforeach
 
-            @else
-            
-                <div class="w-full bg-blue-400 rounded shadow p-2 text-center">No Articles Found</div>
+                @else
+                
+                    <div class="w-full bg-blue-400 rounded shadow p-2 text-center">No Articles Found</div>
 
-            @endif
+                @endif
 
-            <div class="mt-4 w-full">
-                {{ $articles->links() }}
+                <div class="mt-4 w-full">
+                    {{ $articles->links() }}
+                </div>
             </div>
         </div>
     </div>
@@ -216,5 +207,4 @@
 
         </x-slot>
     </x-dialog-modal>
-
 </div>

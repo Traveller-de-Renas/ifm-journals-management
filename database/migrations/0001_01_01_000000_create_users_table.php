@@ -39,7 +39,6 @@ return new class extends Migration
 
             $table->enum('category', ['IFM Staff','Non IFM Staff'])->default('IFM Staff');
 
-
             $table->uuid('uuid')->nullable();
             $table->timestamps();
         });

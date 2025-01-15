@@ -21,6 +21,17 @@
                     <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
                 </div>
                 <div class=""></div>
+                <div class="flex justify-end text-right">
+                    
+                    <x-button class="flex gap-2 items-center" wire:click="$toggle('filters')" >
+                        
+                        <svg class="h-3 w-3 text-white"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                        </svg>
+                        <span>Filter Journals</span>
+                          
+                    </x-button>
+                </div>
             </div>
 
         </div>
@@ -28,9 +39,8 @@
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
 
-        <div class="grid grid-cols-12 gap-4 w-full">
-            <div class="col-span-3">
-                <div class="bg-white border rounded p-2 shadow-sm">
+        <div class="mb-4 {{ $filters ? '' : 'hidden' }}">
+            <div class="bg-white border rounded p-2 shadow-sm">
                 <div class="text-sm text-slate-800 font-bold dark:text-slate-100">Subjects</div>
                 <ul class="cbfhc">
 
@@ -59,8 +69,11 @@
                     
                 </ul>
             </div>
-            </div>
-            <div class="col-span-9">
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 w-full">
+            
+            <div class="col-span-12">
                 @foreach ($data as $row)
                     <div class="border border-slate-200 dark:border-slate-700 p-4 shadow-md mb-8 rounded-md w-full">
                         

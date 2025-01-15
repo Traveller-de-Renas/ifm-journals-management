@@ -51,8 +51,8 @@ class Volumes extends Component
 
         $statuses = ArticleStatus::all();
 
-        $this->issue  =  (Issue::max('number') != '')? Issue::where('number', Issue::max('number'))->first() : 'None' ;
-        $this->volume =  (Volume::max('number') != '')? Volume::where('number', Volume::max('number'))->first() : 'None' ;
+        $this->issue  = (Issue::max('number') != '')? Issue::where('number', Issue::max('number'))->first() : 'None' ;
+        $this->volume = (Volume::max('number') != '')? Volume::where('number', Volume::max('number'))->first() : 'None' ;
 
         return view('livewire.backend.volumes', compact('statuses'));
     }
@@ -75,18 +75,20 @@ class Volumes extends Component
 
     public function createVolume()
     {
-        $max_volume = (Volume::max('number') != '')? Volume::max('number') : 0 ;
+        $max_volume = $this->record->volumes()->count();
 
-        //dd($max_volume);
         $new_volume = $max_volume + 1;
 
         $volume = new Volume;
 
         $volume->number      = $new_volume;
-        $volume->description = 'volume '.$new_volume;
+        $volume->description = 'Volume '.$new_volume;
         $volume->journal_id  = $this->record->id;
 
         if($volume->save()){
+            $this->record->volume_id = $volume->id;
+            $this->record->save();
+
             session()->flash('success', 'New Volume has been created successfully!');
         }
     }
@@ -96,19 +98,22 @@ class Volumes extends Component
         if($this->volume == 'None'){
             session()->flash('danger', 'No Volume has been created!');
         }else{
-            $max_issue = (Issue::max('number') != '')? Issue::max('number') : 0 ;
 
-            //dd($max_issue);
+            $max_issue = $this->record->volume->issues()->count(); 
             $new_issue = $max_issue + 1;
 
-            $volume = new Issue;
+            $issue = new Issue;
 
-            $volume->number      = $new_issue;
-            $volume->description = 'volume '.$new_issue;
-            $volume->volume_id   = $this->volume;
-            $volume->journal_id  = $this->record->id;
+            $issue->number      = $new_issue;
+            $issue->description = 'Issue '.$new_issue;
+            $issue->volume_id   = $this->record->volume_id;
+            $issue->journal_id  = $this->record->id;
+            $issue->status      = 'Pending';
 
-            if($volume->save()){
+            if($issue->save()){
+                $this->record->issue_id = $issue->id;
+                $this->record->save();
+
                 session()->flash('success', 'New Issue has been created successfully!');
             }
         }

@@ -40,7 +40,7 @@ class JournalDetails extends Component
             abort(404);
         }
 
-        $this->countries = Country::all()->pluck('name', 'id')->toArray();
+        $this->countries   = Country::all()->pluck('name', 'id')->toArray();
         $this->salutations = Salutation::all()->pluck('title', 'id')->toArray();
     }
 

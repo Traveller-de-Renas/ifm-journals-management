@@ -19,6 +19,7 @@ class Journals extends Component
     public $categories;
 
     public $signupModal = false;
+    public $filters = false;
     public $journal;
 
     public $selectedSubjects = [];
@@ -89,6 +90,5 @@ class Journals extends Component
                 }
             }
         }
-
     }
 }

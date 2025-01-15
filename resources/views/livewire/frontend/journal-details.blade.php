@@ -166,15 +166,7 @@
                                                     <p class="text-slate-800 font-bold">{{ $issue->description }} Articles</p>
                                                     <div class="text-right">
     
-                                                        @if(auth()->user()?->id == $record->chief_editor?->id)
-                                                        @if($issue->status == 'Unpublished')
-                                                        <x-button class="" wire:click="publishIssue({{ $issue->id }}, 'Published')">Publish Issue</x-button>
-                                                        @endif
-    
-                                                        @if($issue->status == 'Published')
-                                                        <x-button-plain class="bg-red-700 hover:bg-red-500" wire:click="publishIssue({{ $issue->id }}, 'Unpublished')">Unpublish Issue</x-button-plain>
-                                                        @endif
-                                                        @endif
+                                                        
     
                                                     </div>
                                                 </div>
@@ -285,8 +277,14 @@
 
                 <div class="w-full mb-4">
                 <p class="text-lg font-bold mb-2">Recent Articles</p>
+
+                    @php
+                        $statusp = App\Models\ArticleStatus::where('code', '006')->first();
+                        $recent = $record->articles()->where('article_status_id', $statusp->id)->orderBy('created_at', 'desc')->limit(5)->get();
+                    @endphp
                     
-                    @foreach ($record->articles()->orderBy('created_at', 'desc')->limit(5)->get() as $key => $article)
+                    @if(count( $recent ) > 0)
+                    @foreach ($recent as $key => $article)
                         <a href="{{ route('journal.article', $article->uuid) }}">
                             <div class="text-sm font-bold text-blue-700 hover:text-blue-600 bg-gray-50 hover:bg-gray-100 cursor-pointer p-2 mb-2 mt-2">
                                 {{ $article->title }}
@@ -295,6 +293,11 @@
                     @endforeach
                     
                     <x-button class="mb-4 w-full " wire:click="changeTab('table_of_contents')">View All </x-button>
+                    @else
+                        <div class="text-sm font-bold text-blue-700 text-center bg-gray-50 hover:bg-gray-100 cursor-pointer p-2 mb-2 mt-2 shadow">
+                            No Recent Articles Published
+                        </div>
+                    @endif
                 </div>
 
                 <br>
