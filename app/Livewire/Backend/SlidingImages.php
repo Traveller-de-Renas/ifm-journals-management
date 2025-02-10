@@ -20,7 +20,7 @@ class SlidingImages extends Component
     public $Delete;
 
     public $record;
-    public $images;
+    public $images = [];
     public $link;
     public $url;
     public $order;
