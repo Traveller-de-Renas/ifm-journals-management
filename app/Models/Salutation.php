@@ -23,4 +23,9 @@ class Salutation extends Model
         return LogOptions::defaults()
         ->logAll();
     }
+
+    public function status()
+    {
+        return ($this->status == 1)? 'Active' : 'Inactive';
+    }
 }
