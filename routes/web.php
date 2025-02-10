@@ -28,6 +28,7 @@ Route::get('/register/{journal?}', [AuthenticationController::class, 'register']
     ->name('register');
 Route::post('/logout/{journal?}', [AuthenticationController::class, 'logout'])
     ->name('logout');
+    
 
 
 Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
