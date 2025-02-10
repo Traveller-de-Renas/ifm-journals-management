@@ -21,6 +21,7 @@ use App\Http\Controllers\AuthenticationController;
 // });
 Route::get('/', [FrontendController::class, 'index']);
 
+
 Route::get('/admin', [AuthenticationController::class, 'admin'])->name('admin');
 Route::get('/login/{journal?}', [AuthenticationController::class, 'login'])
     ->name('login');
@@ -28,7 +29,6 @@ Route::get('/register/{journal?}', [AuthenticationController::class, 'register']
     ->name('register');
 Route::post('/logout/{journal?}', [AuthenticationController::class, 'logout'])
     ->name('logout');
-    
 
 
 Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
