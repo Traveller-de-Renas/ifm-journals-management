@@ -94,7 +94,7 @@ class SlidingImages extends Component
 
                 $savename  = str_replace(' ', '_', $file_name);
 
-                $file->storeAs('/public/slider', $savename);
+                $file->storeAs('slider/', $savename);
 
                 $data = new SlidingImage;
 
@@ -112,7 +112,10 @@ class SlidingImages extends Component
             'images'
         ]);
         
-        session()->flash('success', 'Saved Successifully');
+        session()->flash('response',[
+            'status'  => 'success', 
+            'message' => 'Images successfully Uploaded'
+        ]);
         $this->Add = false;
     }
 
@@ -125,7 +128,7 @@ class SlidingImages extends Component
             $extension = $file->getClientOriginalExtension();
             $savename  = str_replace(' ', '_', $file_name);
 
-            $file->storeAs('/public/slider', $savename);
+            $file->storeAs('slider/', $savename);
 
             $data->image = $savename;
         }
@@ -141,14 +144,20 @@ class SlidingImages extends Component
             'images'
         ]);
         
-        session()->flash('success', 'Updated Successifully');
+        session()->flash('response',[
+            'status'  => 'success', 
+            'message' => 'Images successfully Uploaded'
+        ]);
         $this->Edit = false;
     }
 
     public function delete(SlidingImage $data)
     {
         if($data->delete()){
-            session()->flash('success', 'Deleted Successifully');
+            session()->flash('response',[
+                'status'  => 'success', 
+                'message' => 'Images successfully Deleted'
+            ]);
             $this->Delete = false;
         }
     }
