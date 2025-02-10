@@ -64,4 +64,9 @@ class FrontendController extends Controller
 
         return Storage::download('editorial/'.$issue->editorial_file);
     }
+
+    public function sliding_images()
+    {
+        return view('backend.sliding_images');
+    }
 }

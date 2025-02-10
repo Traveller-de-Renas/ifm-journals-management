@@ -52,6 +52,7 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/team/{journal?}', [JournalController::class, 'team'])->name('journals.team');
 
     Route::get('/call_for_papers/{journal?}', [JournalController::class, 'call_for_papers'])->name('journals.call_for_papers');
+    Route::get('/sliding_images', [FrontendController::class, 'sliding_images'])->name('journals.sliding_images');
 });
 
 
