@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -14,44 +13,21 @@ class UserController extends Controller
 
     public function logs()
     {
-        return view('backend.logs');
+        return view('backend.user_logs');
     }
 
-    public function profile()
+    public function salutations()
     {
-        return view('backend.profile');
+        return view('backend.salutations');
     }
 
-    public function user_preview()
+    public function roles()
     {
-        return view('backend.user_preview');
+        return view('backend.roles');
     }
 
-    public function login()
+    public function permissions()
     {
-        return view('auth.login');
-    }
-
-    public function register()
-    {
-        return view('auth.register');
-    }
-
-    public function admin()
-    {
-        return view('auth.admin');
-    }
-
-    public function destroy(Request $request)
-    {
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        if(Str::isUuid(auth()->user()->journal)){
-            $url = route('journal.detail', auth()->user()->journal);
-        }else{
-            $url = '/';
-        }
-        return redirect($url);
+        return view('backend.permissions');
     }
 }

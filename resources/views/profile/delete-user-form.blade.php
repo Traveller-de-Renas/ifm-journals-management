@@ -8,7 +8,7 @@
     </x-slot>
 
     <x-slot name="content">
-        <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
+        <div class="max-w-xl text-sm text-gray-600">
             {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
         </div>
 
@@ -32,7 +32,7 @@
                                 autocomplete="current-password"
                                 placeholder="{{ __('Password') }}"
                                 x-ref="password"
-                                wire:model.live="password"
+                                wire:model="password"
                                 wire:keydown.enter="deleteUser" />
 
                     <x-input-error for="password" class="mt-2" />

@@ -14,8 +14,10 @@ class FileCategory extends Model
 
     protected $fillable = [
         'name',
+        'code',
         'description',
-		'journal_id'
+        'submitted',
+        'status'
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -24,8 +26,8 @@ class FileCategory extends Model
         ->logAll();
     }
 
-    public function journal()
+    public function status()
     {
-        return $this->belongsTo(Journal::class);
+        return ($this->status === 1) ? 'Active' : 'Inactive';
     }
 }

@@ -1,17 +1,32 @@
-<x-module>
-    <x-slot name="title">
-        {{ __('REVIEW SECTIONS') }}
-    </x-slot>
+<div class="bg-white shadow-md p-4 rounded">
 
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
+            <p class="font-bold">{{ __('REVIEW SECTIONS') }}</p>
+        </div>
+        <div class="">
+
+        </div>
+        <div class="flex gap-2 justify-end">
+            <x-button class="float-right" wire:click="$toggle('form')" wire:loading.attr="disabled" >Create New</x-button>
             <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
         </div>
-        <div class=""></div>
-        <div class="">
-            <x-button class="float-right" wire:click="$toggle('form')" wire:loading.attr="disabled" >Create New</x-button>
-        </div>
     </div>
+
+    @if (session('response'))
+        @php
+            $bgClass = match (session('response.status')) {
+                'success' => 'bg-green-300',
+                'danger'  => 'bg-red-300',
+                'warning' => 'bg-yellow-300',
+                'info'    => 'bg-blue-300',
+                default   => 'bg-gray-200',
+            };
+        @endphp
+        <div class="p-4 text-sm mb-4 mt-2 shadow {{ $bgClass }} w-full text-center">
+            {{ session('response.message') }}
+        </div>
+    @endif
 
     @if($form)
 
@@ -39,12 +54,12 @@
                     <x-input-error for="saved_option_title" />
                 </div>
                 <div class="col-span-2 flex justify-end">
-                    <x-button-plain class="bg-green-700" wire:click="updateRow({{ $key }}, 'section_options')">
+                    <x-button class="bg-green-700" wire:click="updateRow({{ $key }}, 'section_options')">
                         <svg class="h-4 w-4 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M5 12l5 5l10 -10" /></svg>
-                    </x-button-plain>
-                    <x-button-plain class="bg-red-700" wire:click="deleteRow({{ $key }}, 'section_options')">
+                    </x-button>
+                    <x-button class="bg-red-500 hover:bg-red-700" wire:click="deleteRow({{ $key }}, 'section_options')">
                         <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                    </x-button-plain>
+                    </x-button>
                 </div>
             </div>
 
@@ -60,9 +75,9 @@
                     <x-input-error for="option_title" />
                 </div>
                 <div class="col-span-2 flex justify-end">
-                    <x-button-plain class="bg-red-700" wire:click="removeRow({{ $key }}, 'section_options')">
+                    <x-button class="bg-red-500 hover:bg-red-700" wire:click="removeRow({{ $key }}, 'section_options')">
                         <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                    </x-button-plain>
+                    </x-button>
                 </div>
             </div>
 
@@ -77,11 +92,8 @@
         @endif
 
         <div class="mt-2 p-2 bg-gray-200 grid grid-cols-12  gap-2 mb-2">
-            <div class="col-span-7">
+            <div class="col-span-10">
                 Queries
-            </div>
-            <div class="col-span-3">
-                Confidential
             </div>
             <div class="col-span-2 flex justify-end">
             </div>
@@ -91,21 +103,17 @@
             @if(!empty($saved_queries))
             @foreach ($saved_queries as $key => $query_data)
             <div class="grid grid-cols-12 gap-2 mb-2">
-                <div class="col-span-7">
+                <div class="col-span-10">
                     <x-input type="text" id="saved_query_title" class="w-full h-10" placeholder="Enter query title" wire:model="saved_query_title.{{ $key }}" />
                     <x-input-error for="saved_query_title" />
                 </div>
-                <div class="col-span-3">
-                    <x-select id="saved_query_confidential" class="w-full h-10" placeholder="Select query confidential" wire:model="saved_query_confidential.{{ $key }}" :options="['Yes'=>'Yes', 'No'=>'No']" />
-                    <x-input-error for="saved_query_confidential" />
-                </div>
                 <div class="col-span-2 flex justify-end">
-                    <x-button-plain class="bg-green-700" wire:click="updateRow({{ $key }}, 'queries')">
+                    <x-button class="bg-green-700 hover:bg-green-500" wire:click="updateRow({{ $key }}, 'queries')">
                         <svg class="h-4 w-4 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M5 12l5 5l10 -10" /></svg>
-                    </x-button-plain>
-                    <x-button-plain class="bg-red-700" wire:click="deleteRow({{ $key }}, 'queries')">
+                    </x-button>
+                    <x-button class="bg-red-700 hover:bg-red-500" wire:click="deleteRow({{ $key }}, 'queries')">
                         <svg class="h-4 w-4 text-white" viewBox="0 0 24 24"  fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                    </x-button-plain>
+                    </x-button>
                 </div>
             </div>
             @endforeach 
@@ -119,9 +127,9 @@
                     <x-input-error for="query_title" />
                 </div>
                 <div class="col-span-2 flex justify-end">
-                    <x-button-plain class="bg-red-700" wire:click="removeRow({{ $key }}, 'queries')">
+                    <x-button class="bg-red-500 hover:bg-red-700" wire:click="removeRow({{ $key }}, 'queries')">
                         <svg class="h-4 w-4 text-white" viewBox="0 0 24 24"  fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                    </x-button-plain>
+                    </x-button>
                 </div>
             </div>
 
@@ -141,7 +149,7 @@
             <x-button type="submit" wire:click="store()" wire:loading.attr="disabled">Submit</x-button>
             @endif
 
-            <x-button-plain class="bg-red-700" wire:click="$toggle('form')" wire:loading.attr="disabled">Cancel</x-button-plain>
+            <x-button class="bg-red-500 hover:bg-red-700" wire:click="$toggle('form')" wire:loading.attr="disabled">Cancel</x-button>
         </div>
     </div>
 
@@ -159,9 +167,7 @@
                     <button wire:click="sort('status')" >Status</button>
                     <x-sort-icon class="float-right" sortField="status" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                 </th>
-                <th scope="col" class="py-4 w-2" >
-                    Actions
-                </th>
+                <th scope="col" class="py-4 w-2" ></th>
             </tr>
         </thead>
         <tbody>
@@ -217,14 +223,13 @@
         </x-slot>
         <x-slot name="footer">
             
-            <x-button-danger type="submit" wire:click="delete({{ $record?->id }})" wire:loading.attr="disabled" >
+            <x-button type="submit" class="bg-red-500 hover:bg-red-700" wire:click="delete({{ $record?->id }})" wire:loading.attr="disabled" >
                 {{ __('Delete') }}
-            </x-button-danger>
+            </x-button>
             <x-secondary-button class="ml-3" wire:click="$toggle('deleteModal')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 
         </x-slot>
     </x-dialog-modal>
-
-</x-module>
+</div>

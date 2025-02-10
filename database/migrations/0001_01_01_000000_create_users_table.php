@@ -36,8 +36,7 @@ return new class extends Migration
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->string('status')->default('Active')->nullable();
-
-            $table->enum('category', ['IFM Staff','Non IFM Staff'])->default('IFM Staff');
+            $table->integer('added')->default(0);
 
             $table->uuid('uuid')->nullable();
             $table->timestamps();

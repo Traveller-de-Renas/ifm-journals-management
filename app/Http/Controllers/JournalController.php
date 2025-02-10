@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class JournalController extends Controller
 {
+    public function home()
+    {
+        return view('backend.journals');
+    }
+
     public function index()
     {
         return view('backend.journals');
     }
 
-    public function form()
+    public function create()
     {
-        return view('backend.journals_form');
+        return view('backend.create_journal');
     }
 
     public function subjects()
@@ -28,14 +31,34 @@ class JournalController extends Controller
         return view('backend.categories');
     }
 
-    public function details()
+    public function review_messages()
     {
-        return view('backend.journal_details');
+        return view('backend.review_messages');
+    }
+
+    public function review_sections()
+    {
+        return view('backend.review_sections');
+    }
+
+    public function file_categories()
+    {
+        return view('backend.file_categories');
+    }
+
+    public function submission_confirmations()
+    {
+        return view('backend.submission_confirmations');
+    }
+
+    public function detail()
+    {
+        return view('backend.detail');
     }
 
     public function submission()
     {
-        return view('backend.paper_submission');
+        return view('backend.submission');
     }
 
     public function articles()
@@ -43,79 +66,33 @@ class JournalController extends Controller
         return view('backend.articles');
     }
 
+    public function team()
+    {
+        return view('backend.journal_team');
+    }
+
+    public function reviewers()
+    {
+        return view('backend.journal_reviewers');
+    }
+
     public function article()
     {
-        return view('backend.article_details');
+        return view('backend.article');
     }
 
     public function article_evaluation()
     {
         return view('backend.article_evaluation');
     }
-    
-    public function journal_detail()
-    {
-        return view('frontend.journal_details');
-    }
 
-    public function viewall()
-    {
-        return view('frontend.journals');
-    }
-
-    public function journal_articles()
-    {
-        return view('frontend.articles');
-    }
-
-    public function journal_article()
-    {
-        return view('frontend.article_details');
-    }
-
-    public function archive()
-    {
-        return view('backend.volumes');
-    }
-
-    public function journal_archive()
-    {
-        return view('frontend.volumes');
-    }
-
-    public function callfor_papers()
-    {
-        return view('backend.callfor_papers');
-    }
-
-    public function callfor_paper()
-    {
-        return view('frontend.callfor_paper');
-    }
-
-    public function call_detail()
-    {
-        return view('frontend.call_detail');
-    }
-
-    public function article_download(Request $request)
-    {
-        $aticle = $request->article;
-        $file = File::findOrFail($aticle);
-
-        $file->increment('downloads');
-
-        return Storage::download('public/articles/'.$file->file_path);
-    }
-
-    public function publication_process()
+    public function publication()
     {
         return view('backend.publication_process');
     }
 
-
-    public function editor()
+    public function call_for_papers()
     {
-        return view('backend.editor');
+        return view('backend.call_for_papers');
     }
 }

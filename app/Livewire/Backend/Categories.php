@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Backend;
 
-use App\Models\Subject;
+use App\Models\JournalSubject;
 use Livewire\Component;
-use App\Models\Category;
+use App\Models\JournalCategory;
 
 class Categories extends Component
 {
@@ -21,11 +21,11 @@ class Categories extends Component
 
     public function mount()
     {
-        $this->subjects = Subject::all()->pluck('name', 'id')->toArray();
+        $this->subjects = JournalSubject::all()->pluck('name', 'id')->toArray();
     }
     public function render()
     {
-        $categories = Category::when($this->query, function ($query) {
+        $categories = JournalCategory::when($this->query, function ($query) {
             return $query->where(function ($query) {
                 $query->where('name', 'ilike', '%' . $this->query . '%');
             });
@@ -42,22 +42,22 @@ class Categories extends Component
             'subject' => 'required',
         ]);
 
-        Category::create([
+        JournalCategory::create([
             'name' => $this->name,
-            'subject_id' => $this->subject,
+            'journal_subject_id' => $this->subject,
         ]);
 
         $this->form = false;
         $this->reset();
     }
 
-    public function edit(Category $category)
+    public function edit(JournalCategory $category)
     {
         $this->form = true;
         $this->record = $category;
     }
 
-    public function update(Category $category)
+    public function update(JournalCategory $category)
     {
         $this->validate([
             'name' => 'required',
@@ -66,14 +66,14 @@ class Categories extends Component
 
         $category->update([
             'name' => $this->name,
-            'subject_id' => $this->subject,
+            'journal_subject_id' => $this->subject,
         ]);
 
         $this->form = false;
         $this->reset();
     }
 
-    public function destroy(Category $category)
+    public function destroy(JournalCategory $category)
     {
         $category->delete();
     }

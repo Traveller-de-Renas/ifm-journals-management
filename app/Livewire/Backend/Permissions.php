@@ -94,35 +94,35 @@ class Permissions extends Component
     public function store()
     {
         $this->validate();
-        $array = array('', 'View ', 'Add ', 'Edit ', 'Delete ');
-        foreach($array as $permission){
+        // $array = array('', 'View ', 'Add ', 'Edit ', 'Delete ');
+        // foreach($array as $permission){
             $data = Permission::create([
-                'name' => $permission.$this->name
+                'name' => $this->name
             ]);
 
             $data->assignRole('Administrator');
-        }
+        // }
 
-        session()->flash('success', 'Saved Successifully');
         $this->Add = false;
+        return redirect()->back()->with('success', 'Saved Successifully!');
     }
 
     public function update(Permission $data)
-    {   
+    {
         $this->validate();
         $data->update([
             'name' => $this->name,
         ]);
 
-        session()->flash('success', 'Updated Successifully');
         $this->Edit = false;
+        return redirect()->back()->with('success', 'Updated Successifully!');
     }
 
     public function delete(Permission $data)
     {
         if($data->delete()){
-            session()->flash('success', 'Deleted Successifully');
             $this->Delete = false;
+            return redirect()->back()->with('success', 'Deleted Successifully!');
         }
     }
 

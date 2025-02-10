@@ -37,13 +37,7 @@
             </div>
 
             <div class="flex gap-2">
-                <div class="w-1/12">
-                    EDITOR
-                </div>
-                <div class="w-full">
-                    {{ $editor->salutation?->title }} {{ $editor->first_name }} {{ $editor->middle_name }} {{ $editor->last_name }}
-                    <p class="text-sm text-gray-400">{{ $editor->affiliation }}</p>
-                </div>
+                
             </div>
             <div class="flex gap-2">
                 <div class="w-1/12">
@@ -59,15 +53,24 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="p-4 mb-4 shadow bg-green-300 w-full text-center">
-            {{ session('success') }}
+    @if (session('response'))
+        @php
+            $bgClass = match (session('response.status')) {
+                'success' => 'bg-green-300',
+                'danger'  => 'bg-red-300',
+                'warning' => 'bg-yellow-300',
+                'info'    => 'bg-blue-300',
+                default   => 'bg-gray-200',
+            };
+        @endphp
+        <div class="p-4 text-sm mb-4 mt-2 shadow {{ $bgClass }} w-full text-center">
+            {{ session('response.message') }}
         </div>
     @endif
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
         @php
-            $file = $record->files()->where('publish', 1)->first();
+            $file = $record->files()->first();
         @endphp
         <div class="flex gap-2 items-center">
             
@@ -80,14 +83,18 @@
                 </p>
             </div>
 
+            @php
+                $juser = $journal_user->article_journal_users()->where('article_id', $record->id)->first();
+            @endphp
+
             <div class="flex-1 text-right w-full">
-                @if($record->reviewer_status == 'Pending')
-                <x-button-plain class="bg-green-700 hover:bg-green-600 text-xs" wire:click="accept()">
+                @if($juser->pivot->review_status == 'pending')
+                <x-button class="bg-green-700 hover:bg-green-600 text-xs" wire:click="accept()">
                     Accept
-                </x-button-plain>
-                <x-button-plain class="bg-red-700 hover:bg-red-600 text-xs" wire:click="declineArticle()">
+                </x-button>
+                <x-button class="bg-red-700 hover:bg-red-600 text-xs" wire:click="declineArticle()">
                     Decline
-                </x-button-plain>
+                </x-button>
                 @endif
             </div>
 
@@ -95,7 +102,7 @@
     </div>
 
     <hr>
-    @if($record->reviewer_status == 'Accepted')
+    @if($juser->pivot->review_status == 'accepted')
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
 
         <div class="p-3 bg-[#175883] text-white ">
@@ -125,7 +132,8 @@
                             <p class="w-full @if($section->category == 'comments') font-bold @endif">{{ $data->title }}</p>
 
                             @if($section->category == 'comments')
-                            <x-textarea type="text" id="description" class="w-full mt-2" wire:model="reviewComment.{{ $data->id }}" placeholder="Enter Description" rows="5" />
+                                <x-textarea type="text" id="reviewComment" class="w-full mt-2" wire:model="reviewComment.{{ $data->id }}" placeholder="Enter Description" rows="5" />
+                                <x-input-error for="reviewComment" />
                             @endif
                         </td>
                         @if($section->category == 'options')
@@ -173,7 +181,7 @@
 
         <div class="flex gap-4 justify-center mt-6 mb-4">
             <x-button wire:click="store('incomplete')">Save and Submit Later</x-button>
-            <x-button-plain class="bg-green-700 hover:bg-green-600" wire:click="store('complete')" >Save & Submit</x-button>
+            <x-button class="bg-green-700 hover:bg-green-600" wire:click="store('complete')" >Save & Submit</x-button>
         </div>
     <div>
     @endif

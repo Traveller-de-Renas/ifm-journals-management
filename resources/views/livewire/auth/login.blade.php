@@ -1,6 +1,8 @@
-<div class="w-full">
+<div class="">
+    
     <div class="bg-gray-800 text-white bg-blend-overlay" style="background-image: url({{ asset('images/auth-image.jpg') }}); background-position: top;">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl min-h-48 mx-auto sm:px-6 lg:px-8">
+            @if($journal != null)
             <div class="grid grid-cols-12 gap-2 ">
                 
                 <div class="col-span-10 w-full mb-2 mt-2">
@@ -56,55 +58,63 @@
                 </div>
 
             </div>
+            @endif
         </div>
     </div>
+    
+    <div class="max-w-7xl mx-auto px-4 mb-8 ">
+    <x-authentication-card>
+        <h1 class="text-2xl text-gray-800 dark:text-gray-100 font-bold mb-6">{{ __('Login into Journal') }}</h1>
 
-    <div class="max-w-7xl mx-auto grid grid-cols-3 px-4 py-8">
-        
-        <div class="px-4">
-            <h1 class="text-3xl text-gray-800 dark:text-gray-100 font-bold mb-6">{{ __('Welcome back!') }}</h1>
-            @if (session('message'))
-                <div class="mb-4 font-medium text-sm text-white bg-red-500 w-full rounded text-center p-2">
-                    {{ session('message') }}
-                </div>
-            @endif
-
-            @if (session('success'))
-                <div class="p-4 rounded-md text-sm mb-4 shadow bg-green-300 w-full">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            <div class="space-y-4">
-                <div>
-                    <x-label for="email" value="{{ __('Email') }}" />
-                    <x-input id="email" type="email" wire:model="email" required autofocus />                
-                </div>
-                <div>
-                    <x-label for="password" value="{{ __('Password') }}" />
-                    <x-input id="password" type="password" wire:model="password" required autocomplete="current-password" />                
-                </div>
+        @if (session()->has('error_message'))
+            <div class="bg-red-500 text-white p-3 rounded mb-4">
+                {{ session('error_message') }}
             </div>
-            <div class="flex items-center justify-between mt-6">
-                @if (Route::has('password.request'))
-                    <div class="mr-1">
-                        <a class="text-sm underline hover:no-underline" href="{{ route('password.request') }}">
-                            {{ __('Forgot Password?') }}
-                        </a>
-                    </div>
-                @endif            
-                <x-button class="ml-3" wire:click="login()">
-                    {{ __('Sign in') }}
-                </x-button>            
-            </div>
+        @endif
 
-            <x-validation-errors class="mt-4" />   
-            <!-- Footer -->
-            <div class="pt-5 mt-6 border-t border-gray-100 dark:border-gray-700/60">
-                <div class="text-sm">
-                    {{ __('Don\'t you have an account?') }} <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="{{ route('journal.register',  $journal->uuid) }}">{{ __('Sign Up') }}</a>
-                </div>
+        @session('status')
+            <div class="mb-4 font-medium text-sm text-green-600">
+                {{ $value }}
             </div>
+        @endsession
+
+        <div>
+            <x-label for="email" value="{{ __('Email') }}" />
+            <x-input id="email" class="block mt-1 w-full" type="email" wire:model="email" required autofocus autocomplete="username" />
+            <x-input-error for="email" />
         </div>
+
+        <div class="mt-4">
+            <x-label for="password" value="{{ __('Password') }}" />
+            <x-input id="password" class="block mt-1 w-full" type="password" wire:model="password" required autocomplete="current-password" />
+            <x-input-error for="password" />
+        </div>
+
+        <div class="block mt-4">
+            <label for="remember_me" class="flex items-center">
+                <x-checkbox id="remember_me" wire:model="remember" />
+                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+            </label>
+        </div>
+
+        <div class="mt-4">
+            <x-button class="w-full mb-6 text-center" wire:click="login()">
+                {{ __('Sign in') }}
+            </x-button>
+
+            <div class="flex items-center border-t pt-5 gap-6">
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('register', ['journal' => $journal?->uuid]) }}">
+                    {{ __('Register Here') }}
+                </a>
+
+                @if (Route::has('password.request'))
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                        {{ __('Forgot your password?') }}
+                    </a>
+                @endif
+            </div>
+            
+        </div>
+    </x-authentication-card>
     </div>
 </div>

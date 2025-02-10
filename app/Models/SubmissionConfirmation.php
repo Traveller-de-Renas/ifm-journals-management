@@ -13,8 +13,9 @@ class SubmissionConfirmation extends Model
     use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
-        'journal_id',
-        'description'
+        'description',
+        'code',
+        'status'
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -26,5 +27,10 @@ class SubmissionConfirmation extends Model
     public function journal()
     {
         return $this->belongsTo(Journal::class);
+    }
+
+    public function status()
+    {
+        return ($this->status === 1) ? 'Active' : 'Inactive';
     }
 }

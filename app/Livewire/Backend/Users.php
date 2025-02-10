@@ -24,7 +24,11 @@ class Users extends Component
 
     public $user;
     public $record;
+    public $name;
+    public $status;
+    public $gender;
     public $email;
+    public $phone;
     public $password;
     public $password_confirmation;
 
@@ -38,11 +42,7 @@ class Users extends Component
     {
         $users = User::when($this->query, function($query){
             return $query->where(function($query){
-                $query->where('first_name', 'ilike', '%'.$this->query.'%')
-                    ->orWhere('middle_name', 'ilike', '%'.$this->query.'%')
-                    ->orWhere('last_name', 'ilike', '%'.$this->query.'%')
-                    ->orWhere('phone', 'ilike', '%'.$this->query.'%')
-                    ->orWhere('email', 'ilike', '%'.$this->query.'%');
+                $query->where('name', 'ilike', '%'.$this->query.'%')->orWhere('email', 'ilike', '%'.$this->query.'%');
             });
         })->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         
@@ -65,15 +65,16 @@ class Users extends Component
 
     public function confirmEdit(User $data)
     {
-        $this->record = $data;
-        $this->email  = $data->email;
+        $this->record = $data->id;
+        $this->name = $data->name;
+        $this->status = $data->status;
 
         $this->Edit = true;
     }
 
     public function confirmDelete(User $data)
     {
-        $this->record = $data;
+        $this->record = $data->id;
         $this->Delete = true;
     }
 
@@ -102,7 +103,10 @@ class Users extends Component
     public function rules()
     {
         return [
-            'email'     => 'required|email|unique:users,email,'.$this->record->id,
+            'name'   => 'required|string',
+            'gender' => 'required',
+            'phone'  => 'nullable|string',
+            'email'  => 'required|email|unique:users',
             'password'  => [
                 'sometimes',
                 'nullable',
@@ -114,23 +118,44 @@ class Users extends Component
         ];
     }
 
+    public function store()
+    {
+        $this->validate();
+        $data = new User;
+        $data->create([
+            'name'     => $this->name,
+            'gender'   => $this->gender,
+            'email'    => $this->email,
+            'phone'    => $this->phone,
+            'status'   => $this->status,
+            'password' => Hash::make($this->password),
+        ]);
+        
+        $this->Add = false;
+        return redirect()->back()->with('success', 'Saved Successifully!');
+    }
+
     public function update(User $data)
     {
         $this->validate();
         $data->update([
-            'email'    => $this->email,
+            'name'   => $this->name,
+            'gender' => $this->gender,
+            'email'  => $this->email,
+            'phone'  => $this->phone,
+            'status' => $this->status,
             'password' => Hash::make($this->password),
         ]);
         
-        session()->flash('success', 'Updated Successifully');
         $this->Edit = false;
+        return redirect()->back()->with('success', 'Updated Successifully!');
     }
 
     public function delete(User $data)
     {
         if($data->delete()){
-            session()->flash('success', 'Deleted Successifully');
             $this->Delete = false;
+            return redirect()->back()->with('success', 'Deleted Successifully!');
         }
     }
 
@@ -178,12 +203,5 @@ class Users extends Component
         }else{
             return response()->json(['message'=>'Permission does not Exists']);
         }
-    }
-    
-
-    public function userStatus($status, User $user)
-    {
-        $user->status = $status;
-        $user->update();
     }
 }

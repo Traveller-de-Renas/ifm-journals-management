@@ -1,9 +1,5 @@
-<x-module>
-    
-    <x-slot name="title">
-        {{ __('PERMISSIONS') }}
-    </x-slot>
-
+<div class="bg-white shadow-md p-4 rounded">
+    {{ __('PERMISSIONS') }}
 
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
@@ -47,10 +43,8 @@
                 </td>
                 <td class="whitespace-nowrap ">
                     
-                    <button id="dropdown{{ $sn }}" data-dropdown-toggle="dropdownDots{{ $sn }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50" type="button">
-                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
-                        <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
-                        </svg>
+                    <button id="dropdown{{ $item->id }}" data-dropdown-toggle="dropdownDots{{ $item->id }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900" type="button">
+                        <svg class="h-6 w-6 text-gray-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="1" />  <circle cx="19" cy="12" r="1" />  <circle cx="5" cy="12" r="1" /></svg>
                     </button>
                     
                     <div id="dropdownDots{{ $sn }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
@@ -191,14 +185,14 @@
         </x-slot>
         <x-slot name="footer">
             
-            <x-button-danger type="submit" wire:click="delete({{ $record }})" wire:loading.attr="disabled" >
+            <x-button type="submit" class="bg-red-500 hover:bg-red-700" wire:click="delete({{ $record }})" wire:loading.attr="disabled" >
                 {{ __('Delete') }}
-            </x-button-danger>
-            <x-secondary-button class="ml-3" wire:click="$toggle('Delete')" wire:loading.attr="disabled">
+            </x-button>
+            <x-secondary-button class="ml-3" wire:click="$toggle('Edit')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 
         </x-slot>
     </x-dialog-modal>
 
-</x-module>
+</div>

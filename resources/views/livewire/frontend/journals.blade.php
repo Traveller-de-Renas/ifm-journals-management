@@ -7,7 +7,7 @@
             <p class="text-2xl font-bold">Publish in a journal</p>
 
             <div class="w-full md:grid md:grid-cols-3 gap-4" >
-                <p class="col-span-2 text-justify"> 
+                <p class="col-span-2 text-justify">
                     Choose which journal to publish in or search our active calls for papers. When you're ready, find out&nbsp;how to submit your paper.&nbsp;
                     <br>
                     <br>
@@ -18,7 +18,7 @@
 
             <div class="w-full md:grid md:grid-cols-3 gap-4 mt-6 mb-4" >
                 <div class="">
-                    <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
+                    <x-input class="w-full text-gray-700" wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
                 </div>
                 <div class=""></div>
                 <div class="flex justify-end text-right">
@@ -47,8 +47,8 @@
                     @foreach ($subjects as $key => $subject)
                         <li>
                             <label class="flex items-center">
-                                <input type="checkbox" class="cybz1" wire:click="checkOption('subjects', {{ $subject->id }})" value="{{ $subject->id }}">
-                                <span class="text-sm ch1ih c6w4h cw92y c9o7o ml-2">{{ $subject->name }}</span>
+                                <input type="checkbox" class="" wire:click="checkOption('subjects', {{ $subject->id }})" value="{{ $subject->id }}">
+                                <span class="text-sm ml-2">{{ $subject->name }}</span>
                             </label>
                         </li>
                     @endforeach
@@ -61,8 +61,8 @@
                     @foreach ($categories as $key => $categ)
                         <li>
                             <label class="flex items-center">
-                                <input type="checkbox" class="cybz1" wire:click="checkOption('categories', {{ $categ->id }})" value="{{ $categ->id }}">
-                                <span class="text-sm ch1ih c6w4h cw92y c9o7o ml-2">{{ $categ->name }}</span>
+                                <input type="checkbox" class="" wire:click="checkOption('categories', {{ $categ->id }})" value="{{ $categ->id }}">
+                                <span class="text-sm ml-2">{{ $categ->name }}</span>
                             </label>
                         </li>
                     @endforeach
@@ -91,13 +91,6 @@
                                 <a href="{{ route('journal.detail', $row->uuid) }}">
                                 <p class="text-lg font-bold text-blue-700 hover:text-blue-600 cursor-pointer"> {{ $row->title }} ({{ strtoupper($row->code) }})</p>
                                 </a>
-                                <div class="ml-2 text-xs">
-                                    
-                                    {{ $row->chief_editor?->salutation?->title }}. {{ $row->chief_editor?->first_name }} {{ $row->chief_editor?->middle_name }} {{ $row->chief_editor?->last_name }} 
-                                    @if ($row->chief_editor?->affiliation != '')
-                                        ({{ $row->chief_editor?->affiliation }})
-                                    @endif
-                                </div>
 
                                 <div class="text-sm text-slate-800 dark:text-slate-100 cbfhc cg5st mb-6">
                                     <p class="text-justify">{!! $row->description !!}</p>
@@ -106,16 +99,12 @@
                                 <a href="{{ route('journal.detail', $row->uuid) }}">
                                     <x-button>Preview</x-button>
                                 </a>
-            
-                                @if(auth()->user())
-                                    @if (!$row->journal_users->contains(auth()->user()->id))
-                                        <x-button wire:click="signup({{ $row->id }})" >Register </x-button>
-                                    @endif
-                                @endif
-            
-                                <a href="{{ route('journals.submission', $row->uuid) }}">
-                                    <x-button>Submit a Paper </x-button>
+
+                                <a href="{{ route('register', $row->uuid) }}" class="">
+                                    <x-button>Register </x-button>
                                 </a>
+            
+                                
                             </div>
                         </div>
 

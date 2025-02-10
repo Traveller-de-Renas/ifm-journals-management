@@ -3,7 +3,6 @@
 namespace App\Livewire\Backend;
 
 use App\Models\User;
-use App\Models\Review;
 use App\Models\Article;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -13,8 +12,6 @@ use App\Models\ArticleStatus;
 use App\Models\ReviewSection;
 use Livewire\WithFileUploads;
 use App\Models\ReviewAttachment;
-use App\Mail\ReviewerResponseMail;
-use App\Models\ArticleMovementLog;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,6 +25,7 @@ class ArticleEvaluation extends Component
     public $reviewComment = [];
     public $review_attachment;
     public $user;
+    public $journal_user;
 
     public $description;
     
@@ -51,7 +49,9 @@ class ArticleEvaluation extends Component
         $this->reviewer = User::where('uuid', $request->reviewer)->first();
         if(empty($this->reviewer)){
             abort(404);
-        }
+        } 
+
+        $this->journal_user = $this->reviewer->journal_us()->where('journal_id', $this->record->journal_id)->first();
 
         $this->reviewOption = ArticleReview::where('article_id', $this->record->id)->where('user_id', $this->reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
 
@@ -60,16 +60,22 @@ class ArticleEvaluation extends Component
     
     public function render()
     {
-        $editor = $this->record->journal->journal_users()->where('role', 'editor')->first();
         $submission = $this->record->files()->first();
-        $sections = ReviewSection::all();
+        $sections   = ReviewSection::all();
 
-        return view('livewire.backend.article-evaluation', compact('editor', 'submission', 'sections'));
+        return view('livewire.backend.article-evaluation', compact('submission', 'sections'));
     }
 
     public function upOptions($key, $value)
     {
         $this->reviewOption[$key] = $value;
+    }
+
+    public function rules()
+    {
+        return [
+            'reviewComment.*' => 'required'
+        ];
     }
 
     public function store($state)
@@ -111,7 +117,7 @@ class ArticleEvaluation extends Component
                 $_type = $attachment->getClientOriginalExtension();
                 $_file = str_replace(' ', '_', $_name);
             
-                $attachment->storeAs('public/review_attachments/', $_file);
+                $attachment->storeAs('/review_attachments', $_file);
 
                 ReviewAttachment::create([
                     'article_id' => $this->record->id,
@@ -123,17 +129,22 @@ class ArticleEvaluation extends Component
 
         if($state == 'complete'){
             $this->description = 'This Article Review is Complete and Submitted Back to the Editor for Further Processes';
-            $this->record->reviewer_status   = 'Completed';
-            $this->record->article_status_id = $this->articleStatus('005')->id;
+            $this->journal_user->article_journal_users()->sync([$this->record->id => [
+                'review_status' => 'completed'
+            ]], false);
 
-            $this->record->save();
+            session()->flash('response',[
+                'status'  => 'success',
+                'message' => $this->description.', We would like to extend our sinciere thanks for your careful review of our manuscript. Your expert comments have been invaluable in refining the manuscript and ensuring its rigor and clarity.'
+            ]);
 
-            session()->flash('success', $this->description.', We would like to extend our sinciere thanks for your careful review of our manuscript. Your expert comments have been invaluable in refining the manuscript and ensuring its rigor and clarity.');
-
-            Mail::to('mrenatuskiheka@yahoo.com')
-                ->send(new ReviewerResponseMail($this->record, $this->description));
+            // Mail::to('mrenatuskiheka@yahoo.com')
+            //     ->send(new ReviewerResponse($this->record, $this->description));
         }else{
-            session()->flash('success', 'Article Review is not Completed but Saved so that you can continue to review the Article');
+            session()->flash('response',[
+                'status'  => 'success',
+                'message' => 'Article Review is not Completed but Saved so that you can continue to review the Article'
+            ]);
         }
     }
 
@@ -145,20 +156,17 @@ class ArticleEvaluation extends Component
 
     public function decline()
     {
-        $mlog = ArticleMovementLog::create([
-            'article_id' => $this->record->id,
-            'user_id' => $this->reviewer->id,
-            'description' => $this->description,
+        $this->journal_user->article_journal_users()->sync([$this->record->id => [
+            'review_status' => 'declined'
+        ]], false);
+
+        session()->flash('response',[
+            'status'  => 'success',
+            'message' => 'This Article is Declined, Thanks we hope next time you will be able to assist us on reviewing relevant manuscript'
         ]);
 
-        $this->record->reviewer_status   = 'Declined';
-        $this->record->article_status_id = $this->articleStatus('008')->id;
-        $this->record->save();
-
-        session()->flash('success', 'This Article is Declined, Thanks we hope next time you will be able to assist us on reviewing relevant manuscript.');
-
-        Mail::to('mrenatuskiheka@yahoo.com')
-            ->send(new ReviewerResponseMail($this->record, $this->description));
+        // Mail::to('mrenatuskiheka@yahoo.com')
+        //     ->send(new ReviewerResponse($this->record, $this->description));
 
         $this->reset(['description']);
         $this->declineModal = false;
@@ -166,19 +174,12 @@ class ArticleEvaluation extends Component
 
     public function accept()
     {
-        $this->description = 'This is to inform you that this Article is Accepted for Review';
-        $mlog = ArticleMovementLog::create([
-            'article_id' => $this->record->id,
-            'user_id' => $this->reviewer->id,
-            'description' => $this->description,
-        ]);
-        $this->record->reviewer_status = 'Accepted';
-        $this->record->save();
+        $this->journal_user->article_journal_users()->sync([$this->record->id => [
+            'review_status' => 'accepted'
+        ]], false);
 
-        session()->flash('success', $this->description);
-
-        Mail::to('mrenatuskiheka@yahoo.com')
-            ->send(new ReviewerResponseMail($this->record, $this->description));
+        // Mail::to('mrenatuskiheka@yahoo.com')
+        //     ->send(new ReviewerResponse($this->record, $this->description));
     }
 
     public function articleStatus($code){

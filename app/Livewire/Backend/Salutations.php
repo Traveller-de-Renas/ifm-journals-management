@@ -22,6 +22,7 @@ class Salutations extends Component
     public $title;
     public $status;
     public $description;
+    public $language;
 
     public function render()
     {
@@ -83,9 +84,20 @@ class Salutations extends Component
             'status' => $this->status,
         ]);
 
+        $data->translations()->updateOrCreate(
+            [
+                'locale' => $this->language,
+                'field' => 'title'
+            ],
+            [
+                'value' => $this->title,
+                'locale' => $this->language, 
+                'field' => 'title'
+            ]
+        );
         
-        session()->flash('success', 'Saved Successifully');
         $this->Add = false;
+        return redirect()->back()->with('success', 'Saved Successifully!');
     }
 
     public function update(Salutation $data)
@@ -96,16 +108,28 @@ class Salutations extends Component
             'description' => $this->description,
             'status' => $this->status,
         ]);
+
+        $data->translations()->updateOrCreate(
+            [
+                'locale' => $this->language,
+                'field' => 'title'
+            ],
+            [
+                'value' => $this->title,
+                'locale' => $this->language, 
+                'field' => 'title'
+            ]
+        );
         
-        session()->flash('success', 'Updated Successifully');
         $this->Edit = false;
+        return redirect()->back()->with('success', 'Updated Successifully!');
     }
 
     public function delete(Salutation $menu)
     {
         if($menu->delete()){
-            session()->flash('success', 'Deleted Successifully');
             $this->Delete = false;
+            return redirect()->back()->with('success', 'Deleted Successifully!');
         }
     }
 }

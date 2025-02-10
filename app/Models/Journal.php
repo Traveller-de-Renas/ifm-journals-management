@@ -27,7 +27,7 @@ class Journal extends Model
         'website',
 		'year',
 		'guidlines',
-		'category_id',
+		'journal_category_id',
 		'subject_id',
         'user_id',
         'status',
@@ -41,17 +41,12 @@ class Journal extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(JournalCategory::class);
     }
 
-    public function instructions()
+    public function author_guidelines()
     {
-        return $this->hasMany(JournalInstruction::class);
-    }
-
-    public function indecies()
-    {
-        return $this->hasMany(JournalIndex::class);
+        return $this->hasMany(AuthorGuideline::class);
     }
 
     public function article_types()
@@ -59,32 +54,10 @@ class Journal extends Model
         return $this->hasMany(ArticleType::class);
     }
 
-    public function file_categories()
-    {
-        return $this->hasMany(FileCategory::class);
-    }
-
-    public function journal_users()
-    {
-        return $this->belongsToMany(User::class, 'journal_user', 'journal_id', 'user_id')->withPivot('role');
-    }
-
-
     public function chief_editor()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
-    public function editors()
-    {
-        return $this->belongsToMany(User::class, 'journal_user', 'journal_id', 'user_id')->wherePivot('role', 'editor')->withPivot('role');
-    }
-
-    public function authors()
-    {
-        return $this->belongsToMany(User::class, 'journal_user', 'journal_id', 'user_id')->wherePivot('role', 'author')->withPivot('role');
-    }
-
 
     public function confirmations()
     {
@@ -119,5 +92,15 @@ class Journal extends Model
     public function call_for_papers()
     {
         return $this->hasMany(CallForPaper::class);
+    }
+
+    public function status()
+    {
+        return ($this->status == 1)? 'Active' : 'Inactive';
+    }
+
+    public function journal_us()
+    {
+        return $this->hasMany(JournalUser::class);
     }
 }

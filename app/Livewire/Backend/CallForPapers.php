@@ -6,6 +6,7 @@ use App\Models\Journal;
 use Livewire\Component;
 use App\Models\CallForPaper;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class CallForPapers extends Component
 {
@@ -25,24 +26,16 @@ class CallForPapers extends Component
     public $image;
     public $category;
     public $journal;
-
-    public $form = false;
     public $subjects;
 
     public function mount()
     {
-        //$this->subjects = Subject::all()->pluck('name', 'id')->toArray();
+        $this->journal = Journal::where('uuid', session('journal'))->first();
     }
     
     public function render()
     {
         $this->dispatch('contentChanged');
-
-        $journals = Journal::where('status', 1)->where(function($query){
-            if(auth()->user()->role != 'Administrator'){
-                $query->where('user_id', auth()->user()->id);
-            }
-        })->get()->pluck('title', 'id')->toArray();
 
         $call = CallForPaper::when($this->query, function ($query) {
             return $query->where(function ($query) {
@@ -51,7 +44,7 @@ class CallForPapers extends Component
         })->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
 
         $call = $call->paginate(20);
-        return view('livewire.backend.call-for-papers', compact('call', 'journals'));
+        return view('livewire.backend.call-for-papers', compact('call'));
     }
 
     public function store()
@@ -62,34 +55,41 @@ class CallForPapers extends Component
             'description' => 'required',
         ]);
 
+        $file      = $this->image;
+        $file_name = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        $savename  = rand('100', '999').str_replace(' ', '_', $file_name);
+        $file->storeAs('call_for_papers/', $savename);
+
         CallForPaper::create([
-            'title' => $this->title,
-            'description' => $this->description,
-            'category' => $this->category,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'user_id' => auth()->user()->id,
-            'journal_id' => $this->journal
+            'title'         => $this->title,
+            'description'   => $this->description,
+            'category'      => $this->category,
+            'start_date'    => $this->start_date,
+            'end_date'      => $this->end_date,
+            'user_id'       => auth()->user()->id,
+            'journal_id'    => $this->journal->id,
+            'image'         => $savename
         ]);
 
-        session()->flash('success', 'You successfully created a new call for papers');
+        session()->flash('response',[
+            'status'  => 'success', 
+            'message' => 'You successfully created a new call for papers for this Journal'
+        ]);
 
-        $this->form = false;
         $this->reset();
     }
 
     public function edit(CallForPaper $call)
     {
-        $this->form = true;
-        $this->record = $call;
-        $this->title  = $call->title;
+        $this->record       = $call;
+        $this->title        = $call->title;
         $this->description  = $call->description;
-        $this->start_date  = $call->start_date;
-        $this->end_date  = $call->end_date;
-        $this->journal  = $call->journal_id;
+        $this->start_date   = $call->start_date;
+        $this->end_date     = $call->end_date;
     }
 
-    public function update(CallForPaper $call)
+    public function update()
     {
         $this->validate([
             'title' => 'required',
@@ -97,30 +97,59 @@ class CallForPapers extends Component
             'description' => 'required',
         ]);
 
+        if(Storage::exists('call_for_papers/'.$this->record?->image)){
+            Storage::delete('call_for_papers/'.$this->record?->image);
+        }
+
+        $file      = $this->image;
+        $file_name = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        $savename  = rand('100', '999').str_replace(' ', '_', $file_name);
+        $file->storeAs('call_for_papers/', $savename);
+
         $this->record->update([
-            'title' => $this->title,
-            'description' => $this->description,
-            'category' => $this->category,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'journal_id' => $this->journal
+            'title'         => $this->title,
+            'description'   => $this->description,
+            'category'      => $this->category,
+            'start_date'    => $this->start_date,
+            'end_date'      => $this->end_date,
+            'journal_id'    => $this->journal->id,
+            'image'         => $savename
         ]);
 
-        session()->flash('success', 'You successfully updated this call for papers');
+        session()->flash('response',[
+            'status'  => 'success', 
+            'message' => 'You successfully updated this call for papers'
+        ]);
 
-        $this->form = false;
         $this->reset();
     }
 
     public function confirmDelete(CallForPaper $call)
     {
-        $this->record = $call;
+        $this->record      = $call;
         $this->deleteModal = true;
     }
 
     public function destroy()
     {
         $this->record->delete();
-        session()->flash('success', 'You successfully updated this call for papers');
+
+        session()->flash('response',[
+            'status'  => 'success', 
+            'message' => 'You successfully deleted this call for papers'
+        ]);
+    }
+
+    public $isOpen = false;
+
+    public function openDrawer()
+    {
+        $this->isOpen = true;
+    }
+
+    public function closeDrawer()
+    {
+        $this->isOpen = false;
     }
 }

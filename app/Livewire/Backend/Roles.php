@@ -96,8 +96,8 @@ class Roles extends Component
             'name' => $this->name,
         ]);
 
-        session()->flash('success', 'Saved Successifully');
         $this->Add = false;
+        return redirect()->back()->with('success', 'Saved Successifully!');
     }
 
     public function update(Role $data)
@@ -107,15 +107,15 @@ class Roles extends Component
             'name' => $this->name,
         ]);
 
-        session()->flash('success', 'Updated Successifully');
         $this->Edit = false;
+        return redirect()->back()->with('success', 'Updated Successifully!');
     }
 
     public function delete(Role $data)
     {
         if($data->delete()){
-            session()->flash('success', 'Deleted Successifully');
             $this->Delete = false;
+            return redirect()->back()->with('success', 'Deleted Successifully!');
         }
     }
 

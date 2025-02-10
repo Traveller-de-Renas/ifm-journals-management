@@ -3,20 +3,17 @@
 namespace App\Livewire\Backend;
 
 use App\Models\User;
-use App\Models\Issue;
-use App\Models\Volume;
-use App\Models\Article;
 use App\Models\Journal;
-use App\Models\Subject;
 use Livewire\Component;
-use App\Models\Category;
-use App\Models\Salutation;
-use App\Models\ArticleType;
-use App\Models\ArticleStatus;
-use App\Models\JournalInstruction;
+use App\Mail\EditorialTeam;
+use App\Models\JournalUser;
+use App\Models\ReviewMessage;
+use App\Models\JournalSubject;
+use App\Mail\AccessCredentials;
+use App\Models\JournalCategory;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class Journals extends Component
 {
@@ -27,11 +24,14 @@ class Journals extends Component
     public $record;
     public $subjects;
     public $categories;
-
+    
     public $signupModal = false;
     public $filters = false;
     public $journal;
 
+    public $search_user;
+    public $user;
+    public $users = [];
     public $selectedSubjects = [];
     public $selectedCategories = [];
 
@@ -41,8 +41,8 @@ class Journals extends Component
 
     public function render()
     {
-        $this->subjects   = Subject::all();
-        $this->categories = Category::all();
+        $this->subjects   = JournalSubject::all();
+        $this->categories = JournalCategory::all();
         
         $data = Journal::when($this->query, function ($query) {
             return $query->where(function ($query) {
@@ -50,31 +50,23 @@ class Journals extends Component
             });
         })->when($this->selectedSubjects, function ($query) {
 
-            $query->whereIn('subject_id', $this->selectedSubjects);
+            $query->whereIn('journal_subject_id', $this->selectedSubjects);
 
         })->when($this->selectedCategories, function ($query) {
 
-            $query->whereIn('category_id', $this->selectedCategories);
+            $query->whereIn('journal_category_id', $this->selectedCategories);
 
         })->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
 
-        $data = $data->paginate(5);
+        $journals = $data->paginate(5);
 
-        return view('livewire.backend.journals', compact('data'));
+        return view('livewire.backend.journals', compact('journals'));
     }
 
-    public function signup(Journal $journal)
-    {
-        $this->journal = $journal;
-        $this->signupModal = true;
-    }
 
-    public function confirmSignUp()
+    public function createJournal()
     {
-        Auth::user()->journals()->sync([$this->journal->id => ['role' => 'author']]);
-        $this->signupModal = false;
-        
-        session()->flash('success', 'You are successfully registered as an author on this journal');
+        return redirect()->route('journals.create');
     }
 
     public function checkOption($opt, $value)
@@ -103,164 +95,159 @@ class Journals extends Component
 
     }
 
+    public function confirmAssign(Journal $journal)
+    {
+        $this->record = $journal;
+        $this->openDrawer();
+    }
 
-    public function loadFromJSON(){
-        $file = File::get('storage/journals.json');
 
-        $journals = json_decode($file);
+    public function searchUser($string)
+    {
+        $this->search_user = $string;
+        $this->users = User::when($this->search_user, function ($query) {
+            return $query->where(function ($query) {
+                $query->where('first_name', 'ilike', '%' . $this->search_user . '%')->orWhere('middle_name', 'ilike', '%' . $this->search_user . '%')->orWhere('last_name', 'ilike', '%' . $this->search_user . '%');
+            });
+        })->limit('10')->get();
+    }
 
-        foreach($journals->getJournals as $journal){
+    public function assignEditor(User $user)
+    {
+        $check = $user->journal_us()->where('journal_id', $this->record->id)->first();
+        
+        if(!$check->hasRole('Chief Editor')){
+            $check->assignRole('Chief Editor');
 
-            $the_journal = Journal::updateOrCreate([
-                'code' => $journal->code
-            ],[
-                'title' => $journal->title,
-                'code' => $journal->code,
-                'doi' => $journal->doi,
-                'issn' => $journal->issn,
-                'eissn' => $journal->eissn,
-                'description' => $journal->description,
-                'scope' => $journal->scope,
-                'year' => $journal->year,
-                'email' => $journal->code.'@ifm.ac.tz',
-                'user_id' => auth()->user()->id,
-                'image' => $journal->image
+            if(ReviewMessage::where('category', 'Assign Chief Editor')->count() > 0){
+                Mail::to('mrenatuskiheka@yahoo.com')
+                    ->send(new EditorialTeam($this->record, $check, 'Assign Chief Editor'));
+            }
+
+            session()->flash('response',[
+                'status'  => '', 
+                'message' => 'This user is successfully assigned as Chief Editor to this Journal'
             ]);
+        }else{
+            session()->flash('response',[
+                'status'  => '', 
+                'message' => 'This user is already having Chief Editors Previledges on this Journal'
+            ]);
+        }
+        
+        $this->closeDrawer();
+    }
+
+    public $isOpen = false;
+
+    public function openDrawer()
+    {
+        $this->isOpen = true;
+    }
+
+    public function closeDrawer()
+    {
+        $this->isOpen = false;
+    }
 
 
+    public $create = false;
 
-            if($journal->guidlines){
-                foreach($journal->guidlines as $key => $instruction)
-                {
-                    JournalInstruction::create([
-                        'title' => $instruction->Heading,
-                        'description' => $instruction->Contents,
-                        'journal_id'  => $the_journal->id
-                    ]);
-                }
-            }
+    public function createnew($status)
+    {
+        $this->create = $status;
+    }
 
+    public $first_name;
+    public $middle_name;
+    public $last_name;
+    public $gender;
+    public $email;
+    public $phone;
+    public $password;
+    public $password_confirmation;
 
-            foreach($journal->volumes as $key => $volume)
-            {
-                $volumex = Volume::create([
-                    'number' => $volume->volume_number,
-                    'description' => 'Volume '.$volume->volume_number,
-                    'journal_id'  => $the_journal->id
-                ]);
+    public function getPassword($length = 8) {
+        $upperCase    = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $lowerCase    = 'abcdefghijklmnopqrstuvwxyz';
+        $numbers      = '0123456789';
+        $specialChars = '!@#$%^&*()-_=+[]{}|;:,.<>?';
+    
+        $allCharacters = $upperCase . $lowerCase . $numbers . $specialChars;
+    
+        $password = '';
+        $max = strlen($allCharacters) - 1;
+    
+        for ($i = 0; $i < $length; $i++) {
+            $password .= $allCharacters[random_int(0, $max)];
+        }
+    
+        return $password;
+    }
 
-                foreach($volume->issues as $key => $issue)
-                {
-                    Issue::create([
-                        'number' => $issue->IssueNumber,
-                        'description' => 'Issue '.$issue->IssueNumber,
-                        'journal_id' => $the_journal->id,
-                        'volume_id' => $volumex->id,
-                        'publication_date' => $issue->DatePublished,
-                        'status' => 'Published'
-                    ]);
-                }
-            }
+    public function createUser()
+    {
+        $this->validate(
+            [
+                'first_name'  => 'required|string',
+                'middle_name' => 'nullable|string',
+                'last_name'   => 'required|string',
+                'gender'      => 'required',
+                'email'       => 'required|email|unique:users',
+                'phone'       => 'nullable|string',
+            ]
+        );
 
+        $password = $this->getPassword(8);
+        $data  = new User;
 
-            if($journal->articles){
-                foreach($journal->articles as $key => $article){
+        $data->first_name    = $this->first_name;
+        $data->middle_name   = $this->middle_name;
+        $data->last_name     = $this->last_name;
+        $data->gender        = $this->gender;
+        $data->email         = $this->email;
+        $data->phone         = $this->phone;
+        $data->password      = Hash::make($password);
+        $data->added         = 1;
+        $data->save();
 
-                    $article_type = ArticleType::firstOrCreate([
-                        'name'=> $article->article_type,
-                        'journal_id' => $the_journal->id
-                    ],[
-                        'name'=> $article->article_type,
-                        'journal_id' => $the_journal->id,
-                        'description' => $article->article_type,
-                    ]);
+        $data->journal_us()->create([
+            'journal_id' => $this->record->id,
+            'user_id'    => $data->id
+        ]);
 
+        if(!($data->journal_us()->where('journal_id', $this->record->id)->exists())){
+            $data->journal_us()->attach($this->record->id);
+        }
+        
+        $user = $data->journal_us()->where('journal_id', $this->record->id)->first();
+        $user->assignRole('Chief Editor');
 
+        if(ReviewMessage::where('category', 'Assign Chief Editor')->count() > 0){
+            Mail::to('mrenatuskiheka@yahoo.com')
+                ->send(new EditorialTeam($this->record, $user, 'Assign Chief Editor'));
+        }
 
-                    $salutation = Salutation::firstOrCreate([
-                        'title'=> $article->salutation
-                    ],[
-                        'title'=> $article->salutation
-                    ]);
+        if(ReviewMessage::where('category', 'Access Credentials')->count() > 0){
+            Mail::to('mrenatuskiheka@yahoo.com')
+                ->send(new AccessCredentials($this->record, $user, $password, 'Access Credentials'));
+        }
 
+        $this->closeDrawer();
+        session()->flash('response', [
+            'status'  => 'success', 
+            'message' => 'User is created and successfully assigned to this journal'
+        ]);
 
+    }
 
-                    $gender = 'Male';
-
-                    if($article->salutation == 'Mr'){
-                        $gender = 'Male';
-                    }
-
-                    if($article->salutation == 'Ms'){
-                        $gender = 'Female';
-                    }
-
-
-                    $email = $article->email;
-                    if($article->email == ''){
-                        $email = strtolower($article->first_name.$article->middle_name.$article->last_name).'@ifm.ac.tz';
-                    }
-
-
-                    $user = User::firstOrCreate([
-                        'email'=> $email
-                    ],[
-                        'email'=> $email,
-                        'first_name' => $article->first_name,
-                        'middle_name' => $article->middle_name,
-                        'last_name' => $article->last_name,
-                        'gender' => $gender,
-                        'salutation_id' => $salutation->id,
-                        'password' => Hash::make('123@Journals')
-                    ]);
-
-
-
-                    $volume = Volume::firstOrCreate(
-                        [
-                            'number' => $article->volume->VolumeNumber,
-                            'journal_id' => $the_journal->id
-                        ],
-                        [
-                            'number' => $article->volume->VolumeNumber,
-                            'description' => 'Volume '.$article->volume->VolumeNumber,
-                            'journal_id'  => $the_journal->id
-                        ]
-                    );
-
-
-
-                    $issue = Issue::firstOrCreate(
-                        [
-                            'number' => $article->issue->IssueNumber,
-                            'volume_id' => $volume->id,
-                            'journal_id' => $the_journal->id
-                        ],
-                        [
-                            'number' => $article->issue->IssueNumber,
-                            'volume_id' => $volume->id,
-                            'journal_id' => $the_journal->id,
-                            'status' => 'Published'
-                        ]
-                    );
-
-                    $status = ArticleStatus::where('code', '006')->first();
-                    $artc = Article::create([
-                        'title'             => $article->article_title,
-                        'abstract'          => $article->abstract,
-                        'article_type_id'   => $article_type->id,
-                        'journal_id'        => $the_journal->id,
-                        'keywords'          => $article->keywords,
-                        'areas'             => $article->areas,
-                        'article_status_id' => $status->id,
-                        'user_id'           => $user->id,
-                        'volume_id'         => $volume->id,
-                        'issue_id'          => $issue->id
-                    ]);
-            
-                    $user->journals()->sync([$the_journal->id => ['role' => 'author']]);
-                }
-            }
+    public function removeUser(JournalUser $user)
+    {
+        if($user->removeRole('Chief Editor')){
+            session()->flash('response',[
+                'status'  => 'success', 
+                'message' => 'This user is successfully revoked as Chief Editor from this Journal'
+            ]);
         }
     }
 

@@ -1,3 +1,3 @@
 <x-app-layout>
-    <livewire:backend.review_sections>
+    <livewire:backend.review-sections>
 </x-app-layout>

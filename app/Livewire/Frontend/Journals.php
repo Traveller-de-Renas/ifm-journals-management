@@ -3,9 +3,9 @@
 namespace App\Livewire\Frontend;
 
 use App\Models\Journal;
-use App\Models\Subject;
+use App\Models\JournalSubject;
 use Livewire\Component;
-use App\Models\Category;
+use App\Models\JournalCategory;
 use Illuminate\Support\Facades\Auth;
 
 class Journals extends Component
@@ -31,8 +31,8 @@ class Journals extends Component
 
     public function render()
     {
-        $this->subjects   = Subject::all();
-        $this->categories = Category::all();
+        $this->subjects   = JournalSubject::all();
+        $this->categories = JournalCategory::all();
         
         $data = Journal::when($this->query, function ($query) {
             return $query->where(function ($query) {
@@ -46,6 +46,10 @@ class Journals extends Component
 
             $query->whereIn('category_id', $this->selectedCategories);
 
+        })->whereHas('journal_us', function ($query) {
+            $query->whereHas('roles', function ($query) {
+                $query->whereIn('name', ['Chief Editor']);
+            });
         })->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
 
         $data = $data->paginate(5);

@@ -45,18 +45,16 @@
         </div>
     </div>
 
-
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
-        @php
-            $file = $record->files()->where('publish', 1)->first();
-        @endphp
-        <div class="flex items-center">
-            <a href="{{ route('journal.article_download', $file?->id) }}" >
-                <div class="flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
-                    <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> <p class="ml-2 text-lg font-bold">Download Article @if(!empty($file)) {{ Storage::size('storage/articles/'.$file?->file) }} @endif</p>
-                </div>
-            </a>
-            <p class="ml-2 text-lg text-gray-600 font-bold">{{ $file?->downloads ?? 0 }} Downloads </p>
+    <div class="border-b bg-white">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8">
+            <div class="flex items-center">
+                <a href="{{ route('journal.article_download', $record->uuid) }}" >
+                    <div class="flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
+                        <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> <p class="ml-2 text-lg font-bold">Download Article @if(Storage::exists('publications/'.$record?->manuscript_file))({{ round((Storage::size('publications/'.$record?->manuscript_file) / 1048576), 2) }} MB)@endif</p>
+                    </div>
+                </a>
+                <p class="ml-2 text-lg text-gray-600 font-bold">{{ $record?->downloads ?? 0 }} Downloads </p>
+            </div>
         </div>
     </div>
 
@@ -90,7 +88,7 @@
                 @endif
 
                 @php
-                    $coauthors = $record->article_users()->wherePivot('role', '<>', 'reviewer')->get()
+                    $coauthors = $record->article_journal_users()->get()
                 @endphp
 
                 {{-- @if(count($coauthors) > 0)

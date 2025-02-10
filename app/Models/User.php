@@ -44,7 +44,8 @@ class User extends Authenticatable
         'biography',
         'profile_photo_path',
         'status',
-        'journal'
+        'journal',
+        'added'
     ];
 
     /**
@@ -88,7 +89,7 @@ class User extends Authenticatable
 
     public function journal_users()
     {
-        return $this->belongsToMany(Journal::class)->withPivot('role');
+        return $this->belongsToMany(Journal::class);
     }
 
     public function article_users()
@@ -100,4 +101,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Salutation::class);
     }
+
+
+    public function journal_us()
+    {
+        return $this->hasMany(JournalUser::class);
+    } 
 }

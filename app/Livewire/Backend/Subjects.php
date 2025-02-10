@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Backend;
 
-use App\Models\Subject;
+use App\Models\JournalSubject;
 use Livewire\Component;
 
 class Subjects extends Component
@@ -17,7 +17,7 @@ class Subjects extends Component
     public $form = false;
     public function render()
     {
-        $subjects = Subject::when($this->query, function ($query) {
+        $subjects = JournalSubject::when($this->query, function ($query) {
             return $query->where(function ($query) {
                 $query->where('name', 'ilike', '%' . $this->query . '%');
             });
@@ -33,7 +33,7 @@ class Subjects extends Component
             'name' => 'required',
         ]);
 
-        Subject::create([
+        JournalSubject::create([
             'name' => $this->name,
         ]);
 
@@ -41,13 +41,13 @@ class Subjects extends Component
         $this->reset();
     }
 
-    public function edit(Subject $subject)
+    public function edit(JournalSubject $subject)
     {
         $this->form = true;
         $this->record = $subject;
     }
 
-    public function update(Subject $subject)
+    public function update(JournalSubject $subject)
     {
         $this->validate([
             'name' => 'required',
@@ -61,7 +61,7 @@ class Subjects extends Component
         $this->reset();
     }
 
-    public function destroy(Subject $subject)
+    public function destroy(JournalSubject $subject)
     {
         $subject->delete();
     }

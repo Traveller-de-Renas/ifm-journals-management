@@ -28,4 +28,9 @@ class ReviewSectionQuery extends Model
     {
         return $this->belongsTo(ReviewSection::class);
     }
+
+    public function article_review()
+    {
+        return $this->hasMany(ArticleReview::class);
+    }
 }

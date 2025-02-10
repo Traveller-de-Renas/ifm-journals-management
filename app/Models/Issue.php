@@ -18,6 +18,9 @@ class Issue extends Model
         'description',
 		'journal_id',
 		'volume_id',
+        'editorial',
+        'editorial_file',
+        'editorial_downloads',
         'status',
         'publication_date'
     ];

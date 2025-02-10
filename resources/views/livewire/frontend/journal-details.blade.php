@@ -61,7 +61,7 @@
 
 
 
-<div class="border-b border-gray-200 dark:border-gray-700">
+<div class="border-b border-gray-200 dark:border-gray-700 bg-white">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
             <li class="me-2">
@@ -81,7 +81,7 @@
             </li>
             <li class="me-2">
                 <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'editorial_board') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('editorial_board')">
-                    Editorial Board
+                    Editorial Team
                 </button>
             </li>
             <li class="me-2">
@@ -103,7 +103,7 @@
 
         <div class="md:grid md:grid-cols-12 gap-4 w-full ">
 
-            <div class="col-span-9">
+            <div class="col-span-8">
 
                 <div class="w-full mb-4 @if($tab != 'overview') hidden @endif">
 
@@ -111,6 +111,31 @@
                         <p class="text-lg font-bold mb-2">Aim and Scope</p>
                         <div class="text-justify">
                             {!! $record->scope !!}
+                        </div>
+
+
+                        <p class="text-lg font-bold mb-2 mt-6">Call for Papers</p>
+                        <div >
+                            @foreach ($record->call_for_papers as $call)
+                                <div class="bg-white shadow-md mb-2">
+                                    <div class="p-2 text-xs">
+                                        <span class="font-semibold">CLOSES ON</span> : <span class="text-gray-500">{{ \Carbon\Carbon::parse( $call->end_date)->format('d M Y') }}</span>
+                                    </div>
+                                    <div class="p-2 border-b border-t">
+
+                                        <p class="font-semibold hover:text-blue-600">
+                                            <a href="{{ route('journal.call_detail', $call->uuid) }}">{{ $call->title }}</a>
+                                        </p>
+                                        
+                                        <div class="mt-2 text-xs text-gray-500 text-justify">
+                                            {!! Str::limit(strip_tags($call->description), 250) !!}
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
 
@@ -139,70 +164,121 @@
                 <div class="w-full mb-4 @if($tab != 'table_of_contents') hidden @endif">
 
                     <div class="w-full mb-2">
-                        <p class="text-lg font-bold mb-2">Publications</p>
-    
-                        @if ($record->volumes != '')
-                        @foreach ($record->volumes as $key => $volume)
-                                <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
-                                    <div class="w-full p-2 cursor-pointer hover:bg-slate-200" @click.prevent="open = !open" :aria-expanded="open">
-                                        <div class="text-slate-800 font-bold">
-                                            <a href="" target="_blank" >{{ $volume->description }}</a>
+
+                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+                            <li class="me-2">
+                                <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($subtab == 'all_issues') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeSubTab('all_issues')">
+                                    All Issues
+                                </button>
+                            </li>
+                            <li class="me-2">
+                                <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($subtab == 'online_first') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeSubTab('online_first')">
+                                    Online First
+                                </button>
+                            </li>
+                        </ul>
+
+
+
+                        <div class="w-full mb-4 @if($subtab != 'all_issues') hidden @endif">
+
+                            <div class="w-full mb-2">
+                                @if ($record->volumes != '')
+                                    @foreach ($record->volumes()->orderBy('number', 'DESC')->get() as $key => $volume)
+                                    <div x-data="@if($key == 0){ open: true } @else { open: false } @endif" class="mt-4">
+                                        <div class="border-b border-gray-200">
+                                            <button
+                                                @click="open = !open"
+                                                class="w-full text-left p-4 flex items-center justify-between text-gray-800 font-medium hover:bg-gray-100 focus:outline-none"
+                                            >
+
+                                                <svg :class="{'rotate-90': open}" class="w-5 h-5 transform transition-transform"  width="24" height="24" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <polyline points="9 6 15 12 9 18" /></svg>
+                                                <span class="w-full text-lg font-semibold ml-2">{{ $volume->description }}</span>
+                                                
+                                            </button>
+                                            <div x-show="open" x-transition class="p-2 text-gray-700">
+                                                <ul class="list-disc list-inside">
+                                                    @foreach ($volume->issues()->where('publication', 'Published')->orderBy('number', 'DESC')->get() as $key => $issue)
+                                                    
+                                                        <li class="ml-8 font-semibold">
+                                                            <a href="{{ route('journal.articles', $issue->uuid) }}" >
+                                                                <span class="hover:underline text-blue-700 hover:text-blue-500 cursor-pointer text-lg">{{ $issue->description }}</span> {{ \Carbon\Carbon::parse($issue->publication_date)->format('Y') }}
+                                                            </a>
+                                                        </li>
+
+                                                    @endforeach
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="text-sm" x-show="open" x-cloak="">
-                                        @foreach ($volume->issues()->where(function($query) use($record){
-                                            if(auth()->user()?->id != $record->chief_editor?->id){
-                                                $query->where('status', 'Published');
-                                            }
-                                        })->get() as $key => $issue)
-                                        <div class="rounded-sm border-b border-t border-slate-200 mb-2" x-data="{ open: false }">
-                                            <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
-                                                <div class="text-slate-800">
-                                                    <a href="" target="_blank" >{{ $issue->description }}</a>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm p-2" x-show="open" x-cloak="">
-                                                <div class="flex justify-between">
-                                                    <p class="text-slate-800 font-bold">{{ $issue->description }} Articles</p>
-                                                    <div class="text-right">
-    
-                                                        
-    
-                                                    </div>
-                                                </div>
-    
-                                                @php
-                                                    $status = App\Models\ArticleStatus::where('code', '006')->first();
-                                                @endphp
-                                                
-    
-                                                @foreach ($issue->articles()->where('article_status_id', $status->id)->get() as $key => $article)
-                                                <div class="w-full mb-6 pb-6 border-b">
-                                                    <a href="{{ route('journal.article', $article->uuid) }}">
-                                                    <p class="text-blue-700 hover:text-blue-500 text-lg font-bold cursor-pointer">{{ $article->title }}</p>
-                                                    </a>
-                                                    
-                                                    <div class="text-sm text-green-700">
-                                                        {{ $article->author?->salutation?->title }} {{ $article->author?->first_name }} {{ $article->author?->middle_name }} {{ $article->author?->last_name }} 
-                                                        {{ $article->author?->affiliation != '' ? '('. $article->author?->affiliation.')' : '' }}
-                                                    </div>
-    
-                                                    <div class="mt-2 text-justify italic">
-                                                        {!! $article->abstract !!}
-                                                    </div>
-                                                </div>
-                                                @endforeach
-    
-                                            </div>
+                                    @endforeach
+                                @endif
+                            </div>
+
+                        </div>
+
+
+                        <div class="w-full mb-4 @if($subtab != 'online_first') hidden @endif">
+
+                            <div class="w-full mb-2">
+
+                                @php
+                                    $online_first = $record->articles()->whereHas('article_status', function ($query) { 
+                                        $query->where('code', '014'); 
+                                    })->whereNull('issue_id')->get();
+                                @endphp
+
+                                @foreach ($online_first as $key => $article)
+            
+                                <div class="bg-white hover:shadow-lg cursor-pointer p-4 border rounded-lg mb-4 mt-4 shadow grid grid-cols-12 ">
+                                    <div class="col-span-9">
+                                        <div class="text-md font-bold hover:underline hover:text-blue-600">
+                                            <a href="{{ route('journal.article', $article->uuid) }}">
+                                            {{ $article->title }}
+                                            </a>
                                         </div>
-                                        @endforeach
+                    
+                                        <div class="text-xs text-blue-700 hover:text-blue-600 mb-4">
+                                            @foreach ($article?->article_journal_users()->whereHas('roles', function($query){ $query->where('name', 'Author');})->get() as $key => $article_user)
+                                                {{ $article_user->user->first_name }} {{ $article_user->user->middle_name }} {{ $article_user->user->last_name }},
+                                            @endforeach
+                                        </div>
+                                        <div class="text-xs">
+                                            {!! Str::limit(strip_tags($article->abstract), 250) !!}
+                                        </div>
+                                        
+                                        <div class="w-full text-xs text-gray-500 mt-4">
+                                            {{ $article->publication_date }}
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 border-l p-4">
+                                        <div class="flex gap-1 items-center hover:underline">
+                                            <svg class="w-8 h-8 text-blue-700 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 17v-5h1.5a1.5 1.5 0 1 1 0 3H5m12 2v-5h2m-2 3h2M5 10V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1v6M5 19v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1M10 3v4a1 1 0 0 1-1 1H5m6 4v5h1.375A1.627 1.627 0 0 0 14 15.375v-1.75A1.627 1.627 0 0 0 12.375 12H11Z"/>
+                                            </svg>
+                                            <span class=" text-blue-700 font-semibold">
+                                                <a href="{{ route('journal.article_download', $article->uuid) }}" >
+                                                PDF
+                                                @if(Storage::exists('publications/'.$article?->manuscript_file))({{ round((Storage::size('publications/'.$article?->manuscript_file) / 1048576), 2) }} MB)@endif
+                                                </a>
+                                            </span>
+                                        </div>
+                    
+                                        <br>
+                                        <span class="text-xs text-gray-500 font-bold ml-1">DOWNLOADS</span>
+                                        <div class="flex gap-1 items-center">
+                                            <svg class="h-8 w-8 text-blue-700"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M14 3v4a1 1 0 0 0 1 1h4" />  <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />  <line x1="12" y1="11" x2="12" y2="17" />  <polyline points="9 14 12 17 15 14" /></svg>
+                                            <span class="text-xl text-blue-700 font-semibold">{{ $article?->downloads }}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            @endforeach
-                        @endif
+                                    
+                                @endforeach
+                            </div>
+
+                        </div>
     
                     </div>
-
                 </div>
 
                 <div class="w-full mb-4 @if($tab != 'author_guidelines') hidden @endif">
@@ -226,44 +302,42 @@
 
                 <div class="w-full mb-4 @if($tab != 'editorial_board') hidden @endif">
                     <div class="w-full mb-4">
-                        <p class="text-lg font-bold mb-2">Editorial Board</p>
+                        <p class="text-lg font-bold mb-2">Editorial Team</p>
     
                         <div class="w-full mt-2">
-                        @foreach ($record->journal_users()->where('role', 'editor')->get() as $key => $journal_user)
+                            @foreach ($record->journal_us()->whereHas('roles', function ($query) {
+                                $query->whereIn('name', ['Supporting Editor', 'Chief Editor', 'Associate Editor']);
+                            })->get() as $key => $j_user)
                         
-                                <div class="flex w-full" >
-                                    <div class="w-full border bg-gray-100 hover:bg-gray-200 border-slate-200 px-4 rounded-sm cursor-pointer" wire:click="editorDetails({{ $key }});">
-                                        {{ $journal_user->salutation?->title }}
-                                        {{ $journal_user->first_name }}
-                                        {{ $journal_user->middle_name }}
-                                        {{ $journal_user->last_name }}
-    
-                                        {{ $journal_user->affiliation != '' ? '('.$journal_user->affiliation.')' : '' }}
-    
-                                        @if ($journal_user->id == $record->user_id)
-                                            <p class="text-xs text-green-400">Chief Editor</p>
-                                        @else
-                                            <p class="text-xs text-blue-400">Editor</p>
-                                        @endif
+                                <div class="w-full p-2 border bg-white hover:bg-gray-200 border-slate-200 cursor-pointer" wire:click="editorDetails({{ $key }});">
+                                    <div class="font-semibold">
+                                        {{ $j_user->user->salutation?->title }}
+                                        {{ $j_user->user->first_name }}
+                                        {{ $j_user->user->middle_name }}
+                                        {{ $j_user->user->last_name }}
                                     </div>
+
+                                    {{ $j_user->user->affiliation != '' ? '('.$j_user->user->affiliation.')' : '' }}
+
+                                    @if ($j_user->hasRole('Chief Editor'))
+                                        <p class="text-xs text-green-400">Chief Editor</p>
+                                    @else
+                                        <p class="text-xs text-blue-400">Editor</p>
+                                    @endif
                                 </div>
                             
                                 <div class="p-2 text-sm border @if($key != $editor_detail) hidden @endif" >
                                     <div class="w-full flex">
                                         <div class="text-sm w-1/5 ">Affiliation</div>
-                                        <div class="text-sm w-full">: {{ $journal_user->affiliation }}</div>
+                                        <div class="text-sm w-full">: {{ $j_user->user->affiliation }}</div>
                                     </div>
                                     <div class="w-full flex">
                                         <div class="text-sm w-1/5">Degree</div>
-                                        <div class="text-sm w-full">: {{ $journal_user->degree }}</div>
+                                        <div class="text-sm w-full">: {{ $j_user->user->degree }}</div>
                                     </div>
                                     <div class="w-full flex">
                                         <div class="text-sm w-1/5">Email</div>
-                                        <div class="text-sm w-full">: {{ $journal_user->email }}</div>
-                                    </div>
-                                    <div class="w-full flex">
-                                        <div class="text-sm w-1/5">Category</div>
-                                        <div class="text-sm w-full">: {{ $journal_user->category }}</div>
+                                        <div class="text-sm w-full">: {{ $j_user->user->email }}</div>
                                     </div>
                                 </div>
                             @endforeach 
@@ -271,22 +345,50 @@
                     </div>
                 </div>
 
+
+                <div class="w-full mb-4 @if($tab != 'calls_for_papers') hidden @endif">
+                    <div class="w-full mb-4">
+                        <p class="text-lg font-bold mb-2">Call for Papers</p>
+
+                        @foreach ($record->call_for_papers as $call)
+                            <div class="bg-white shadow-md mb-2">
+                                <div class="p-2 text-xs">
+                                    <span class="font-semibold">CLOSES ON</span> : <span class="text-gray-500">{{ \Carbon\Carbon::parse( $call->end_date)->format('d M Y') }}</span>
+                                </div>
+                                <div class="p-2 border-b border-t">
+
+                                    <p class="font-semibold hover:text-blue-600">
+                                        <a href="{{ route('journal.call_detail', $call->uuid) }}">{{ $call->title }}</a>
+                                    </p>
+                                    
+                                    <div class="mt-2 text-xs text-gray-500 text-justify">
+                                        {!! Str::limit(strip_tags($call->description), 250) !!}
+                                    </div>
+                                </div>
+                                <div class="p-2">
+
+                                </div>
+                            </div>
+                        @endforeach
+
+                    </div>
+                </div>
             </div>
 
-            <div class="col-span-3">
+            <div class="col-span-4">
 
                 <div class="w-full mb-4">
-                <p class="text-lg font-bold mb-2">Recent Articles</p>
+                <p class="text-lg font-bold mb-2 pl-2">Recent Articles</p>
 
                     @php
-                        $statusp = App\Models\ArticleStatus::where('code', '006')->first();
+                        $statusp = App\Models\ArticleStatus::where('code', '014')->first();
                         $recent = $record->articles()->where('article_status_id', $statusp->id)->orderBy('created_at', 'desc')->limit(5)->get();
                     @endphp
                     
                     @if(count( $recent ) > 0)
                     @foreach ($recent as $key => $article)
                         <a href="{{ route('journal.article', $article->uuid) }}">
-                            <div class="text-sm font-bold text-blue-700 hover:text-blue-600 bg-gray-50 hover:bg-gray-100 cursor-pointer p-2 mb-2 mt-2">
+                            <div class="text-sm font-bold text-blue-700 hover:text-blue-600 bg-white hover:bg-gray-100 cursor-pointer rounded shadow p-3 mt-2 mb-4">
                                 {{ $article->title }}
                             </div>
                         </a>

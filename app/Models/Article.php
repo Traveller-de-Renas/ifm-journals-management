@@ -15,6 +15,7 @@ class Article extends Model
 
     protected $fillable = [
         'title',
+        'paper_id',
         'abstract',
         'keywords',
         'areas',
@@ -29,13 +30,28 @@ class Article extends Model
         'country_id',
         'user_id',
         'article_status_id',
+        'editorial',
+        'type_setting',
+        'downloads',
+        'start_page',
+        'end_page',
+        'manuscript_file',
+        'submission_date',
+        'publication_date',
+
+        'deadline',
+        'scope',
+        'methodology',
+        'tech_complete',
+        'noverity',
+        'prior_publication',
     ];
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
         ->logAll();
-    } 
+    }
 
     public function journal()
     {
@@ -77,25 +93,11 @@ class Article extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function article_users()
+    public function article_journal_users()
     {
-        return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->withPivot('id', 'role', 'number')->withTimestamps();
-    }
+        return $this->belongsToMany(JournalUser::class, 'article_journal_user', 'article_id', 'journal_user_id')->withPivot('review_start_date', 'review_end_date', 'review_status', 'number')->withTimestamps();
+    } 
 
-    public function coauthors()
-    {
-        return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->wherePivot('role', 'author')->withPivot('role')->withTimestamps();
-    }
-
-    public function editors()
-    {
-        return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->wherePivot('role', 'editor')->withPivot('role')->withTimestamps();
-    }
-
-    public function reviewers()
-    {
-        return $this->belongsToMany(User::class, 'article_user', 'article_id', 'user_id')->wherePivot('role', 'reviewer')->withPivot('role')->withTimestamps();
-    }
 
     public function article_status()
     {
@@ -112,8 +114,14 @@ class Article extends Model
         return $this->hasMany(ReviewAttachment::class);
     }
 
-    public function movement_logs()
+    public function article_comments()
     {
-        return $this->hasMany(ArticleMovementLog::class);
+        return $this->hasMany(ArticleComment::class);
+    }
+
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
     }
 }

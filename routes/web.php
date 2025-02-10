@@ -1,100 +1,79 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JournalController;
-use App\Http\Controllers\WebsiteController;
-use App\Http\Controllers\DataFeedController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ConfigurationController;
+use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\AuthenticationController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/', [HomeController::class, 'index']);
-Route::get('/admin', [UserController::class, 'admin'])->name('admin');
-Route::post('/logout', [UserController::class, 'destroy'])->name('logout')->middleware('auth');
+// Route::middleware([
+//     'auth:sanctum',
+//     config('jetstream.auth_session'),
+//     'verified',
+// ])->group(function () {
+//     Route::get('/dashboard', function () {
+//         return view('dashboard');
+//     })->name('dashboard');
+// });
+Route::get('/', [FrontendController::class, 'index']);
 
-
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
-
-
-Route::group(['prefix' => 'journal'], function () {
-    Route::get('/login/{journal}', [UserController::class, 'login'])->name('journal.login');
-    Route::get('/register/{journal}', [UserController::class, 'register'])->name('journal.register');
-});
+Route::get('/admin', [AuthenticationController::class, 'admin'])->name('admin');
+Route::get('/login/{journal?}', [AuthenticationController::class, 'login'])
+    ->name('login');
+Route::get('/register/{journal?}', [AuthenticationController::class, 'register'])
+    ->name('register');
+Route::post('/logout/{journal?}', [AuthenticationController::class, 'logout'])
+    ->name('logout');
 
 
 Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
+    Route::get('/home', [JournalController::class, 'home'])->name('journals.home');
     Route::get('/index', [JournalController::class, 'index'])->name('journals.index');
-    Route::get('/form/{journal}', [JournalController::class, 'form'])->name('journals.form');
-
-    Route::get('/publication_process', [JournalController::class, 'publication_process'])->name('journals.publication_process');
+    Route::get('/create/{journal?}', [JournalController::class, 'create'])->name('journals.create');
     Route::get('/subjects', [JournalController::class, 'subjects'])->name('journals.subjects');
     Route::get('/categories', [JournalController::class, 'categories'])->name('journals.categories');
-    Route::get('/details/{journal}', [JournalController::class, 'details'])->name('journals.details');
-    Route::get('/submission/{journal}/{article?}', [JournalController::class, 'submission'])->name('journals.submission');
-    Route::get('/articles/{journal}/{status?}', [JournalController::class, 'articles'])->name('journals.articles');
-    Route::get('/article/{article}', [JournalController::class, 'article'])->name('journals.article');
-    Route::get('/archive/{journal}', [JournalController::class, 'archive'])->name('journals.archive');
+    Route::get('/review_messages', [JournalController::class, 'review_messages'])->name('journals.review_messages');
+    Route::get('/review_sections', [JournalController::class, 'review_sections'])->name('journals.review_sections');
+    Route::get('/file_categories', [JournalController::class, 'file_categories'])->name('journals.file_categories');
+    Route::get('/submission_confirmations', [JournalController::class, 'submission_confirmations'])->name('journals.submission_confirmations');
 
-    Route::get('/editor/{journal}', [JournalController::class, 'editor'])->name('journals.editor');
-});
+    Route::get('/detail/{journal?}', [JournalController::class, 'detail'])->name('journals.detail');
+    Route::get('/submission/{journal?}/{article?}', [JournalController::class, 'submission'])->name('journals.submission');
+    Route::get('/submission_download/{article?}', [FrontendController::class, 'submission_download'])->name('journals.submission_download');
 
+    Route::get('/article/{article?}', [JournalController::class, 'article'])->name('journals.article');
+    Route::get('/articles/{journal?}/{status?}', [JournalController::class, 'articles'])->name('journals.articles');
+    Route::get('/publication/{journal?}', [JournalController::class, 'publication'])->name('journals.publication');
+    Route::get('/reviewer/{journal?}', [JournalController::class, 'reviewers'])->name('journals.reviewer');
+    Route::get('/team/{journal?}', [JournalController::class, 'team'])->name('journals.team');
 
-Route::group(['prefix' => 'journals'], function () {
-    Route::get('/article_evaluation/{article}/{reviewer}', [JournalController::class, 'article_evaluation'])->name('journals.article_evaluation');
-});
-
-
-Route::group(['prefix' => 'journal'], function () {
-    Route::get('/viewall', [JournalController::class, 'viewall'])->name('journal.viewall');
-    Route::get('/detail/{journal}', [JournalController::class, 'journal_detail'])->name('journal.detail');
-    Route::get('/articles/{journal}', [JournalController::class, 'journal_articles'])->name('journal.articles');
-    Route::get('/article/{article}', [JournalController::class, 'journal_article'])->name('journal.article');
-    Route::get('/callfor_paper', [JournalController::class, 'callfor_paper'])->name('journal.callfor_paper');
-    Route::get('/call_detail/{call}', [JournalController::class, 'call_detail'])->name('journal.call_detail');
-    Route::get('/archive/{journal}', [JournalController::class, 'journal_archive'])->name('journal.archive');
-    Route::get('/article_download/{article?}', [JournalController::class, 'article_download'])->name('journal.article_download');
-});
-
-
-Route::group(['prefix' => 'callfor_papers', 'middleware' => 'auth'], function () {
-    Route::get('/index', [JournalController::class, 'callfor_papers'])->name('journals.callfor_papers');
-});
-
-
-Route::group(['prefix' => 'configurations', 'middleware' => 'auth'], function () {
-    Route::get('/salutations', [ConfigurationController::class, 'salutations'])->name('admin.salutations');
-    Route::get('/review_sections', [ConfigurationController::class, 'review_sections'])->name('admin.review_sections');
-    Route::get('/roles', [ConfigurationController::class, 'roles'])->name('admin.roles');
-    Route::get('/permissions', [ConfigurationController::class, 'permissions'])->name('admin.permissions');
-    Route::get('/staff_list', [ConfigurationController::class, 'staff_list'])->name('admin.staff_list');
+    Route::get('/call_for_papers/{journal?}', [JournalController::class, 'call_for_papers'])->name('journals.call_for_papers');
 });
 
 
 Route::group(['prefix' => 'users', 'middleware' => 'auth'], function () {
     Route::get('/index', [UserController::class, 'index'])->name('admin.users');
-    Route::get('/logs', [UserController::class, 'logs'])->name('admin.logs');
-    Route::get('/profile', [UserController::class, 'profile'])->name('admin.profile');
-    Route::get('/user_preview/{user?}', [UserController::class, 'user_preview'])->name('admin.user_preview');
+    Route::get('/logs', [UserController::class, 'logs'])->name('admin.user_logs');
+    Route::get('/salutations', [UserController::class, 'salutations'])->name('admin.salutations');
+    Route::get('/roles', [UserController::class, 'roles'])->name('admin.roles');
+    Route::get('/permissions', [UserController::class, 'permissions'])->name('admin.permissions');
 });
 
 
-Route::group(['prefix' => 'website', 'middleware' => 'auth'], function () {
-    Route::get('/sliding_images', [WebsiteController::class, 'sliding_images'])->name('admin.sliding_images');
-    Route::get('/social_medias', [WebsiteController::class, 'social_medias'])->name('admin.social_medias');
-    Route::get('/contacts', [WebsiteController::class, 'contacts'])->name('admin.contacts');
+Route::group(['prefix' => 'journal'], function () {
+    Route::get('/viewall', [FrontendController::class, 'viewall'])->name('journal.viewall');
+    Route::get('/detail/{journal}', [FrontendController::class, 'journal_detail'])->name('journal.detail');
+    Route::get('/articles/{issue}', [FrontendController::class, 'journal_articles'])->name('journal.articles');
+    Route::get('/editorial/{issue}', [FrontendController::class, 'journal_editorial'])->name('journal.editorial');
+    Route::get('/editorial_download/{issue?}', [FrontendController::class, 'editorial_download'])->name('journal.editorial_download');
+    Route::get('/article/{article}', [FrontendController::class, 'journal_article'])->name('journal.article');
+    Route::get('/callfor_paper', [FrontendController::class, 'callfor_paper'])->name('journal.callfor_paper');
+    Route::get('/call_detail/{call}', [FrontendController::class, 'call_detail'])->name('journal.call_detail');
+    Route::get('/archive/{journal}', [FrontendController::class, 'journal_archive'])->name('journal.archive');
+    Route::get('/article_download/{article?}', [FrontendController::class, 'article_download'])->name('journal.article_download');
+    Route::get('/article_evaluation/{article}/{reviewer}', [JournalController::class, 'article_evaluation'])->name('journal.article_evaluation');
 });

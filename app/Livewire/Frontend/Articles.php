@@ -3,7 +3,7 @@
 namespace App\Livewire\Frontend;
 
 use App\Models\Article;
-use App\Models\Journal;
+use App\Models\Issue;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -18,19 +18,18 @@ class Articles extends Component
     public $sortAsc = false;
 
     public $article;
-    public $deleteModal = false;
 
     public $record;
     public $volume;
-    public $issue;
+    public $journal;
     
-    public function mount(Request $request){
-
-        if(!Str::isUuid($request->journal)){
+    public function mount(Request $request)
+    {
+        if(!Str::isUuid($request->issue)){
             abort(404);
         }
         
-        $this->record = Journal::where('uuid', $request->journal)->first();
+        $this->record = Issue::where('uuid', $request->issue)->first();
         if(empty($this->record)){
             abort(404);
         }
@@ -38,26 +37,10 @@ class Articles extends Component
     
     public function render()
     {
-        
-        $articles = Article::where('journal_id', $this->record->id)->where('status', 'Published')->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
+        $articles = Article::where('issue_id', $this->record->id)->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         $articles = $articles->paginate(20);
 
         return view('livewire.frontend.articles', compact('articles'));
-        
     }
 
-    public function delete(Article $article)
-    {
-        $article->files()->delete();
-        $article->submission_confirmations()->delete();
-        $article->delete();
-
-        $this->deleteModal = false;
-    }
-
-    public function confirmDelete(Article $article)
-    {
-        $this->article = $article;
-        $this->deleteModal = true;
-    }
 }

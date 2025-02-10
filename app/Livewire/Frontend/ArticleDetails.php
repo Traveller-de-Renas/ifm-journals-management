@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Frontend;
 
-use App\Models\User;
 use App\Models\Article;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -25,26 +24,10 @@ class ArticleDetails extends Component
         if(empty($this->record)){
             abort(404);
         }
-
-        $this->reviewers = User::all();
     }
     
     public function render()
     {
         return view('livewire.frontend.article_details');
-    }
-
-
-    public function assignReviewer()
-    {
-        $this->reviewerModal = true;
-    }
-
-    public function assignRev()
-    {
-        $this->record->article_users()->sync([$this->reviewer_id => ['role' => 'reviewer']], false);
-        
-        session()->flash('success', 'Reviewer is Assigned successfully');
-        $this->reviewerModal = false;
     }
 }

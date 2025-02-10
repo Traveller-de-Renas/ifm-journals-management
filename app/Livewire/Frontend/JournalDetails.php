@@ -20,14 +20,14 @@ class JournalDetails extends Component
     public $editor_names;
     public $editor_detail = '';
 
-    public $signupModal = false;
-
-    public $countries = [];
-    public $salutations = [];
+    public $signupModal  = false;
+    public $countries    = [];
+    public $salutations  = [];
     public $create_juser = false;
     public $juser_fname, $juser_mname, $juser_lname, $juser_email, $juser_phone, $juser_affiliation, $juser_gender, $juser_salutation_id, $juser_country_id;
 
-    public $tab = 'overview';
+    public $tab    = 'overview';
+    public $subtab = 'all_issues';
 
     public function mount(Request $request){
 
@@ -132,5 +132,10 @@ class JournalDetails extends Component
     public function changeTab($tab)
     {
         $this->tab = $tab;
+    }
+
+    public function changeSubTab($subtab)
+    {
+        $this->subtab = $subtab;
     }
 }

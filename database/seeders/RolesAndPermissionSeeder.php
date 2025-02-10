@@ -14,10 +14,39 @@ class RolesAndPermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = Role::create(['name' => 'Administrator']);
+        $roles = array(
+            [
+                'name' => 'Administrator',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'Chief Editor',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'Supporting Editor',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'Associate Editor',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'Reviewer',
+                'guard_name' => 'web'
+            ],
+            [
+                'name' => 'Author',
+                'guard_name' => 'web'
+            ]
+        );
+
+        foreach($roles as $role){
+            Role::create($role);
+        }
 
         $permissions = array(
-            'website',
+            'Add Journals',
             'configurations',
             'users',
             'Editorial Board',
@@ -27,16 +56,16 @@ class RolesAndPermissionSeeder extends Seeder
             'Categories',
         );
 
-        foreach($permissions as $permission){
-            $array = array('', 'View ', 'Add ', 'Edit ', 'Delete ');
-            foreach($array as $prefix){
-                $data = Permission::create([
-                    'name' => $prefix.$permission
-                ]);
+        // foreach($permissions as $permission){
+        //     $array = array('', 'View ', 'Add ', 'Edit ', 'Delete ');
+        //     foreach($array as $prefix){
+        //         $data = Permission::create([
+        //             'name' => $prefix.$permission
+        //         ]);
 
-                $data->assignRole('Administrator');
-            }
-        }
+        //         $data->assignRole('Administrator');
+        //     }
+        // }
         
     }
 }

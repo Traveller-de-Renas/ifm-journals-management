@@ -6,11 +6,11 @@ use App\Models\User;
 use App\Models\Country;
 use App\Models\Journal;
 use Livewire\Component;
-use App\Models\StaffList;
 use App\Models\Salutation;
 use Illuminate\Support\Str;
+use App\Mail\JournalAccount;
 use Illuminate\Http\Request;
-use App\Mail\JournalEnrollMail;
+use App\Models\ReviewMessage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -37,6 +37,7 @@ class Register extends Component
     public $countries;
     public $salutations;
     public $user_check;
+    public $can_review;
 
     public function mount(Request $request){
         if(!Str::isUuid($request->journal)){
@@ -69,7 +70,7 @@ class Register extends Component
             'last_name'   => 'nullable|required_if:category,external|string',
             'gender' => 'required_if:category,external',
             'phone'  => 'nullable|string',
-            'email'  => 'nullable|required_if:category,external|email|unique:users',
+            'email'  => 'nullable|required_if:category,external|email',
             'password'  => [
                 'sometimes',
                 'nullable',
@@ -84,73 +85,56 @@ class Register extends Component
     public function store()
     {
         $this->validate();
-        $data  = new User;
 
-        if($this->pf_number != null && $this->category == 'internal'){
-            if(StaffList::where('pf_number', $this->pf_number)->first()){
-                $staff = StaffList::find(StaffList::where('pf_number', $this->pf_number)->first()->id);
-                $user  = (User::where('pf_number', $this->pf_number)->first())? User::find(User::where('pf_number', $this->pf_number)->first()->id) : null;
+        $data = User::updateOrCreate([
+            'email'=> $this->email
+        ],[
+            'first_name'    => $this->first_name,
+            'middle_name'   => $this->middle_name,
+            'last_name'     => $this->last_name,
+            'gender'        => $this->gender,
+            'email'         => $this->email,
+            'phone'         => $this->phone,
+            'degree'        => $this->degree,
+            'interests'     => $this->interests,
+            'country_id'    => $this->country,
+            'pf_number'     => $this->pf_number,
+            'salutation_id' => $this->salutation,
+            'password'      => Hash::make($this->password)
+        ]);
 
-                $this->first_name   = $staff->first_name;
-                $this->middle_name  = $staff->middle_name;
-                $this->last_name    = $staff->last_name;
-                $this->gender       = $staff->gender;
-                $this->email        = $staff->email;
-                $this->phone        = $staff->phone;
-                $this->salutation   = $staff->salutation_id;
-                $this->interests    = $staff->interests;
-                $this->pf_number    = $staff->pf_number;
-                $password           = $staff->password;
-                
-                if(empty($user)){
-                    $message = 'Your Account is Successifully Created login with your EMS Username and Password';
-                }else{
-                    $data    = $user;
-                    $message = 'Your Account already Exist login with your EMS Username and Password';
-                }
+        //$password = Hash::make($this->password);
+        // $data->save();
 
-            }else{
-                session()->flash('error', 'Staff with this PF Number is Not Found');
-                return;
-            }
-        }else{
-            $password = Hash::make($this->password);
-            $message  = 'Your Account is Successifully Created login with the email and password you provided';
+        $review = 0;
+        if(isset($this->can_review)){
+            $review = 1;
         }
         
-        $data->first_name    = $this->first_name;
-        $data->middle_name   = $this->middle_name;
-        $data->last_name     = $this->last_name;
-        $data->gender        = $this->gender;
-        $data->email         = $this->email;
-        $data->phone         = $this->phone;
-        $data->degree        = $this->degree;
-        $data->interests     = $this->interests;
-        $data->country_id    = $this->country;
-        $data->pf_number     = $this->pf_number;
-        $data->salutation_id = $this->salutation;
-        $data->password      = $password;
-
-        if(empty($user)){
-            $data->save();
-        }else{
-            $data->update();
+        if($data->journal_us()->where('journal_id', $this->journal->id)->count() == 0){
+            $data->journal_us()->create([
+                'journal_id' => $this->journal->id,
+                'can_review' => $review
+            ]);
         }
         
-        $data->journals()->sync([$this->journal->id => ['role' => 'author']]);
 
-        session()->flash('success', $message);
-        return redirect()->to('/login');
+        $data->assignRole('Author');
+
+        if(ReviewMessage::where('category', 'Journal Account')->count() > 0){
+            Mail::to('mrenatuskiheka@yahoo.com')
+                ->send(new JournalAccount($this->journal, $data));
+        }
+
+        session()->flash('success', 'Your Account is Successifully Created login with the email and password you provided');
+
+        return redirect(route('login', $this->journal->uuid));
     }
 
-    public function checkCategory($category)
-    {
-        //dd($category);
-    }
 
     public function checkUser()
     {
-        if(User::where('email', $this->email)->exists()){
+        if(User::where('email', $this->email)->where('added', 0)->exists()){
             $this->user_check = 'exists';
         }else{
             $this->user_check = 'nouser';
@@ -159,11 +143,10 @@ class Register extends Component
 
     public function enrollConfirmation()
     {
-        $user = User::where('email', $this->email)->first();
+        //$user = User::where('email', $this->email)->first();
         Mail::to('mrenatuskiheka@yahoo.com')
-            ->send(new JournalEnrollMail($this->journal, $user));
+            ->send(new JournalAccount($this->journal, $user));
         
-        session()->flash('success', 'A confirmation email is sent to the email you entered for enrollment confirmation on this journal');
     }
 
 
@@ -174,8 +157,25 @@ class Register extends Component
         ]);
 
         $user = User::where('email', $this->email)->first();
-        // Auth::user()->journal_users()->sync([$this->journal->id => ['role' => 'author']]);
-        $user->journal_users()->attach([$this->journal->id => ['role' => 'author']]);
+
+        if(empty($user)){
+            $review = 0;
+            if(isset($this->can_review)){
+                $review = 1;
+            }
+
+            $journal_us = $user->journal_us()->create([
+                'journal_id' => $this->journal->id,
+                'can_review' => $review
+            ]);
+        }
+
+        if(!($journal_us->hasRole('Author'))){
+            $journal_us->assignRole('Author');
+        }
+
+        Mail::to('mrenatuskiheka@yahoo.com')
+            ->send(new JournalAccount($this->journal, $user));
         
         session()->flash('success', 'You are successfully registered as an author on this journal');
     }

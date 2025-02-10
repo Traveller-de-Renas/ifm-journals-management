@@ -17,7 +17,6 @@ class Volume extends Model
         'number',
         'description',
 		'journal_id',
-		'volume_id',
         'status',
     ];
 

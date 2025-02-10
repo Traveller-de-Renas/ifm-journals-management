@@ -21,7 +21,6 @@ class AdminSeeder extends Seeder
             'gender'        => 'Male',
             'country_id'    => '1',
             'salutation_id' => '1',
-            'category'      => 'IFM Staff',
             'password'      => Hash::make('admin@ifm123EMS'),
         ]);
 

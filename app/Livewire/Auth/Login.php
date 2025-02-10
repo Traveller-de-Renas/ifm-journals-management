@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Auth;
 
-use App\Models\User;
 use App\Models\Journal;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -11,21 +10,17 @@ use Illuminate\Support\Facades\Auth;
 
 class Login extends Component
 {
-    public $email;
-    public $password;
     public $journal;
-
-    public function mount(Request $request){
-        if($request->path() != 'admin'){
-            if(!Str::isUuid($request->journal)){
-                abort(404);
-            }
-            
+    
+    public function mount(Request $request)
+    {
+        if(Str::isUuid($request->journal)){
             $this->journal = Journal::where('uuid', $request->journal)->first();
             if(empty($this->journal)){
                 abort(404);
             }
         }
+
     }
 
     public function render()
@@ -33,40 +28,42 @@ class Login extends Component
         return view('livewire.auth.login');
     }
 
+    public $email;
+    public $password;
+    public $remember = false;
+
     public function login()
     {
         $this->validate([
             'email'    => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required',
         ]);
 
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+        if (Auth::guard('web')->attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+            session()->regenerate();
+
             $user = Auth::user();
-            // dd($user->journal_users()->pluck('journals.id')->toArray());
-            // dd(in_array($this->journal->id, $user->journal_users()->pluck('journals.id')->toArray()));
-            // dd($user->journal_users()->where('journal_id', $this->journal->id)->exists());
 
             if($user->hasRole('Administrator')){
-                return redirect()->intended('/dashboard');
+                return redirect(route('journals.home'));
             }else{
-                if(!$user->journal_users()->where('journal_id', $this->journal->id)->exists()){
-                    Auth::logout();
+                if($this->journal){
+                    session(['journal' => $this->journal->uuid]);
+                    if(!$user->journal_us()->where('journal_id', $this->journal->id)->exists()){
+                        Auth::logout();
+                        
+                        session()->flash('error_message', 'It seems you are not registered to this journal please register to proceed.');
 
-                    return back()->with([
-                        'message' => 'It seems you are not registered to this journal please register to proceed.',
-                    ]);
+                        return redirect()->route('login', ['journal' => $this->journal->uuid]);
+                    }
+
+                    return redirect(route('journals.submission', $this->journal->uuid));
+                }else{
+                    session()->flash('error_message', 'It seems you have not selected a journal to login.');
                 }
-
-                $user->update([
-                    'journal' => $this->journal->uuid
-                ]);
-                
-                return redirect()->intended('/journals/details/'.$this->journal->uuid);
             }
         }
 
-        return back()->with([
-            'message' => 'The provided credentials do not match our records.',
-        ]);
+        session()->flash('error_message', 'The provided credentials do not match our records.');
     }
 }

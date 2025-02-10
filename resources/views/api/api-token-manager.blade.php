@@ -13,7 +13,7 @@
             <!-- Token Name -->
             <div class="col-span-6 sm:col-span-4">
                 <x-label for="name" value="{{ __('Token Name') }}" />
-                <x-input id="name" type="text" class="mt-1 block w-full" wire:model.live="createApiTokenForm.name" autofocus />
+                <x-input id="name" type="text" class="mt-1 block w-full" wire:model="createApiTokenForm.name" autofocus />
                 <x-input-error for="name" class="mt-2" />
             </div>
 
@@ -25,8 +25,8 @@
                     <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach (Laravel\Jetstream\Jetstream::$permissions as $permission)
                             <label class="flex items-center">
-                                <x-checkbox wire:model.live="createApiTokenForm.permissions" :value="$permission"/>
-                                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ $permission }}</span>
+                                <x-checkbox wire:model="createApiTokenForm.permissions" :value="$permission"/>
+                                <span class="ms-2 text-sm text-gray-600">{{ $permission }}</span>
                             </label>
                         @endforeach
                     </div>
@@ -64,7 +64,7 @@
                     <div class="space-y-6">
                         @foreach ($this->user->tokens->sortBy('name') as $token)
                             <div class="flex items-center justify-between">
-                                <div class="break-all dark:text-white">
+                                <div class="break-all">
                                     {{ $token->name }}
                                 </div>
 
@@ -128,8 +128,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @foreach (Laravel\Jetstream\Jetstream::$permissions as $permission)
                     <label class="flex items-center">
-                        <x-checkbox wire:model.live="updateApiTokenForm.permissions" :value="$permission"/>
-                        <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ $permission }}</span>
+                        <x-checkbox wire:model="updateApiTokenForm.permissions" :value="$permission"/>
+                        <span class="ms-2 text-sm text-gray-600">{{ $permission }}</span>
                     </label>
                 @endforeach
             </div>
