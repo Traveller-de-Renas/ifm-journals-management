@@ -20,7 +20,7 @@ class SlidingImages extends Component
     public $Delete;
 
     public $record;
-    public $images = [];
+    public $images;
     public $link;
     public $url;
     public $order;
@@ -94,7 +94,7 @@ class SlidingImages extends Component
 
                 $savename  = str_replace(' ', '_', $file_name);
 
-                $file->storeAs('/slider', $savename);
+                $file->storeAs('/slider/', $savename);
 
                 $data = new SlidingImage;
 
@@ -125,7 +125,7 @@ class SlidingImages extends Component
             $extension = $file->getClientOriginalExtension();
             $savename  = str_replace(' ', '_', $file_name);
 
-            $file->storeAs('/slider', $savename);
+            $file->storeAs('/slider/', $savename);
 
             $data->image = $savename;
         }
