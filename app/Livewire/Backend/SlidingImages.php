@@ -94,7 +94,7 @@ class SlidingImages extends Component
 
                 $savename  = str_replace(' ', '_', $file_name);
 
-                $file->storeAs('/public/slider', $savename);
+                $file->storeAs('/slider', $savename);
 
                 $data = new SlidingImage;
 
@@ -125,7 +125,7 @@ class SlidingImages extends Component
             $extension = $file->getClientOriginalExtension();
             $savename  = str_replace(' ', '_', $file_name);
 
-            $file->storeAs('/public/slider', $savename);
+            $file->storeAs('/slider', $savename);
 
             $data->image = $savename;
         }
