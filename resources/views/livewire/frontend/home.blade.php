@@ -69,8 +69,8 @@
                     <p class="mb-3 font-normal text-gray-500 dark:text-gray-400 text-sm text-justify">
                         We enable you to submit your manuscript online in any of our journals that are related to your manuscript. Make sure you follow all guidelines provided by specific journal.
                     </p>
-                    <a href="{{ route('login') }}" >
-                        <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center">Submit a Paper</p>
+                    <a href="{{ route('journal.viewall') }}" >
+                        <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center">Find Journal</p>
                         
                     </a>
                 </div>
