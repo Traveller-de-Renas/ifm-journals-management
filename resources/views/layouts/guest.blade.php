@@ -32,7 +32,7 @@
                         <a href="{{ url('/') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
                             <img src="{{ asset('storage/logo.png' ) }}" class="w-12 md:w-24 md:h-24" >
                             <div>
-                                <p class="text-white text-4xl font-bold">The institute of Finance Management</p>
+                                <p class="text-white text-4xl font-bold">The Institute of Finance Management</p>
                                 <p class="text-white text-lg">Journals Management System</p>
                             </div>
                         </a>
