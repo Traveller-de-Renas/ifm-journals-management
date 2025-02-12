@@ -386,7 +386,7 @@ class Journals extends Component
                         'user_id'           => 1,
                         'volume_id'         => $volume->id,
                         'issue_id'          => $issue->id,
-                        'publication_date'  => $issue->DatePublished,
+                        'publication_date'  => $issue->publication_date,
                         'manuscript_file'   => $article->manuscript_file,
                         'country_id'        => 100
                     ]);

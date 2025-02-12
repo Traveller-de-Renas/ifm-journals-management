@@ -45,7 +45,7 @@
                 </span>
                 @endif
 
-                <p class="text-lg text-gray-400 font-bold">Aticle Publication Date : {{ date("Y-m-d") }} </p>
+                <p class="text-lg text-gray-400 font-bold">Aticle Publication Date : {{ \Carbon\Carbon::parse($record->publication_date)->format('d-m-Y') }} </p>
             </div>
 
         </div>
@@ -96,19 +96,6 @@
                 @php
                     $coauthors = $record->article_journal_users()->get()
                 @endphp
-
-                {{-- @if(count($coauthors) > 0)
-                <div class="w-full mb-4">
-                    <p class="text-lg font-bold">Co Authors</p>
-                    <div class="text-sm text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
-                        @foreach ($coauthors as $key => $user)
-                        <div class="flex items-center">
-                            {{ $user->salutation?->title }} {{ $user->first_name }} ({{ $user->affiliation }})
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif --}}
 
             </div>
         </div>
