@@ -32,7 +32,7 @@
         <div class="col-span-3">
             <div class="bg-white border rounded p-2 shadow-sm">
 
-            <div class="text-sm text-slate-800 font-bold dark:text-slate-100">Categories</div>
+            <div class="text-sm text-slate-800 font-bold">Categories</div>
             <ul class="cbfhc">
 
                 {{-- @foreach ($categories as $key => $categ) --}}
@@ -56,7 +56,7 @@
         </div>
         <div class="col-span-9">
             @foreach ($call as $row)
-                <div class="border border-slate-200 dark:border-slate-700 p-4 shadow-md mb-8 rounded-md w-full">
+                <div class="border border-slate-200 p-4 shadow-md mb-8 rounded-md w-full">
                     
                     <div class="grid grid-cols-12 items-top gap-4">
                         
@@ -64,7 +64,7 @@
                             <a href="{{ route('journal.call_detail', $row->uuid) }}">
                                 <p class="text-lg font-bold text-blue-700 hover:text-blue-600 cursor-pointer"> {{ $row->title }}</p>
                             </a>
-                            <div class="text-sm text-slate-800 dark:text-slate-100 cbfhc cg5st mb-6">
+                            <div class="text-sm text-slate-800 mb-6">
                                 <p class="text-justify">{{ Str::words(strip_tags($row->description), '60'); }}</p>
                             </div>
                         </div>

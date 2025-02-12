@@ -41,7 +41,7 @@
 
         <div class="mb-4 {{ $filters ? '' : 'hidden' }}">
             <div class="bg-white border rounded p-2 shadow-sm">
-                <div class="text-sm text-slate-800 font-bold dark:text-slate-100">Subjects</div>
+                <div class="text-sm text-slate-800 font-bold">Subjects</div>
                 <ul class="cbfhc">
 
                     @foreach ($subjects as $key => $subject)
@@ -55,7 +55,7 @@
                     
                 </ul>
 
-                <div class="text-sm text-slate-800 font-bold dark:text-slate-100 mt-6">Categories</div>
+                <div class="text-sm text-slate-800 font-bold mt-6">Categories</div>
                 <ul class="cbfhc">
 
                     @foreach ($categories as $key => $categ)
@@ -75,12 +75,12 @@
             
             <div class="col-span-12">
                 @foreach ($data as $row)
-                    <div class="border border-slate-200 dark:border-slate-700 p-4 shadow-md mb-8 rounded-md w-full">
+                    <div class="border border-slate-200 p-4 shadow-md mb-8 rounded-md w-full">
                         
                         <div class="flex gap-4 items-top">
                             <div class="w-2/12">
                                 @if($row->image == '')
-                                    <svg class="w-8 h-8 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                                    <svg class="w-8 h-8 text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                                         <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
                                     </svg>
                                 @else
@@ -92,7 +92,7 @@
                                 <p class="text-lg font-bold text-blue-700 hover:text-blue-600 cursor-pointer"> {{ $row->title }} ({{ strtoupper($row->code) }})</p>
                                 </a>
 
-                                <div class="text-sm text-slate-800 dark:text-slate-100 cbfhc cg5st mb-6">
+                                <div class="text-sm text-slate-800 mb-6">
                                     <p class="text-justify">{!! $row->description !!}</p>
                                 </div>
             

@@ -478,7 +478,7 @@ class Submission extends Component
         $journal_us = JournalUser::firstOrCreate([
             'user_id' => $author->id,
             'journal_id' => $this->journal->id
-        ], [
+        ],[
             'user_id' => $author->id,
             'journal_id' => $this->journal->id
         ]);
@@ -487,11 +487,10 @@ class Submission extends Component
             $journal_us->assignRole('Author');
         }
 
-        $this->record->article_journal_users()->sync([$journal_us->id => [
-             'number' => $author_no]], false);
+        $this->record->article_journal_users()->sync([$journal_us->id => ['number' => $author_no]], false);
 
-             $this->authors = [];
-             $this->sauthor != '';
+        $this->authors  = [];
+        $this->sauthor != '';
     }
 
     public function removeAuthor(JournalUser $author)

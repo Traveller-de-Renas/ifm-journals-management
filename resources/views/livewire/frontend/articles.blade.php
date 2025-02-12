@@ -42,7 +42,7 @@
                 <div class="col-span-2">
                     @if($record->journal->image == '')
                     <div class="p-2">
-                        <svg class="w-full text-white dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                        <svg class="w-full text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                             <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
                         </svg>
                     </div>
@@ -61,11 +61,11 @@
 
     <div class="border-b bg-white">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="text-lg font-bold py-4 mb-4">{{ __($record->journal->title) }} ({{ strtoupper($record->journal->code) }}) : {{ $record->volume->description }} {{ $record->description }}</div>
+            <div class="text-lg font-bold py-4 mb-4">{{ __($record->journal->title) }} ({{ strtoupper($record->journal->code) }}) : {{ $record->volume->description }}, {{ $record->description }}</div>
         </div>
     </div>
 
-    <div class="border-gray-200 dark:border-gray-700">
+    <div class="border-gray-200">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
  
             <div class="mt-4">
@@ -83,7 +83,7 @@
                         </div>
                         <div class="col-span-2 border-l p-4">
                             <div class="flex gap-1 items-center hover:underline">
-                                <svg class="w-8 h-8 text-blue-700 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <svg class="w-8 h-8 text-blue-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 17v-5h1.5a1.5 1.5 0 1 1 0 3H5m12 2v-5h2m-2 3h2M5 10V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1v6M5 19v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1M10 3v4a1 1 0 0 1-1 1H5m6 4v5h1.375A1.627 1.627 0 0 0 14 15.375v-1.75A1.627 1.627 0 0 0 12.375 12H11Z"/>
                                 </svg>
                                 <span class=" text-blue-700 font-semibold">
@@ -116,10 +116,16 @@
                         </a>
                     </div>
 
-                    <div class="text-xs text-blue-700 hover:text-blue-600 mb-4">
-                        @foreach ($article?->article_journal_users()->whereHas('roles', function($query){ $query->where('name', 'Author');})->get() as $key => $article_user)
-                            {{ $article_user->user->first_name }} {{ $article_user->user->middle_name }} {{ $article_user->user->last_name }},
-                        @endforeach
+                    <div class="text-sm text-blue-700 font-semibold hover:text-blue-600 mb-2">
+                        @if($article->user_id == 1)
+                            @foreach ($article->co_authors()->whereNotNull('first_name')->get() as $co_author)
+                            <span class="hover:text-blue-600 hover:underline cursor-pointer mr-2">{{ $co_author->last_name }}, {{ strtoupper(substr($co_author->first_name, 0, 1)) }}.</span>
+                            @endforeach
+                        @else
+                            @foreach ($article?->article_journal_users()->whereHas('roles', function($query){ $query->where('name', 'Author');})->get() as $key => $article_user)
+                                {{ $article_user->user->first_name }} {{ $article_user->user->middle_name }} {{ $article_user->user->last_name }},
+                            @endforeach
+                        @endif
                     </div>
                     <div>
                         {!! Str::limit(strip_tags($article->abstract), 250) !!}
@@ -131,7 +137,7 @@
                 </div>
                 <div class="col-span-2 border-l p-4">
                     <div class="flex gap-1 items-center hover:underline">
-                        <svg class="w-8 h-8 text-blue-700 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-blue-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 17v-5h1.5a1.5 1.5 0 1 1 0 3H5m12 2v-5h2m-2 3h2M5 10V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1v6M5 19v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1M10 3v4a1 1 0 0 1-1 1H5m6 4v5h1.375A1.627 1.627 0 0 0 14 15.375v-1.75A1.627 1.627 0 0 0 12.375 12H11Z"/>
                         </svg>
                         <span class=" text-blue-700 font-semibold">

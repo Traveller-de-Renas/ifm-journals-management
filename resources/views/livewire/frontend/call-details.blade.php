@@ -32,6 +32,6 @@
     </div>
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
-        <span class="text-sm text-justify dark:text-gray-400">{!! $record->description !!}</span>
+        <span class="text-sm text-justify">{!! $record->description !!}</span>
     </div>
 </div>

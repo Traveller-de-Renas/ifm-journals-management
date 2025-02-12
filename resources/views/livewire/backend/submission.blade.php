@@ -116,12 +116,12 @@
                     <div class="mt-6">
                         @foreach ($record->article_journal_users()->where('number', '>', 0)->orderBy('number', 'ASC')->get() as $key => $article_user)
                         <div class="flex items-center">
-                            <div class="w-full border bg-gray-200 hover:bg-gray-300 border-slate-200 dark:border-slate-700 p-1 px-2 mb-1 rounded-md">
+                            <div class="w-full border bg-gray-200 hover:bg-gray-300 border-slate-200 p-1 px-2 mb-1 rounded-md">
                             {{ $article_user->user->first_name }}
                             {{ $article_user->user->middle_name }}
                             {{ $article_user->user->last_name }}
                             </div>
-                            <div class="w-1/5 border bg-gray-200 hover:bg-gray-300 border-slate-200 dark:border-slate-700 p-1 px-4 mb-1 ml-2 rounded-md text-md">
+                            <div class="w-1/5 border bg-gray-200 hover:bg-gray-300 border-slate-200 p-1 px-4 mb-1 ml-2 rounded-md text-md">
                                 Author No.{{ $article_user->pivot->number }}
                             </div>
                             <div class="mb-1">
@@ -221,7 +221,7 @@
                                 
                                 <label class="inline-flex items-center cursor-pointer">
                                     <input type="checkbox" class="sr-only peer" wire:model="confirmed.{{ $key }}">
-                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300  rounded-full peer  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                 </label>
                                 
                             </div>
@@ -379,7 +379,7 @@
 
                                 <label class="inline-flex items-center cursor-pointer">
                                     <input type="checkbox" value="1" class="sr-only peer" wire:model="confirmations.{{ $key }}">
-                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300  rounded-full peer  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                 </label>
             
                             </div>

@@ -64,9 +64,9 @@
             <div class="md:grid md:grid-cols-12 gap-6">
                 <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
                     <a href="#">
-                        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">ONLINE SUBMISSION</h5>
+                        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 text-center">ONLINE SUBMISSION</h5>
                     </a>
-                    <p class="mb-3 font-normal text-gray-500 dark:text-gray-400 text-sm text-justify">
+                    <p class="mb-3 font-normal text-gray-500 text-sm text-justify">
                         We enable you to submit your manuscript online in any of our journals that are related to your manuscript. Make sure you follow all guidelines provided by specific journal.
                     </p>
                     <a href="{{ route('journal.viewall') }}" >
@@ -78,9 +78,9 @@
         
                 <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
                     <a href="#">
-                        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">PEER REVIEW</h5>
+                        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 text-center">PEER REVIEW</h5>
                     </a>
-                    <p class="mb-3 font-normal text-gray-500 dark:text-gray-400 text-sm text-justify">
+                    <p class="mb-3 font-normal text-gray-500 text-sm text-justify">
                         Our system allows peer review, each manuscript submitted in specific journal will be reviewed by more than one professional reviewer.
                     </p>
                 </div>
@@ -88,9 +88,9 @@
             
                 <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
                     <a href="#">
-                        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">PUBLISH WITH US</h5>
+                        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 text-center">PUBLISH WITH US</h5>
                     </a>
-                    <p class="mb-3 col-span-4 font-normal text-gray-500 dark:text-gray-400 text-sm text-justify">Publish with us your research across our journals, books, teaching cases and open access options. Follow our guides and find the resources to help you submit, publish and promote your work.</p>
+                    <p class="mb-3 col-span-4 font-normal text-gray-500 text-sm text-justify">Publish with us your research across our journals, books, teaching cases and open access options. Follow our guides and find the resources to help you submit, publish and promote your work.</p>
                     <a href="{{ route('journal.viewall') }}" >
                         <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center w-full">Journals</p>
                         
@@ -165,27 +165,27 @@
         <div class="grid grid-cols-12 gap-6">
             <div class="col-span-4 w-full p-6 bg-white border border-gray-200 rounded-lg shadow mb-4 text-center">
                 <a href="#">
-                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Journals</h5>
+                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900">Journals</h5>
                 </a>
-                <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
+                <p class="font-bold text-gray-500 text-center">
                     {{ $journals_count }}
                 </p>
             </div>
 
             <div class="col-span-4 w-full p-6 bg-white border border-gray-200 rounded-lg shadow mb-4 text-center">
                 <a href="#">
-                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Issues </h5>
+                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900">Issues </h5>
                 </a>
-                <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
+                <p class="font-bold text-gray-500 text-center">
                     {{ $issues_count }}
                 </p>
             </div>
 
             <div class="col-span-4 w-full p-6 bg-white border border-gray-200 rounded-lg shadow mb-4 text-center">
                 <a href="#">
-                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">Articles </h5>
+                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900">Articles </h5>
                 </a>
-                <p class="font-bold text-gray-500 dark:text-gray-400 text-center">
+                <p class="font-bold text-gray-500 text-center">
                     {{ $articles_count }}
                 </p>
             </div>

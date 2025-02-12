@@ -31,6 +31,11 @@
             <p> ISSN : {{ $record?->journal->issn }} </p>
 
             <div class="mt-6 mb-6">
+                @if($record->user_id == 1)
+                    @foreach ($record->co_authors()->whereNotNull('first_name')->get() as $co_author)
+                    <span class="hover:text-blue-600 hover:underline cursor-pointer mr-2">{{ $co_author->last_name }}, {{ strtoupper(substr($co_author->first_name, 0, 1)) }}.</span>
+                    @endforeach
+                @else
                 <span class="hover:text-blue-600 hover:underline cursor-pointer">
                     @if($record->author->salutation) {{ $record->author->salutation?->title }}. @endif
                     
@@ -38,6 +43,7 @@
                     
                     @if($record->author->affiliation) ({{ $record->author->affiliation }}) @endif
                 </span>
+                @endif
 
                 <p class="text-lg text-gray-400 font-bold">Aticle Publication Date : {{ date("Y-m-d") }} </p>
             </div>
@@ -110,11 +116,17 @@
         <div class="w-full mb-12 grid grid-cols-12 gap-2">
             <div class="col-span-8">
                 <p class="text-lg font-bold">Citation</p>
-                <span class="hover:text-blue-600 hover:underline cursor-pointer">{{ $record->author->last_name }}, {{ strtoupper(substr($record->author->first_name, 0, 1)) }}.
-                </span>
-                @foreach ($coauthors as $key => $user)
-                    <span class="hover:text-blue-600 hover:underline cursor-pointer">{{ $user->last_name }}, {{ strtoupper(substr($user->first_name, 0, 1)) }}.  </span>
-                @endforeach
+                @if($record->user_id == 1)
+                    @foreach ($record->co_authors()->whereNotNull('first_name')->get() as $co_author)
+                    <span class="hover:text-blue-600 hover:underline cursor-pointer mr-2">{{ $co_author->last_name }}, {{ strtoupper(substr($co_author->first_name, 0, 1)) }}.</span>
+                    @endforeach
+                @else
+                    <span class="hover:text-blue-600 hover:underline cursor-pointer">{{ $record->author->last_name }}, {{ strtoupper(substr($record->author->first_name, 0, 1)) }}.
+                    </span>
+                    @foreach ($coauthors as $key => $user)
+                        <span class="hover:text-blue-600 hover:underline cursor-pointer">{{ $user->last_name }}, {{ strtoupper(substr($user->first_name, 0, 1)) }}.  </span>
+                    @endforeach
+                @endif
 
                 ({{ \Carbon\Carbon::parse($record->publication_date)->format('Y') }}),
 

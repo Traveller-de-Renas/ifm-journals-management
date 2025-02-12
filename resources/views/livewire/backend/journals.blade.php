@@ -12,6 +12,8 @@
                 <span>Filter Journals</span>
             </x-button>
 
+            <x-button class="" wire:click="loadJournals()" wire:loading.attr="disabled">Load Data</x-button>
+
             {{-- @if (Auth()->user()->hasPermissionTo('Add Journals')) --}}
                 <x-button class="" wire:click="createJournal()" wire:loading.attr="disabled" >Create New</x-button>
             {{-- @endif --}}
@@ -37,7 +39,7 @@
 
 
     <div class="{{ ($filters)? 'block' : 'hidden'}}" >
-        <div class="text-sm text-slate-800 dark:text-slate-100">Subjects</div>
+        <div class="text-sm text-slate-800 ">Subjects</div>
         <ul class="">
 
             @foreach ($subjects as $key => $subject)
@@ -51,7 +53,7 @@
             
         </ul>
 
-        <div class="text-sm text-slate-800 dark:text-slate-100 mt-6">Categories</div>
+        <div class="text-sm text-slate-800 mt-6">Categories</div>
         <ul class="">
 
             @foreach ($categories as $key => $categ)
@@ -158,10 +160,10 @@
 
     <div>
         <div 
-            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 dark:bg-gray-800 {{ $isOpen ? 'translate-x-0' : 'translate-x-full' }}" 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 {{ $isOpen ? 'translate-x-0' : 'translate-x-full' }}" 
             style="transition: transform 0.3s ease-in-out;"
         >
-            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500">
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -169,7 +171,7 @@
             </h5>
     
             <button wire:click="closeDrawer" 
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center">
                 <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
@@ -184,7 +186,7 @@
 
             <hr>
     
-            <p class="mb-6 mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p class="mb-6 mt-2 text-sm text-gray-500">
                 Search Editor from the List of Users registered or create new user if you can not find the user u want to assign, 
                 <br>
                 <span class="text-red-600">NOTE</span> : If you assign new user the current one will be removed.
@@ -198,7 +200,7 @@
                 @endphp
                 
                 @if(!empty($editor))
-                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400"> Currently Assigned Chief Editor is </p>
+                    <p class="mt-2 text-sm text-gray-500"> Currently Assigned Chief Editor is </p>
                     <div class="flex mb-2 font-bold border-t pt-2">
                         <div class="w-full">
                             {{ $editor->user->first_name }}

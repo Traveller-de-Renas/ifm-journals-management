@@ -124,4 +124,9 @@ class Article extends Model
     {
         return $this->hasMany(Notification::class);
     }
+
+    public function co_authors()
+    {
+        return $this->hasMany(CoAuthor::class);
+    }
 }

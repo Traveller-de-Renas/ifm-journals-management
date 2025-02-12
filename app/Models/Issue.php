@@ -22,6 +22,7 @@ class Issue extends Model
         'editorial_file',
         'editorial_downloads',
         'status',
+        'publication',
         'publication_date'
     ];
 

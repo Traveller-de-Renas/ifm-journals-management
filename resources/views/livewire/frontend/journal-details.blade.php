@@ -42,7 +42,7 @@
                 <div class="col-span-2">
                     @if($record->image == '')
                     <div class="p-2">
-                        <svg class="w-full text-white dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                        <svg class="w-full text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                             <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
                         </svg>
                     </div>
@@ -61,9 +61,9 @@
 
 
 
-<div class="border-b border-gray-200 dark:border-gray-700 bg-white">
+<div class="border-b border-gray-200 bg-white">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
             <li class="me-2">
                 <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'overview') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('overview')">
                     Overview
@@ -165,7 +165,7 @@
 
                     <div class="w-full mb-2">
 
-                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
                             <li class="me-2">
                                 <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($subtab == 'all_issues') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeSubTab('all_issues')">
                                     All Issues
@@ -253,7 +253,7 @@
                                     </div>
                                     <div class="col-span-3 border-l p-4">
                                         <div class="flex gap-1 items-center hover:underline">
-                                            <svg class="w-8 h-8 text-blue-700 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <svg class="w-8 h-8 text-blue-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 17v-5h1.5a1.5 1.5 0 1 1 0 3H5m12 2v-5h2m-2 3h2M5 10V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1v6M5 19v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1M10 3v4a1 1 0 0 1-1 1H5m6 4v5h1.375A1.627 1.627 0 0 0 14 15.375v-1.75A1.627 1.627 0 0 0 12.375 12H11Z"/>
                                             </svg>
                                             <span class=" text-blue-700 font-semibold">

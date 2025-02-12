@@ -196,10 +196,10 @@
 
     <div>
         <div 
-            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 dark:bg-gray-800 {{ $isOpen ? 'translate-x-0' : 'translate-x-full' }}" 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 {{ $isOpen ? 'translate-x-0' : 'translate-x-full' }}" 
             style="transition: transform 0.3s ease-in-out;"
         >
-            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500">
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -207,7 +207,7 @@
             </h5>
     
             <button wire:click="closeDrawer" 
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center">
                 <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
@@ -227,33 +227,33 @@
             <div class="mt-2 mb-1 text-sm text-gray-500 font-bold">Editor Decisions</div>
             <div class="mt-2 mb-6 flex flex-col justify-between gap-2">
 
-                <div class="flex items-center ps-2 border border-gray-200 rounded dark:border-gray-700 p-2 ">
+                <div class="flex items-center ps-2 border border-gray-200 roundedp-2 ">
                     <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('meet_guidelines')">
-                        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-full">Manuscript Meets Guidelines</span>
+                        <span class="ms-3 text-sm font-medium text-gray-900 w-full">Manuscript Meets Guidelines</span>
                         <div>
                             <input type="checkbox" value="" class="sr-only peer" wire:model="meet_guidelines">
-                            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 "></div>
                         </div>
                     </label>
                 </div>
 
-                <div class="flex items-center ps-2 border border-gray-200 rounded dark:border-gray-700 p-2 ">
+                <div class="flex items-center ps-2 border border-gray-200 rounded  p-2 ">
                     <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('plagiarism_check')">
-                        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-full">Plagiarism Check</span>
+                        <span class="ms-3 text-sm font-medium text-gray-900 w-full">Plagiarism Check</span>
                         <div>
                             <input type="checkbox" value="" class="sr-only peer" wire:model="plagiarism_check">
-                            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 "></div>
                         </div>
                     </label>
                 </div>
   
-                {{-- <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700 ">
-                    <input id="bordered-checkbox-1" type="radio" wire:model="compliance" wire:click="selectCompliance()" value="003" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-full focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="bordered-checkbox-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Passed Author Guidelines Checking</label>
+                {{-- <div class="flex items-center ps-4 border border-gray-200 rounded  ">
+                    <input id="bordered-checkbox-1" type="radio" wire:model="compliance" wire:click="selectCompliance()" value="003" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-full focus:ring-blue-500   focus:ring-2  ">
+                    <label for="bordered-checkbox-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 ">Passed Author Guidelines Checking</label>
                 </div>
-                <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700 ">
-                    <input id="bordered-checkbox-2" type="radio" wire:model="compliance" wire:click="selectCompliance()" value="004" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-full focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="bordered-checkbox-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Return to Author for Guidelines Compliance</label>
+                <div class="flex items-center ps-4 border border-gray-200 rounded  ">
+                    <input id="bordered-checkbox-2" type="radio" wire:model="compliance" wire:click="selectCompliance()" value="004" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-full focus:ring-blue-500   focus:ring-2  ">
+                    <label for="bordered-checkbox-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 ">Return to Author for Guidelines Compliance</label>
                 </div> --}}
 
                 @if($compliance == '003')
@@ -287,10 +287,10 @@
 
     <div>
         <div 
-            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 dark:bg-gray-800 {{ $isOpenA ? 'translate-x-0' : 'translate-x-full' }}" 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 {{ $isOpenA ? 'translate-x-0' : 'translate-x-full' }}" 
             style="transition: transform 0.3s ease-in-out;"
         >
-            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500">
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -298,7 +298,7 @@
             </h5>
     
             <button wire:click="closeDrawerA" 
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center">
                 <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
@@ -313,7 +313,7 @@
                 Title : {{ $record?->title }}
             </p>
 
-            <p class="mb-6 mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p class="mb-6 mt-2 text-sm text-gray-500">
                 Search Associate Editor from Editorial Team of this journal.
             </p>
 
@@ -325,7 +325,7 @@
                 @endphp
                 
                 @if(!empty($editor))
-                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                <p class="mt-2 text-xs text-gray-500">
                 Currently Assigned Chief Editor is
                 </p>
                 <div class="mb-2 font-bold">
@@ -364,10 +364,10 @@
 
     <div>
         <div 
-            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 dark:bg-gray-800 {{ $isOpenB ? 'translate-x-0' : 'translate-x-full' }}" 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 {{ $isOpenB ? 'translate-x-0' : 'translate-x-full' }}" 
             style="transition: transform 0.3s ease-in-out;"
         >
-            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500">
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -375,7 +375,7 @@
             </h5>
     
             <button wire:click="closeDrawerB" 
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center">
                 <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
@@ -388,61 +388,61 @@
                 Title : {{ $record?->title }}
             </p>
 
-            <div class="flex items-center ps-2 border border-gray-200 rounded dark:border-gray-700 p-2 mb-1">
+            <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-1">
                 <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('scope')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-full">Paper is with Scope</span>
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">Paper is with Scope</span>
                     <div>
                         <input type="checkbox" class="sr-only peer" wire:model="scope" {{ $rev_count > 0 ? 'disabled' : '' }} >
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 "></div>
                     </div>
                 </label>
             </div>
 
-            <div class="flex items-center ps-2 border border-gray-200 rounded dark:border-gray-700 p-2 mb-1">
+            <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-1">
                 <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('tech_complete')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-full">Is the Paper Technical Completeness</span>
+                    <span class="ms-3 text-sm font-medium text-gray-900  w-full">Is the Paper Technical Completeness</span>
                     <div>
                         <input type="checkbox" class="sr-only peer" wire:model="tech_complete">
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </div>
                 </label>
             </div>
 
-            <div class="flex items-center ps-2 border border-gray-200 rounded dark:border-gray-700 p-2 mb-1">
+            <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-1">
                 <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('noverity')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-full">Does the Paper has Noverity</span>
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">Does the Paper has Noverity</span>
                     <div>
                         <input type="checkbox" class="sr-only peer" wire:model="noverity">
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 "></div>
                     </div>
                 </label>
             </div>
 
 
-            <div class="flex items-center ps-2 border border-gray-200 rounded dark:border-gray-700 p-2 mb-1">
+            <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-1">
                 <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('prior_publication')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-full">Not Prior Published</span>
+                    <span class="ms-3 text-sm font-medium text-gray-900w-full">Not Prior Published</span>
                     <div>
                         <input type="checkbox" class="sr-only peer" wire:model="prior_publication">
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 "></div>
                     </div>
                 </label>
             </div>
 
 
-            <div class="flex items-center ps-2 border border-gray-200 rounded dark:border-gray-700 p-2 mb-6">
+            <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-6">
                 <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('methodology')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-full">Methodological Rigorous</span>
+                    <span class="ms-3 text-sm font-medium text-gray-900  w-full">Methodological Rigorous</span>
                     <div>
                         <input type="checkbox" class="sr-only peer" wire:model="methodology">
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </div>
                 </label>
             </div>
             
 
             @if($scope == true && $prior_publication == true && $methodology == true && $noverity == true && $tech_complete == true)
-            <p class="mb-2 mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p class="mb-2 mt-2 text-sm text-gray-500 ">
                 Search Reviwer from Journal Reviewers of this journal.
             </p>
 
@@ -494,7 +494,7 @@
                 @endphp
                 
                 @if(!empty($reviewers))
-                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Currently Assigned Reviewers</p>
+                    <p class="mt-2 text-xs text-gray-500 ">Currently Assigned Reviewers</p>
                     @foreach($reviewers as $key => $reviewer)
                         <div class="mb-2 font-bold flex gap-2 w-full">
                             <div>
@@ -530,10 +530,10 @@
 
     <div>
         <div 
-            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 dark:bg-gray-800 {{ $isOpenC ? 'translate-x-0' : 'translate-x-full' }}" 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12  {{ $isOpenC ? 'translate-x-0' : 'translate-x-full' }}" 
             style="transition: transform 0.3s ease-in-out;"
         >
-            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 ">
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -541,7 +541,7 @@
             </h5>
     
             <button wire:click="closeDrawerC" 
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center  ">
                 <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
@@ -592,10 +592,10 @@
 
     <div>
         <div 
-            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 dark:bg-gray-800 {{ $isOpenD ? 'translate-x-0' : 'translate-x-full' }}" 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12  {{ $isOpenD ? 'translate-x-0' : 'translate-x-full' }}" 
             style="transition: transform 0.3s ease-in-out;"
         >
-            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 ">
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -603,7 +603,7 @@
             </h5>
     
             <button wire:click="closeDrawerD" 
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center  ">
                 <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
@@ -619,14 +619,14 @@
             <div class="mb-2 w-full">
 
                 <div class="flex items-center ps-4 border border-gray-200 rounded flex-1 mb-2">
-                    <input id="editorial" type="checkbox" wire:model="editorial" value="" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2">
-                    <label for="editorial" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Editorial Completed</label>
+                    <input id="editorial" type="checkbox" wire:model="editorial" value="" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500  focus:ring-2">
+                    <label for="editorial" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 ">Editorial Completed</label>
                 </div>
                 <x-input-error for="editorial" />
 
                 <div class="flex items-center ps-4 border border-gray-200 rounded flex-1 mb-2">
-                    <input id="type_setting" type="checkbox" wire:model="type_setting" value="" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2">
-                    <label for="type_setting" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Type Setting Completed</label>
+                    <input id="type_setting" type="checkbox" wire:model="type_setting" value="" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500  focus:ring-2">
+                    <label for="type_setting" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 ">Type Setting Completed</label>
                 </div>
                 <x-input-error for="type_setting" />
 
@@ -647,10 +647,10 @@
 
     <div>
         <div 
-            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 dark:bg-gray-800 {{ $isOpenE ? 'translate-x-0' : 'translate-x-full' }}" 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12  {{ $isOpenE ? 'translate-x-0' : 'translate-x-full' }}" 
             style="transition: transform 0.3s ease-in-out;"
         >
-            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 ">
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -658,7 +658,7 @@
             </h5>
     
             <button wire:click="closeDrawerE" 
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center  ">
                 <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
@@ -758,10 +758,10 @@
 
     <div>
         <div 
-            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 dark:bg-gray-800 {{ $isOpenF ? 'translate-x-0' : 'translate-x-full' }}" 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12  {{ $isOpenF ? 'translate-x-0' : 'translate-x-full' }}" 
             style="transition: transform 0.3s ease-in-out;"
         >
-            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 ">
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -769,7 +769,7 @@
             </h5>
     
             <button wire:click="closeDrawerF" 
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center  ">
                 <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
@@ -806,10 +806,10 @@
 
     <div>
         <div 
-            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 dark:bg-gray-800 {{ $isOpenG ? 'translate-x-0' : 'translate-x-full' }}" 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12  {{ $isOpenG ? 'translate-x-0' : 'translate-x-full' }}" 
             style="transition: transform 0.3s ease-in-out;"
         >
-            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 ">
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -817,7 +817,7 @@
             </h5>
     
             <button wire:click="closeDrawerG" 
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center  ">
                 <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
@@ -832,45 +832,45 @@
 
             <p class="text-sm text-gray-500">To submit this manuscript for publication please confirm the following checklist </p>
 
-            <div class="flex items-center ps-2 border border-gray-200 rounded dark:border-gray-700 p-2 mb-1">
+            <div class="flex items-center ps-2 border border-gray-200 rounded  p-2 mb-1">
                 <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('formatting')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-full">Formatting</span>
+                    <span class="ms-3 text-sm font-medium text-gray-900  w-full">Formatting</span>
                     <div>
                         <input type="checkbox" class="sr-only peer" id="formatting" wire:model="formatting" {{ $rev_count > 0 ? 'disabled' : '' }} >
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300   peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-blue-600 "></div>
                     </div>
                 </label>
             </div>
             <x-input-error for="formatting" />
 
-            <div class="flex items-center ps-2 border border-gray-200 rounded dark:border-gray-700 p-2 mb-1">
+            <div class="flex items-center ps-2 border border-gray-200 rounded  p-2 mb-1">
                 <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('copyediting')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-full">Copyediting</span>
+                    <span class="ms-3 text-sm font-medium text-gray-900  w-full">Copyediting</span>
                     <div>
                         <input type="checkbox" class="sr-only peer" id="copyediting" wire:model="copyediting">
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300   peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-blue-600 "></div>
                     </div>
                 </label>
             </div>
             <x-input-error for="copyediting" />
 
-            <div class="flex items-center ps-2 border border-gray-200 rounded dark:border-gray-700 p-2 mb-1">
+            <div class="flex items-center ps-2 border border-gray-200 rounded  p-2 mb-1">
                 <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('typesetting')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-full">Typesetting</span>
+                    <span class="ms-3 text-sm font-medium text-gray-900  w-full">Typesetting</span>
                     <div>
                         <input type="checkbox" class="sr-only peer" id="typesetting" wire:model="typesetting">
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300   peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-blue-600 "></div>
                     </div>
                 </label>
             </div>
             <x-input-error for="typesetting" />
 
-            <div class="flex items-center ps-2 border border-gray-200 rounded dark:border-gray-700 p-2 mb-1">
+            <div class="flex items-center ps-2 border border-gray-200 rounded  p-2 mb-1">
                 <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('proofreading')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-full">Proofreading</span>
+                    <span class="ms-3 text-sm font-medium text-gray-900  w-full">Proofreading</span>
                     <div>
                         <input type="checkbox" class="sr-only peer" id="proofreading" wire:model="proofreading">
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300   peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-blue-600 "></div>
                     </div>
                 </label>
             </div>

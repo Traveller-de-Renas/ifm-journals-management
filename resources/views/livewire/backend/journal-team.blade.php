@@ -100,10 +100,10 @@
 
     <div>
         <div 
-            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 dark:bg-gray-800 {{ $isOpen ? 'translate-x-0' : 'translate-x-full' }}" 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12 {{ $isOpen ? 'translate-x-0' : 'translate-x-full' }}" 
             style="transition: transform 0.3s ease-in-out;"
         >
-            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500">
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -111,7 +111,7 @@
             </h5>
     
             <button wire:click="closeDrawer" 
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center">
                 <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
@@ -120,7 +120,7 @@
 
             <hr>
     
-            <p class="mb-6 mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p class="mb-6 mt-2 text-sm text-gray-500">
                 Search from the List of Users registered or create new user if you can not find the user u want to add, 
                 <br>
             </p>
@@ -189,15 +189,15 @@
                 </div>
             @endif
 
-            <div class="mt-2 mb-1 text-sm text-gray-500 dark:text-gray-400">Team Member Roles</div>
+            <div class="mt-2 mb-1 text-sm text-gray-500">Team Member Roles</div>
             <div class="mt-2 mb-6 flex justify-between gap-4">
-                <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700 flex-1">
-                    <input id="bordered-checkbox-1" type="checkbox" wire:model="associate_editor" value="Associate Editor" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="bordered-checkbox-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Associate Editor</label>
+                <div class="flex items-center ps-4 border border-gray-200 rounded flex-1">
+                    <input id="bordered-checkbox-1" type="checkbox" wire:model="associate_editor" value="Associate Editor" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 ">
+                    <label for="bordered-checkbox-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 ">Associate Editor</label>
                 </div>
-                <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700 flex-1">
-                    <input id="bordered-checkbox-2" type="checkbox" wire:model="supporting_editor" value="Supporting Editor" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="bordered-checkbox-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Supporting Editor</label>
+                <div class="flex items-center ps-4 border border-gray-200 rounded flex-1">
+                    <input id="bordered-checkbox-2" type="checkbox" wire:model="supporting_editor" value="Supporting Editor" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500  focus:ring-2">
+                    <label for="bordered-checkbox-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900">Supporting Editor</label>
                 </div>
             </div>
 
