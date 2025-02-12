@@ -280,7 +280,7 @@ class Journals extends Component
         set_time_limit(300);
 
         ini_set('max_execution_time', 300);
-        $file = File::get('storage/journals_jissr.json');
+        $file = File::get('storage/journals_jfbs.json');
 
         $journals = json_decode($file);
 
