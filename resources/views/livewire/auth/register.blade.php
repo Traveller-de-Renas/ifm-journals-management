@@ -68,7 +68,7 @@
     <div class="max-w-7xl mx-auto px-4 py-8">
         <x-authentication-card>
             @if (session('error'))
-                <div class="p-4 rounded-md text-sm mb-4 shadow bg-red-300 w-full">
+                <div class="p-4 rounded-md text-sm text-white mb-4 shadow bg-red-700 w-full">
                     {{ session('error') }}
                 </div>
             @endif

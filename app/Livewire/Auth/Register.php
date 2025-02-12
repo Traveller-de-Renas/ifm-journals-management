@@ -7,6 +7,7 @@ use App\Models\Country;
 use App\Models\Journal;
 use Livewire\Component;
 use App\Models\Salutation;
+use App\Models\JournalUser;
 use Illuminate\Support\Str;
 use App\Mail\JournalAccount;
 use Illuminate\Http\Request;
@@ -158,28 +159,34 @@ class Register extends Component
 
         $user = User::where('email', $this->email)->first();
 
-        if(empty($user)){
+        if(!empty($user)){
             $review = 0;
             if(isset($this->can_review)){
                 $review = 1;
             }
 
-            $journal_us = $user->journal_us()->create([
+            $journal_us = JournalUser::firstOrCreate([
+                'user_id'    => $user->id,
+                'journal_id' => $this->journal->id
+            ],[
+                'user_id'    => $user->id,
                 'journal_id' => $this->journal->id,
                 'can_review' => $review
             ]);
+
+            if(!($journal_us->hasRole('Author'))){
+                $journal_us->assignRole('Author');
+            }
+    
+            Mail::to('mrenatuskiheka@yahoo.com')
+                ->send(new JournalAccount($this->journal, $user));
+            
+            session()->flash('success', 'You are successfully registered as an author on this journal');
+        }else{
+            session()->flash('error', 'No user record found registered with this email on this journal');
         }
 
-        if(!($journal_us->hasRole('Author'))){
-            $journal_us->assignRole('Author');
-        }
-
-        Mail::to('mrenatuskiheka@yahoo.com')
-            ->send(new JournalAccount($this->journal, $user));
-        
-        session()->flash('success', 'You are successfully registered as an author on this journal');
+    
     }
-
-
 
 }
