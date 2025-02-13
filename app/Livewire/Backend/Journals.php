@@ -127,10 +127,10 @@ class Journals extends Component
         if(!$check->hasRole('Chief Editor')){
             $check->assignRole('Chief Editor');
 
-            if(ReviewMessage::where('category', 'Assign Chief Editor')->count() > 0){
-                Mail::to('mrenatuskiheka@yahoo.com')
-                    ->send(new EditorialTeam($this->record, $check, 'Assign Chief Editor'));
-            }
+            // if(ReviewMessage::where('category', 'Assign Chief Editor')->count() > 0){
+            //     Mail::to($user->email)
+            //         ->send(new EditorialTeam($this->record, $check, 'Assign Chief Editor'));
+            // }
 
             session()->flash('response',[
                 'status'  => '', 
@@ -232,12 +232,12 @@ class Journals extends Component
         $user->assignRole('Chief Editor');
 
         if(ReviewMessage::where('category', 'Assign Chief Editor')->count() > 0){
-            Mail::to('mrenatuskiheka@yahoo.com')
+            Mail::to($data->email)
                 ->send(new EditorialTeam($this->record, $user, 'Assign Chief Editor'));
         }
 
         if(ReviewMessage::where('category', 'Access Credentials')->count() > 0){
-            Mail::to('mrenatuskiheka@yahoo.com')
+            Mail::to($data->email)
                 ->send(new AccessCredentials($this->record, $user, $password, 'Access Credentials'));
         }
 
@@ -371,7 +371,7 @@ class Journals extends Component
                     ]);
 
 
-                    $status = ArticleStatus::where('code', '006')->first();
+                    $status = ArticleStatus::where('code', '014')->first();
                     $articx = Article::updateOrCreate([
                         'title'             => $article->article_title,
                         'journal_id'        => $the_journal->id,

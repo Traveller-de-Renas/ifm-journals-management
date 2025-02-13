@@ -114,6 +114,68 @@
                         </div>
 
 
+                        <p class="text-lg font-bold mb-2">Current Issue {{ $cissue->volume->description.' '.$cissue->description }}</p>
+                        
+                        @if ($cissue->articles->count() > 0)
+                        @foreach ($cissue->articles as $key => $article)
+                        
+                        <div class="bg-white hover:shadow-lg cursor-pointer p-4 border rounded-lg mb-4 mt-4 shadow grid grid-cols-12 ">
+                            <div class="col-span-9">
+                                <div class="text-sm font-bold hover:underline hover:text-blue-600">
+                                    <a href="{{ route('journal.article', $article->uuid) }}">
+                                    {{ $article->title }}
+                                    </a>
+                                </div>
+            
+                                <div class="text-sm text-green-700 font-semibold hover:text-green-600 mb-2">
+                                    @if($article->user_id == 1)
+                                        @foreach ($article->co_authors()->whereNotNull('first_name')->get() as $co_author)
+                                        <span class="hover:text-green-600 hover:underline cursor-pointer mr-2">{{ $co_author->last_name }}, {{ strtoupper(substr($co_author->first_name, 0, 1)) }}.</span>
+                                        @endforeach
+                                    @else
+                                        @foreach ($article?->article_journal_users()->whereHas('roles', function($query){ $query->where('name', 'Author');})->get() as $key => $article_user)
+                                            {{ $article_user->user->first_name }} {{ $article_user->user->middle_name }} {{ $article_user->user->last_name }},
+                                        @endforeach
+                                    @endif
+                                </div>
+                                <div class="text-xs">
+                                    {!! Str::limit(strip_tags($article->abstract), 150) !!}
+                                </div>
+                                
+                                <div class="w-full text-xs text-gray-500 mt-4">
+                                    {{ $article->publication_date }}
+                                </div>
+                            </div>
+                            <div class="col-span-3 border-l p-4">
+                                <div class="flex gap-1 items-center hover:underline mb-2">
+                                    <svg class="w-6 h-6 text-blue-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 17v-5h1.5a1.5 1.5 0 1 1 0 3H5m12 2v-5h2m-2 3h2M5 10V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1v6M5 19v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1M10 3v4a1 1 0 0 1-1 1H5m6 4v5h1.375A1.627 1.627 0 0 0 14 15.375v-1.75A1.627 1.627 0 0 0 12.375 12H11Z"/>
+                                    </svg>
+                                    <span class=" text-blue-700 font-semibold">
+                                        <a href="{{ route('journal.article_download', $article->uuid) }}" >
+                                        PDF
+                                        @if(Storage::exists('publications/'.$article?->manuscript_file))({{ round((Storage::size('publications/'.$article?->manuscript_file) / 1048576), 2) }} MB)@endif
+                                        </a>
+                                    </span>
+                                </div>
+            
+                                
+                                <span class="text-xs text-gray-500 font-bold ml-1">DOWNLOADS</span>
+                                <div class="flex gap-1 items-center">
+                                    <svg class="h-6 w-6 text-blue-700"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M14 3v4a1 1 0 0 0 1 1h4" />  <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />  <line x1="12" y1="11" x2="12" y2="17" />  <polyline points="9 14 12 17 15 14" /></svg>
+                                    <span class="text-xl text-blue-700 font-semibold">{{ $article?->downloads }}</span>
+                                </div>
+                            </div>
+                        </div>
+                            
+                        @endforeach
+                        @else
+                        
+                            <div class="w-full bg-blue-400 rounded shadow p-2">No Articles Found</div>
+            
+                        @endif
+
+
                         <p class="text-lg font-bold mb-2 mt-6">Call for Papers</p>
                         <div >
                             @foreach ($record->call_for_papers as $call)
@@ -388,8 +450,21 @@
                     @if(count( $recent ) > 0)
                     @foreach ($recent as $key => $article)
                         <a href="{{ route('journal.article', $article->uuid) }}">
-                            <div class="text-sm font-bold text-blue-700 hover:text-blue-600 bg-white hover:bg-gray-100 cursor-pointer rounded shadow p-3 mt-2 mb-4">
+                            <div class="text-sm font-bold text-gray-700 hover:text-blue-700 bg-white hover:bg-gray-100 cursor-pointer rounded shadow p-3 mt-2 mb-2">
                                 {{ $article->title }}
+
+                                <div class="text-xs text-green-700 font-light hover:text-green-600">
+                                    @if($article->user_id == 1)
+                                        @foreach ($article->co_authors()->whereNotNull('first_name')->get() as $co_author)
+                                        <span class="hover:text-blue-600 hover:underline cursor-pointer mr-2">{{ $co_author->last_name }}, {{ strtoupper(substr($co_author->first_name, 0, 1)) }}.</span>
+                                        @endforeach
+                                    @else
+                                        @foreach ($article?->article_journal_users()->whereHas('roles', function($query){ $query->where('name', 'Author');})->get() as $key => $article_user)
+                                            {{ $article_user->user->first_name }} {{ $article_user->user->middle_name }} {{ $article_user->user->last_name }},
+                                        @endforeach
+                                    @endif
+                                </div>
+
                             </div>
                         </a>
                     @endforeach

@@ -8,16 +8,14 @@
                     {{ $record?->journal->title }}
                     </a>
                 </p>
-                @if ($record->issue?->volume?->description)
+                @if ($record->issue?->volume?->description && $record->issue?->description)
                     <p class="mr-1"> > </p> 
-                    <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->volume?->description }} </p>
+                    <p class="underline mr-1 cursor-pointer hover:text-gray-500">
+                        <a href="{{ route('journal.articles', $record->issue->uuid) }}" >
+                            {{ $record->issue?->volume?->description }} {{ $record->issue?->description }}
+                        </a>
+                    </p>
                 @endif
-
-                @if ($record->issue?->description)
-                    <p class="mr-1"> > </p>
-                    <p class="underline mr-1 cursor-pointer hover:text-gray-500"> {{ $record->issue?->description }} </p>
-                @endif
-
             </div>
             
             <p class="text-white text-3xl font-bold mt-4 mb-4">

@@ -155,27 +155,27 @@ class Submission extends Component
 
         $validator = Validator::make(
             [
-                'title' => $this->title,
+                'title'         => $this->title,
                 'article_type_id' => $this->article_type_id,
-                'country_id' => $this->country_id,
-                'keywords' => $this->keywords,
-                'areas'  => $this->areas,
-                'tables' => $this->tables,
-                'figures' => $this->figures,
-                'words' => $this->words,
-                'pages' => $this->pages,
+                'country_id'    => $this->country_id,
+                'keywords'      => $this->keywords,
+                'areas'         => $this->areas,
+                'tables'        => $this->tables,
+                'figures'       => $this->figures,
+                'words'         => $this->words,
+                'pages'         => $this->pages,
             ],
             [
-                'title' => 'required',
-                'article_type_id' => 'required',
-                'country_id' => 'required|integer',
-                'keywords' => 'required|string',
-                'areas'  => 'required|string',
-                'tables' => 'required|integer',
-                'figures' => 'required|integer',
-                'words' => 'required|integer',
-                'pages' => 'required|integer',
-                'confirmed.*' => 'required|in:1'
+                'title'             => 'required',
+                'article_type_id'   => 'required',
+                'country_id'        => 'required|integer',
+                'keywords'          => 'required|string',
+                'areas'             => 'required|string',
+                'tables'            => 'required|integer',
+                'figures'           => 'required|integer',
+                'words'             => 'required|integer',
+                'pages'             => 'required|integer',
+                'confirmed.*'       => 'required|in:1'
             ], attributes: [
                 'article_type_id' => 'Article Type',
                 'country_id' => 'Country'
@@ -211,10 +211,8 @@ class Submission extends Component
             ]);
 
             if(ReviewMessage::where('category', 'Submission')->count() > 0){
-
-                Mail::to('mrenatuskiheka@yahoo.com')
+                Mail::to($article->author->email)
                     ->send(new Submissions($article));
-
             }
         }
 
@@ -235,9 +233,9 @@ class Submission extends Component
             }
 
             Notification::create([
-                'article_id' => $article->id,
+                'article_id'      => $article->id,
                 'journal_user_id' => $journal_user->id,
-                'status' => 1
+                'status'          => 1
             ]);
         }
 
@@ -333,7 +331,7 @@ class Submission extends Component
             $this->record->paper_id = $paper_id;
 
             if(ReviewMessage::where('category', 'Submission')->count() > 0){
-                Mail::to('mrenatuskiheka@yahoo.com')
+                Mail::to($this->record->author->email)
                     ->send(new Submissions($this->record));
             }
         }

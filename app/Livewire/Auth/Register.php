@@ -178,7 +178,7 @@ class Register extends Component
                 $journal_us->assignRole('Author');
             }
     
-            Mail::to('mrenatuskiheka@yahoo.com')
+            Mail::to($this->email)
                 ->send(new JournalAccount($this->journal, $user));
             
             session()->flash('success', 'You are successfully registered as an author on this journal');

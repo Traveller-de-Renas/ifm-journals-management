@@ -116,10 +116,10 @@
                         </a>
                     </div>
 
-                    <div class="text-sm text-blue-700 font-semibold hover:text-blue-600 mb-2">
+                    <div class="text-sm text-green-700 font-semibold hover:text-green-600 mb-2">
                         @if($article->user_id == 1)
                             @foreach ($article->co_authors()->whereNotNull('first_name')->get() as $co_author)
-                            <span class="hover:text-blue-600 hover:underline cursor-pointer mr-2">{{ $co_author->last_name }}, {{ strtoupper(substr($co_author->first_name, 0, 1)) }}.</span>
+                            <span class="hover:text-green-600 hover:underline cursor-pointer mr-2">{{ $co_author->last_name }}, {{ strtoupper(substr($co_author->first_name, 0, 1)) }}.</span>
                             @endforeach
                         @else
                             @foreach ($article?->article_journal_users()->whereHas('roles', function($query){ $query->where('name', 'Author');})->get() as $key => $article_user)

@@ -28,6 +28,7 @@ class JournalDetails extends Component
 
     public $tab    = 'overview';
     public $subtab = 'all_issues';
+    public $cissue;
 
     public function mount(Request $request){
 
@@ -42,6 +43,8 @@ class JournalDetails extends Component
 
         $this->countries   = Country::all()->pluck('name', 'id')->toArray();
         $this->salutations = Salutation::all()->pluck('title', 'id')->toArray();
+
+        $this->cissue = $this->record->issues()->where('number', $this->record->issues()->max('number'))->first();
     }
 
     public function render()

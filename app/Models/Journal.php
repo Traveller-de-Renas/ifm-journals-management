@@ -79,16 +79,6 @@ class Journal extends Model
         return $this->hasMany(Issue::class);
     }
 
-    public function volume()
-    {
-        return $this->belongsTo(Volume::class);
-    }
-
-    public function issue()
-    {
-        return $this->belongsTo(Issue::class);
-    }
-
     public function call_for_papers()
     {
         return $this->hasMany(CallForPaper::class);

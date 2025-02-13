@@ -97,12 +97,12 @@ class JournalTeam extends Component
                 $user->assignRole('Associate Editor');
 
                 if(ReviewMessage::where('category', 'Add Associate Editor')->count() > 0){
-                    Mail::to('mrenatuskiheka@yahoo.com')
+                    Mail::to($data->email)
                         ->send(new EditorialTeam($this->journal, $user, 'Add Associate Editor'));
                 }
 
                 if(ReviewMessage::where('category', 'Access Credentials')->count() > 0){
-                    Mail::to('mrenatuskiheka@yahoo.com')
+                    Mail::to($data->email)
                         ->send(new AccessCredentials($this->journal, $user, $password, 'Access Credentials'));
                 }
             }

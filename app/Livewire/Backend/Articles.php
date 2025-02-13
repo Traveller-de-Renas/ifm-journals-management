@@ -469,10 +469,10 @@ class Articles extends Component
 
 
 
-            if(ReviewMessage::where('category', 'Article Returns')->count() > 0){
-                Mail::to('mrenatuskiheka@yahoo.com')
-                    ->send(new ArticleReturns($this->record));
-            }
+            // if(ReviewMessage::where('category', 'Article Returns')->count() > 0){
+            //     Mail::to($this->record->author->email)
+            //         ->send(new ArticleReturns($this->record));
+            // }
             
         }else{
             //updating notification
@@ -586,16 +586,15 @@ class Articles extends Component
         ]);
 
 
-
         session()->flash('response',[
             'status'  => 'success', 
-            'message' => 'Associate Editor '.$user->user->last_name.' is successfully assigned as to Followup on this Manuscript'
+            'message' => $user->user->last_name.' is successfully assigned as Associate Editor to Followup on this Manuscript'
         ]);
 
-        if (ReviewMessage::where('category', 'Article Assignment')->exists()) {
-            Mail::to('mrenatuskiheka@yahoo.com')
-                ->send(new ArticleAssignment($this->record));
-        }
+        // if (ReviewMessage::where('category', 'Article Assignment')->exists()) {
+        //     Mail::to($user->user->email)
+        //         ->send(new ArticleAssignment($this->record));
+        // }
         
         $this->closeDrawerA();
     }
@@ -643,10 +642,10 @@ class Articles extends Component
             ]], false);
 
 
-            if(ReviewMessage::where('category', 'Review Request')->count() > 0){
-                Mail::to('mrenatuskiheka@yahoo.com')
-                    ->send(new ReviewRequest($this->record, $user_s));
-            }
+            // if(ReviewMessage::where('category', 'Review Request')->count() > 0){
+            //     Mail::to($user_s->user->email)
+            //         ->send(new ReviewRequest($this->record, $user_s));
+            // }
         }
 
         $this->users_x = [];
@@ -759,10 +758,9 @@ class Articles extends Component
         $this->record->update([
             'article_status_id' => $status->id
         ]);
-
         
-        Mail::to('mrenatuskiheka@yahoo.com')
-            ->send(new ReviewStatus($this->record, $this->editor_comments, array_keys($this->send, true, true)));
+        // Mail::to($this->record->author->email)
+        //     ->send(new ReviewStatus($this->record, $this->editor_comments, array_keys($this->send, true, true)));
 
 
         if($this->review_status == "018"){
