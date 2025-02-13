@@ -109,12 +109,12 @@
 
                     <div class="w-full mb-4">
                         <p class="text-lg font-bold mb-2">Aim and Scope</p>
-                        <div class="text-justify">
+                        <div class="text-justify mb-6">
                             {!! $record->scope !!}
                         </div>
 
 
-                        <p class="text-lg font-bold mb-2">Current Issue {{ $cissue->volume->description.' '.$cissue->description }}</p>
+                        <p class="text-lg font-bold mb-2">Current Issue <span class="text-gray-500 font-semibold text-sm">{{ $cissue->volume->description.' '.$cissue->description }}</span></p>
                         
                         @if ($cissue->articles->count() > 0)
                         @foreach ($cissue->articles as $key => $article)
