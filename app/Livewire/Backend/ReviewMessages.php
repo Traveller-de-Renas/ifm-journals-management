@@ -4,6 +4,7 @@ namespace App\Livewire\Backend;
 
 use Livewire\Component;
 use App\Models\ReviewMessage;
+use App\Models\NotificationCategory;
 
 class ReviewMessages extends Component
 {
@@ -17,7 +18,8 @@ class ReviewMessages extends Component
 
     public function render()
     {
-        $messages = ReviewMessage::when($this->query, function ($query) {
+        $categories = NotificationCategory::where('status', 1)->get();
+        $messages   = ReviewMessage::when($this->query, function ($query) {
             return $query->where(function ($query) {
                 $query->where('description', 'ilike', '%' . $this->query . '%');
             });
@@ -25,7 +27,7 @@ class ReviewMessages extends Component
 
         $messages = $messages->paginate(20);
 
-        return view('livewire.backend.review-messages', compact('messages'));
+        return view('livewire.backend.review-messages', compact('messages', 'categories'));
     }
 
     public function store()

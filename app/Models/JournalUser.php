@@ -14,7 +14,8 @@ class JournalUser extends Model
     protected $fillable = [
         'journal_id',
         'user_id',
-        'can_review'
+        'can_review',
+        'status'
     ];
 
     public function journal()

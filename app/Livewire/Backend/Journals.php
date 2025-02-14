@@ -18,7 +18,6 @@ use App\Models\JournalSubject;
 use App\Mail\AccessCredentials;
 use App\Models\CoAuthor;
 use App\Models\JournalCategory;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -127,10 +126,10 @@ class Journals extends Component
         if(!$check->hasRole('Chief Editor')){
             $check->assignRole('Chief Editor');
 
-            // if(ReviewMessage::where('category', 'Assign Chief Editor')->count() > 0){
-            //     Mail::to($user->email)
-            //         ->send(new EditorialTeam($this->record, $check, 'Assign Chief Editor'));
-            // }
+            if(ReviewMessage::where('category', 'Assign Chief Editor')->count() > 0){
+                Mail::to($user->email)
+                    ->send(new EditorialTeam($this->record, $check, 'Assign Chief Editor'));
+            }
 
             session()->flash('response',[
                 'status'  => '', 

@@ -1,4 +1,3 @@
-Hello,
 <br>
 <br>
 {!! $review_message->description !!}

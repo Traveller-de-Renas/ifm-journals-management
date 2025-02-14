@@ -9,7 +9,6 @@ use Livewire\Component;
 use App\Mail\ReviewStatus;
 use App\Mail\ReviewRequest;
 use App\Models\JournalUser;
-use App\Mail\ArticleReturns;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Livewire\WithPagination;
@@ -20,7 +19,6 @@ use App\Models\ReviewSection;
 use Livewire\WithFileUploads;
 use App\Models\ArticleComment;
 use App\Mail\ArticleAssignment;
-use App\Mail\ArticlePublishing;
 use Illuminate\Support\Facades\Mail;
 
 class Articles extends Component
@@ -466,13 +464,6 @@ class Articles extends Component
                 'journal_user_id' => $journal_user->id,
                 'status'          => 1
             ]);
-
-
-
-            // if(ReviewMessage::where('category', 'Article Returns')->count() > 0){
-            //     Mail::to($this->record->author->email)
-            //         ->send(new ArticleReturns($this->record));
-            // }
             
         }else{
             //updating notification
@@ -591,10 +582,10 @@ class Articles extends Component
             'message' => $user->user->last_name.' is successfully assigned as Associate Editor to Followup on this Manuscript'
         ]);
 
-        // if (ReviewMessage::where('category', 'Article Assignment')->exists()) {
-        //     Mail::to($user->user->email)
-        //         ->send(new ArticleAssignment($this->record));
-        // }
+        if (ReviewMessage::where('category', 'Article Assignment')->exists()) {
+            Mail::to($user->user->email)
+                ->send(new ArticleAssignment($this->record));
+        }
         
         $this->closeDrawerA();
     }
@@ -642,10 +633,10 @@ class Articles extends Component
             ]], false);
 
 
-            // if(ReviewMessage::where('category', 'Review Request')->count() > 0){
-            //     Mail::to($user_s->user->email)
-            //         ->send(new ReviewRequest($this->record, $user_s));
-            // }
+            if(ReviewMessage::where('category', 'Review Request')->count() > 0){
+                Mail::to($user_s->user->email)
+                    ->send(new ReviewRequest($this->record, $user_s));
+            }
         }
 
         $this->users_x = [];
@@ -759,8 +750,8 @@ class Articles extends Component
             'article_status_id' => $status->id
         ]);
         
-        // Mail::to($this->record->author->email)
-        //     ->send(new ReviewStatus($this->record, $this->editor_comments, array_keys($this->send, true, true)));
+        Mail::to($this->record->author->email)
+            ->send(new ReviewStatus($this->record, $this->editor_comments, array_keys($this->send, true, true)));
 
 
         if($this->review_status == "018"){
@@ -853,9 +844,6 @@ class Articles extends Component
             'message' => 'This manuscript is Successfully set Pending for publication'
         ]);
     }
-
-
-
 
 
 

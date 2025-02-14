@@ -2,23 +2,32 @@
 
 namespace App\Mail;
 
+use App\Models\ReviewMessage;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AccountActivation extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $journal;
+    public $user;
+
+    public $review_message;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($journal, $user)
     {
-        //
+        $this->journal = $journal;
+        $this->user    = $user;
+
+        $this->review_message = ReviewMessage::where('category', 'Account Activation')->first();
     }
 
     /**
@@ -27,7 +36,7 @@ class AccountActivation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Account Activation',
+            subject: 'Welcome to '.$this->journal->title.' Activate Your Account',
         );
     }
 
@@ -37,7 +46,7 @@ class AccountActivation extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'mail.account_activation',
         );
     }
 

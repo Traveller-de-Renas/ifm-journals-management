@@ -2,7 +2,7 @@
 
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
-            <p class="font-bold">{{ __('CUSTOMIZED REVIEW MESSAGES') }}</p>
+            <p class="font-bold">{{ __('CUSTOMIZED NOTIFICATION MESSAGES') }}</p>
         </div>
         <div class="">
 
@@ -107,7 +107,7 @@
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
-                Create Review Message
+                Create Notification Message
             </h5>
     
             <button wire:click="closeDrawer" 
@@ -123,24 +123,9 @@
                 <x-label for="category" value="Category" class="mb-2 block font-medium text-sm text-gray-700" />
                 <select id="category" wire:model="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     <option selected>Choose a category</option>
-                    <option value="Journal Account">{{ __('Journal Account') }}</option>
-                    <option value="Submission">{{ __('Submission') }}</option>
-                    <option value="Article Revisions">{{ __('Article Revisions') }}</option>
-                    <option value="Article Rejection">{{ __('Article Rejection') }}</option>
-                    <option value="Article Assignment">{{ __('Article Assignment') }}</option>
-                    <option value="Review Request">{{ __('Review Request') }}</option>
-                    <option value="Review Reminder">{{ __('Review Reminder') }}</option>
-                    <option value="Acceptance Letter">{{ __('Acceptance Letter') }}</option>
-                    <option value="Completed Review">{{ __('Completed Review') }}</option>
-                    <option value="Declined Review">{{ __('Declined Review') }}</option>
-                    <option value="Call for Papers">{{ __('Call for Papers') }}</option>
-
-                    <option value="Assign Chief Editor">{{ __('Assign Chief Editor') }}</option>
-                    <option value="Add Associate Editor">{{ __('Add Associate Editor') }}</option>
-                    <option value="Add Supporting Editor">{{ __('Add Supporting Editor') }}</option>
-                    <option value="Access Credentials">{{ __('Access Credentials') }}</option>
-
-
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->name }}" >{{ $category->name }}</option>
+                    @endforeach
                 </select>
                 <x-input-error for="category" />
             </div>

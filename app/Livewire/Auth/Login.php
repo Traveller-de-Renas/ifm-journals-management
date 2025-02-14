@@ -49,15 +49,15 @@ class Login extends Component
             }else{
                 if($this->journal){
                     session(['journal' => $this->journal->uuid]);
-                    if(!$user->journal_us()->where('journal_id', $this->journal->id)->exists()){
+                    if(!$user->journal_us()->where('journal_id', $this->journal->id)->where('status', 1)->exists()){
                         Auth::logout();
                         
-                        session()->flash('error_message', 'It seems you are not registered to this journal please register to proceed.');
+                        session()->flash('error_message', 'It seems you are not registered to this journal please register, or activate your account to proceed.');
 
                         return redirect()->route('login', ['journal' => $this->journal->uuid]);
                     }
 
-                    return redirect(route('journals.submission', $this->journal->uuid));
+                    return redirect(route('journals.articles', ['journal' => $this->journal->uuid, 'status' => 'with_decisions']));
                 }else{
                     session()->flash('error_message', 'It seems you have not selected a journal to login.');
                 }

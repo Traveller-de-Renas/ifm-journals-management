@@ -105,32 +105,30 @@ class Register extends Component
             'password'      => Hash::make($this->password)
         ]);
 
-        //$password = Hash::make($this->password);
-        // $data->save();
-
         $review = 0;
         if(isset($this->can_review)){
             $review = 1;
         }
+
+        $journal_user = $data->journal_us()->where('journal_id', $this->journal->id);
         
-        if($data->journal_us()->where('journal_id', $this->journal->id)->count() == 0){
-            $data->journal_us()->create([
+        if($journal_user->count() == 0){
+            $journal_user = $data->journal_us()->create([
                 'journal_id' => $this->journal->id,
-                'can_review' => $review
+                'can_review' => $review,
             ]);
+
+            $journal_user->assignRole('Author');
         }
-        
 
-        $data->assignRole('Author');
+        session()->flash('success', 'You are successfully registered as new author on this journal to proceed with to the submission portal please activate your account through the link sent to your email address.');
 
-        // if(ReviewMessage::where('category', 'Journal Account')->count() > 0){
-        //     Mail::to('mrenatuskiheka@yahoo.com')
-        //         ->send(new JournalAccount($this->journal, $data));
-        // }
+        if(ReviewMessage::where('category', 'Journal Account')->count() > 0){
+            Mail::to($this->email)
+                ->send(new JournalAccount($this->journal, $data));
+        }
 
-        // $this->accountActivation($this->email);
-
-        session()->flash('success', 'Your Account is Successifully Created login with the email and password you provided');
+        $this->accountActivationLink($data);
 
         return redirect(route('login', $this->journal->uuid));
     }
@@ -145,11 +143,12 @@ class Register extends Component
         }
     }
 
-    public function accountActivation()
+    public function accountActivationLink($user)
     {
-        //$user = User::where('email', $this->email)->first();
-        Mail::to('mrenatuskiheka@yahoo.com')
-            ->send(new AccountActivation($this->journal, $user));
+        if(ReviewMessage::where('category', 'Account Activation')->count() > 0){
+            Mail::to($user->email)
+                ->send(new AccountActivation($this->journal, $user));
+        }
         
     }
 
@@ -180,11 +179,15 @@ class Register extends Component
             if(!($journal_us->hasRole('Author'))){
                 $journal_us->assignRole('Author');
             }
-    
-            Mail::to($this->email)
-                ->send(new JournalAccount($this->journal, $user));
+
+            if(ReviewMessage::where('category', 'Journal Account')->count() > 0){
+                Mail::to($this->email)
+                    ->send(new JournalAccount($this->journal, $user));
+            }
+
+            $this->accountActivationLink($user);
             
-            session()->flash('success', 'You are successfully registered as an author on this journal');
+            session()->flash('success', 'You are successfully registered as new author on this journal to proceed with to the submission portal please activate your account through the link sent to your email address.');
         }else{
             session()->flash('error', 'No user record found registered with this email on this journal');
         }

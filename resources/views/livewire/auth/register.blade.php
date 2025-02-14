@@ -42,7 +42,7 @@
                 <div class="col-span-2">
                     @if($journal->image == '')
                     <div class="p-2">
-                        <svg class="w-full text-white dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                        <svg class="w-full text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                             <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
                         </svg>
                     </div>
@@ -73,7 +73,7 @@
                 </div>
             @endif
 
-            <h1 class="text-2xl text-gray-800 dark:text-gray-100 font-bold mb-6">{{ __('Create your Account') }}</h1>
+            <h1 class="text-2xl text-gray-800 font-bold mb-6">{{ __('Create your Account') }}</h1>
 
             <div class="space-y-4">
 
@@ -135,9 +135,9 @@
                     </div>
 
                     <div class="mt-2 mb-6 flex justify-between gap-4">
-                        <div class="flex ps-3 border border-gray-200 rounded-lg dark:border-gray-700 flex-1">
-                            <input id="bordered-checkbox-1" type="checkbox" wire:model="can_review" value="Associate Editor" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 mt-4">
-                            <label for="bordered-checkbox-1" class="w-full py-3 ms-2 text-xs font-medium text-gray-900 dark:text-gray-300">By checking this box I confirm that I want my account to be invited for peer review.</label>
+                        <div class="flex ps-3 border border-gray-200 rounded-lg flex-1">
+                            <input id="bordered-checkbox-1" type="checkbox" wire:model="can_review" value="Associate Editor" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 mt-4">
+                            <label for="bordered-checkbox-1" class="w-full py-3 ms-2 text-xs font-medium text-gray-900">By checking this box I confirm that I want my account to be invited for peer review.</label>
                         </div>
                     </div>
 
@@ -151,7 +151,7 @@
             </div>
             
 
-            <div class="pt-5 mt-6 border-t border-gray-100 dark:border-gray-700/60">
+            <div class="pt-5 mt-6 border-t border-gray-100">
                 <div class="text-sm">
                     {{ __('Have an account?') }} <a class="font-medium text-blue-400 hover:text-blue-600" href="{{ route('login',  $journal->uuid) }}">{{ __('Sign In') }}</a>
                 </div>

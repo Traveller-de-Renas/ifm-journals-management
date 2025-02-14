@@ -113,7 +113,7 @@ class JournalTeam extends Component
                 $user->assignRole('Supporting Editor');
 
                 if(ReviewMessage::where('category', 'Add Supporting Editor')->count() > 0){
-                    Mail::to('mrenatuskiheka@yahoo.com')
+                    Mail::to($data->email)
                         ->send(new EditorialTeam($this->journal, $user, $password, 'Add Supporting Editor'));
                 }
             }
