@@ -91,10 +91,6 @@
                 </div>
                 @endif
 
-                @php
-                    $coauthors = $record->article_journal_users()->get()
-                @endphp
-
             </div>
         </div>
 
@@ -108,9 +104,15 @@
                 @else
                     <span class="hover:text-blue-600 hover:underline cursor-pointer">{{ $record->author->last_name }}, {{ strtoupper(substr($record->author->first_name, 0, 1)) }}.
                     </span>
-                    @foreach ($coauthors as $key => $user)
-                        <span class="hover:text-blue-600 hover:underline cursor-pointer">{{ $user->last_name }}, {{ strtoupper(substr($user->first_name, 0, 1)) }}.  </span>
-                    @endforeach
+
+                    @php
+                        $coauthors = $record->article_journal_users()->where('journal_user_id', '!=', $record->author->journal_us()->where('journal_id', $record->journal_id)->first()->id)->get();
+                    @endphp
+                    @if(count($coauthors) > 0)
+                        @foreach ($coauthors as $key => $user)
+                            <span class="hover:text-blue-600 hover:underline cursor-pointer">{{ $user->user->last_name }}, {{ strtoupper(substr($user->user->first_name, 0, 1)) }}.  </span>
+                        @endforeach
+                    @endif
                 @endif
 
                 ({{ \Carbon\Carbon::parse($record->publication_date)->format('Y') }}),
@@ -118,7 +120,17 @@
                 "{{ __($record->title) }}",
 
                 <span class="font-bold italic hover:text-blue-600 hover:underline cursor-pointer"><a href="{{ route('journal.detail', $record?->journal->uuid) }}">{{ __($record->journal?->title) }}</a></span>,
-                {{ $record->issue?->volume->description }}, {{ $record->issue?->description }}, {{ $record->issue?->volume->journal->issn }}. {{ $record->issue?->volume->journal->doi }}
+                <a href="{{ route('journal.articles', $record->issue->uuid) }}" class="hover:text-blue-600 hover:underline cursor-pointer" >
+                {{ $record->issue?->volume->description }} {{ $record->issue?->description }}
+                </a>
+                
+                @if($record->issue?->volume->journal->issn)
+                , {{ $record->issue?->volume->journal->issn }}.
+                @endif
+
+                @if($record->issue?->volume->journal->doi)
+                {{ $record->issue?->volume->journal->doi }}
+                @endif
             </div>
         </div>
     </div>

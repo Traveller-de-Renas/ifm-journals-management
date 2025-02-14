@@ -64,7 +64,7 @@
     
     <div class="max-w-7xl mx-auto px-4 mb-8 ">
     <x-authentication-card>
-        <h1 class="text-2xl text-gray-800 dark:text-gray-100 font-bold mb-6">{{ __('Login into Journal') }}</h1>
+        <h1 class="text-2xl text-gray-800 font-bold mb-6">{{ __('Login into Journal') }}</h1>
 
         @if (session()->has('error_message'))
             <div class="bg-red-500 text-white p-3 rounded mb-4">

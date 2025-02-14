@@ -50,7 +50,7 @@
                         <img class="w-full rounded-md rounded-bl-md mt-4" src="{{ asset('storage/journals/'.$record->image) }}" alt="{{ strtoupper($record->code) }}">
                     @endif
 
-                    <a href="{{ route('journals.submission', $record->uuid) }}">
+                    <a href="{{ route('login', $record->uuid) }}">
                         <x-button class="mb-4 mt-2 w-full">Submit a Paper </x-button>
                     </a>
                 </div>
@@ -114,6 +114,31 @@
                         </div>
 
 
+                        <p class="text-lg font-bold mb-2 mt-6">Call for Papers</p>
+                        <div class="mb-6">
+                            @foreach ($record->call_for_papers as $call)
+                                <div class="bg-white shadow-md mb-2">
+                                    <div class="p-2 text-xs">
+                                        <span class="font-semibold">CLOSES ON</span> : <span class="text-gray-500">{{ \Carbon\Carbon::parse( $call->end_date)->format('d M Y') }}</span>
+                                    </div>
+                                    <div class="p-2 border-b border-t">
+
+                                        <p class="font-semibold hover:text-blue-600">
+                                            <a href="{{ route('journal.call_detail', $call->uuid) }}">{{ $call->title }}</a>
+                                        </p>
+                                        
+                                        <div class="mt-2 text-xs text-gray-500 text-justify">
+                                            {!! Str::limit(strip_tags($call->description), 250) !!}
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+
                         <p class="text-lg font-bold mb-2">Current Issue <span class="text-gray-500 font-semibold text-sm">{{ $cissue->volume->description.' '.$cissue->description }}</span></p>
                         
                         @if ($cissue->articles->count() > 0)
@@ -174,52 +199,8 @@
                             <div class="w-full bg-blue-400 rounded shadow p-2">No Articles Found</div>
             
                         @endif
-
-
-                        <p class="text-lg font-bold mb-2 mt-6">Call for Papers</p>
-                        <div >
-                            @foreach ($record->call_for_papers as $call)
-                                <div class="bg-white shadow-md mb-2">
-                                    <div class="p-2 text-xs">
-                                        <span class="font-semibold">CLOSES ON</span> : <span class="text-gray-500">{{ \Carbon\Carbon::parse( $call->end_date)->format('d M Y') }}</span>
-                                    </div>
-                                    <div class="p-2 border-b border-t">
-
-                                        <p class="font-semibold hover:text-blue-600">
-                                            <a href="{{ route('journal.call_detail', $call->uuid) }}">{{ $call->title }}</a>
-                                        </p>
-                                        
-                                        <div class="mt-2 text-xs text-gray-500 text-justify">
-                                            {!! Str::limit(strip_tags($call->description), 250) !!}
-                                        </div>
-                                    </div>
-                                    <div class="p-2">
-
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    @if(!empty($record->indecies) && count($record->indecies) > 0)
-                    <div class="w-full mb-4">
-                        <p class="text-lg font-bold mb-2">Indexing</p>
-                        
-                        @foreach ($record->indecies as $index)
-                            <div class="rounded-sm border border-slate-200 mb-2" x-data="{ open: false }">
-                                <div class="w-full p-2 cursor-pointer" @click.prevent="open = !open" :aria-expanded="open">
-                                    <div class="text-slate-800">
-                                        <a href="{{ $index->link }}" target="_blank" >{{ $index->title }}</a>
-                                    </div>
-                                </div>
-                                <div class="text-sm p-2" x-show="open" x-cloak="">
-                                    {{ $index->description }}
-                                </div>
-                            </div>
-                        @endforeach
                         
                     </div>
-                    @endif
 
                 </div>
 
@@ -440,11 +421,11 @@
             <div class="col-span-4">
 
                 <div class="w-full mb-4">
-                <p class="text-lg font-bold mb-2 pl-2">Recent Articles</p>
+                <p class="text-lg font-bold mb-2 pl-2">Most Viewed Articles</p>
 
                     @php
                         $statusp = App\Models\ArticleStatus::where('code', '014')->first();
-                        $recent = $record->articles()->where('article_status_id', $statusp->id)->orderBy('created_at', 'desc')->limit(5)->get();
+                        $recent  = $record->articles()->where('downloads', '>', 0)->orderBy('downloads', 'desc')->limit(5)->get();
                     @endphp
                     
                     @if(count( $recent ) > 0)
@@ -469,10 +450,10 @@
                         </a>
                     @endforeach
                     
-                    <x-button class="mb-4 w-full " wire:click="changeTab('table_of_contents')">View All </x-button>
+                    <x-button class="mb-4 w-full " wire:click="changeTab('table_of_contents')">View All Articles </x-button>
                     @else
                         <div class="text-sm font-bold text-blue-700 text-center bg-gray-50 hover:bg-gray-100 cursor-pointer p-2 mb-2 mt-2 shadow">
-                            No Recent Articles Published
+                            No Most Viewed Articles
                         </div>
                     @endif
                 </div>

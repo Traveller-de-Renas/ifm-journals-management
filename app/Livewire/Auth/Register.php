@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use App\Mail\JournalAccount;
 use Illuminate\Http\Request;
 use App\Models\ReviewMessage;
+use App\Mail\AccountActivation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -122,10 +123,12 @@ class Register extends Component
 
         $data->assignRole('Author');
 
-        if(ReviewMessage::where('category', 'Journal Account')->count() > 0){
-            Mail::to('mrenatuskiheka@yahoo.com')
-                ->send(new JournalAccount($this->journal, $data));
-        }
+        // if(ReviewMessage::where('category', 'Journal Account')->count() > 0){
+        //     Mail::to('mrenatuskiheka@yahoo.com')
+        //         ->send(new JournalAccount($this->journal, $data));
+        // }
+
+        // $this->accountActivation($this->email);
 
         session()->flash('success', 'Your Account is Successifully Created login with the email and password you provided');
 
@@ -142,11 +145,11 @@ class Register extends Component
         }
     }
 
-    public function enrollConfirmation()
+    public function accountActivation()
     {
         //$user = User::where('email', $this->email)->first();
         Mail::to('mrenatuskiheka@yahoo.com')
-            ->send(new JournalAccount($this->journal, $user));
+            ->send(new AccountActivation($this->journal, $user));
         
     }
 
@@ -188,5 +191,6 @@ class Register extends Component
 
     
     }
+
 
 }

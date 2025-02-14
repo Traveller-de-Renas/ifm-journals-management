@@ -51,24 +51,24 @@
                             </svg>
                         </button>
                         <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
-                            <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
+                            <ul class="flex flex-col font-medium p-6 md:p-0 mt-4 mb-2 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
                                 <li>
-                                    <a href="{{ url('/') }}" class="block py-2 px-3 text-white bg-[#175883] rounded md:bg-transparent md:text-[#175883] md:p-0" aria-current="page">Home</a>
+                                    <a href="{{ url('/') }}" class="block px-3 text-white bg-[#175883] rounded md:bg-transparent md:text-[#175883] md:p-0" aria-current="page">Home</a>
                                 </li>
                                 
                                 <li>
-                                    <a href="{{ route('journal.viewall') }}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#175883] md:p-0">Journals</a>
+                                    <a href="{{ route('journal.viewall') }}" class="block px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#175883] md:p-0">Journals</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('journal.callfor_paper') }}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#175883] md:p-0">Call for Papers</a>
+                                    <a href="{{ route('journal.callfor_paper') }}" class="block px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#175883] md:p-0">Call for Papers</a>
                                 </li>
                                 @if (explode('/', request()->path())[0] == 'journal' && explode('/', request()->path())[1] == 'detail' && Str::isUuid(explode('/', request()->path())[2]))
                                     <li>
-                                        <a href="{{ route('login', explode('/', request()->path())[2]) }}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#175883]md:p-0">Login</a>
+                                        <a href="{{ route('login', explode('/', request()->path())[2]) }}" class="block px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#175883]md:p-0">Login</a>
                                     </li>
                                 
                                     <li>
-                                        <a href="{{ route('register', explode('/', request()->path())[2]) }}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#175883] md:p-0">Register</a>
+                                        <a href="{{ route('register', explode('/', request()->path())[2]) }}" class="block px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#175883] md:p-0">Register</a>
                                     </li>
                                 @endif
                             </ul>
