@@ -25,7 +25,7 @@ class FileCategories extends Seeder
                 'name'        => $notification['name'],
                 'description' => $notification['description'],
                 'code'        => $notification['code'],
-                'submitted'   => $notification['submission']
+                'submitted'   => $notification['submitted']
             ]);
         }
     }
