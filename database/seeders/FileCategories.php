@@ -13,11 +13,11 @@ class FileCategories extends Seeder
     public function run(): void
     {
         $notifications = array(
-            array('name'=>"Title Page", 'description'=>'Title Page', 'code'=>'001', 'submission'=>'submission'),
-            array('name'=>"Anonymous Manuscript File", 'description'=>'Anonymous Manuscript File', 'code'=>'002', 'submission'=>'submission'),
-            array('name'=>"Title Page", 'description'=>'Title Page', 'code'=>'003', 'submission'=>'resubmission'),
-            array('name'=>"Revised Anonymous Manuscript File", 'description'=>'Revised Anonymous Manuscript File', 'code'=>'004', 'submission'=>'resubmission'),
-            array('name'=>"Reviewer Comments Matrix", 'description'=>'Reviewer Comments Matrix', 'code'=>'005', 'submission'=>'resubmission'),
+            array('name'=>"Title Page", 'description'=>'Title Page', 'code'=>'001', 'submitted'=>'submission'),
+            array('name'=>"Anonymous Manuscript File", 'description'=>'Anonymous Manuscript File', 'code'=>'002', 'submitted'=>'submission'),
+            array('name'=>"Title Page", 'description'=>'Title Page', 'code'=>'003', 'submitted'=>'resubmission'),
+            array('name'=>"Revised Anonymous Manuscript File", 'description'=>'Revised Anonymous Manuscript File', 'code'=>'004', 'submitted'=>'resubmission'),
+            array('name'=>"Reviewer Comments Matrix", 'description'=>'Reviewer Comments Matrix', 'code'=>'005', 'submitted'=>'resubmission'),
         );
 
         foreach($notifications as $notification){
@@ -25,7 +25,7 @@ class FileCategories extends Seeder
                 'name'        => $notification['name'],
                 'description' => $notification['description'],
                 'code'        => $notification['code'],
-                'submission'  => $notification['submission']
+                'submitted'   => $notification['submission']
             ]);
         }
     }
