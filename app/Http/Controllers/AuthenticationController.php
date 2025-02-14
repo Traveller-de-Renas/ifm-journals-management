@@ -10,12 +10,11 @@ class AuthenticationController extends Controller
 
     public function login()
     {
-        if(session()->has('journal')){
+        if(session()->has('journal') || request('journal')){
             return view('auth.login');
         }else{
             return view('frontend.home');
         }
-        
     }
 
     public function admin()
@@ -43,10 +42,8 @@ class AuthenticationController extends Controller
         return redirect($route);
     }
 
-
     public function accountActivation()
     {
         dd('Activate Account');
     }
-
 }
