@@ -38,7 +38,6 @@ class ForgotPassword extends Component
             ]);
 
             if(ReviewMessage::where('category', 'Password Request')->count() > 0){
-                dd($this->email);
                 Mail::to($this->email)
                     ->send(new PasswordRequest($user->first(), $prequest));
             }
