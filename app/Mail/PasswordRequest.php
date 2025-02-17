@@ -23,7 +23,6 @@ class PasswordRequest extends Mailable
      */
     public function __construct($user, $prequest)
     {
-        dd($user);
         $this->user = $user;
         $this->prequest = $prequest;
         $this->review_message = ReviewMessage::where('category', 'Password Request')->first();
