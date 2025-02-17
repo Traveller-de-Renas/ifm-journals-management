@@ -74,24 +74,20 @@
             </div>
         </div>
 
-        <div class="w-full mb-12 grid grid-cols-12 gap-2">
-            <div class="col-span-8">
-
-                @if($record->keywords != '')
-                <div class="w-full mb-4">
-                    <p class="text-lg font-bold mb-4">Keywords</p>
-                    <div class="flex gap-2">
-                        @php
-                            $keywords = explode(',', $record->keywords);
-                        @endphp
-                        @foreach ($keywords as $key => $keyword)
-                            <span class="shadow px-4 py-2 hover:bg-gray-100 cursor-pointer border rounded-xl"> {{ $keyword }} </span>
-                        @endforeach
-                    </div>
+        <div class="w-full mb-12">
+            @if($record->keywords != '')
+            <div class="w-full mb-4">
+                <p class="text-lg font-bold mb-4">Keywords</p>
+                <div class="flex gap-2">
+                    @php
+                        $keywords = explode(',', $record->keywords);
+                    @endphp
+                    @foreach ($keywords as $key => $keyword)
+                        <span class="shadow px-4 py-2 hover:bg-gray-100 cursor-pointer border rounded-xl"> {{ $keyword }} </span>
+                    @endforeach
                 </div>
-                @endif
-
             </div>
+            @endif
         </div>
 
         <div class="w-full mb-12 grid grid-cols-12 gap-2">
