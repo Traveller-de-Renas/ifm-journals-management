@@ -32,8 +32,6 @@ class Register extends Component
     public $interests;
     public $password;
     public $password_confirmation;
-    public $category = 'external';
-    public $pf_number;
 
     public $journal;
     public $countries;
@@ -66,17 +64,16 @@ class Register extends Component
     public function rules()
     {
         return [
-            'pf_number'   => 'nullable|required_if:category,internal|string',
-            'first_name'  => 'nullable|required_if:category,external|string',
+            'first_name'  => 'required|string',
             'middle_name' => 'nullable|string',
-            'last_name'   => 'nullable|required_if:category,external|string',
-            'gender' => 'required_if:category,external',
-            'phone'  => 'nullable|string',
-            'email'  => 'nullable|required_if:category,external|email',
-            'password'  => [
+            'last_name'   => 'required|string',
+            'gender'      => 'required',
+            'phone'       => 'nullable|string',
+            'email'       => 'required|email',
+            'password'    => [
                 'sometimes',
                 'nullable',
-                'required_if:category,external',
+                'required',
                 'confirmed',
                 'min:6',
                 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@$#%]).*$/'
@@ -100,7 +97,6 @@ class Register extends Component
             'degree'        => $this->degree,
             'interests'     => $this->interests,
             'country_id'    => $this->country,
-            'pf_number'     => $this->pf_number,
             'salutation_id' => $this->salutation,
             'password'      => Hash::make($this->password)
         ]);
@@ -130,7 +126,7 @@ class Register extends Component
 
         $this->accountActivationLink($data);
 
-        return redirect(route('login', $this->journal->uuid));
+        // return redirect(route('login', $this->journal->uuid));
     }
 
 

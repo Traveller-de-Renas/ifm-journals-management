@@ -27,6 +27,8 @@ Route::get('/login/{journal?}', [AuthenticationController::class, 'login'])->nam
 Route::get('/register/{journal?}', [AuthenticationController::class, 'register'])->name('register');
 Route::post('/logout/{journal?}', [AuthenticationController::class, 'logout'])->name('logout');
 Route::get('/account_activation/{journal?}/{user?}', [AuthenticationController::class, 'accountActivation'])->name('account_activation');
+Route::get('/password_request/{journal?}', [AuthenticationController::class, 'passwordRequest'])->name('password_request');
+Route::get('/password_reset/{user?}', [AuthenticationController::class, 'passwordReset'])->name('password_reset');
 
 Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/home', [JournalController::class, 'home'])->name('journals.home');

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('gender');
             $table->string('affiliation')->nullable();
-            $table->string('pf_number')->nullable();
 
             $table->foreignId('country_id')->nullable()->constrained(table: 'countries');
             $table->foreignId('salutation_id')->nullable()->constrained(table: 'salutations');

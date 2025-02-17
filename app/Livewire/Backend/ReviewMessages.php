@@ -34,12 +34,12 @@ class ReviewMessages extends Component
     {
         $this->validate([
             'description' => 'required',
-            'category' => 'required'
+            'category'    => 'required'
         ]);
 
         ReviewMessage::create([
             'description' => $this->description,
-            'category' => $this->category,
+            'category' => $this->category
         ]);
 
         session()->flash('response',[

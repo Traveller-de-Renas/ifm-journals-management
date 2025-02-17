@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Livewire\Auth;
+
+use Carbon\Carbon;
+use App\Models\User;
+use Livewire\Component;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Models\PasswordChangeRequest;
+
+class ResetPassword extends Component
+{
+    public $user;
+    public $password;
+    public $password_confirmation;
+    public $prequest;
+    
+    public function mount(){
+        if(!Str::isUuid(request('user'))){
+            abort(404);
+        }
+
+        $user_uid = strip_tags(request('user'));
+        $this->prequest = PasswordChangeRequest::where('uuid', $user_uid)->first();
+
+        if(empty($this->prequest)){
+            abort(404);
+        }
+
+        $start = Carbon::parse($this->prequest->created_at);
+        $end   = Carbon::parse(now());
+
+        $diff  = $start->diffInMinutes($end);
+
+        if($diff > 15){
+            $this->prequest->update([
+                'status' => 0
+            ]);
+        }
+
+
+    }
+
+
+    public function render()
+    {
+        return view('livewire.auth.reset-password');
+    }
+
+    public function resetPassword()
+    {
+        $this->validate(['password' => 'string|required|confirmed|min:6|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@$#%]).*$/']);
+        
+        if($this->prequest->user->update([
+            'password' => Hash::make($this->password)
+        ])){
+            session()->flash('success', 'You are successfully registered as new author on this journal to proceed with to the submission portal please activate your account through the link sent to your email address.');
+        }else{
+            session()->flash('error_message', 'Failed to update your password');
+        }
+    }
+}

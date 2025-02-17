@@ -77,13 +77,7 @@
 
             <div class="space-y-4">
 
-                <div {{ $category == 'internal' ? '' : 'hidden' }} class="mt-4">
-                    <x-label for="pf_number" class="text-xs">{{ __('PF Number') }} <span class="text-red-500">*</span></x-label>
-                    <x-input id="pf_number" type="text" wire:model="pf_number" :value="old('pf_number')" required autofocus autocomplete="off" />
-                    <x-input-error for="pf_number" />
-                </div>
-
-                <div {{ $category == 'external' ? '' : 'hidden' }}>
+                <div>
                     <div class="mt-4">
                         <x-label for="email" class="text-xs">{{ __('Email Address') }} <span class="text-red-500">*</span></x-label>
                         <x-input id="email" type="email" class="w-full" wire:model.live.debounce.500ms="email" placeholder="search..." type="search" required />

@@ -77,4 +77,15 @@ class AuthenticationController extends Controller
         }
 
     }
+
+
+    public function passwordRequest()
+    {
+        return view('auth.forgot-password');
+    }
+
+    public function passwordReset()
+    {
+        return view('auth.reset-password');
+    }
 }
