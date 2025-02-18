@@ -44,7 +44,7 @@ class SubmissionConfirmations extends Component
 
         session()->flash('response', [
             'status'  => 'success', 
-            'message' => 'File category for article submission is created successifully'
+            'message' => 'Article submission conformation is created successifully'
         ]);
     }
 
@@ -74,7 +74,7 @@ class SubmissionConfirmations extends Component
 
         session()->flash('response', [
             'status'  => 'success', 
-            'message' => 'File category for article submission is created successifully'
+            'message' => 'Article submission confirmation is updated successifully'
         ]);
     }
 
@@ -89,7 +89,7 @@ class SubmissionConfirmations extends Component
         if($this->record->delete()){
             session()->flash('response', [
                 'status'  => 'success', 
-                'message' => 'File category for article submission is deleted successifully'
+                'message' => 'Article submission confirmation is deleted successifully'
             ]);
         }
     }

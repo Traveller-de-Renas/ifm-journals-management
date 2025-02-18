@@ -855,4 +855,34 @@ class Articles extends Component
         $this->accept_for_production = true;
 
     }
+
+    public $confirm_xs = false;
+    public function confirmXS(Article $article)
+    {
+        $this->record = $article;
+        $this->confirm_xs = true;
+    }
+
+
+    public function cancelSubmision()
+    {
+        if ($this->record->article_status->code == '002' || $this->record->article_status->code == '006'){
+            $status = $this->articleStatus('012');
+            $this->record->update([
+                'article_status_id' => $status->id
+            ]);
+
+            session()->flash('response', [
+                'status'  => 'success',
+                'message' => 'This submision is Successfully cancelled'
+            ]);
+        }else{
+            session()->flash('response', [
+                'status'  => 'info',
+                'message' => 'You can not cancel this submision the manuscript is already onprogress'
+            ]);
+        }
+
+        $this->confirm_xs = false;
+    }
 }

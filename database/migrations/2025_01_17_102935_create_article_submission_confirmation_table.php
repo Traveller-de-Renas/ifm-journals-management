@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->foreignId('article_id')->constrained(table: 'articles');
             $table->foreignId('submission_confirmation_id')->constrained(table: 'submission_confirmations');
-            $table->enum('value', ['Yes','No'])->nullable();
+            $table->boolean('value')->default(0);
 
             $table->timestamps();
             $table->softDeletes();

@@ -23,6 +23,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Models\SubmissionConfirmation;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class Submission extends Component
@@ -100,14 +101,14 @@ class Submission extends Component
             if(in_array($this->record->article_status->code, ['019', '020'])){
                 $submission = 'resubmission';
             }
+
+            $this->confirmed = $this->record?->submission_confirmations()->pluck('value','submission_confirmation_id')->toArray();
         }
 
         $filecategories = FileCategory::where('status', 1)->where('submitted', $submission);
 
         $this->filecategories  = $filecategories->get();
         $this->file_categories = $filecategories->whereNotIn('id', $uploaded)->pluck('name', 'id')->toArray();
-
-    
 
         $this->countries = Country::all()->pluck('name', 'id')->toArray();
         $this->salutations = Salutation::all()->pluck('title', 'id')->toArray();
@@ -222,6 +223,7 @@ class Submission extends Component
 
 
         //Notification 
+        $message = "This manuscript is saved successifuly and you can continue with resubmission later";
         if($status == '002' || $status == '006')
         {
             $journal_user = $this->journal->journal_us()->whereHas('roles', function ($query) {
@@ -241,15 +243,17 @@ class Submission extends Component
                 'journal_user_id' => $journal_user->id,
                 'status'          => 1
             ]);
+
+            $message = "This manuscript is saved and submitted successifuly, you can not edit it. unless you cancel submission";
         }
 
         $this->record = $article;
 
-        foreach($this->journal->confirmations as $key => $confirmation){
-            $value = 'No';
+        foreach($this->confirmations as $key => $confirmation){
+            $value = false;
             
-            if(isset($this->confirmations[$key]) && $this->confirmations[$key] == 1){
-                $value = 'Yes';
+            if(isset($this->confirmations[$key]) && $this->confirmations[$key] == true){
+                $value = true;
             }
                 
             $article->submission_confirmations()->sync([$confirmation->id => ['value' => $value]], false);
@@ -257,7 +261,7 @@ class Submission extends Component
 
         session()->flash('response',[
             'status'  => 'success',
-            'message' => 'Manuscript is Saved and Submitted successfully'
+            'message' => $message
         ]);
     }
 
@@ -280,38 +284,40 @@ class Submission extends Component
     {
         $state = $this->articleStatus($status);
 
-        $validator = Validator::make(
-            [
-                'title' => $this->title,
+        if($status == '002' || $status == '006')
+        {
+            $validator = Validator::make([
+                'title'           => $this->title,
                 'article_type_id' => $this->article_type_id,
-                'country_id' => $this->country_id,
-                'keywords' => $this->keywords,
-                'areas'  => $this->areas,
-                'tables' => $this->tables,
-                'figures' => $this->figures,
-                'words' => $this->words,
-                'pages' => $this->pages,
-            ],
-            [
-                'title' => 'required',
-                'article_type_id' => 'required',
-                'country_id' => 'required|integer',
-                'keywords' => 'required|string',
-                'areas'  => 'required|string',
-                'tables' => 'required|integer',
-                'figures' => 'required|integer',
-                'words' => 'required|integer',
-                'pages' => 'required|integer',
+                'country_id'      => $this->country_id,
+                'keywords'        => $this->keywords,
+                'areas'           => $this->areas,
+                'tables'          => $this->tables,
+                'figures'         => $this->figures,
+                'words'           => $this->words,
+                'pages'           => $this->pages,
+            ],[
+                'title'             => 'required',
+                'article_type_id'   => 'required',
+                'country_id'        => 'required|integer',
+                'keywords'          => 'required|string',
+                'areas'             => 'required|string',
+                'tables'            => 'required|integer',
+                'figures'           => 'required|integer',
+                'words'             => 'required|integer',
+                'pages'             => 'required|integer',
+                'confirmed.*'       => 'required|boolean|in:true'
             ], attributes: [
                 'article_type_id' => 'Article Type',
                 'country_id' => 'Country'
             ]);
-    
-        if ($validator->fails()) {
-            $this->setStep(1);
-        } 
         
-        $validator->validate();
+            if ($validator->fails()) {
+                $this->setStep(1);
+            } 
+            
+            $validator->validate();
+        }
         
         $this->record->title             = $this->title;
         $this->record->abstract          = $this->abstract;
@@ -356,21 +362,24 @@ class Submission extends Component
 
             }
 
-            Notification::create([
-                'article_id' => $this->record->id,
-                'journal_user_id' => $journal_user->id,
-                'status' => 1
-            ]);
+
+            if(!empty($journal_user)){
+                Notification::create([
+                    'article_id' => $this->record->id,
+                    'journal_user_id' => $journal_user->id,
+                    'status' => 1
+                ]);
+            }
         }
 
-        foreach($this->journal->confirmations as $key => $confirmation){
+        foreach($this->confirmations as $key => $confirmd){
             $value = 'No';
             
-            if(isset($this->confirmations[$key]) && $this->confirmations[$key] == 1){
+            if(isset($this->confirmed[$confirmd->id]) && $this->confirmed[$confirmd->id] == true){
                 $value = 'Yes';
             }
-            
-            $this->record->submission_confirmations()->sync([$confirmation->id => ['value' => $value]], false);
+
+            $this->record->submission_confirmations()->sync([$confirmd->id => ['value' => $value]], false);
         }
 
         session()->flash('response',[
@@ -396,8 +405,8 @@ class Submission extends Component
         if ($this->record == null) {
             $this->store('001');
         }else{
-            if(in_array($this->record->article_status->code, ['019', '020'])){ //Returned with Comments
-                $this->store('005'); //Pending Resubmission
+            if(in_array($this->record->article_status->code, ['019', '020'])){
+                $this->store('005');
             }
         }
 
@@ -411,13 +420,13 @@ class Submission extends Component
     
         $file->storeAs('/articles', $_file);
 
-        
     
         $article_file = new File;
         $article_file->file_path        = $_file;
         $article_file->file_type        = $_type;
         $article_file->file_category_id = $this->file_category_id;
         $article_file->article_id       = $this->record->id;
+        $article_file->file_description = $_name;
 
         $article_file->save();
     
@@ -427,6 +436,21 @@ class Submission extends Component
     
         session()->flash('file_uploaded', 'File uploaded successfully');
     }
+
+
+
+    public function deleteFile(File $file)
+    {
+        $file->delete();
+
+        if (Storage::exists('articles/'.$file->file_path)) {
+            Storage::delete('articles/'.$file->file_path);
+        }
+        
+    }
+
+
+
 
     public $step = 1;
 
@@ -475,8 +499,8 @@ class Submission extends Component
         if ($this->record == null) {
             $this->store('001');
         }else{
-            if(in_array($this->record->article_status->code, ['019', '020'])){ //Returned with Comments
-                $this->store('005'); //Pending Resubmission
+            if(in_array($this->record->article_status->code, ['019', '020'])){
+                $this->store('005');
             }
         }
 

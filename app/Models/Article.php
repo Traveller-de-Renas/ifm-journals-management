@@ -85,7 +85,7 @@ class Article extends Model
 
     public function submission_confirmations()
     {
-        return $this->belongsToMany(SubmissionConfirmation::class)->withTimestamps();;
+        return $this->belongsToMany(SubmissionConfirmation::class)->withPivot('value')->withTimestamps();;
     }
 
     public function author()

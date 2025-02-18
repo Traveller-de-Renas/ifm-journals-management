@@ -86,7 +86,7 @@
                 </div>
 
                 <div class="mt-4 mb-4">
-                    <x-label for="sauthor" value="Co Authors List" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-label for="sauthor" value="Authors List" class="mb-2 block font-medium text-sm text-gray-700" />
                     <div class="flex gap-2" >
                         <x-input type="text" class="w-full" wire:model="sauthor" wire:keyup="searchAuthor($event.target.value)" placeholder="Search User to add as Co Author" />
                         <x-button wire:click="createJuser();">Create</x-button>
@@ -191,15 +191,18 @@
                 @if(!empty($record?->files))
                     @foreach ($record?->files as $key => $file)
                     
-                    <div class="grid grid-cols-12 gap-2 w-full mt-2 ">
-                        <div class="flex items-center bg-gray-200 rounded-lg col-span-11 p-2 px-4">{{ $file->file_category->name }}</div>
-                        <div class="flex gap-2 justify-end">
-                            <a href="{{ asset('storage/articles/'.$file->file_path) }} " class="bg-blue-500 hover:bg-blue-700 rounded-md px-4 shadow flex items-center" target="_blank" >
-                                <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />  <polyline points="7 10 12 15 17 10" />  <line x1="12" y1="15" x2="12" y2="3" /></svg>
-                            </a>
-                            <x-button class="bg-red-500 hover:bg-red-700">
-                                <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                            </x-button>
+                    <div class="grid grid-cols-12 gap-2 w-full mt-2 bg-gray-200 rounded-lg ">
+                        <div class="flex items-center col-span-3 p-2 px-4">
+                            {{ $file->file_category->name }}
+                        </div>
+
+                        <div class="col-span-8 p-2 px-4">
+                            <a href="{{ asset('storage/articles/'.$file->file_path) }}"><span class="font-bold text-blue-500 hover:text-blue-700 cursor-pointer">{{ $file->file_description }}</span></a>
+                            
+                        </div>
+                        
+                        <div class="col-span-1 p-2 px-4">
+                            <span class="font-bold text-red-700 hover:text-red-500 cursor-pointer" wire:click="deleteFile({{ $file->id }})" >{{ __('delete') }}</span>
                         </div>
                     </div>
 
@@ -218,12 +221,12 @@
                         <div class="w-full flex p-2 border-b">
                             <div class="w-11/12 text-justify text-sm">
                                 {!! $confirmation->description !!}
-                                <x-input-error for="confirmed.{{ $key }}" />
+                                <x-input-error for="confirmed.{{ $confirmation->id }}" />
                             </div>
                             <div class="flex w-1/12 items-start justify-center">
                                 
                                 <label class="inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" wire:model="confirmed.{{ $key }}">
+                                    <input type="checkbox" class="sr-only peer" wire:model="confirmed.{{ $confirmation->id }}">
                                     <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300  rounded-full peer  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                 </label>
                                 
@@ -337,6 +340,27 @@
                     @endforeach
                 </div>
 
+                <div class="w-full p-4">
+                    <div class="flex items-center font-bold">
+                        Authors List
+                    </div>
+
+                    <div>
+                        @if(!empty($record?->article_journal_users))
+                        <div class="mt-6 w-full">
+                            @foreach ($record->article_journal_users()->orderBy('number', 'ASC')->get() as $key => $article_user)
+                            <div class="flex items-center">
+                                <div class="w-full border bg-gray-200 hover:bg-gray-300 border-slate-200 p-1 px-2 mb-1 rounded-md">
+                                {{ $article_user->user->first_name }}
+                                {{ $article_user->user->middle_name }}
+                                {{ $article_user->user->last_name }}
+                                </div>
+                            </div>
+                            @endforeach 
+                        </div>
+                        @endif
+                    </div>
+                </div>
                 
                 <div class="w-full p-4 flex flex-wrap gap-2">
                     <div class="flex items-center font-bold">
@@ -381,7 +405,7 @@
                             <div class="flex w-1/12 items-start justify-center">
 
                                 <label class="inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" value="1" class="sr-only peer" wire:model="confirmed.{{ $key }}">
+                                    <input type="checkbox" value="1" class="sr-only peer" wire:model="confirmed.{{ $confirmation->id }}" disabled>
                                     <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300  rounded-full peer  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                                 </label>
             
@@ -450,52 +474,52 @@
 
         <div class="mt-4 text-center">
             @if(!empty($record) && ($record?->article_status?->code == '001' || $record?->article_status?->code == '005' || $record?->article_status?->code == '004'))
+
+                <x-button type="submit" wire:click="update('{{ $record?->article_status?->code }}')" wire:loading.attr="disabled">
+                    {{ __('Save & Submit Later') }}
+                </x-button>
+
                 @if ($record->author?->id == auth()->user()->id && $step == 4)
 
                     @if ($record?->article_status?->code == '001' || $record?->article_status?->code == '004')
-                        <x-button type="submit" wire:click="update('002')" wire:loading.attr="disabled">
+                        <x-button class="bg-green-700 hover:bg-green-600" type="submit" wire:click="update('002')" wire:loading.attr="disabled">
                             {{ __('Save & Submit') }}
                         </x-button>
                     @endif
 
                     @if ($record?->article_status?->code == '005')
-                        <x-button type="submit" wire:click="update('006')" wire:loading.attr="disabled">
+                        <x-button class="bg-green-700 hover:bg-green-600" type="submit" wire:click="update('006')" wire:loading.attr="disabled">
                             {{ __('Save & Submit') }}
                         </x-button>
                     @endif
 
                 @endif
-
-                <x-button type="submit" wire:click="update('{{ $record?->article_status?->code }}')" wire:loading.attr="disabled">
-                    {{ __('Save & Submit Later') }}
-                </x-button>
+                
             @elseif(empty($record))
-                @if ($step == 4)
-                    <x-button type="submit" wire:click="store('002')" wire:loading.attr="disabled">
-                        {{ __('Save & Submit') }}
-                    </x-button>
-                @endif
         
                 <x-button type="submit" wire:click="store('001')" wire:loading.attr="disabled">
                     {{ __('Save & Submit Later') }}
                 </x-button>
-            @elseif(!empty($record) && ($record?->article_status?->code == '019' || $record?->article_status?->code == '020'))
+
                 @if ($step == 4)
-                    <x-button type="submit" wire:click="store('006')" wire:loading.attr="disabled">
-                        {{ __('Save & Resubmit') }}
+                    <x-button class="bg-green-700 hover:bg-green-600" type="submit" wire:click="store('002')" wire:loading.attr="disabled">
+                        {{ __('Save & Submit') }}
                     </x-button>
                 @endif
-        
+
+            @elseif(!empty($record) && ($record?->article_status?->code == '019' || $record?->article_status?->code == '020'))
+                
                 <x-button type="submit" wire:click="store('005')" wire:loading.attr="disabled">
                     {{ __('Save & Resubmit Later') }}
                 </x-button>
+
+                @if ($step == 4)
+                    <x-button class="bg-green-700 hover:bg-green-600" type="submit" wire:click="store('006')" wire:loading.attr="disabled">
+                        {{ __('Save & Resubmit') }}
+                    </x-button>
+                @endif
+
             @endif
-            
-            <a href="{{ route('journals.detail', $journal->uuid) }}">
-                <x-button class="bg-red-500 hover:bg-red-700" wire:loading.attr="disabled">
-                    {{ __('Close / Exit') }}
-                </x-button>
-            </a>
         </div>
     </div>
 

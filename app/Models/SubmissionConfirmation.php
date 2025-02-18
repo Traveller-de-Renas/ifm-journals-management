@@ -24,10 +24,6 @@ class SubmissionConfirmation extends Model
         ->logAll();
     }
 
-    public function journal()
-    {
-        return $this->belongsTo(Journal::class);
-    }
 
     public function status()
     {

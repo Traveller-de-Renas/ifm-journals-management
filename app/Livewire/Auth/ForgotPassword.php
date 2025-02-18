@@ -4,7 +4,9 @@ namespace App\Livewire\Auth;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Journal;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use App\Mail\PasswordRequest;
 use App\Models\ReviewMessage;
 use Illuminate\Support\Facades\Mail;
@@ -12,6 +14,14 @@ use App\Models\PasswordChangeRequest;
 
 class ForgotPassword extends Component
 {
+    public $journal;
+
+    public function mount()
+    {
+        if(Str::isUuid(request()->journal)){
+            $this->journal = Journal::where('uuid', request()->journal)->first();
+        }
+    }
     public function render()
     {
         return view('livewire.auth.forgot-password');
@@ -26,23 +36,27 @@ class ForgotPassword extends Component
 
         $user = User::where('email', $this->email);
 
-        if($user->exists()){
-            session()->flash('success', 'A password reset link was successfully sent to your email address. Please check your inbox and follow the instructions.');
+        if(!$user->first()->journal_us()->where('journal_id', $this->journal->id)->where('status', 1)->exists()){
+            session()->flash('error_message', 'It seems you are not registered to this journal please register, or activate your account.');
 
-            $prequest = PasswordChangeRequest::firstOrCreate([
-                'user_id' => $user->first()->id,
-                'status'  => 1
-            ],[
-                'user_id' => $user->first()->id,
-                'journal' => session()->get('journal')
-            ]);
-
-            if(ReviewMessage::where('category', 'Password Request')->count() > 0){
-                Mail::to($this->email)
-                    ->send(new PasswordRequest($user->first(), $prequest));
-            }
+            return redirect()->route('password_request', ['journal' => $this->journal->uuid]);
         }else{
-            session()->flash('error_message', 'No user records found registered with this email');
+            if($user->exists()){
+                session()->flash('success', 'A password reset link was successfully sent to your email address. Please check your inbox and follow the instructions.');
+
+                $prequest = PasswordChangeRequest::firstOrCreate([
+                    'user_id' => $user->first()->id,
+                    'status'  => 1
+                ],[
+                    'user_id' => $user->first()->id,
+                    'journal' => session()->get('journal')
+                ]);
+
+                if(ReviewMessage::where('category', 'Password Request')->count() > 0){
+                    Mail::to($this->email)
+                        ->send(new PasswordRequest($user->first(), $prequest));
+                }
+            }
         }
 
     }

@@ -81,7 +81,7 @@
 
                             @if (($article->article_status->code == '002' || $article->article_status->code == '006') && $article->user_id == auth()->user()->id)
                             <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100" wire:click="cancelSubmission({{ $article->id }})" wire:loading.attr="disabled">Cancel Submission</a>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100" wire:click="confirmXS({{ $article->id }})" wire:loading.attr="disabled">Cancel Submission</a>
                             </li>
                             @endif
 
@@ -246,15 +246,6 @@
                         </div>
                     </label>
                 </div>
-  
-                {{-- <div class="flex items-center ps-4 border border-gray-200 rounded  ">
-                    <input id="bordered-checkbox-1" type="radio" wire:model="compliance" wire:click="selectCompliance()" value="003" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-full focus:ring-blue-500   focus:ring-2  ">
-                    <label for="bordered-checkbox-1" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 ">Passed Author Guidelines Checking</label>
-                </div>
-                <div class="flex items-center ps-4 border border-gray-200 rounded  ">
-                    <input id="bordered-checkbox-2" type="radio" wire:model="compliance" wire:click="selectCompliance()" value="004" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-full focus:ring-blue-500   focus:ring-2  ">
-                    <label for="bordered-checkbox-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 ">Return to Author for Guidelines Compliance</label>
-                </div> --}}
 
                 @if($compliance == '003')
 
@@ -1039,6 +1030,30 @@
             <button class="ml-3 bg-red-500 hover:bg-red-700 rounded-md shadow-sm cursor-pointer p-2 px-4 text-white" wire:click="$toggle('confirm_publish')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </button>
+
+        </x-slot>
+    </x-dialog-modal>
+
+
+    
+
+    <x-dialog-modal wire:model="confirm_xs">
+        <x-slot name="title">
+            {{ __('Cancel Manuscript Submission') }}
+        </x-slot>
+        <x-slot name="content">
+            <div class="mt-4">
+                <p class="text-center">Are you sure you want to cancel this submision.?</p>
+            </div>
+        </x-slot>
+        <x-slot name="footer">
+            
+            <button type="submit" class="bg-red-500 hover:bg-red-700 rounded-md shadow-sm cursor-pointer p-2 px-4 text-white mr-2" wire:click="cancelSubmision()" wire:loading.attr="disabled" >
+                {{ __('Confirm and Cancel') }}
+            </button>
+            <x-secondary-button class="" wire:click="$toggle('confirm_xs')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-secondary-button>
 
         </x-slot>
     </x-dialog-modal>

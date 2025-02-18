@@ -36,24 +36,12 @@
 
             <p class="text-sm text-gray-400">Aticle Submission Date : {{ \Carbon\Carbon::parse($record->submission_date)->format('d-m-Y') }} </p>
 
-            <p class="text-sm text-gray-400">Aticle Publication Date : {{ \Carbon\Carbon::parse($record->publication_date)->format('d-m-Y') }}</p>
+            @if($record->article_status->code == '014')
+                <p class="text-sm text-gray-400">Aticle Publication Date : {{ \Carbon\Carbon::parse($record->publication_date)->format('d-m-Y') }}</p>
+            @endif
         </div>
 
     </div>
-
-    {{-- <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
-        @php
-            $file = $record->files()->where('publish', 1)->first();
-        @endphp
-        <div class="flex items-center">
-            <a href="{{ route('journal.article_download', $file?->id) }}" >
-                <div class="flex items-center text-blue-700 hover:text-blue-600 cursor-pointer">
-                    <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5"> <p class="ml-2 text-lg font-bold">Download Article @if(!empty($file)) {{ Storage::size('storage/articles/'.$file?->file) }} @endif</p>
-                </div>
-            </a>
-            <p class="ml-2 text-lg text-gray-600 font-bold">{{ $file?->downloads ?? 0 }} Downloads </p>
-        </div>
-    </div> --}}
 
     <hr>
 
@@ -86,22 +74,10 @@
                     $coauthors = $record->article_journal_users()->get()
                 @endphp
 
-                {{-- @if(count($coauthors) > 0)
-                <div class="w-full mb-4">
-                    <p class="text-lg font-bold">Co Authors</p>
-                    <div class="text-sm text-blue-700 hover:text-blue-600 cursor-pointer mb-2 mt-2">
-                        @foreach ($coauthors as $key => $user)
-                        <div class="flex items-center">
-                            {{ $user->salutation?->title }} {{ $user->first_name }} ({{ $user->affiliation }})
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif --}}
-
             </div>
         </div>
 
+        @if($record->article_status->code == '014')
         <div class="w-full mb-8 grid grid-cols-12 gap-2">
             <div class="col-span-8">
                 <p class="text-lg font-bold">Citation</p>
@@ -119,6 +95,7 @@
                 {{ $record->issue?->volume->description }}, {{ $record->issue?->description }}, {{ $record->issue?->volume->journal->issn }}. {{ $record->issue?->volume->journal->doi }}
             </div>
         </div>
+        @endif
     </div>
 
 </div>

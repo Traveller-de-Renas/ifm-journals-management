@@ -18,12 +18,12 @@ class AppLayout extends Component
     {
         $this->journal = Journal::where('uuid', session('journal'))->first();
 
-        $submitted = 0;
-        $resubmitted = 0;
+        $submitted    = 0;
+        $resubmitted  = 0;
         $withdecision = 0;
-        $onprogress = 0;
-        $returned = 0;
-        $onreview = 0;
+        $pending      = 0;
+        $returned     = 0;
+        $onreview     = 0;
         
         if($this->journal){
             $this->ceditor = $this->journal?->journal_us()->whereHas('roles', function ($query) {
@@ -76,13 +76,9 @@ class AppLayout extends Component
             ->get()->count();
 
 
-            //on progress
-            $onprogress = $this->journal->articles()->whereHas('article_status', function ($query) {
-                $query->whereIn('code', ['002','006','011']);
-            })
-            ->whereHas('notifications', function ($query) {
-                $juserid = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first()->id;
-                $query->where('journal_user_id', $juserid)->where('status', 1);
+            //pending
+            $pending = $this->journal->articles()->whereHas('article_status', function ($query) {
+                $query->whereIn('code', ['001', '005']);
             })
             ->where('user_id', auth()->user()->id)
             ->get()->count();
@@ -100,6 +96,6 @@ class AppLayout extends Component
             ->get()->count();
         }
 
-        return view('layouts.app', compact('submitted', 'resubmitted', 'withdecision', 'onprogress', 'returned', 'onreview'));
+        return view('layouts.app', compact('submitted', 'resubmitted', 'withdecision', 'pending', 'returned', 'onreview'));
     }
 }

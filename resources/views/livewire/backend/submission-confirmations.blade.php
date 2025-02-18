@@ -101,29 +101,18 @@
             <hr>
             
             <div class="w-full border-b pb-4">
-                <div class="mt-4 col-span-2">
-                    <x-label for="name" value="Name" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="text" id="name" class="w-full" wire:model="name" />
-                    <x-input-error for="name" />
-                </div>
-
-                <div class="mt-4 col-span-2">
-                    <x-label for="code" value="code" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="text" id="code" class="w-full" wire:model="code" />
-                    <x-input-error for="code" />
-                </div>
 
                 <div class="mt-4 col-span-2">
                     <x-label for="description" value="Description" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-textarea type="text" id="description" class="w-full h-10" wire:model="description" />
+                    <x-textarea type="text" id="description" class="w-full h-10" wire:model="description" rows="3" />
                     <x-input-error for="description" />
                 </div>
 
                 <div class="grid grid-cols-2 space-x-2">
                     <div class="mt-4">
-                        <x-label for="submitted" value="Submitted On" class="mb-2 block font-medium text-sm text-gray-700" />
-                        <x-select id="submitted" class="w-full" :options="['submission' => 'New Submission', 'resubmission' => 'Resubmission']" wire:model="submitted" />
-                        <x-input-error for="submitted" />
+                        <x-label for="code" value="code" class="mb-2 block font-medium text-sm text-gray-700" />
+                        <x-input type="text" id="code" class="w-full" wire:model="code" />
+                        <x-input-error for="code" />
                     </div>
                     <div class="mt-4">
                         <x-label for="status" value="status" class="mb-2 block font-medium text-sm text-gray-700" />
