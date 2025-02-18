@@ -27,7 +27,7 @@ class ForgotPassword extends Component
         $user = User::where('email', $this->email);
 
         if($user->exists()){
-            session()->flash('success', 'You are successfully registered as new author on this journal to proceed with to the submission portal please activate your account through the link sent to your email address.');
+            session()->flash('success', 'A password reset link was successfully sent to your email address. Please check your inbox and follow the instructions.');
 
             $prequest = PasswordChangeRequest::firstOrCreate([
                 'user_id' => $user->first()->id,

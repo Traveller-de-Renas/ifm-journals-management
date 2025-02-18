@@ -56,7 +56,7 @@ class ResetPassword extends Component
         if($this->prequest->user->update([
             'password' => Hash::make($this->password)
         ])){
-            session()->flash('success', 'You are successfully registered as new author on this journal to proceed with to the submission portal please activate your account through the link sent to your email address.');
+            session()->flash('success', 'You are successfully updated your login password. You can now login to proceed to the submission portal.');
         }else{
             session()->flash('error_message', 'Failed to update your password');
         }
