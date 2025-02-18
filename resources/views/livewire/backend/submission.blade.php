@@ -111,10 +111,13 @@
                         
                         @endif
                     </div>
+
+                    
                     
                     @if(!empty($record?->article_journal_users))
                     <div class="mt-6">
-                        @foreach ($record->article_journal_users()->where('number', '>', 0)->orderBy('number', 'ASC')->get() as $key => $article_user)
+                        {{-- where('number', '>', 0)-> --}}
+                        @foreach ($record->article_journal_users()->orderBy('number', 'ASC')->get() as $key => $article_user)
                         <div class="flex items-center">
                             <div class="w-full border bg-gray-200 hover:bg-gray-300 border-slate-200 p-1 px-2 mb-1 rounded-md">
                             {{ $article_user->user->first_name }}
@@ -556,9 +559,9 @@
                     <x-input-error for="juser_affiliation" />
                 </div>
                 <div class="mt-4">
-                    <x-label for="country_id" value="Country" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-select id="country_id" class="w-full" :options="$countries" wire:model="juser_country_id" />
-                    <x-input-error for="country_id" />
+                    <x-label for="juser_country_id" value="Country" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-select id="juser_country_id" class="w-full" :options="$countries" wire:model="juser_country_id" />
+                    <x-input-error for="juser_country_id" />
                 </div>
             </div>
         </x-slot>

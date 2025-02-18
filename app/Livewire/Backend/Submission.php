@@ -153,6 +153,7 @@ class Submission extends Component
         
         $state = $this->articleStatus($status);
 
+        if($status == '006' || $status == '002'){
         $validator = Validator::make(
             [
                 'title'         => $this->title,
@@ -186,6 +187,7 @@ class Submission extends Component
         } 
         
         $validator->validate();
+    }
 
         $article = Article::create([
             'paper_id'          => $paper_id,
@@ -448,20 +450,26 @@ class Submission extends Component
     public function searchAuthor($string)
     {
         if($string != ''){
-            $selected = $this->record->article_journal_users()->where('number', '>', 0)->pluck('user_id')->toArray();
+            $selected = $this->record?->article_journal_users()->where('number', '>', 0)->pluck('user_id')->toArray();
 
             $this->author_search = trim(preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 ]/', ' ', urldecode(html_entity_decode(strip_tags($string))))));
-            $this->authors = User::when($this->author_search, function($query){
+            
+            $authors = User::when($this->author_search, function($query){
                 return $query->where(function($query){
                     $query->where('first_name', 'ilike', '%'.$this->author_search.'%')->orWhere('middle_name', 'ilike', '%'.$this->author_search.'%')->orWhere('last_name', 'ilike', '%'.$this->author_search.'%');
                 });
-            })->whereNotIn('id', $selected)->orderBy('first_name', 'ASC')->get();
+            });
+            
+            if($selected){
+                $authors = $authors->whereNotIn('id', $selected);
+            }
+
+            $this->authors = $authors->orderBy('first_name', 'ASC')->get();
         }
     }
 
     public function assignAuthor(User $author)
     {
-        
         if ($this->record == null) {
             $this->store('001');
         }else{

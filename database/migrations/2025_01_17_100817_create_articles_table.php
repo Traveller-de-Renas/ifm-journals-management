@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreignId('issue_id')->nullable()->constrained(table: 'issues');
             $table->foreignId('article_status_id')->constrained(table: 'article_statuses');
 
-            $table->foreignId('country_id')->constrained(table: 'countries');
+            $table->foreignId('country_id')->nullable()->constrained(table: 'countries');
             $table->foreignId('user_id')->constrained(table: 'users');
 
             $table->integer('pages')->default(0)->nullable();
