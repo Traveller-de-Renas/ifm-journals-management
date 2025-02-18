@@ -16,6 +16,8 @@ return new class extends Migration
 
             $table->foreignId('journal_id')->constrained(table: 'journals');
             $table->text('description')->nullable();
+            $table->string('code')->nullable();
+            $table->integer('status')->default(1);
 
             $table->timestamps();
             $table->softDeletes();

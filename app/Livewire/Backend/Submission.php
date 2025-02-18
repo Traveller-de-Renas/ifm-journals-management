@@ -22,6 +22,7 @@ use App\Models\ReviewMessage;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Models\SubmissionConfirmation;
 use Illuminate\Support\Facades\Validator;
 
 class Submission extends Component
@@ -110,6 +111,7 @@ class Submission extends Component
 
         $this->countries = Country::all()->pluck('name', 'id')->toArray();
         $this->salutations = Salutation::all()->pluck('title', 'id')->toArray();
+        $this->confirmations = SubmissionConfirmation::where('status', 1)->get();
 
         $this->dispatch('contentChanged');
     }
