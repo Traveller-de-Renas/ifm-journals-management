@@ -116,13 +116,14 @@
                     
                     @if(!empty($record?->article_journal_users))
                     <div class="mt-6">
-                        {{-- where('number', '>', 0)-> --}}
                         @foreach ($record->article_journal_users()->orderBy('number', 'ASC')->get() as $key => $article_user)
                         <div class="flex items-center">
                             <div class="w-full border bg-gray-200 hover:bg-gray-300 border-slate-200 p-1 px-2 mb-1 rounded-md">
-                            {{ $article_user->user->first_name }}
-                            {{ $article_user->user->middle_name }}
-                            {{ $article_user->user->last_name }}
+                                {{ $article_user->user->first_name }}
+                                {{ $article_user->user->middle_name }}
+                                {{ $article_user->user->last_name }}.
+                    
+                                @if($article_user->user->affiliation) ({{ $article_user->user->affiliation }}) @endif
                             </div>
                             <div class="w-1/5 border bg-gray-200 hover:bg-gray-300 border-slate-200 p-1 px-4 mb-1 ml-2 rounded-md text-md">
                                 Author No.{{ $article_user->pivot->number }}
@@ -159,7 +160,11 @@
                                 
                             </div>
                             <div class="mb-1">
+                                @if($article_user->pivot->number != 1)
                                 <x-button class="ml-2 bg-red-500 hover:bg-red-700 text-xs" wire:click="removeAuthor({{ $article_user->id }})">Remove</x-button>
+                                @else
+                                <x-button class="ml-2 bg-gray-500 hover:bg-gray-700 text-xs cursor-pointer" disabled >Remove</x-button>
+                                @endif
                             </div>
                         </div>
                         @endforeach 
@@ -191,18 +196,19 @@
                 @if(!empty($record?->files))
                     @foreach ($record?->files as $key => $file)
                     
-                    <div class="grid grid-cols-12 gap-2 w-full mt-2 bg-gray-200 rounded-lg ">
-                        <div class="flex items-center col-span-3 p-2 px-4">
-                            {{ $file->file_category->name }}
-                        </div>
+                    <div class="grid grid-cols-12 gap-2 w-full mt-2">
+                        <div class="col-span-11 grid grid-cols-12 bg-gray-200 rounded-lg ">
+                            <div class="col-span-3 items-center  p-2 px-4">
+                                {{ $file->file_category->name }}
+                            </div>
 
-                        <div class="col-span-8 p-2 px-4">
-                            <a href="{{ asset('storage/articles/'.$file->file_path) }}"><span class="font-bold text-blue-500 hover:text-blue-700 cursor-pointer">{{ $file->file_description }}</span></a>
+                            <div class="col-span-8 p-2 px-4">
+                                <a href="{{ asset('storage/articles/'.$file->file_path) }}"><span class="font-bold text-blue-500 hover:text-blue-700 cursor-pointer ml-4">{{ $file->file_description }}</span></a>
+                            </div>
                             
-                        </div>
-                        
-                        <div class="col-span-1 p-2 px-4">
-                            <span class="font-bold text-red-700 hover:text-red-500 cursor-pointer" wire:click="deleteFile({{ $file->id }})" >{{ __('delete') }}</span>
+                            <div class="col-span-1 p-2 px-4">
+                                <span class="font-bold text-red-700 hover:text-red-500 cursor-pointer text-right w-full" wire:click="deleteFile({{ $file->id }})" >{{ __('delete') }}</span>
+                            </div>
                         </div>
                     </div>
 
@@ -351,9 +357,11 @@
                             @foreach ($record->article_journal_users()->orderBy('number', 'ASC')->get() as $key => $article_user)
                             <div class="flex items-center">
                                 <div class="w-full border bg-gray-200 hover:bg-gray-300 border-slate-200 p-1 px-2 mb-1 rounded-md">
-                                {{ $article_user->user->first_name }}
-                                {{ $article_user->user->middle_name }}
-                                {{ $article_user->user->last_name }}
+                                    {{ $article_user->user->first_name }}
+                                    {{ $article_user->user->middle_name }}
+                                    {{ $article_user->user->last_name }}.
+                        
+                                    @if($article_user->user->affiliation) ({{ $article_user->user->affiliation }}) @endif
                                 </div>
                             </div>
                             @endforeach 
@@ -368,30 +376,28 @@
                     </div>
 
                     @if($record?->files()->pluck('file_category_id')->toArray())
-                    @foreach ($filecategories as $key => $file)
-                    
-                    <div class="flex gap-2 w-full items-center font-bold"> 
-                        <div class="flex items-center bg-gray-200 rounded-lg w-full p-3">
-                            @if (in_array($file->id, $record?->files()->pluck('file_category_id')->toArray()))
-                                <svg class="h-4 w-4 text-green-600"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M5 12l5 5l10 -10" /></svg>
-                            @else
-                                <svg class="h-4 w-4 text-red-600"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="18" y1="6" x2="6" y2="18" />  <line x1="6" y1="6" x2="18" y2="18" /></svg>
-                            @endif
-                            <span class="ml-2">{{ $file->name }}</span>
+                        @foreach ($filecategories as $key => $file)
+                        
+                        <div class="flex gap-2 w-full items-center bg-gray-200 rounded-lg"> 
+                            <div class="flex flex-1 items-center w-full p-2">
+                                @if (in_array($file->id, $record?->files()->pluck('file_category_id')->toArray()))
+                                    <svg class="h-4 w-4 text-green-600"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M5 12l5 5l10 -10" /></svg>
+                                @else
+                                    <svg class="h-4 w-4 text-red-600"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="18" y1="6" x2="6" y2="18" />  <line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                @endif
+                                <span class="ml-2">{{ $file->name }}</span>
+                            </div>
+                            <div class="flex-1 items-center justify-end">
+                                <a href="{{ asset('storage/articles/'.$file->file_path) }}"><span class="font-bold text-blue-500 hover:text-blue-700 cursor-pointer ml-4">{{ $record->files()->where('file_category_id', $file->id)->first()?->file_description }}</span></a>
+                            </div>
                         </div>
-                        <div class="flex items-center justify-end">
-                            <a href="{{ asset('storage/articles/'.$file->name) }} " class="bg-blue-500 hover:bg-blue-700 rounded-md p-4 shadow flex items-center" target="_blank" >
-                                <svg class="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"  stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />  <polyline points="7 10 12 15 17 10" />  <line x1="12" y1="15" x2="12" y2="3" /></svg>
-                            </a>
-                        </div>
-                    </div>
 
-                    @endforeach
-                @else
-                    <div class="w-full p-2 mt-6 bg-gray-200 rounded-lg text-center">
-                        No File(s) Uploaded
-                    </div>
-                @endif
+                        @endforeach
+                    @else
+                        <div class="w-full p-2 mt-6 bg-gray-200 rounded-lg text-center">
+                            No File(s) Uploaded
+                        </div>
+                    @endif
                 </div>
 
                 <div class="w-full p-4 flex flex-wrap gap-2">

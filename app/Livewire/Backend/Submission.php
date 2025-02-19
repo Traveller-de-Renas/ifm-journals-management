@@ -67,6 +67,9 @@ class Submission extends Component
     public $juser_fname, $juser_mname, $juser_lname, $juser_email, $juser_phone, $juser_affiliation, $juser_gender, $juser_salutation_id, $juser_country_id;
     public $filecategories;
 
+
+    public $author_juser;
+
     public function mount(Request $request)
     {
         if(!Str::isUuid($request->journal)){
@@ -110,9 +113,11 @@ class Submission extends Component
         $this->filecategories  = $filecategories->get();
         $this->file_categories = $filecategories->whereNotIn('id', $uploaded)->pluck('name', 'id')->toArray();
 
-        $this->countries = Country::all()->pluck('name', 'id')->toArray();
-        $this->salutations = Salutation::all()->pluck('title', 'id')->toArray();
+        $this->countries     = Country::all()->pluck('name', 'id')->toArray();
+        $this->salutations   = Salutation::all()->pluck('title', 'id')->toArray();
         $this->confirmations = SubmissionConfirmation::where('status', 1)->get();
+
+        $this->author_juser  = auth()->user()->journal_us()->where('journal_id', $this->journal->id)->first();
 
         $this->dispatch('contentChanged');
     }
@@ -157,40 +162,40 @@ class Submission extends Component
         $state = $this->articleStatus($status);
 
         if($status == '006' || $status == '002'){
-        $validator = Validator::make(
-            [
-                'title'         => $this->title,
-                'article_type_id' => $this->article_type_id,
-                'country_id'    => $this->country_id,
-                'keywords'      => $this->keywords,
-                'areas'         => $this->areas,
-                'tables'        => $this->tables,
-                'figures'       => $this->figures,
-                'words'         => $this->words,
-                'pages'         => $this->pages,
-            ],
-            [
-                'title'             => 'required',
-                'article_type_id'   => 'required',
-                'country_id'        => 'required|integer',
-                'keywords'          => 'required|string',
-                'areas'             => 'required|string',
-                'tables'            => 'required|integer',
-                'figures'           => 'required|integer',
-                'words'             => 'required|integer',
-                'pages'             => 'required|integer',
-                'confirmed.*'       => 'required|in:1'
-            ], attributes: [
-                'article_type_id' => 'Article Type',
-                'country_id' => 'Country'
-            ]);
-    
-        if ($validator->fails()) {
-            $this->setStep(1);
-        } 
+            $validator = Validator::make(
+                [
+                    'title'         => $this->title,
+                    'article_type_id' => $this->article_type_id,
+                    'country_id'    => $this->country_id,
+                    'keywords'      => $this->keywords,
+                    'areas'         => $this->areas,
+                    'tables'        => $this->tables,
+                    'figures'       => $this->figures,
+                    'words'         => $this->words,
+                    'pages'         => $this->pages,
+                ],
+                [
+                    'title'             => 'required',
+                    'article_type_id'   => 'required',
+                    'country_id'        => 'required|integer',
+                    'keywords'          => 'required|string',
+                    'areas'             => 'required|string',
+                    'tables'            => 'required|integer',
+                    'figures'           => 'required|integer',
+                    'words'             => 'required|integer',
+                    'pages'             => 'required|integer',
+                    'confirmed.*'       => 'required|in:1'
+                ], attributes: [
+                    'article_type_id' => 'Article Type',
+                    'country_id' => 'Country'
+                ]);
         
-        $validator->validate();
-    }
+            if ($validator->fails()) {
+                $this->setStep(1);
+            } 
+            
+            $validator->validate();
+        }
 
         $article = Article::create([
             'paper_id'          => $paper_id,
@@ -209,6 +214,7 @@ class Submission extends Component
             'user_id'           => auth()->user()->id
         ]);
 
+        $article->article_journal_users()->sync([$this->author_juser->id => ['number' => 1]], false);
 
         if($status == '002'){
             $article->update([
@@ -348,6 +354,8 @@ class Submission extends Component
 
         $this->record->update();
 
+        $this->record->article_journal_users()->sync([$this->author_juser->id => ['number' => 1]], false);
+
         if($status == '002' || $status == '006')
         {
             $journal_user = $this->journal->journal_us()->whereHas('roles', function ($query) {
@@ -407,6 +415,8 @@ class Submission extends Component
         }else{
             if(in_array($this->record->article_status->code, ['019', '020'])){
                 $this->store('005');
+            }else{
+                $this->update('001');
             }
         }
 
@@ -446,7 +456,7 @@ class Submission extends Component
         if (Storage::exists('articles/'.$file->file_path)) {
             Storage::delete('articles/'.$file->file_path);
         }
-        
+
     }
 
 
@@ -457,18 +467,42 @@ class Submission extends Component
     public function incrementStep()
     {
         $this->dispatch('contentChanged');
+        if ($this->record == null) {
+            $this->store('001');
+        }else{
+            if(in_array($this->record->article_status->code, ['019', '020'])){
+                $this->store('005');
+            }
+        }
+
         $this->step++;
     }
 
     public function decrementStep()
     {
         $this->dispatch('contentChanged');
+        if ($this->record == null) {
+            $this->store('001');
+        }else{
+            if(in_array($this->record->article_status->code, ['019', '020'])){
+                $this->store('005');
+            }
+        }
+
         $this->step--;
     }
 
     public function setStep($step)
     {
         $this->dispatch('contentChanged');
+        if ($this->record == null) {
+            $this->store('001');
+        }else{
+            if(in_array($this->record->article_status->code, ['019', '020'])){
+                $this->store('005');
+            }
+        }
+
         $this->step = $step;
     }
 
@@ -501,10 +535,12 @@ class Submission extends Component
         }else{
             if(in_array($this->record->article_status->code, ['019', '020'])){
                 $this->store('005');
+            }else{
+                $this->update('001');
             }
         }
 
-        $max_no    = $this->record->article_journal_users()->where('number', '>', 0)->count();
+        $max_no    = $this->record->article_journal_users()->count();
         $author_no = $max_no++;
 
         $journal_us = JournalUser::firstOrCreate([
@@ -515,14 +551,14 @@ class Submission extends Component
             'journal_id' => $this->journal->id
         ]);
 
+        $this->record->article_journal_users()->sync([$journal_us->id => ['number' => $author_no]], false);
+
         if(!($journal_us->hasRole('Author'))){
             $journal_us->assignRole('Author');
         }
 
-        $this->record->article_journal_users()->sync([$journal_us->id => ['number' => $author_no]], false);
-
-        $this->authors  = [];
-        $this->sauthor != '';
+        $this->authors = [];
+        $this->sauthor = '';
     }
 
     public function removeAuthor(JournalUser $author)

@@ -26,13 +26,17 @@
         <p> ISSN : {{ $record?->journal->issn }} </p>
 
         <div class="mt-6 mb-6">
-            <span class="hover:text-blue-600 hover:underline cursor-pointer">
-                @if($record->author->salutation) {{ $record->author->salutation?->title }}. @endif
+            @foreach ($record->article_journal_users()->orderBy('number', 'ASC')->get() as $key => $article_user)
+            <span class="hover:text-blue-600 hover:underline cursor-pointer mr-2">
+
+                @if($article_user->user->salutation) {{ $article_user->user->salutation?->title }}. @endif
+            
+                {{ $article_user->user->last_name }}, {{ strtoupper(substr($article_user->user->first_name, 0, 1)) }}.
                 
-                {{ $record->author->last_name }}, {{ strtoupper(substr($record->author->first_name, 0, 1)) }}.
-                
-                @if($record->author->affiliation) ({{ $record->author->affiliation }}) @endif
+                @if($article_user->user->affiliation) ({{ $article_user->user->affiliation }}) @endif
+
             </span>
+            @endforeach 
 
             <p class="text-sm text-gray-400">Aticle Submission Date : {{ \Carbon\Carbon::parse($record->submission_date)->format('d-m-Y') }} </p>
 
@@ -69,6 +73,36 @@
                     </div>
                 </div>
                 @endif
+
+                @php
+                    $coauthors = $record->article_journal_users()->get()
+                @endphp
+
+            </div>
+        </div>
+
+        <div class="w-full mb-8 grid grid-cols-12 gap-2">
+            <div class="col-span-12">
+
+                <div class="w-full mb-4">
+                    <p class="text-lg font-bold mb-4">Manuscript Documents</p>
+                    @if(!empty($record?->files))
+                        @foreach ($record?->files as $key => $file)
+                            <div class="grid grid-cols-12  bg-gray-200 rounded-lg ">
+                                <div class="col-span-3 items-center  p-2 px-4">
+                                    {{ $file->file_category->name }}
+                                </div>
+
+                                <div class="col-span-8 p-2 px-4">
+                                    <a href="{{ asset('storage/articles/'.$file->file_path) }}"><span class="font-bold text-blue-500 hover:text-blue-700 cursor-pointer ml-4">{{ $file->file_description }}</span></a>
+                                </div>
+                                
+                                <div class="col-span-1 p-2 px-4">
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
 
                 @php
                     $coauthors = $record->article_journal_users()->get()

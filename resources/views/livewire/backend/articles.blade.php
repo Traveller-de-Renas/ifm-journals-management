@@ -171,10 +171,6 @@
                                 <a href="{{ route('journals.article', $article->uuid) }}" class="block px-4 py-2 hover:bg-gray-100 text-start" wire:loading.attr="disabled">View Manuscript</a>
                             </li>
 
-                            <li>
-                                <a href="{{ route('journals.submission_download', $article->uuid) }}" class="block px-4 py-2 hover:bg-gray-100" wire:loading.attr="disabled">Download</a>
-                            </li>
-
                         </ul>
                     </div>
 
