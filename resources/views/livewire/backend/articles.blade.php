@@ -105,13 +105,17 @@
 
                             @php
                                 $caeditors = $journal->journal_us()->whereHas('roles', function ($query) {
-                                    $query->whereIn('name', ['Chief Editor']);
+                                    $query->where('name', 'Chief Editor');
                                 })->get()->pluck('id');
 
                                 $aeditors = $journal->journal_us()->whereHas('roles', function ($query) {
-                                    $query->whereIn('name', ['Associate Editor']);
+                                    $query->where('name', 'Associate Editor');
                                 })->get()->pluck('id');
                             @endphp
+
+                            <li>
+                                {{ $caeditors }}
+                            </li>
 
                             @if (($article->article_status->code == '003' || $article->article_status->code == '008') && $caeditors->contains(auth()->user()->id))
                             <li>
