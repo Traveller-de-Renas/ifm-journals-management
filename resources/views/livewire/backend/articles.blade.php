@@ -106,16 +106,14 @@
                             @php
                                 $caeditors = $journal->journal_us()->whereHas('roles', function ($query) {
                                     $query->whereIn('name', ['Chief Editor']);
-                                })->get()->pluck('id');
+                                })->get()->pluck('id')->toArray();
 
                                 $aeditors = $journal->journal_us()->whereHas('roles', function ($query) {
                                     $query->whereIn('name', ['Associate Editor']);
-                                })->get()->pluck('id');
+                                })->get()->pluck('id')->toarray();
                             @endphp
 
-                            {{ $caeditors->contains(auth()->user()->id) }}
-
-                            @if (($article->article_status->code == '003' || $article->article_status->code == '008') && $caeditors->contains(auth()->user()->id))
+                            @if (($article->article_status->code == '003' || $article->article_status->code == '008') && in_array(auth()->user()->id, $caeditors))
                             <li>
                                 <button class="block px-4 py-2 hover:bg-gray-100" wire:click="openDrawerA({{ $article->id }})" wire:loading.attr="disabled">Assign Associate Editor</button>
                             </li>
@@ -128,7 +126,7 @@
                             @endif
 
                             @if (($article->article_status->code == '003' || $article->article_status->code == '006' || $article->article_status->code == '008' || $article->article_status->code == '010'))
-                                @if (($aeditors->contains(auth()->user()->id) || $caeditors->contains(auth()->user()->id)))
+                                @if (($aeditors->contains(auth()->user()->id) || in_array(auth()->user()->id)))
                                     <li>
                                         <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start" wire:click="openDrawerB({{ $article->id }})" wire:loading.attr="disabled">Send to Reviewer</button>
                                     </li>
@@ -136,7 +134,7 @@
                             @endif
 
                             
-                            @if ($article->article_status->code == '006' && ($aeditors->contains(auth()->user()->id) || $caeditors->contains(auth()->user()->id)))
+                            @if ($article->article_status->code == '006' && ($aeditors->contains(auth()->user()->id) || in_array(auth()->user()->id)))
                                 <li>
                                     <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start" wire:click="acceptResubmission({{ $article->id }})" wire:loading.attr="disabled">Accept for Production</button>
                                 </li>
