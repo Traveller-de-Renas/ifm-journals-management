@@ -113,11 +113,11 @@
                                 })->get()->pluck('id');
                             @endphp
 
-                            @if (($article->article_status->code == '003' || $article->article_status->code == '008') && $caeditors->contains(auth()->user()->id))
+                            {{-- @if (($article->article_status->code == '003' || $article->article_status->code == '008') && $caeditors->contains(auth()->user()->id)) --}}
                             <li>
                                 <button class="block px-4 py-2 hover:bg-gray-100" wire:click="openDrawerA({{ $article->id }})" wire:loading.attr="disabled">Assign Associate Editor</button>
                             </li>
-                            @endif
+                            {{-- @endif --}}
 
                             @if ($article->article_status->code == '008' && $aeditors->contains(auth()->user()->id))
                                 <li>
