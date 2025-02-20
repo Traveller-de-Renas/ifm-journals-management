@@ -182,7 +182,7 @@
                     <div>
                         @foreach ($users as $user)
                             <div class="py-2 flex border-b hover:bg-gray-100" wire:click="selectUser({{ $user->id }})">
-                                <div class="w-full px-2">{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}</div>
+                                <div class="w-full px-2">{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }} ({{ $user->email }})</div>
                             </div>
                         @endforeach
                     </div>
