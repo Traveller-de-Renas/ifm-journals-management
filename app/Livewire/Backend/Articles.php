@@ -370,6 +370,21 @@ class Articles extends Component
     }
 
 
+    public $isOpenH = false;
+
+    public function openDrawerH(Article $article)
+    {
+        $this->dispatch('contentChanged');
+        $this->record  = $article;
+        $this->isOpenH = true;
+    }
+
+    public function closeDrawerH()
+    {
+        $this->isOpenH = false;
+    }
+
+
 
     public function recommendations()
     {
@@ -433,11 +448,13 @@ class Articles extends Component
     {
         $status = $this->articleStatus($this->compliance);
 
-        $this->record->update([
-            'article_status_id' => $status->id
-        ]);
+        
 
         if($this->compliance == '004'){
+
+            $this->validate([
+                'description' => 'required|string'
+            ]);
 
             ArticleComment::create(
                 [
@@ -486,6 +503,10 @@ class Articles extends Component
                 'message' => 'This Manuscript is Saved and Submitted for further editorial decision'
             ]);
         }
+
+        $this->record->update([
+            'article_status_id' => $status->id
+        ]);
 
         $this->closeDrawer();
     }
@@ -884,5 +905,34 @@ class Articles extends Component
         }
 
         $this->confirm_xs = false;
+    }
+
+
+
+    public function rejectManuscript()
+    {
+        $this->validate([
+            'editor_comments' => 'required|string'
+        ]);
+
+        $status = $this->articleStatus('015');
+        $this->record->update([
+            'article_status_id' => $status->id
+        ]);
+
+        ArticleComment::create(
+            [
+                'article_id'  => $this->record->id,
+                'user_id'     => auth()->user()->id,
+                'description' => $this->editor_comments
+            ]
+        );
+
+        session()->flash('response', [
+            'status'  => 'info',
+            'message' => 'This manuscript is rejected and sent back to author'
+        ]);
+
+        $this->closeDrawerH();
     }
 }

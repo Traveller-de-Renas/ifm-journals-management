@@ -119,6 +119,13 @@
                             </li>
                             @endif
 
+
+                            @if ($article->article_status->code == '003' && $caeditors->contains(auth()->user()->id))
+                            <li>
+                                <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start" wire:click="openDrawerH({{ $article->id }})" wire:loading.attr="disabled">Reject Manuscript</button>
+                            </li>
+                            @endif
+
                             @if ($article->article_status->code == '008' && $aeditors->contains(auth()->user()->id))
                                 <li>
                                     <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start" wire:click="openDrawerC({{ $article->id }})" wire:loading.attr="disabled">Return to Chief Editor</button>
@@ -223,7 +230,7 @@
             <div class="mt-2 mb-1 text-sm text-gray-500 font-bold">Editor Decisions</div>
             <div class="mt-2 mb-6 flex flex-col justify-between gap-2">
 
-                <div class="flex items-center ps-2 border border-gray-200 roundedp-2 ">
+                <div class="flex items-center ps-2 border border-gray-200 rounded p-2 ">
                     <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('meet_guidelines')">
                         <span class="ms-3 text-sm font-medium text-gray-900 w-full">Manuscript Meets Guidelines</span>
                         <div>
@@ -258,6 +265,8 @@
                     <div class="mt-4" wire:ignore>
                         <x-label for="description" value="Editor Comments" class="mb-2 block font-medium text-sm text-gray-700" />
                         <x-textarea type="text" id="description" class="w-full" wire:model="description" rows="6" />
+                    </div>
+                    <div class="mt-2">
                         <x-input-error for="description" />
                     </div>
 
@@ -788,6 +797,54 @@
     </div>
     <!-- Backdrop -->
     <div wire:click="closeDrawerF" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenF ? 'block' : 'hidden' }}"></div>
+
+
+    <div>
+        <div 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12  {{ $isOpenH ? 'translate-x-0' : 'translate-x-full' }}" 
+            style="transition: transform 0.3s ease-in-out;"
+        >
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 ">
+                <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                Reject Manuscript
+            </h5>
+    
+            <button wire:click="closeDrawerH" 
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center  ">
+                <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+                <span class="sr-only">Close menu</span>
+            </button>
+
+            <hr>
+    
+            <p class="mb-6 mt-2 font-bold">
+                Title : {{ $record?->title }}
+            </p>
+
+           
+            <div class="mt-4" wire:ignore >
+                <x-label for="editor_comments" value="Editor Comments" class="mb-2 block font-medium text-sm text-gray-700" /><span></span>
+                <x-textarea type="text" id="editor_comments" class="w-full" wire:model="editor_comments" placeholder="Enter Editor Comments" rows="7" />
+            </div>
+            <div class="mt-2">
+                <x-input-error for="editor_comments" />
+            </div>
+            
+
+            <div class="text-right">
+                <x-button class="mt-4 mb-4" wire:click="rejectManuscript()" wire:loading.attr="disabled" >
+                    Reject Manuscript
+                </x-button>
+            </div>
+        </div>
+        
+    </div>
+    <!-- Backdrop -->
+    <div wire:click="closeDrawerH" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenH ? 'block' : 'hidden' }}"></div>
 
 
 
