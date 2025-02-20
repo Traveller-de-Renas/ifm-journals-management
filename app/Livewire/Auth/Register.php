@@ -50,7 +50,7 @@ class Register extends Component
         }
 
         $this->countries = Country::all()->pluck('name', 'id')->toArray();
-        $this->salutations = Salutation::all()->pluck('title', 'id')->toArray();
+        $this->salutations = Salutation::where('status', 1)->pluck('title', 'id')->toArray();
     }
 
     public function render()
@@ -70,6 +70,7 @@ class Register extends Component
             'gender'      => 'required',
             'phone'       => 'nullable|string',
             'email'       => 'required|email',
+            'affiliation' => 'required|string',
             'password'    => [
                 'sometimes',
                 'nullable',
@@ -98,6 +99,7 @@ class Register extends Component
             'interests'     => $this->interests,
             'country_id'    => $this->country,
             'salutation_id' => $this->salutation,
+            'affiliation'   => $this->affiliation,
             'password'      => Hash::make($this->password)
         ]);
 
@@ -125,8 +127,6 @@ class Register extends Component
         }
 
         $this->accountActivationLink($data);
-
-        // return redirect(route('login', $this->journal->uuid));
     }
 
 
@@ -187,8 +187,24 @@ class Register extends Component
         }else{
             session()->flash('error', 'No user record found registered with this email on this journal');
         }
-
     
+    }
+
+
+    public $affiliation;
+    public $affiliations = [];
+
+    public function checkAffiliation()
+    {
+        $this->affiliations = User::whereLike('affiliation', '%'.$this->affiliation.'%')->groupBy('affiliation')
+        ->get(['affiliation']);
+
+    }
+
+
+    public function selectAffiliation($affiliation)
+    {
+        $this->affiliation = $affiliation;
     }
 
 

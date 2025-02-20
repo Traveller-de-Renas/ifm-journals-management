@@ -9,7 +9,6 @@
                     </p>
 
                     <br>
-
                     <div class="grid grid-cols-12 gap-2">
                         <p class="text-sm font-bold">ISSN </p>
                         <p class="col-span-11">: {{ $journal->issn }}</p>
@@ -36,8 +35,6 @@
                     <div class="w-full text-justify mt-4 mb-4">
                         {!! $journal->description !!}
                     </div>
-
-                    
                 </div>
                 <div class="col-span-2">
                     @if($journal->image == '')
@@ -76,7 +73,6 @@
             <h1 class="text-2xl text-gray-800 font-bold mb-6">{{ __('Create your Account') }}</h1>
 
             <div class="space-y-4">
-
                 <div>
                     <div class="mt-4">
                         <x-label for="email" class="text-xs">{{ __('Email Address') }} <span class="text-red-500">*</span></x-label>
@@ -92,27 +88,54 @@
                     </div>
                     <div {{ $user_check == 'nouser' ? '' : 'hidden' }} >
                         <div class="mt-4">
+                            <x-label for="title" class="text-xs">{{ __('Title') }}</x-label>
+                            <x-select id="title" class="w-full" :options="$salutations" wire:model="salutation" />
+                            <x-input-error for="title" />
+                        </div>
+
+                        <div class="mt-4">
                             <x-label for="first_name" class="text-xs">{{ __('First Name') }} <span class="text-red-500">*</span></x-label>
-                            <x-input id="first_name" type="text" class="w-full" wire:model="first_name" :value="old('first_name')" required autofocus autocomplete="off" />
+                            <x-input id="first_name" type="text" class="w-full" wire:model="first_name" required autofocus autocomplete="off" />
                             <x-input-error for="first_name" />
                         </div>
         
                         <div class="mt-4">
                             <x-label for="middle_name" class="text-xs">{{ __('Middle Name') }} </x-label>
-                            <x-input id="middle_name" type="text" class="w-full" wire:model="middle_name" :value="old('middle_name')" required autofocus autocomplete="off" />
+                            <x-input id="middle_name" type="text" class="w-full" wire:model="middle_name"  required autofocus autocomplete="off" />
                             <x-input-error for="middle_name" />
                         </div>
         
                         <div class="mt-4">
                             <x-label for="last_name" class="text-xs">{{ __('Last Name') }} <span class="text-red-500">*</span></x-label>
-                            <x-input id="last_name" type="text" class="w-full" wire:model="last_name" :value="old('last_name')" required autofocus autocomplete="off" />
+                            <x-input id="last_name" type="text" class="w-full" wire:model="last_name"  required autofocus autocomplete="off" />
                             <x-input-error for="last_name" />
                         </div>
-        
+                            
                         <div class="mt-4">
                             <x-label for="gender" class="text-xs">{{ __('Gender') }} <span class="text-red-500">*</span></x-label>
                             <x-select id="gender" class="w-full" :options="['Male'=>'Male', 'Female'=>'Female']" wire:model="gender" required />
                             <x-input-error for="gender" />
+                        </div>
+                        
+
+                        <div class="mt-4">
+                            <x-label for="affiliation" class="text-xs">{{ __('Affiliation') }} <span class="text-red-500">*</span></x-label>
+                            <x-input id="affiliation" type="text" class="w-full" wire:model="affiliation" wire:input="checkAffiliation()"  required autofocus autocomplete="off" />
+                            <x-input-error for="affiliation" />
+
+                            @if($affiliation != '')
+                            <div class="shadow mt-1 relative">
+                                <div class="absolute">
+                                    @foreach ($affiliations as $affiliation)
+                                        
+                                        <div class="text-xs text-gray-700 bg-gray-200 hover:bg-gray-300 cursor-pointer p-2" wire:click="selectAffiliation('{{ $affiliation->affiliation }}')">
+                                            {{ $affiliation->affiliation }}
+                                        </div>
+
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endif
                         </div>
         
                         <div class="mt-4">

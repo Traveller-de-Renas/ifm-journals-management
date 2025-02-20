@@ -114,7 +114,7 @@ class Submission extends Component
         $this->file_categories = $filecategories->whereNotIn('id', $uploaded)->pluck('name', 'id')->toArray();
 
         $this->countries     = Country::all()->pluck('name', 'id')->toArray();
-        $this->salutations   = Salutation::all()->pluck('title', 'id')->toArray();
+        $this->salutations   = Salutation::where('status', 1)->pluck('title', 'id')->toArray();
         $this->confirmations = SubmissionConfirmation::where('status', 1)->get();
 
         $this->author_juser  = auth()->user()->journal_us()->where('journal_id', $this->journal->id)->first();
@@ -617,55 +617,29 @@ class Submission extends Component
     {
         $pivot =  (object) $pivot;
 
+        $author = $this->record->article_journal_users()->whereHas('roles', function ($query) {
+            $query->where('name', 'Author');
+        })->where('number', $pivot->number)->first();
+
         if($type == 'up'){
-            $other = $this->record->article_users()
-            ->where('role', 'author')
-            ->wherePivot('article_id', $pivot->article_id)
-            ->wherePivot('number', $pivot->number - 1)->first();
+            //select the upper author
+            $upper = $this->record->article_journal_users()->whereHas('roles', function ($query) {
+                $query->where('name', 'Author');
+            })->where('number', $pivot->number - 1)->first();
 
-            $this->record->article_users()
-            ->where('role', 'author')
-            ->wherePivot('id', $other->pivot->id)
-            ->updateExistingPivot($other->pivot->user_id,
-                ['role' => 'author', 'number' => $other->pivot->number + 1]
-            );
+            $this->record->article_journal_users()->sync([$upper->id => ['number' => $pivot->number]], false);
+            $this->record->article_journal_users()->sync([$author->id => ['number' => $pivot->number - 1]], false);
 
-            $this->record->article_users()
-            ->where('role', 'author')
-            ->wherePivot('id', $pivot->id)
-            ->updateExistingPivot($pivot->user_id,
-                ['role' => 'author', 'number' => $pivot->number - 1]
-            );
-            
         }
 
         if($type == 'down'){
-            // $this->record->article_users()
-            // ->where('role', 'author')
-            // ->wherePivot('user_id', $pivot->user_id)
-            // ->wherePivot('article_id', $pivot->article_id)
-            // ->updateExistingPivot($pivot->user_id,
-            //     ['role' => 'author', 'number' => $pivot->number + 1]
-            // );
+            //select the lower author
+            $lower = $this->record->article_journal_users()->whereHas('roles', function ($query) {
+                $query->where('name', 'Author');
+            })->where('number', $pivot->number + 1)->first();
 
-            $other = $this->record->article_users()
-            ->where('role', 'author')
-            ->wherePivot('article_id', $pivot->article_id)
-            ->wherePivot('number', $pivot->number + 1)->first();
-
-            $this->record->article_users()
-            ->where('role', 'author')
-            ->wherePivot('id', $other->pivot->id)
-            ->updateExistingPivot($other->pivot->user_id,
-                ['role' => 'author', 'number' => $other->pivot->number - 1]
-            );
-
-            $this->record->article_users()
-            ->where('role', 'author')
-            ->wherePivot('id', $pivot->id)
-            ->updateExistingPivot($pivot->user_id,
-                ['role' => 'author', 'number' => $pivot->number + 1]
-            );
+            $this->record->article_journal_users()->sync([$lower->id => ['number' => $pivot->number]], false);
+            $this->record->article_journal_users()->sync([$author->id => ['number' => $pivot->number + 1]], false);
         }
     }
 

@@ -177,17 +177,17 @@
                 <div class="grid grid-cols-12 gap-2">
                     
                     <div class="mt-4 col-span-3">
-                        <x-label for="file_attachment" value="File" class="mb-2 block font-medium text-sm text-gray-700" />
+                        <x-label for="file_attachment" value="File" class="mb-1 block font-medium text-sm text-gray-700" />
                         <x-input-file wire:model="file_attachment" id="file_attachment" />
                         <x-input-error for="file_attachment" />
                     </div>
                     <div class="mt-4 col-span-8">
-                        <x-label for="file_category_id" value="File Category" class="mb-2 block font-medium text-sm text-gray-700" />
+                        <x-label for="file_category_id" value="File Category" class="mb-1 block font-medium text-sm text-gray-700" />
                         <x-select wire:model="file_category_id" id="file_category_id" class="w-full" :options="$file_categories" />
                         <x-input-error for="file_category_id" />
                     </div>
                     <div class="mt-4 flex text-right">
-                        <x-button class="mt-8 w-full" wire:click="uploadDocument()" >Upload</x-button>
+                        <button class="mt-6 w-full bg-green-500 hover:bg-green-700 text-white p-2 rounded-md shadow font-semibold" wire:click="uploadDocument()" >UPLOAD</button>
                     </div>
 
                 </div>
@@ -203,11 +203,17 @@
                             </div>
 
                             <div class="col-span-8 p-2 px-4">
-                                <a href="{{ asset('storage/articles/'.$file->file_path) }}"><span class="font-bold text-blue-500 hover:text-blue-700 cursor-pointer ml-4">{{ $file->file_description }}</span></a>
+                                <a href="{{ asset('storage/articles/'.$file->file_path) }}">
+                                    <span class="font-bold text-blue-500 hover:text-blue-700 cursor-pointer ml-4 hover:underline">
+                                        {{ $file->file_description }}
+
+                                        @if(Storage::exists('articles/'.$file->file_path))({{ round((Storage::size('articles/'.$file->file_path) / 1048576), 2) }} MB)@endif
+                                    </span>
+                                </a>
                             </div>
                             
                             <div class="col-span-1 p-2 px-4">
-                                <span class="font-bold text-red-700 hover:text-red-500 cursor-pointer text-right w-full" wire:click="deleteFile({{ $file->id }})" >{{ __('delete') }}</span>
+                                <span class="font-bold text-red-700 hover:text-red-500 cursor-pointer text-right w-full hover:underline" wire:click="deleteFile({{ $file->id }})" >{{ __('delete') }}</span>
                             </div>
                         </div>
                     </div>
@@ -377,6 +383,10 @@
 
                     @if($record?->files()->pluck('file_category_id')->toArray())
                         @foreach ($filecategories as $key => $file)
+
+                        @php
+                            $file_doc = $record->files()->where('file_category_id', $file->id)->first();
+                        @endphp
                         
                         <div class="flex gap-2 w-full items-center bg-gray-200 rounded-lg"> 
                             <div class="flex flex-1 items-center w-full p-2">
@@ -388,7 +398,14 @@
                                 <span class="ml-2">{{ $file->name }}</span>
                             </div>
                             <div class="flex-1 items-center justify-end">
-                                <a href="{{ asset('storage/articles/'.$file->file_path) }}"><span class="font-bold text-blue-500 hover:text-blue-700 cursor-pointer ml-4">{{ $record->files()->where('file_category_id', $file->id)->first()?->file_description }}</span></a>
+                                <a href="{{ asset('storage/articles/'.$file->file_path) }}">
+                                    <span class="font-bold text-blue-500 hover:text-blue-700 cursor-pointer ml-4 hover:underline">
+                                        {{ $file_doc?->file_description }}
+
+                                        
+                                        @if(Storage::exists('articles/'.$file_doc?->file_path) && $file_doc?->file_path != '')({{ round((Storage::size('articles/'.$file_doc?->file_path) / 1048576), 2) }} MB)@endif
+                                    </span>
+                                </a>
                             </div>
                         </div>
 
@@ -610,7 +627,7 @@
 </div>
 
 <script>
-    window.addEventListener('contentChanged', (e) => {
+    window.addEventListener('contentChangedx', (e) => {
         tinymce.remove('#abstract');
         tinymce.init({
             selector: '#abstract',
