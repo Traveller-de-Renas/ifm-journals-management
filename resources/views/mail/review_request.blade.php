@@ -1,6 +1,6 @@
 <br>
     @php
-        $reviewer = $user->author->first_name.' '.$record->author->middle_name.' '.$record->author->last_name
+        $reviewer = $user->user->first_name.' '.$user->user->middle_name.' '.$user->user->last_name
     @endphp
 
     {!! 
