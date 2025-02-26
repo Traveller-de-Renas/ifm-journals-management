@@ -52,11 +52,13 @@ class JournalReviewers extends Component
             $data->gender        = $this->gender;
             $data->email         = $this->email;
             $data->phone         = $this->phone;
+            $data->password      = Hash::make('jrev@123IFM');
 
             $data->save();
 
             $data->journal_us()->create([
                 'journal_id' => $this->journal->id,
+                'status'     => 1,
                 'user_id'    => $data->id
             ]);
 
@@ -80,6 +82,7 @@ class JournalReviewers extends Component
             if(!($this->user->journal_us()->where('journal_id', $this->journal->id)->exists())){
                 $this->user->journal_us()->create([
                     'journal_id' => $this->journal->id,
+                    'status'     => 1,
                     'user_id'    => $this->user->id
                 ]);
             }

@@ -417,7 +417,7 @@
 
             <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-1">
                 <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('prior_publication')">
-                    <span class="ms-3 text-sm font-medium text-gray-900w-full">Not Prior Published</span>
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">Not Prior Published</span>
                     <div>
                         <input type="checkbox" class="sr-only peer" wire:model="prior_publication">
                         <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 "></div>

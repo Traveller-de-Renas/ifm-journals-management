@@ -83,6 +83,7 @@ class JournalTeam extends Component
 
             $data->journal_us()->create([
                 'journal_id' => $this->journal->id,
+                'status'     => 1,
                 'user_id'    => $data->id
             ]);
 
@@ -131,6 +132,7 @@ class JournalTeam extends Component
             if(!($this->user->journal_us()->where('journal_id', $this->journal->id)->exists())){
                 $this->user->journal_us()->create([
                     'journal_id' => $this->journal->id,
+                    'status'     => 1,
                     'user_id'    => $this->user->id
                 ]);
             }
