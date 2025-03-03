@@ -282,11 +282,11 @@
                                     </svg>
                                 </button>
                                 <ul id="dropdown-d" class="hidden py-2 space-y-2">
-                                    @if(auth()->user()->hasPermissionTo('View Journals'))
+                                    {{-- @if(auth()->user()->hasPermissionTo('View Journals')) --}}
                                     <li>
                                         <a href="{{ route('journals.index') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">All Journals</a>
                                     </li>
-                                    @endif
+                                    {{-- @endif --}}
 
 
                                     @if(auth()->user()->hasPermissionTo('View Journal Subjects'))
