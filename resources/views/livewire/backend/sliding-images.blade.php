@@ -1,7 +1,7 @@
 <div class="bg-white shadow-md p-4 rounded">
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
-            <p class="font-bold">{{ __('SLIDING IMAGES') }}</p>
+            <p class="font-bold text-xl">{{ __('SLIDING IMAGES') }}</p>
         </div>
         <div class="">
 

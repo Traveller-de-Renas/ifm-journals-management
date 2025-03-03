@@ -2,7 +2,7 @@
 
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
-            <p class="font-bold">{{ __('CUSTOMIZED NOTIFICATION MESSAGES') }}</p>
+            <p class="font-bold text-xl">{{ __('CUSTOMIZED NOTIFICATION MESSAGES') }}</p>
         </div>
         <div class="">
 

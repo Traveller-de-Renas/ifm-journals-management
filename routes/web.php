@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckPermission;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\AuthenticationController;
@@ -32,14 +33,16 @@ Route::get('/password_reset/{user?}', [AuthenticationController::class, 'passwor
 
 Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/home', [JournalController::class, 'home'])->name('journals.home');
-    Route::get('/index', [JournalController::class, 'index'])->name('journals.index');
+
+    Route::get('/dashboard', [JournalController::class, 'dashboard'])->name('journals.dashboard')->middleware('permission:View Dashboard');
+    Route::get('/index', [JournalController::class, 'index'])->name('journals.index')->middleware('permission:View Journals');
     Route::get('/create/{journal?}', [JournalController::class, 'create'])->name('journals.create');
-    Route::get('/subjects', [JournalController::class, 'subjects'])->name('journals.subjects');
-    Route::get('/categories', [JournalController::class, 'categories'])->name('journals.categories');
-    Route::get('/review_messages', [JournalController::class, 'review_messages'])->name('journals.review_messages');
-    Route::get('/review_sections', [JournalController::class, 'review_sections'])->name('journals.review_sections');
-    Route::get('/file_categories', [JournalController::class, 'file_categories'])->name('journals.file_categories');
-    Route::get('/submission_confirmations', [JournalController::class, 'submission_confirmations'])->name('journals.submission_confirmations');
+    Route::get('/subjects', [JournalController::class, 'subjects'])->name('journals.subjects')->middleware('permission:View Journal Subjects');
+    Route::get('/categories', [JournalController::class, 'categories'])->name('journals.categories')->middleware('permission:View Journal Categories');
+    Route::get('/review_messages', [JournalController::class, 'review_messages'])->name('journals.review_messages')->middleware('permission:View Review Messages');
+    Route::get('/review_sections', [JournalController::class, 'review_sections'])->name('journals.review_sections')->middleware('permission:View Review Sections');
+    Route::get('/file_categories', [JournalController::class, 'file_categories'])->name('journals.file_categories')->middleware('permission:View File Categories');
+    Route::get('/submission_confirmations', [JournalController::class, 'submission_confirmations'])->name('journals.submission_confirmations')->middleware('permission:View Submission Confirmations');
 
     Route::get('/detail/{journal?}', [JournalController::class, 'detail'])->name('journals.detail');
     Route::get('/submission/{journal?}/{article?}', [JournalController::class, 'submission'])->name('journals.submission');
@@ -52,16 +55,16 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/team/{journal?}', [JournalController::class, 'team'])->name('journals.team');
 
     Route::get('/call_for_papers/{journal?}', [JournalController::class, 'call_for_papers'])->name('journals.call_for_papers');
-    Route::get('/sliding_images', [FrontendController::class, 'sliding_images'])->name('journals.sliding_images');
+    Route::get('/sliding_images', [FrontendController::class, 'sliding_images'])->name('journals.sliding_images')->middleware('permission:View Sliding Images');
 });
 
 
 Route::group(['prefix' => 'users', 'middleware' => 'auth'], function () {
-    Route::get('/index', [UserController::class, 'index'])->name('admin.users');
-    Route::get('/logs', [UserController::class, 'logs'])->name('admin.user_logs');
-    Route::get('/salutations', [UserController::class, 'salutations'])->name('admin.salutations');
-    Route::get('/roles', [UserController::class, 'roles'])->name('admin.roles');
-    Route::get('/permissions', [UserController::class, 'permissions'])->name('admin.permissions');
+    Route::get('/index', [UserController::class, 'index'])->name('admin.users')->middleware('permission:View Users');
+    Route::get('/logs', [UserController::class, 'logs'])->name('admin.user_logs')->middleware('permission:View User Logs');
+    Route::get('/salutations', [UserController::class, 'salutations'])->name('admin.salutations')->middleware('permission:View Salutations');
+    Route::get('/roles', [UserController::class, 'roles'])->name('admin.roles')->middleware('permission:View Roles');
+    Route::get('/permissions', [UserController::class, 'permissions'])->name('admin.permissions')->middleware('permission:View Permissions');
 });
 
 

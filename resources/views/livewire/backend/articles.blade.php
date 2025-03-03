@@ -2,7 +2,8 @@
     
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
-            <p class="font-bold">{{ __('LIST OF ARTICLES') }}</p>
+            <p class="font-bold text-xl">{{ __('LIST OF ARTICLES') }}/{{ strtoupper(str_replace('_', ' ', $this->status)) }}
+            </p>
         </div>
         <div class="">
 

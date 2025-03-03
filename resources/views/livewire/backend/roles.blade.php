@@ -1,13 +1,15 @@
 <div class="bg-white shadow-md p-4 rounded">
-    {{ __('ROLES') }}
 
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
-            <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
+            <p class="font-bold text-xl">{{ __('ROLES') }}</p>
         </div>
-        <div class=""></div>
         <div class="">
+
+        </div>
+        <div class="flex gap-2 justify-end">
             <x-button class="float-right" wire:click="confirmAdd" wire:loading.attr="disabled" >Create New</x-button>
+            <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
         </div>
     </div>
 

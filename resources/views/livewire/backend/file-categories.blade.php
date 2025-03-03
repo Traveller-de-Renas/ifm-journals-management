@@ -2,7 +2,7 @@
 
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
-            <p class="font-bold">{{ __('FILE CATEGORIES') }}</p>
+            <p class="font-bold text-xl">{{ __('FILE CATEGORIES') }}</p>
         </div>
         <div class="">
 

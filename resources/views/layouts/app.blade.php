@@ -263,91 +263,138 @@
                         <div class="px-4 py-2 text-gray-300 mt-4"> Administrator</div>
 
                         <ul class="space-y-2 font-medium border-t border-gray-400">
+                            @if(auth()->user()->hasPermissionTo('View Dashboard'))
+                                <li>
+                                    <a href="{{ route('journals.dashboard') }}" class="flex items-center px-4 py-2 text-white hover:text-gray-950 hover:bg-gray-100 group">
+                                        <svg class="flex-shrink-0 w-4 h-5 text-white transition duration-75 group-hover:text-gray-900 "  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <rect x="3" y="12" width="6" height="8" rx="1" />  <rect x="9" y="8" width="6" height="12" rx="1" />  <rect x="15" y="4" width="6" height="16" rx="1" />  <line x1="4" y1="20" x2="18" y2="20" /></svg>
+                                        <span class="ms-3">Dashboard</span>
+                                    </a>
+                                </li>
+                            @endif
+
+                            @if(auth()->user()->hasPermissionTo('Journals'))
                             <li>
                                 <button type="button" class="flex items-center w-full px-4 py-2 text-base text-white hover:text-gray-950 transition duration-75 group hover:bg-gray-100" aria-controls="dropdown-d" data-collapse-toggle="dropdown-d">
-                                    <svg class="flex-shrink-0 w-4 h-5 text-white transition duration-75 group-hover:text-gray-900 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
-                                        <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
-                                    </svg>
+                                    <svg class="flex-shrink-0 w-4 h-5 text-white transition duration-75 group-hover:text-gray-900 "  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18" />  <line x1="13" y1="8" x2="15" y2="8" />  <line x1="13" y1="12" x2="15" y2="12" /></svg>
                                     <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Journals</span>
                                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
                                 <ul id="dropdown-d" class="hidden py-2 space-y-2">
+                                    @if(auth()->user()->hasPermissionTo('View Journals'))
                                     <li>
                                         <a href="{{ route('journals.index') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">All Journals</a>
                                     </li>
+                                    @endif
+
+
+                                    @if(auth()->user()->hasPermissionTo('View Journal Subjects'))
                                     <li>
                                         <a href="{{ route('journals.subjects') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Subjects</a>
                                     </li>
+                                    @endif
+
+
+                                    @if(auth()->user()->hasPermissionTo('View Journal Categories'))
                                     <li>
                                         <a href="{{ route('journals.categories') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Categories</a>
                                     </li>
+                                    @endif
 
+
+                                    @if(auth()->user()->hasPermissionTo('View Notification Messages'))
                                     <li>
                                         <a href="{{ route('journals.review_messages') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Notification Message</a>
                                     </li>
+                                    @endif
 
+
+                                    @if(auth()->user()->hasPermissionTo('View Review Sections'))
                                     <li>
                                         <a href="{{ route('journals.review_sections') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Review Sections</a>
                                     </li>
+                                    @endif
 
+
+                                    @if(auth()->user()->hasPermissionTo('View File Categories'))
                                     <li>
                                         <a href="{{ route('journals.file_categories') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">File Categories</a>
                                     </li>
+                                    @endif
 
+
+                                    @if(auth()->user()->hasPermissionTo('View Submission Confirmation'))
                                     <li>
                                         <a href="{{ route('journals.submission_confirmations') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Submission Confirmation</a>
                                     </li>
+                                    @endif
                                 </ul>
                             </li>
+                            @endif
 
+                            @if(auth()->user()->hasPermissionTo('Users'))
                             <li>
                                 <button type="button" class="flex items-center w-full px-4 py-2 text-base text-white hover:text-gray-950 transition duration-75 group hover:bg-gray-100" aria-controls="dropdown-e" data-collapse-toggle="dropdown-e">
-                                    <svg class="flex-shrink-0 w-4 h-5 text-white transition duration-75 group-hover:text-gray-900 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                                        <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
-                                    </svg>
+                                    <svg class="flex-shrink-0 w-4 h-5 text-white transition duration-75 group-hover:text-gray-900 "  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="9" cy="7" r="4" />  <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />  <path d="M16 3.13a4 4 0 0 1 0 7.75" />  <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
                                     <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Users</span>
                                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
                                 <ul id="dropdown-e" class="hidden py-2 space-y-2">
+                                    @if(auth()->user()->hasPermissionTo('View Journal Subjects'))
                                     <li>
                                         <a href="{{ route('admin.users') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">All Users</a>
                                     </li>
+                                    @endif
+
+                                    @if(auth()->user()->hasPermissionTo('View Roles'))
                                     <li>
                                         <a href="{{ route('admin.roles') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Roles</a>
                                     </li>
+                                    @endif
+
+                                    @if(auth()->user()->hasPermissionTo('View Permissions'))
                                     <li>
                                         <a href="{{ route('admin.permissions') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Permissions</a>
                                     </li>
+                                    @endif
+
+                                    @if(auth()->user()->hasPermissionTo('View Salutations'))
                                     <li>
                                         <a href="{{ route('admin.salutations') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Salutations</a>
                                     </li>
+                                    @endif
+
+                                    @if(auth()->user()->hasPermissionTo('View User Logs'))
                                     <li>
-                                        <a href="{{ route('admin.user_logs') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">User Logs</a>
+                                        <a href="{{ route('admin.user_logs') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Activity Logs</a>
                                     </li>
+                                    @endif
                                 </ul>
                             </li>
+                            @endif
 
 
+                            @if(auth()->user()->hasPermissionTo('Website'))
                             <li>
                                 <button type="button" class="flex items-center w-full px-4 py-2 text-base text-white hover:text-gray-950 transition duration-75 group hover:bg-gray-100" aria-controls="dropdown-g" data-collapse-toggle="dropdown-g">
-                                    <svg class="flex-shrink-0 w-4 h-5 text-white transition duration-75 group-hover:text-gray-900 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
-                                        <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
-                                    </svg>
+                                    <svg class="flex-shrink-0 w-4 h-5 text-white transition duration-75 group-hover:text-gray-900 "  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" />  <line x1="3.6" y1="9" x2="20.4" y2="9" />  <line x1="3.6" y1="15" x2="20.4" y2="15" />  <path d="M11.5 3a17 17 0 0 0 0 18" />  <path d="M12.5 3a17 17 0 0 1 0 18" /></svg>
                                     <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Website</span>
                                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
                                 <ul id="dropdown-g" class="hidden py-2 space-y-2">
+                                    @if(auth()->user()->hasPermissionTo('View Sliding Images'))
                                     <li>
                                         <a href="{{ route('journals.sliding_images') }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Sliding Images</a>
                                     </li>
+                                    @endif
                                 </ul>
                             </li>
+                            @endif
 
                         </ul>
 

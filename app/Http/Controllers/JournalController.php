@@ -11,6 +11,11 @@ class JournalController extends Controller
         return view('backend.journals');
     }
 
+    public function dashboard()
+    {
+        return view('backend.dashboard');
+    }
+
     public function index()
     {
         return view('backend.journals');

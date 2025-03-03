@@ -9,7 +9,7 @@
                     @php
                         $journal = \App\Models\Journal::where('uuid', session('journal'))->first();
                     @endphp
-                    <p class="text-lg font-bold ">{{ $journal->title }} - {{ $journal->code }}</p>
+                    <p class="text-lg font-bold ">{{ $journal->title }} - {{ strtoupper($journal->code) }}</p>
                     @endif
                 </div>
             </div>

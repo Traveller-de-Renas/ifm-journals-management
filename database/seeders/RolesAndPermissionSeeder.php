@@ -20,6 +20,10 @@ class RolesAndPermissionSeeder extends Seeder
                 'guard_name' => 'web'
             ],
             [
+                'name' => 'Research Admin',
+                'guard_name' => 'web'
+            ],
+            [
                 'name' => 'Chief Editor',
                 'guard_name' => 'web'
             ],
@@ -46,26 +50,44 @@ class RolesAndPermissionSeeder extends Seeder
         }
 
         $permissions = array(
-            'Add Journals',
-            'configurations',
-            'users',
-            'Editorial Board',
             'Journals',
-            'Publication Process',
-            'Subjects',
-            'Categories',
+            'Add Journals',
+            'Edit Journals',
+            'Delete Journals',
+
+            'View Notification Messages',
+            'View Review Sections',
+            'View File Categories',
+            'View Submission Confirmation',
+
+            'View Dashboard',
+
+            'Users',
+            'View Users',
+            'Add Users',
+            'Edit Users',
+            'Delete Users',
+
+            'View User Logs',
+
+            'View Salutations',
+            'View Permissions',
+            'View Roles',
+            
+            'View Journal Subjects',
+            'View Journal Categories',
+
+            'Website',
+            'View Sliding Images'
         );
 
-        // foreach($permissions as $permission){
-        //     $array = array('', 'View ', 'Add ', 'Edit ', 'Delete ');
-        //     foreach($array as $prefix){
-        //         $data = Permission::create([
-        //             'name' => $prefix.$permission
-        //         ]);
+        foreach($permissions as $permission){
+            $data = Permission::create([
+                'name' => $permission
+            ]);
 
-        //         $data->assignRole('Administrator');
-        //     }
-        // }
+            $data->assignRole('Administrator');
+        }
         
     }
 }

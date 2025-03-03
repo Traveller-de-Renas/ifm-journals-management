@@ -2,7 +2,7 @@
 
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
-            <p class="font-bold">{{ __('LIST OF JOURNALS') }}</p>
+            <p class="font-bold text-xl">{{ __('LIST OF JOURNALS') }}</p>
         </div>
         <div class="col-span-2 flex gap-2 justify-end">
             <x-button class="flex gap-2 items-center" wire:click="$toggle('filters')" >
@@ -12,11 +12,11 @@
                 <span>Filter Journals</span>
             </x-button>
 
-            <x-button class="" wire:click="loadJournals()" wire:loading.attr="disabled">Load Data</x-button>
+            {{-- <x-button class="" wire:click="loadJournals()" wire:loading.attr="disabled">Load Data</x-button> --}}
 
-            {{-- @if (Auth()->user()->hasPermissionTo('Add Journals')) --}}
+            @if (Auth()->user()->hasPermissionTo('Add Journals'))
                 <x-button class="" wire:click="createJournal()" wire:loading.attr="disabled" >Create New</x-button>
-            {{-- @endif --}}
+            @endif
 
             <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
         </div>
@@ -102,7 +102,7 @@
             <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 grey:border-neutral-500 grey:hover:bg-neutral-600">
                 <td class="whitespace-nowrap px-6 py-3 font-medium">{{ $sn }}</td>
                 <td class="whitespace-nowrap px-6 py-3">{{ $data->title }}</td>
-                <td class="whitespace-nowrap px-6 py-3">{{ $data->code }}</td>
+                <td class="whitespace-nowrap px-6 py-3">{{ strtoupper($data->code) }}</td>
                 <td class="whitespace-nowrap px-6 py-3">
                     @php
                         $editor = $data->journal_us()->whereHas('roles', function ($query) {

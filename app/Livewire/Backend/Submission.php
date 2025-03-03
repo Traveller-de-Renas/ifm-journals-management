@@ -156,7 +156,7 @@ class Submission extends Component
         }else{
             $month = date('m');
             $year  = date('Y');
-            $paper_id = $this->journal->code.'-'.$month.'-'.$year.'-'.str_pad($this->journal->articles()->count() + 1, 5, '0', STR_PAD_LEFT);
+            $paper_id = strtoupper($this->journal->code).'-'.$month.'-'.$year.'-'.str_pad($this->journal->articles()->count() + 1, 5, '0', STR_PAD_LEFT);
         }
         
         $state = $this->articleStatus($status);
@@ -343,7 +343,7 @@ class Submission extends Component
 
             $month = date('m');
             $year  = date('Y');
-            $paper_id = $this->journal->code.'-'.$month.'-'.$year.'-'.str_pad($this->journal->articles()->count() + 1, 5, '0', STR_PAD_LEFT);
+            $paper_id = strtoupper($this->journal->code).'-'.$month.'-'.$year.'-'.str_pad($this->journal->articles()->count() + 1, 5, '0', STR_PAD_LEFT);
             $this->record->paper_id = $paper_id;
 
             if(ReviewMessage::where('category', 'Submission')->count() > 0){

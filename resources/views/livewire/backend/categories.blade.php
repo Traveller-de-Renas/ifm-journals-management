@@ -36,7 +36,7 @@
 
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
-            <p class="font-bold">{{ __('JOURNAL CATEGORIES') }}</p>
+            <p class="font-bold text-xl">{{ __('JOURNAL CATEGORIES') }}</p>
         </div>
         <div class="">
 
