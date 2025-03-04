@@ -45,7 +45,7 @@ class Login extends Component
             $user = Auth::user();
 
             if($user->hasRole('Administrator')){
-                return redirect(route('journals.home'));
+                return redirect(route('journals.dashboard'));
             }else{
                 if($this->journal){
                     session(['journal' => $this->journal->uuid]);

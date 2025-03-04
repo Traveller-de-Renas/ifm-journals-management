@@ -135,9 +135,6 @@
                                 <a href="{{ route('journals.create', $data->uuid) }}" class="block px-4 py-2 hover:bg-gray-100 " wire:loading.attr="disabled">Edit</a>
                             </li>
                             <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="confirmView({{ $data->id }})" wire:loading.attr="disabled">View</a>
-                            </li>
-                            <li>
                                 <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="confirmDelete({{ $data->id }})" wire:loading.attr="disabled">Delete</a>
                             </li>
                             <li>

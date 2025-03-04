@@ -59,11 +59,6 @@ class Journal extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function confirmations()
-    {
-        return $this->hasMany(SubmissionConfirmation::class);
-    }
-
     public function articles()
     {
         return $this->hasMany(Article::class);

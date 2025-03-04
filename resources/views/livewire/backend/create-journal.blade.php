@@ -315,7 +315,7 @@
             </li> --}}
 
 
-            <li class="ms-6">
+            {{-- <li class="ms-6">
                 <div class="flex items-center justify-start cursor-pointer" wire:click="setStep(6)">     
                     <span class="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 ring-4 ring-white {{ $step >= 6 ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-600' }}" >
                         <svg class="w-3.5 h-3.5 text-white dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
@@ -349,7 +349,7 @@
                     </div>
                 </div>
                 
-            </li>
+            </li> --}}
         </ol>
 
         <hr>

@@ -42,7 +42,7 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/review_messages', [JournalController::class, 'review_messages'])->name('journals.review_messages')->middleware('permission:View Review Messages');
     Route::get('/review_sections', [JournalController::class, 'review_sections'])->name('journals.review_sections')->middleware('permission:View Review Sections');
     Route::get('/file_categories', [JournalController::class, 'file_categories'])->name('journals.file_categories')->middleware('permission:View File Categories');
-    Route::get('/submission_confirmations', [JournalController::class, 'submission_confirmations'])->name('journals.submission_confirmations')->middleware('permission:View Submission Confirmations');
+    Route::get('/submission_confirmations', [JournalController::class, 'submission_confirmations'])->name('journals.submission_confirmations')->middleware('permission:View Submission Confirmation');
 
     Route::get('/detail/{journal?}', [JournalController::class, 'detail'])->name('journals.detail');
     Route::get('/submission/{journal?}/{article?}', [JournalController::class, 'submission'])->name('journals.submission');

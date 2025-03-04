@@ -145,13 +145,13 @@ class CreateJournal extends Component
             ]);
         }
 
-        foreach($this->confirmation_description as $key => $description)
-        {
-            SubmissionConfirmation::create([
-                'description' => $description,
-                'journal_id' => $journal->id
-            ]);
-        }
+        // foreach($this->confirmation_description as $key => $description)
+        // {
+        //     SubmissionConfirmation::create([
+        //         'description' => $description,
+        //         'journal_id' => $journal->id
+        //     ]);
+        // }
 
         // foreach($this->index_title as $key => $index)
         // {
@@ -283,18 +283,18 @@ class CreateJournal extends Component
             }
         }
         
-        if(!empty($this->confirmation_description)){
-            SubmissionConfirmation::where('journal_id', $journal->id)->delete();
-            foreach($this->confirmation_description as $key => $description)
-            {
-                $con = new SubmissionConfirmation;
-                if($description != null){
-                    $con->description = $description;
-                    $con->journal_id  = $journal->id;
-                    $con->save();
-                }
-            }
-        }
+        // if(!empty($this->confirmation_description)){
+        //     SubmissionConfirmation::where('journal_id', $journal->id)->delete();
+        //     foreach($this->confirmation_description as $key => $description)
+        //     {
+        //         $con = new SubmissionConfirmation;
+        //         if($description != null){
+        //             $con->description = $description;
+        //             $con->journal_id  = $journal->id;
+        //             $con->save();
+        //         }
+        //     }
+        // }
 
         // if(!empty($this->index_title)){
         //     JournalIndex::where('journal_id', $journal->id)->delete();
@@ -438,13 +438,7 @@ class CreateJournal extends Component
             }
         }
 
-        if($this->record->confirmations){
-            foreach($this->record->confirmations as $key => $ins){
-                $this->confirmations[] = '';
-
-                $this->confirmation_description[$key] = $ins->description;
-            }
-        }
+        
     }
 
     public $step = 1;
