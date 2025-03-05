@@ -38,7 +38,7 @@
                                     <x-sort-icon class="float-right" sortField="title" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                                 </th>
                                 <th scope="col" class="px-6 py-4 w-2">Paper Id</th>
-                                <th scope="col" class="px-6 py-4 w-2">Submitted On</th>
+                                <th scope="col" class="px-6 py-4 w-2">Due Date</th>
                                 <th scope="col" class="px-6 py-4 w-2">Decision</th>
                             </tr>
                         </thead>
@@ -56,7 +56,19 @@
                                 <td class="whitespace-nowrap px-6 py-4">
                                     {{ $article->paper_id }}
                                 </td>
-                                <td class="whitespace-nowrap px-6 py-4">{{ $article->created_at }}</td>
+                                
+                                <td class="whitespace-nowrap px-6 py-4">
+                                    {{ $article->deadline }}
+
+                                    @if ($article->deadlineDays())
+                                        @if ($article->deadlineDays() > 0)
+                                            {{ '('.$article->deadlineDays().' Days Remained)' }}
+                                        @else
+                                            {{ '('.abs($article->deadlineDays()).' Days Passed Due)' }}
+                                        @endif
+                                    @endif
+                                    
+                                </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <div class="px-2 text-[12px] text-center rounded" style="{{ $article->article_status->color }}">
                                         {{ $article->article_status->name }}

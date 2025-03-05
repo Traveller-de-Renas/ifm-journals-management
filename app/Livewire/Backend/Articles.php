@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Backend;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Article;
 use App\Models\Journal;
@@ -418,7 +419,8 @@ class Articles extends Component
 
 
         $this->record->update([
-            'article_status_id' => $status->id
+            'article_status_id' => $status->id,
+            'deadline'          => Carbon::now()->addDays($status->max_days)
         ]);
 
         session()->flash('response',[
@@ -505,7 +507,8 @@ class Articles extends Component
         }
 
         $this->record->update([
-            'article_status_id' => $status->id
+            'article_status_id' => $status->id,
+            'deadline'          => Carbon::now()->addDays($status->max_days)
         ]);
 
         $this->closeDrawer();
@@ -575,7 +578,8 @@ class Articles extends Component
         $status = $this->articleStatus('008');
 
         $this->record->update([
-            'article_status_id' => $status->id
+            'article_status_id' => $status->id,
+            'deadline'          => Carbon::now()->addDays($status->max_days)
         ]);
 
 
@@ -635,7 +639,8 @@ class Articles extends Component
     {
         $status = $this->articleStatus('010');
         $this->record->update([
-            'article_status_id' => $status->id
+            'article_status_id' => $status->id,
+            'deadline'          => Carbon::now()->addDays($status->max_days)
         ]);
 
         $note = $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id);
@@ -701,7 +706,8 @@ class Articles extends Component
             'manuscript_file'   => $this->record->paper_id.'.pdf',
             'start_page'        => $this->start_page,
             'end_page'          => $this->end_page,
-            'article_status_id' => $status->id
+            'article_status_id' => $status->id,
+            'deadline'          => Carbon::now()->addDays($status->max_days)
         ]);
 
 
@@ -768,7 +774,8 @@ class Articles extends Component
         
         $status = $this->articleStatus($this->review_status);
         $this->record->update([
-            'article_status_id' => $status->id
+            'article_status_id' => $status->id,
+            'deadline'          => Carbon::now()->addDays($status->max_days)
         ]);
         
         Mail::to($this->record->author->email)
@@ -855,7 +862,8 @@ class Articles extends Component
             'article_status_id' => $status->id,
             'manuscript_file'   => $this->record->paper_id.'.pdf',
             'start_page'        => $this->start_page,
-            'end_page'          => $this->end_page
+            'end_page'          => $this->end_page,
+            'deadline'          => Carbon::now()->addDays($status->max_days)
         ]);
 
         $this->closeDrawerG();
@@ -890,7 +898,8 @@ class Articles extends Component
         if ($this->record->article_status->code == '002' || $this->record->article_status->code == '006'){
             $status = $this->articleStatus('012');
             $this->record->update([
-                'article_status_id' => $status->id
+                'article_status_id' => $status->id,
+                'deadline'          => Carbon::now()->addDays($status->max_days)
             ]);
 
             session()->flash('response', [
@@ -917,7 +926,8 @@ class Articles extends Component
 
         $status = $this->articleStatus('015');
         $this->record->update([
-            'article_status_id' => $status->id
+            'article_status_id' => $status->id,
+            'deadline'          => Carbon::now()->addDays($status->max_days)
         ]);
 
         ArticleComment::create(

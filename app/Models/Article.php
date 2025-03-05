@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Traits\Uuid;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
@@ -128,5 +129,17 @@ class Article extends Model
     public function co_authors()
     {
         return $this->hasMany(CoAuthor::class);
+    }
+
+    public function deadlineDays()
+    {
+        if($this->deadline){
+            $startDate = Carbon::now();
+            $endDate   = Carbon::parse($this->deadline);
+            $days      = (int) $startDate->diffInDays($endDate);
+
+            return $days;
+        }
+        return null;
     }
 }

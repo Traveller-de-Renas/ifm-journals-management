@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Backend;
 
+use Carbon\Carbon;
 use App\Models\File;
 use App\Models\User;
 use App\Models\Article;
@@ -211,6 +212,7 @@ class Submission extends Component
             'tables'            => $this->tables,
             'figures'           => $this->figures,
             'article_status_id' => $state->id,
+            'deadline'          => Carbon::now()->addDays($state->max_days),
             'user_id'           => auth()->user()->id
         ]);
 
@@ -336,6 +338,7 @@ class Submission extends Component
         $this->record->tables            = $this->tables;
         $this->record->figures           = $this->figures;
         $this->record->article_status_id = $state->id;
+        $this->record->deadline          = Carbon::now()->addDays($state->max_days);
         
 
         if($status == '002'){
