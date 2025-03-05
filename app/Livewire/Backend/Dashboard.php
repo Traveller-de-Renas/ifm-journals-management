@@ -17,7 +17,7 @@ class Dashboard extends Component
 
     public function render()
     {
-        $statuses = ArticleStatus::whereNotIn('code', ['001', '004', '005', '007', '012', '014', '015', '016', '017', '018', '019', '020'])->get();
+        $statuses = ArticleStatus::whereNotIn('code', ['001', '004', '005', '007', '012', '014', '015', '016', '017', '018', '019', '020'])->orderBy('code', 'ASC')->get();
 
         $data = Journal::when($this->query, function ($query) {
             return $query->where(function ($query) {
