@@ -12,6 +12,7 @@ class Dashboard extends Component
     public $sortBy  = 'id';
     public $sortAsc = false;
 
+    public $statux;
     public $currentJournal;
 
     public function render()
@@ -24,7 +25,13 @@ class Dashboard extends Component
             });
         })->with('articles', function ($query) use ($statuses) {
             $status = $statuses->pluck('id')->toArray();
-            return $query->whereIn('article_status_id', $status);
+
+            if($this->statux){
+                return $query->where('article_status_id', $this->statux);
+            } else {
+                return $query->whereIn('article_status_id', $status);
+            }
+            
         })
         ->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
 
@@ -35,6 +42,13 @@ class Dashboard extends Component
 
     public function setJournal($currentJournal)
     {
+        $this->statux = null;
         $this->currentJournal = $currentJournal;
+    }
+
+    public function filterArticles($journal, $status)
+    {
+        $this->statux = $status;
+        $this->currentJournal = $journal;
     }
 }

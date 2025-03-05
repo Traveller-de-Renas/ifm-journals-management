@@ -20,7 +20,7 @@
                         @foreach ($statuses as $status)
                             <div class="w-1/4 text-xs text-gray-600 font-light border-r px-4 py-4 flex">
                                 <p class="w-full">{{ $status->name }}</p>
-                                <span class="text-right font-bold">
+                                <span class="text-right font-bold cursor-pointer hover:text-blue-600" wire:click="filterArticles('{{ $data->uuid }}', '{{ $status->id }}')">
                                     {{ $status->articles()->where('journal_id', $data->id)->count() }}
                                 </span>
                             </div>
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="{{ $data->uuid == $currentJournal ? 'block' : 'hidden' }} bg-gray-100">
-
+                    
                     <table class="min-w-full text-left text-sm font-light">
                         <thead class="border-b font-medium grey:border-neutral-500">
                             <tr>
