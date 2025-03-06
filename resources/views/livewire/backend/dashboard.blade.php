@@ -39,7 +39,7 @@
                                 </th>
                                 <th scope="col" class="px-6 py-4 w-2">Paper Id</th>
                                 <th scope="col" class="px-6 py-4 w-2">Due Date</th>
-                                <th scope="col" class="px-6 py-4 w-2">Decision</th>
+                                <th scope="col" class="px-6 py-4 w-2">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,9 +62,13 @@
 
                                     @if ($article->deadlineDays())
                                         @if ($article->deadlineDays() > 0)
-                                            {{ '('.$article->deadlineDays().' Days Remained)' }}
+                                        <span class="text-green-500 font-bold">
+                                            {{ '('.$article->deadlineDays().' Days to Overdue)' }}
+                                        </span>
                                         @else
-                                            {{ '('.abs($article->deadlineDays()).' Days Passed Due)' }}
+                                        <span class="text-red-500 font-bold">
+                                            {{ '(Overdue For '.abs($article->deadlineDays()).' Days)' }}
+                                        </span>
                                         @endif
                                     @endif
                                     
