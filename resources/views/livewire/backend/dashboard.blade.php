@@ -20,9 +20,20 @@
                         @foreach ($statuses as $status)
                             <div class="w-1/4 text-xs text-gray-600 font-light border-r px-4 py-4 flex">
                                 <p class="w-full cursor-pointer hover:text-blue-600" wire:click="filterArticles('{{ $data->uuid }}', '{{ $status->id }}')">{{ $status->name }}</p>
-                                <span class="text-right font-bold cursor-pointer hover:text-blue-600" wire:click="filterArticles('{{ $data->uuid }}', '{{ $status->id }}')">
-                                    {{ $status->articles()->where('journal_id', $data->id)->count() }}
-                                </span>
+
+                                @php
+                                    $article_count = $status->articles()->where('journal_id', $data->id)->count();
+                                @endphp
+
+                                @if($article_count > 0)
+                                    <span class="text-right font-bold cursor-pointer hover:text-blue-600" wire:click="filterArticles('{{ $data->uuid }}', '{{ $status->id }}')">
+                                        {{ $article_count }}
+                                    </span>
+                                @else
+                                    <span class="text-right font-bold cursor-pointer">
+                                        {{ $article_count }}
+                                    </span>
+                                @endif
                             </div>
                         @endforeach
                     </div>
@@ -62,13 +73,13 @@
 
                                     @if ($article->deadlineDays())
                                         @if ($article->deadlineDays() > 0)
-                                        <span class="text-green-500 font-bold">
-                                            {{ '('.$article->deadlineDays().' Days to Overdue)' }}
-                                        </span>
+                                            <span class="text-green-500 font-bold">
+                                                {{ '('.$article->deadlineDays().' Days to Overdue)' }}
+                                            </span>
                                         @else
-                                        <span class="text-red-500 font-bold">
-                                            {{ '(Overdue For '.abs($article->deadlineDays()).' Days)' }}
-                                        </span>
+                                            <span class="text-red-500 font-bold">
+                                                {{ '(Overdue For '.abs($article->deadlineDays()).' Days)' }}
+                                            </span>
                                         @endif
                                     @endif
                                     
