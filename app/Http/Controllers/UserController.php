@@ -30,4 +30,9 @@ class UserController extends Controller
     {
         return view('backend.permissions');
     }
+
+    public function user_profile()
+    {
+        return view('backend.user_profile');
+    }
 }

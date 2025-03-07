@@ -8,8 +8,8 @@
 
         </div>
         <div class="flex gap-2 justify-end">
-            <x-button class="float-right" wire:click="confirmAdd" wire:loading.attr="disabled" >Create New</x-button>
-            <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
+            <x-button class="float-right" wire:click="confirmAdd()" wire:loading.attr="disabled" >Create New</x-button>
+            <x-input wire:model.live.debounce.500ms="search" placeholder="search..." type="search" />
         </div>
     </div>
 
@@ -44,18 +44,24 @@
 
             <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 grey:border-neutral-500 grey:hover:bg-neutral-600">
                 <td class="whitespace-nowrap px-6 py-3 font-medium">{{ $sn }}</td>
-                <td class="whitespace-nowrap px-6 py-3">{{ ucwords(strtolower($item->first_name)) }} {{ ucwords(strtolower($item->last_name)) }}</td>
+                <td class="whitespace-nowrap px-6 py-3" >
+                    <a href="{{ route('admin.user_profile', $item->uuid) }}">
+                        <p class="text-blue-700 hover:text-blue-400 cursor-pointer">
+                    {{ ucwords(strtolower($item->first_name)) }} {{ ucwords(strtolower($item->last_name)) }}
+                </p>
+                </a>
+                </td>
                 <td class="whitespace-nowrap px-6 py-3">{{ $item->email }}</td>
                 <td class="whitespace-nowrap px-6 py-3">{{ $item->phone }}</td>
                 <td class="whitespace-nowrap px-6 py-3">{{ $item->status }}</td>
                 <td class="whitespace-nowrap ">
                     
-                    <button id="dropdown{{ $item->id }}" data-dropdown-toggle="dropdownDots{{ $item->id }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900" type="button">
+                    <button id="dropdown{{ $sn }}" data-dropdown-toggle="dropdownDots{{ $sn }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900" type="button">
                         <svg class="h-6 w-6 text-gray-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="1" />  <circle cx="19" cy="12" r="1" />  <circle cx="5" cy="12" r="1" /></svg>
                     </button>
                         
-                    <div id="dropdownDots{{ $item->id }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 ">
-                        <ul class="py-2 text-sm text-gray-700 " aria-labelledby="dropdown{{ $item->id }}">
+                    <div id="dropdownDots{{ $sn }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 ">
+                        <ul class="py-2 text-sm text-gray-700 " aria-labelledby="dropdown{{ $sn }}">
                             <li>
                                 <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="confirmEdit({{ $item->id }})" wire:loading.attr="disabled">Edit</a>
                             </li>
@@ -82,58 +88,60 @@
         {{ $users->links() }}
     </div>
 
-    <x-dialog-modal wire:model="Add">
+    <x-dialog-modal wire:model="regForm">
         <x-slot name="title">
-            {{ __('Create New') }}
+            {{ __('User Registration Form') }}
         </x-slot>
         <x-slot name="content">
             
+            <div class="grid grid-cols-2 gap-2">
+                <div class="">
+                    <x-label for="first_name" class="text-xs">{{ __('First Name') }} <span class="text-red-500">*</span></x-label>
+                    <x-input id="first_name" type="text" class="w-full" wire:model="first_name"  required autocomplete="off" />
+                    <x-input-error for="first_name" />
+                </div>
+
+                <div class="">
+                    <x-label for="middle_name" class="text-xs">{{ __('Middle Name') }} </x-label>
+                    <x-input id="middle_name" type="text" class="w-full" wire:model="middle_name"  required autocomplete="off" />
+                    <x-input-error for="middle_name" />
+                </div>
+            </div>
+
             <div class="mt-4">
-                <x-label for="name" value="Full Name" class="mb-2 block font-medium text-sm text-gray-700" />
-                <x-input type="text" id="name" class="w-full" wire:model="name" />
-                <x-input-error for="name" />
+                <x-label for="last_name" class="text-xs">{{ __('Last Name') }} <span class="text-red-500">*</span></x-label>
+                <x-input id="last_name" type="text" class="w-full" wire:model="last_name" required autocomplete="off" />
+                <x-input-error for="last_name" />
             </div>
 
             <div class="grid grid-cols-2 space-x-2">
                 <div class="mt-4">
-                    <x-label for="email" value="Email" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-label for="email" value="Email" class="mb-2 block font-medium text-xs text-gray-700" />
                     <x-input type="text" id="email" class="w-full" wire:model="email" />
                     <x-input-error for="email" />
                 </div>
                 <div class="mt-4">
-                    <x-label for="phone" value="Phone" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-label for="phone" value="Phone" class="mb-2 block font-medium text-xs text-gray-700" />
                     <x-input type="text" id="phone" class="w-full" wire:model="phone" />
                     <x-input-error for="phone" />
                 </div>
             </div>
 
             <div class="mt-4">
-                <x-label for="gender" value="Gender" class="mb-2 block font-medium text-sm text-gray-700" />
+                <x-label for="gender" value="Gender" class="mb-2 block font-medium text-xs text-gray-700" />
                 <x-select id="gender" class="w-full" :options="['Male' => 'Male', 'Female' => 'Female']" wire:model="gender" />
                 <x-input-error for="gender" />
             </div>
 
+
             <div class="grid grid-cols-2 space-x-2">
                 <div class="mt-4">
-                    <x-label for="password" value="Password" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-label for="password" value="Password" class="mb-2 block font-medium text-xs text-gray-700" />
                     <x-input type="password" id="password" class="w-full" wire:model="password" />
                     <x-input-error for="password" />
                 </div>
                 <div class="mt-4">
-                    <x-label for="password_confirmation" value="Password Confirmation" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="password" id="password_confirmation" class="w-full" wire:model="password_confirmation" />
-                    <x-input-error for="password_confirmation" />
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 space-x-2">
-                <div class="mt-4">
-                    <x-label for="picture" value="Picture" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input-file type="file" id="picture" class="w-full" wire:model="picture" />
-                    <x-input-error for="picture" />
-                </div>
-                <div class="mt-4">
-                    <x-label for="status" value="status" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-label for="status" value="status" class="mb-2 block font-medium text-xs text-gray-700" />
                     <x-select id="status" class="w-full" :options="['1' => 'Active', '0' => 'Inactive']" wire:model="status" />
                     <x-input-error for="status" />
                 </div>
@@ -146,76 +154,6 @@
                 {{ __('Submit') }}
             </x-button>
             <x-secondary-button class="ml-3" wire:click="$toggle('Add')" wire:loading.attr="disabled">
-                {{ __('Cancel') }}
-            </x-secondary-button>
-
-        </x-slot>
-    </x-dialog-modal>
-
-    <x-dialog-modal wire:model="Edit">
-        <x-slot name="title">
-            {{ __('Edit Data') }}
-        </x-slot>
-        <x-slot name="content">
-
-            <div class="mt-4">
-                <x-label for="name" value="First Name" class="mb-2 block font-medium text-sm text-gray-700" />
-                <x-input type="text" id="name" class="w-full" wire:model="name" />
-                <x-input-error for="name" />
-            </div>
-
-            <div class="grid grid-cols-2 space-x-2">
-                <div class="mt-4">
-                    <x-label for="email" value="Email" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="text" id="email" class="w-full" wire:model="email" />
-                    <x-input-error for="email" />
-                </div>
-                <div class="mt-4">
-                    <x-label for="phone" value="Phone" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="text" id="phone" class="w-full" wire:model="phone" />
-                    <x-input-error for="phone" />
-                </div>
-            </div>
-
-            <div class="mt-4">
-                <x-label for="gender" value="Gender" class="mb-2 block font-medium text-sm text-gray-700" />
-                <x-select id="gender" class="w-full" :options="['Male' => 'Male', 'Female' => 'Female']" wire:model="gender" />
-                <x-input-error for="gender" />
-            </div>
-
-            <div class="grid grid-cols-2 space-x-2">
-                <div class="mt-4">
-                    <x-label for="password" value="Password" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="password" id="password" class="w-full" wire:model="password" />
-                    <x-input-error for="password" />
-                </div>
-                <div class="mt-4">
-                    <x-label for="password_confirmation" value="Password Confirmation" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input type="password" id="password_confirmation" class="w-full" wire:model="password_confirmation" />
-                    <x-input-error for="password_confirmation" />
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 space-x-2">
-                <div class="mt-4">
-                    <x-label for="picture" value="Picture" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-input-file type="file" id="picture" class="w-full" wire:model="picture" />
-                    <x-input-error for="picture" />
-                </div>
-                <div class="mt-4">
-                    <x-label for="status" value="status" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-select id="status" class="w-full" :options="['1' => 'Active', '0' => 'Inactive']" wire:model="status" />
-                    <x-input-error for="status" />
-                </div>
-            </div>
-
-        </x-slot>
-        <x-slot name="footer">
-            
-            <x-button type="submit" wire:click="update({{ $record }})" wire:loading.attr="disabled">
-                {{ __('Submit') }}
-            </x-button>
-            <x-secondary-button class="ml-3" wire:click="$toggle('Edit')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 

@@ -101,11 +101,6 @@ class JournalTeam extends Component
                     Mail::to($data->email)
                         ->send(new EditorialTeam($this->journal, $user, 'Add Associate Editor'));
                 }
-
-                if(ReviewMessage::where('category', 'Access Credentials')->count() > 0){
-                    Mail::to($data->email)
-                        ->send(new AccessCredentials($this->journal, $user, $password, 'Access Credentials'));
-                }
             }
 
 
@@ -115,8 +110,14 @@ class JournalTeam extends Component
 
                 if(ReviewMessage::where('category', 'Add Supporting Editor')->count() > 0){
                     Mail::to($data->email)
-                        ->send(new EditorialTeam($this->journal, $user, $password, 'Add Supporting Editor'));
+                        ->send(new EditorialTeam($this->journal, $user, 'Add Supporting Editor'));
                 }
+            }
+
+
+            if(ReviewMessage::where('category', 'Access Credentials')->count() > 0){
+                Mail::to($data->email)
+                    ->send(new AccessCredentials($this->journal, $user, $password, 'Access Credentials'));
             }
 
 
@@ -140,11 +141,21 @@ class JournalTeam extends Component
             if($this->associate_editor){
                 $user = $this->user->journal_us()->where('journal_id', $this->journal->id)->first();
                 $user->assignRole('Associate Editor');
+
+                if(ReviewMessage::where('category', 'Add Associate Editor')->count() > 0){
+                    Mail::to($this->user->user->email)
+                        ->send(new EditorialTeam($this->journal, $user, 'Add Associate Editor'));
+                }
             }
 
             if($this->supporting_editor){
                 $user = $this->user->journal_us()->where('journal_id', $this->journal->id)->first();
                 $user->assignRole('Supporting Editor');
+
+                if(ReviewMessage::where('category', 'Add Supporting Editor')->count() > 0){
+                    Mail::to($this->user->user->email)
+                        ->send(new EditorialTeam($this->journal, $user, 'Add Supporting Editor'));
+                }
             }
 
             $this->closeDrawer();

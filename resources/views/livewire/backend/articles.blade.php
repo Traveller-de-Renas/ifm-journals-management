@@ -13,6 +13,8 @@
         </div>
     </div>
 
+    
+
     @if (session('response'))
         @php
             $bgClass = match (session('response.status')) {

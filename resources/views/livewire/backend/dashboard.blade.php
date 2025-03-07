@@ -2,7 +2,7 @@
     <div class="bg-white shadow-md p-4 rounded-t">
         <div class="w-full grid grid-cols-3 gap-4" >
             <div class="">
-                <p class="font-bold text-xl">{{ __('JOURNALS DASHBOARD') }}</p>
+                <p class="font-bold text-xl">{{ __('DASHBOARD') }}</p>
             </div>
             <div class="col-span-2 flex gap-2 justify-end">
                 <x-input wire:model.live.debounce.500ms="query" placeholder="Search Journal..." type="search" />

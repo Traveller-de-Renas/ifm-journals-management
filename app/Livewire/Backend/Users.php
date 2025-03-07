@@ -4,27 +4,26 @@ namespace App\Livewire\Backend;
 
 use App\Models\User;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 
 class Users extends Component
 {
-    use WithPagination;
-
-    public $query;
+    public $search;
     public $sortBy  = 'id';
-    public $sortAsc = false; 
+    public $sortAsc = false;
 
-    public $Add;
+    public $regForm;
     public $Edit;
     public $Delete;
     public $View;
 
     public $user;
     public $record;
-    public $name;
+    public $first_name;
+    public $middle_name;
+    public $last_name;
     public $status;
     public $gender;
     public $email;
@@ -40,9 +39,12 @@ class Users extends Component
     
     public function render()
     {
-        $users = User::when($this->query, function($query){
+        $users = User::when($this->search, function($query){
             return $query->where(function($query){
-                $query->where('name', 'ilike', '%'.$this->query.'%')->orWhere('email', 'ilike', '%'.$this->query.'%');
+                $query->where('first_name', 'ilike', '%'.$this->search.'%')
+                ->orWhere('middle_name', 'ilike', '%'.$this->search.'%')
+                ->orWhere('last_name', 'ilike', '%'.$this->search.'%')
+                ->orWhere('email', 'ilike', '%'.$this->search.'%');
             });
         })->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
         
@@ -60,16 +62,21 @@ class Users extends Component
 
     public function confirmAdd()
     {
-        $this->Add = true;
+        $this->regForm = true;
     }
 
     public function confirmEdit(User $data)
     {
-        $this->record = $data->id;
-        $this->name = $data->name;
-        $this->status = $data->status;
+        $this->record      = $data->id;
+        $this->first_name  = $data->first_name;
+        $this->middle_name = $data->middle_name;
+        $this->last_name   = $data->last_name;
+        $this->gender      = $data->gender;
+        $this->email       = $data->email;
+        $this->phone       = $data->phone;
+        $this->status      = $data->status;
 
-        $this->Edit = true;
+        $this->regForm = true;
     }
 
     public function confirmDelete(User $data)
@@ -111,7 +118,6 @@ class Users extends Component
                 'sometimes',
                 'nullable',
                 'required',
-                'confirmed',
                 'min:6',
                 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@$#%]).*$/'
             ],
@@ -123,16 +129,21 @@ class Users extends Component
         $this->validate();
         $data = new User;
         $data->create([
-            'name'     => $this->name,
-            'gender'   => $this->gender,
-            'email'    => $this->email,
-            'phone'    => $this->phone,
-            'status'   => $this->status,
-            'password' => Hash::make($this->password),
+            'first_name'    => $this->first_name,
+            'middle_name'   => $this->middle_name,
+            'last_name'     => $this->last_name,
+            'gender'        => $this->gender,
+            'email'         => $this->email,
+            'phone'         => $this->phone,
+            'status'        => $this->status,
+            'password'      => Hash::make($this->password),
         ]);
         
-        $this->Add = false;
-        return redirect()->back()->with('success', 'Saved Successifully!');
+        $this->regForm = false;
+        session()->flash('response',[
+            'status'  => '', 
+            'message' => 'New user successfully Created.'
+        ]);
     }
 
     public function update(User $data)

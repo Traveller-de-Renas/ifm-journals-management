@@ -142,4 +142,11 @@ class Article extends Model
         }
         return null;
     }
+
+
+    public function mail_logs()
+    {
+        return $this->hasMany(MailLog::class);
+    }
+    
 }

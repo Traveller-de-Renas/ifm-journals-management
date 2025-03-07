@@ -33,7 +33,6 @@ Route::get('/password_reset/{user?}', [AuthenticationController::class, 'passwor
 
 Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/home', [JournalController::class, 'home'])->name('journals.home');
-
     Route::get('/dashboard', [JournalController::class, 'dashboard'])->name('journals.dashboard')->middleware('permission:View Dashboard');
     Route::get('/index', [JournalController::class, 'index'])->name('journals.index')->middleware('permission:View Journals');
     Route::get('/create/{journal?}', [JournalController::class, 'create'])->name('journals.create');
@@ -65,6 +64,8 @@ Route::group(['prefix' => 'users', 'middleware' => 'auth'], function () {
     Route::get('/salutations', [UserController::class, 'salutations'])->name('admin.salutations')->middleware('permission:View Salutations');
     Route::get('/roles', [UserController::class, 'roles'])->name('admin.roles')->middleware('permission:View Roles');
     Route::get('/permissions', [UserController::class, 'permissions'])->name('admin.permissions')->middleware('permission:View Permissions');
+
+    Route::get('/user_profile/{user?}', [UserController::class, 'user_profile'])->name('admin.user_profile')->middleware('permission:View User Profile');
 });
 
 
