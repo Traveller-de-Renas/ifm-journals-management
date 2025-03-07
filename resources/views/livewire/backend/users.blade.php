@@ -259,7 +259,7 @@
         </x-slot>
 
         <x-slot name="footer">
-            <x-secondary-button wire:click="$toggle('confirmingView')" wire:loading.attr="disabled">
+            <x-secondary-button wire:click="$toggle('View')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
         </x-slot>
