@@ -143,7 +143,7 @@ class JournalTeam extends Component
                 $user->assignRole('Associate Editor');
 
                 if(ReviewMessage::where('category', 'Add Associate Editor')->count() > 0){
-                    Mail::to($this->user->user->email)
+                    Mail::to($this->user->email)
                         ->send(new EditorialTeam($this->journal, $user, 'Add Associate Editor'));
                 }
             }
@@ -153,7 +153,7 @@ class JournalTeam extends Component
                 $user->assignRole('Supporting Editor');
 
                 if(ReviewMessage::where('category', 'Add Supporting Editor')->count() > 0){
-                    Mail::to($this->user->user->email)
+                    Mail::to($this->user->email)
                         ->send(new EditorialTeam($this->journal, $user, 'Add Supporting Editor'));
                 }
             }
