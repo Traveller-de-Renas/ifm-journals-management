@@ -170,7 +170,7 @@ class JournalTeam extends Component
 
     public function removeUser(JournalUser $user)
     {
-        if($user->delete()){
+        if($user->removeRole($data)){
             session()->flash('response',[
                 'status'  => 'success', 
                 'message' => 'This user is successfully removed from this journal'
@@ -207,16 +207,20 @@ class JournalTeam extends Component
         $this->create = $status;
     }
 
-    public $roles;
+    public $record;
     public $isOpen = false;
 
-    public function openDrawer()
+    public function openDrawer($record)
     {
-        $this->isOpen = true;
+        if($record != ''){
+            $this->record = JournalUser::find($record);
+        }
+        
+        $this->isOpen  = true;
     }
 
     public function closeDrawer()
     {
-        $this->isOpen = false;
+        $this->isOpen  = false;
     }
 }

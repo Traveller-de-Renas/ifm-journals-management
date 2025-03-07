@@ -8,7 +8,7 @@
 
         </div>
         <div class="flex gap-2 justify-end">
-            <x-button class="float-right" wire:click="openDrawer()" wire:loading.attr="disabled" >Add Team Member</x-button>
+            <x-button class="float-right" wire:click="openDrawer('')" wire:loading.attr="disabled" >Add Team Member</x-button>
             <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
         </div>
     </div>
@@ -39,7 +39,7 @@
                         <button wire:click="sort('first_name')" >Full Name</button>
                     </th>
                     <th scope="col" class="px-6 py-4">
-                        <button >Role</button>
+                        <button >Roles</button>
                     </th>
                     <th scope="col" class="py-4 w-2" >
                         Actions
@@ -76,7 +76,7 @@
                         <div id="dropdownDots{{ $data->id }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 ">
                             <ul class="py-2 text-sm text-gray-700 " aria-labelledby="dropdown{{ $data->id }}">
                                 <li>
-                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="roles({{ $data->id }})" wire:loading.attr="disabled">Roles</a>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="openDrawer({{ $data->id }})" wire:loading.attr="disabled">Roles</a>
                                 </li>
                                 <li>
                                     <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="removeUser({{ $data->id }})" wire:loading.attr="disabled">Remove</a>

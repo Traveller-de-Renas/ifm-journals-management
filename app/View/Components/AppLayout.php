@@ -10,6 +10,7 @@ use Illuminate\View\Component;
 class AppLayout extends Component
 {
     public $journal;
+    public $journal_user;
     public $ceditor = [];
     /**
      * Get the view / contents that represents the component.
@@ -26,6 +27,8 @@ class AppLayout extends Component
         $onreview     = 0;
         
         if($this->journal){
+            $this->journal_user = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first();
+            
             $this->ceditor = $this->journal?->journal_us()->whereHas('roles', function ($query) {
                 $query->whereIn('name', ['Chief Editor', 'Supporting Editor', 'Associate Editor']);
             })->get()->pluck('user_id')->toArray();
