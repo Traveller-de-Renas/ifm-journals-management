@@ -51,7 +51,7 @@
                     $sn = 1;
 
                     $theteam = $journal->journal_us()->whereHas('roles', function ($query) {
-                        $query->whereIn('name', ['Chief Editor','Supporting Editor','Associate Editor']);
+                        $query->whereIn('name', ['Chief Editor','Supporting Editor','Associate Editor', 'Advisory Board']);
                     })->get();
                 @endphp
                 @foreach ($theteam as $data)
@@ -198,6 +198,16 @@
                 <div class="flex items-center ps-4 border border-gray-200 rounded flex-1">
                     <input id="bordered-checkbox-2" type="checkbox" wire:model="supporting_editor" value="Supporting Editor" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500  focus:ring-2">
                     <label for="bordered-checkbox-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900">Supporting Editor</label>
+                </div>
+            </div>
+
+            <div class="mt-2 mb-6 flex justify-between gap-4">
+                <div class="flex items-center ps-4 border border-gray-200 rounded flex-1">
+                    <input id="bordered-checkbox-3" type="checkbox" wire:model="advisory_board" value="Advisory Board" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 ">
+                    <label for="bordered-checkbox-3" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 ">Advisory Board</label>
+                </div>
+                <div class="flex items-center ps-4 rounded flex-1">
+                    
                 </div>
             </div>
 

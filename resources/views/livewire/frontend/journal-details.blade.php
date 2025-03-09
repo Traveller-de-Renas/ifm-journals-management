@@ -349,7 +349,7 @@
     
                         <div class="w-full mt-2">
                             @foreach ($record->journal_us()->whereHas('roles', function ($query) {
-                                $query->whereIn('name', ['Supporting Editor', 'Chief Editor', 'Associate Editor']);
+                                $query->whereIn('name', ['Supporting Editor', 'Chief Editor', 'Associate Editor', 'Advisory Board']);
                             })->get() as $key => $j_user)
                         
                                 <div class="w-full p-2 border bg-white hover:bg-gray-200 border-slate-200 cursor-pointer" wire:click="editorDetails({{ $key }});">

@@ -15,8 +15,9 @@ use Illuminate\Support\Facades\Mail;
 class JournalTeam extends Component
 {
     public $journal;
-    public $associate_editor = false;
+    public $associate_editor  = false;
     public $supporting_editor = false;
+    public $advisory_board    = false;
 
     public function render()
     {
@@ -115,9 +116,22 @@ class JournalTeam extends Component
             }
 
 
-            if(ReviewMessage::where('category', 'Access Credentials')->count() > 0){
-                Mail::to($data->email)
-                    ->send(new AccessCredentials($this->journal, $user, $password, 'Access Credentials'));
+            if($this->advisory_board){
+                $user = $this->user->journal_us()->where('journal_id', $this->journal->id)->first();
+                $user->assignRole('Advisory Board');
+
+                if(ReviewMessage::where('category', 'Add Advisory Board')->count() > 0){
+                    Mail::to($this->user->email)
+                        ->send(new EditorialTeam($this->journal, $user, 'Add Advisory Board'));
+                }
+            }
+
+
+            if($this->supporting_editor || $this->associate_editor){
+                if(ReviewMessage::where('category', 'Access Credentials')->count() > 0){
+                    Mail::to($data->email)
+                        ->send(new AccessCredentials($this->journal, $user, $password, 'Access Credentials'));
+                }
             }
 
 
@@ -155,6 +169,17 @@ class JournalTeam extends Component
                 if(ReviewMessage::where('category', 'Add Supporting Editor')->count() > 0){
                     Mail::to($this->user->email)
                         ->send(new EditorialTeam($this->journal, $user, 'Add Supporting Editor'));
+                }
+            }
+
+
+            if($this->advisory_board){
+                $user = $this->user->journal_us()->where('journal_id', $this->journal->id)->first();
+                $user->assignRole('Advisory Board');
+
+                if(ReviewMessage::where('category', 'Add Advisory Board')->count() > 0){
+                    Mail::to($this->user->email)
+                        ->send(new EditorialTeam($this->journal, $user, 'Add Advisory Board'));
                 }
             }
 
@@ -215,7 +240,7 @@ class JournalTeam extends Component
         if($record != ''){
             $this->record = JournalUser::find($record);
         }
-        
+
         $this->isOpen  = true;
     }
 
