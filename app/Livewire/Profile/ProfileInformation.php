@@ -83,7 +83,7 @@ class ProfileInformation extends Component
             'last_name'   => 'required|string',
             'gender'      => 'required',
             'phone'       => 'nullable|string',
-            'email'       => 'required|email',
+            'email'       => 'required|email|unique:users,email,'.$this->record->id,
             'affiliation' => 'required|string'
         ];
     }

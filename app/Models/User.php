@@ -106,5 +106,10 @@ class User extends Authenticatable
     public function journal_us()
     {
         return $this->hasMany(JournalUser::class);
-    } 
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 }

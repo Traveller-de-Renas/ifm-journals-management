@@ -25,7 +25,7 @@
             
         </div>
         <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="bg-white px-4 py-5 sm:p-6 rounded-md shadow">
+            <div class="bg-white px-4 py-5 sm:p-6 rounded-t-md shadow">
 
                 <div class="grid grid-cols-2 gap-2">
                     <div class="mt-4 w-full">

@@ -379,12 +379,24 @@
                                         <div class="text-sm w-full">: {{ $j_user->user->affiliation }}</div>
                                     </div>
                                     <div class="w-full flex">
+                                        <div class="text-sm w-1/5 ">Country</div>
+                                        <div class="text-sm w-full">: {{ $j_user->user?->country?->name }}</div>
+                                    </div>
+                                    <div class="w-full flex">
                                         <div class="text-sm w-1/5">Degree</div>
                                         <div class="text-sm w-full">: {{ $j_user->user->degree }}</div>
                                     </div>
                                     <div class="w-full flex">
                                         <div class="text-sm w-1/5">Email</div>
                                         <div class="text-sm w-full">: {{ $j_user->user->email }}</div>
+                                    </div>
+                                    <div class="w-full flex">
+                                        <div class="text-sm w-1/5">Biography</div>
+                                        <div class="text-sm w-full">: {{ $j_user->user->biography }}</div>
+                                    </div>
+                                    <div class="w-full flex">
+                                        <div class="text-sm w-1/5">Interests</div>
+                                        <div class="text-sm w-full">: {{ $j_user->user->interests }}</div>
                                     </div>
                                 </div>
                             @endforeach 

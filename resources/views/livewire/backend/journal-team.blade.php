@@ -8,7 +8,7 @@
 
         </div>
         <div class="flex gap-2 justify-end">
-            <x-button class="float-right" wire:click="openDrawer('')" wire:loading.attr="disabled" >Add Team Member</x-button>
+            <x-button class="float-right" wire:click="openDrawer()" wire:loading.attr="disabled" >Add Team Member</x-button>
             <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
         </div>
     </div>
@@ -82,15 +82,14 @@
                             
                         <div id="dropdownDots{{ $data->id }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 ">
                             <ul class="py-2 text-sm text-gray-700 " aria-labelledby="dropdown{{ $data->id }}">
-                                <li>
-                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="openDrawer({{ $data->id }})" wire:loading.attr="disabled">Roles</a>
-                                </li>
+                                
                                 <li>
                                     <a href="#" class="block px-4 py-2 hover:bg-gray-100" wire:click="updateInfo({{ $data->user->id }})" wire:loading.attr="disabled">Update Info</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100" wire:click="removeUser({{ $data->id }})" wire:loading.attr="disabled">Remove</a>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 text-red-600 font-bold" wire:click="removeUser({{ $data->id }})" wire:loading.attr="disabled">Remove</a>
                                 </li>
+
                             </ul>
                         </div>
                     </td>
@@ -227,6 +226,8 @@
                     </div>
                 </div>
             @endif
+
+            {{  $record }}
             
             @if(!$update)
             <div class="mt-2 mb-1 text-sm text-gray-500">Team Member Roles</div>

@@ -232,15 +232,17 @@ class JournalTeam extends Component
         ]);
     }
 
+
     public function removeUser(JournalUser $user)
     {
-        if($user->removeRole($data)){
-            session()->flash('response',[
-                'status'  => 'success', 
-                'message' => 'This user is successfully removed from this journal'
-            ]);
-        }
+        $user->syncRoles(['Author']);
+        
+        session()->flash('response',[
+            'status'  => 'success',
+            'message' => 'This user is successfully removed from this journal'
+        ]);
     }
+
 
     public $search_user;
     public $username;
@@ -292,17 +294,14 @@ class JournalTeam extends Component
     public $record;
     public $isOpen = false;
 
-    public function openDrawer($record)
+    public function openDrawer()
     {
-        if($record != ''){
-            $this->record = JournalUser::find($record);
-        }
-
         $this->isOpen  = true;
     }
 
     public function closeDrawer()
     {
+        $this->record  = null;
         $this->isOpen  = false;
     }
 
