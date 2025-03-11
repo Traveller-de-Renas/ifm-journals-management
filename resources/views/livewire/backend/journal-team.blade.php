@@ -39,11 +39,12 @@
                         <button wire:click="sort('first_name')" >Full Name</button>
                     </th>
                     <th scope="col" class="px-6 py-4">
+                        <button >Affiliation</button>
+                    </th>
+                    <th scope="col" class="px-6 py-4">
                         <button >Roles</button>
                     </th>
-                    <th scope="col" class="py-4 w-2" >
-                        Actions
-                    </th>
+                    <th scope="col" class="py-4 w-2" ></th>
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +59,13 @@
 
                 <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 grey:border-neutral-500 grey:hover:bg-neutral-600">
                     <td class="whitespace-nowrap px-6 py-3 font-medium">{{ $sn }}</td>
-                    <td class="whitespace-nowrap px-6 py-3">{{ $data->user->first_name }} {{ $data->user->middle_name }} {{ $data->user->last_name }}</td>
+                    <td class="whitespace-nowrap px-6 py-3">
+                        {{ $data->user->salutation?->title }}
+                        {{ $data->user->first_name }} {{ $data->user->middle_name }} {{ $data->user->last_name }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-3">
+                        {{ $data->user->affiliation }}
+                    </td>
                     <td class="whitespace-nowrap px-6 py-3">
                         
                         @foreach ($data->roles as $role)
@@ -79,7 +86,10 @@
                                     <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="openDrawer({{ $data->id }})" wire:loading.attr="disabled">Roles</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="removeUser({{ $data->id }})" wire:loading.attr="disabled">Remove</a>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100" wire:click="updateInfo({{ $data->user->id }})" wire:loading.attr="disabled">Update Info</a>
+                                </li>
+                                <li>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100" wire:click="removeUser({{ $data->id }})" wire:loading.attr="disabled">Remove</a>
                                 </li>
                             </ul>
                         </div>
@@ -119,12 +129,14 @@
             </button>
 
             <hr>
-    
+            
+            @if(!$update)
             <p class="mb-6 mt-2 text-sm text-gray-500">
                 Search from the List of Users registered or create new user if you can not find the user u want to add, 
                 <br>
             </p>
 
+            
             <div class="flex justify-end mb-2">
                 @if ($create)
                     <x-button class="" wire:click="createnew(false)" wire:loading.attr="disabled" >Search From Users</x-button>
@@ -133,30 +145,37 @@
                 @endif
                 
             </div>
+            @endif
 
             @if ($create)
                 <div class="mb-6">
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="mt-4">
+                        <x-label for="title" class="text-xs">{{ __('Title') }}</x-label>
+                        <x-select id="title" class="w-full" :options="$salutations" wire:model="salutation" />
+                        <x-input-error for="title" />
+                    </div>
+
+                    <div class="mt-4 grid grid-cols-2 gap-2">
                         <div class="">
                             <x-label for="first_name" class="text-xs">{{ __('First Name') }} <span class="text-red-500">*</span></x-label>
-                            <x-input id="first_name" type="text" class="w-full" wire:model="first_name" :value="old('first_name')" required autofocus autocomplete="off" />
+                            <x-input id="first_name" type="text" class="w-full" wire:model="first_name" required autofocus autocomplete="off" />
                             <x-input-error for="first_name" />
                         </div>
         
                         <div class="">
                             <x-label for="middle_name" class="text-xs">{{ __('Middle Name') }} </x-label>
-                            <x-input id="middle_name" type="text" class="w-full" wire:model="middle_name" :value="old('middle_name')" required autofocus autocomplete="off" />
+                            <x-input id="middle_name" type="text" class="w-full" wire:model="middle_name" required autofocus autocomplete="off" />
                             <x-input-error for="middle_name" />
                         </div>
                     </div>
     
-                    <div class="mt-2">
+                    <div class="mt-4">
                         <x-label for="last_name" class="text-xs">{{ __('Last Name') }} <span class="text-red-500">*</span></x-label>
-                        <x-input id="last_name" type="text" class="w-full" wire:model="last_name" :value="old('last_name')" required autofocus autocomplete="off" />
+                        <x-input id="last_name" type="text" class="w-full" wire:model="last_name"  required autofocus autocomplete="off" />
                         <x-input-error for="last_name" />
                     </div>
         
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="mt-4 grid grid-cols-2 gap-2">
                         <div class="mt-2">
                             <x-label for="email" class="text-xs">{{ __('Email Address') }} <span class="text-red-500">*</span></x-label>
                             <x-input id="email" type="email" class="w-full" wire:model="email" required />
@@ -169,10 +188,30 @@
                         </div>
                     </div>
         
-                    <div class="mt-2">
+                    <div class="mt-4">
                         <x-label for="gender" value="Gender" class="text-xs text-gray-700" />
                         <x-select id="gender" class="w-full" :options="['Male' => 'Male', 'Female' => 'Female']" wire:model="gender" />
                         <x-input-error for="gender" />
+                    </div>
+
+                    <div class="mt-4">
+                        <x-label for="affiliation" class="text-xs">{{ __('Affiliation') }} <span class="text-red-500">*</span></x-label>
+                        <x-input id="affiliation" type="text" class="w-full" wire:model="affiliation" wire:input="checkAffiliation()"  required autofocus autocomplete="off" />
+                        <x-input-error for="affiliation" />
+
+                        @if($affiliation != '')
+                        <div class="shadow mt-1 relative">
+                            <div class="absolute">
+                                @foreach ($affiliations as $affiliation)
+                                    
+                                    <div class="text-xs text-gray-700 bg-gray-200 hover:bg-gray-300 cursor-pointer p-2" wire:click="selectAffiliation('{{ $affiliation->affiliation }}')">
+                                        {{ $affiliation->affiliation }}
+                                    </div>
+
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
                     </div>
                     
                 </div>
@@ -188,7 +227,8 @@
                     </div>
                 </div>
             @endif
-
+            
+            @if(!$update)
             <div class="mt-2 mb-1 text-sm text-gray-500">Team Member Roles</div>
             <div class="mt-2 mb-6 flex justify-between gap-4">
                 <div class="flex items-center ps-4 border border-gray-200 rounded flex-1">
@@ -212,6 +252,12 @@
             </div>
 
             <x-button class="float-right" wire:click="store()" wire:loading.attr="disabled" >Submit</x-button>
+
+            @else
+
+            <x-button class="float-right" wire:click="updateMember()" wire:loading.attr="disabled" >Update</x-button>
+
+            @endif
         </div>
         
     </div>

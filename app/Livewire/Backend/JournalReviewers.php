@@ -5,6 +5,7 @@ namespace App\Livewire\Backend;
 use App\Models\User;
 use App\Models\Journal;
 use Livewire\Component;
+use App\Models\Salutation;
 use App\Models\JournalUser;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,6 +16,7 @@ class JournalReviewers extends Component
 
     public function render()
     {
+        $this->salutations = Salutation::where('status', 1)->pluck('title', 'id')->toArray();
         $journal_id = session()->get('journal');
 
         $this->journal = Journal::where('uuid', $journal_id)->first();
@@ -29,6 +31,8 @@ class JournalReviewers extends Component
     public $phone;
     public $password;
     public $password_confirmation;
+    public $salutation;
+    public $salutations;
 
 
     public function store()
@@ -53,6 +57,8 @@ class JournalReviewers extends Component
             $data->email         = $this->email;
             $data->phone         = $this->phone;
             $data->password      = Hash::make('jrev@123IFM');
+            $data->salutation_id = $this->salutation;
+            $data->affiliation   = $this->affiliation;
 
             $data->save();
 
@@ -100,6 +106,38 @@ class JournalReviewers extends Component
 
     }
 
+    public function updateMember()
+    {
+        $this->validate(
+            [
+                'first_name'  => 'required|string',
+                'middle_name' => 'nullable|string',
+                'last_name'   => 'required|string',
+                'gender'      => 'required',
+                'email'       => 'required|email|unique:users,email,'.$this->user->id,
+                'phone'       => 'nullable|string',
+            ]
+        );
+
+        $this->user->first_name    = $this->first_name;
+        $this->user->middle_name   = $this->middle_name;
+        $this->user->last_name     = $this->last_name;
+        $this->user->gender        = $this->gender;
+        $this->user->email         = $this->email;
+        $this->user->phone         = $this->phone;
+        $this->user->salutation_id = $this->salutation;
+        $this->user->affiliation   = $this->affiliation;
+
+        $this->user->update();
+
+        $this->closeDrawer();
+
+        session()->flash('response',[
+            'status'  => 'success', 
+            'message' => 'Team Member Information is successfully updated'
+        ]);
+    }
+
     public function removeUser(JournalUser $user)
     {
         if($user->delete()){
@@ -133,10 +171,28 @@ class JournalReviewers extends Component
     }
 
     public $create = false;
+    public $update = false;
 
     public function createnew($status)
     {
         $this->create = $status;
+    }
+
+    public function updateInfo(User $user)
+    {
+        $this->user         = $user;
+        $this->first_name   = $user->first_name;
+        $this->middle_name  = $user->middle_name;
+        $this->last_name    = $user->last_name;
+        $this->gender       = $user->gender;
+        $this->email        = $user->email;
+        $this->phone        = $user->phone;
+        $this->affiliation  = $user->affiliation;
+        $this->salutation   = $user->salutation_id;
+
+        $this->create  = true;
+        $this->isOpen  = true;
+        $this->update  = true;
     }
 
     public $roles;
@@ -150,5 +206,22 @@ class JournalReviewers extends Component
     public function closeDrawer()
     {
         $this->isOpen = false;
+    }
+
+
+    public $affiliation;
+    public $affiliations = [];
+
+    public function checkAffiliation()
+    {
+        $this->affiliations = User::whereLike('affiliation', '%'.$this->affiliation.'%')->groupBy('affiliation')
+        ->get(['affiliation']);
+
+    }
+
+
+    public function selectAffiliation($affiliation)
+    {
+        $this->affiliation = $affiliation;
     }
 }

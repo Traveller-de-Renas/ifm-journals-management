@@ -5,3 +5,8 @@
 [x-cloak] {
     display: none;
 }
+
+
+ul li .MsoNormal{
+    margin-left: 20px;
+}
