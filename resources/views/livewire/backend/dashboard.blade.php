@@ -62,7 +62,9 @@
                             <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 grey:border-neutral-500 grey:hover:bg-neutral-600">
                                 <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $sn }}</td>
                                 <td class="whitespace-normal px-6 py-3 break-words">
-                                    {{ $article->title }}
+                                    
+                                    <a href="{{ route('journals.article', $article->uuid) }}" class="block px-4 py-2 hover:bg-gray-100 text-blue-500 hover:text-blue-700 cursor-pointer" wire:loading.attr="disabled">{{ $article->title }}</a>
+
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     {{ $article->paper_id }}

@@ -84,11 +84,11 @@
                     Editorial Team
                 </button>
             </li>
-            <li class="me-2">
+            {{-- <li class="me-2">
                 <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'reviewer_information') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('reviewer_information')">
                     Reviewer Information
                 </button>
-            </li>
+            </li> --}}
             <li class="me-2">
                 <button class="font-bold inline-flex items-center justify-center p-4 rounded-t-lg hover:text-gray-600 group border-b-2 @if($tab == 'calls_for_papers') border-blue-600 @else border-transparent hover:border-gray-300 @endif " wire:click="changeTab('calls_for_papers')">
                     Calls for Papers
@@ -104,7 +104,6 @@
         <div class="md:grid md:grid-cols-12 gap-4 w-full ">
 
             <div class="col-span-8">
-
                 <div class="w-full mb-4 @if($tab != 'overview') hidden @endif">
 
                     <div class="w-full mb-4">
@@ -358,9 +357,13 @@
                                         {{ $j_user->user->first_name }}
                                         {{ $j_user->user->middle_name }}
                                         {{ $j_user->user->last_name }}
+
+                                        <span class="text-sm font-light">
+                                            {{ $j_user->user->affiliation != '' ? '('.$j_user->user->affiliation.')' : '' }}
+                                        </span>
                                     </div>
 
-                                    {{ $j_user->user->affiliation != '' ? '('.$j_user->user->affiliation.')' : '' }}
+                                    
 
                                     @if ($j_user->hasRole('Chief Editor'))
                                         <p class="text-xs text-green-900">Managing Editor</p>
@@ -403,7 +406,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <div class="w-full mb-4 @if($tab != 'calls_for_papers') hidden @endif">
                     <div class="w-full mb-4">
