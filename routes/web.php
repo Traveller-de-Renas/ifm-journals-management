@@ -81,4 +81,5 @@ Route::group(['prefix' => 'journal'], function () {
     Route::get('/archive/{journal}', [FrontendController::class, 'journal_archive'])->name('journal.archive');
     Route::get('/article_download/{article?}', [FrontendController::class, 'article_download'])->name('journal.article_download');
     Route::get('/article_evaluation/{article}/{reviewer}', [JournalController::class, 'article_evaluation'])->name('journal.article_evaluation');
+    Route::get('/peer_review_process', [JournalController::class, 'peer_review_process'])->name('journal.peer_review_process');
 });

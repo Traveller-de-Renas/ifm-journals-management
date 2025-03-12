@@ -57,8 +57,8 @@
             </div>
         </div>
 
-        <div class="w-full mb-8 grid grid-cols-12 gap-2">
-            <div class="col-span-8">
+        <div class="w-full mb-8 ">
+            <div class="">
 
                 @if($record->keywords != '')
                 <div class="w-full mb-4">

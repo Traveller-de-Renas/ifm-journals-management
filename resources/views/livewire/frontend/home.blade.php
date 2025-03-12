@@ -60,8 +60,31 @@
 
     <div class="w-full py-16 mb-6 bg-gray-100">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 ">
+                IFM JOURNALS
+            </h5>
+            <div class="mb-6 text-justify">
+                Welcome to the IFM Journals platform, your gateway to accessing high-quality academic and research publications. Whether you are looking to explore the latest research, respond to active calls for papers, or find the right journal for your work, our platform provides the tools and resources to support you.<br><br>
+We are committed to fostering academic excellence by offering engaging experience for researchers, authors, and readers. Our platform hosts three distinguished journals edited by the Institute of Finance Management (IFM): the Journal of Finance and Business Studies (JFBS), the Journal of Innovation and Social Science Research (JISSR),and the African Journal of Finance and Management (AJFM). Browse our journals, stay informed with recent publications, and contribute to advancing knowledge in your field.
+
+            </div>
 
             <div class="md:grid md:grid-cols-12 gap-6">
+
+
+                <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
+                    <a href="#">
+                        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 text-center">PEER REVIEW PROCESS</h5>
+                    </a>
+                    <p class="mb-3 font-normal text-gray-500 text-sm text-justify">
+                        Our double-anonymous peer review process ensures objectivity, as authors and reviewers remain anonymous to each other. We follow a rigorous review system to uphold the quality, credibility, and originality of published research.
+                    </p>
+                    <a href="{{ route('journal.peer_review_process') }}" >
+                        <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center">Read More</p>
+                    </a>
+                </div>
+
+
                 <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
                     <a href="#">
                         <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 text-center">ONLINE SUBMISSION</h5>
@@ -76,14 +99,7 @@
                 </div>
         
         
-                <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">
-                    <a href="#">
-                        <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 text-center">PEER REVIEW</h5>
-                    </a>
-                    <p class="mb-3 font-normal text-gray-500 text-sm text-justify">
-                        Our system allows peer review, each manuscript submitted in specific journal will be reviewed by more than one professional reviewer.
-                    </p>
-                </div>
+                
         
             
                 <div class="col-span-4 p-6 bg-white border border-gray-200 rounded-lg shadow  mb-4">

@@ -100,4 +100,9 @@ class JournalController extends Controller
     {
         return view('backend.call_for_papers');
     }
+
+    public function peer_review_process()
+    {
+        return view('frontend.peer_review_process');
+    }
 }
