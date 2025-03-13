@@ -363,6 +363,12 @@
                                         </span>
                                     </div>
 
+                                    <div class="w-full flex text-xs">
+                                        @if ($j_user->hasRole('Chief Editor'))
+                                        {{ $record->email }}
+                                        @endif
+                                    </div>
+
                                     
 
                                     @if ($j_user->hasRole('Chief Editor'))
