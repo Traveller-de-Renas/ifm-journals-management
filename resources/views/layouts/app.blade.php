@@ -62,7 +62,7 @@
                                 </li>
                                 @endif
 
-                                @if(auth()->user()->hasPermissionTo('Settings'))
+                                @if(auth()->user()->hasPermissionTo('Settings') && session('journal'))
                                 <li>
                                     <button type="button" class="flex items-center w-full px-4 py-2 text-base text-white hover:text-gray-950 transition duration-75 group hover:bg-gray-100" aria-controls="dropdown-f" data-collapse-toggle="dropdown-f">
                                         <svg class="flex-shrink-0 w-4 h-5 text-white transition duration-75 group-hover:text-gray-900 "  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -95,11 +95,17 @@
                                             <a href="{{ route('journals.reviewer', session('journal')) }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Reviewers</a>
                                         </li>
                                         @endif
+
+                                        @if(auth()->user()->hasPermissionTo('Journal Users'))
+                                        <li>
+                                            <a href="{{ route('journals.users', session('journal')) }}" class="flex items-center w-full p-2 text-white hover:text-gray-950 transition duration-75 pl-11 group hover:bg-gray-100">Journal Users</a>
+                                        </li>
+                                        @endif
                                     </ul>
                                 </li>
                                 @endif
 
-                                @if(auth()->user()->hasPermissionTo('Call for Papers'))
+                                @if(auth()->user()->hasPermissionTo('Call for Papers') && session('journal'))
                                 <li>
                                     <a href="{{ route('journals.call_for_papers', session('journal')) }}" class="flex items-center px-4 py-2 text-white hover:text-gray-950 hover:bg-gray-100 group">
                                         <svg class="flex-shrink-0 w-4 h-5 text-white transition duration-75 group-hover:text-gray-900 "  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

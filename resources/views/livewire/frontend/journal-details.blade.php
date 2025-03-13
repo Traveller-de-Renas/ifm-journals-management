@@ -346,12 +346,12 @@
                     <div class="w-full mb-4">
                         <p class="text-lg font-bold mb-2">Editorial Team</p>
     
-                        <div class="w-full mt-2">
+                        <div class="w-full mt-2 mb-8">
                             @foreach ($record->journal_us()->whereHas('roles', function ($query) {
-                                $query->whereIn('name', ['Supporting Editor', 'Chief Editor', 'Associate Editor', 'Advisory Board']);
+                                $query->whereIn('name', ['Supporting Editor', 'Chief Editor', 'Associate Editor']);
                             })->get() as $key => $j_user)
                         
-                                <div class="w-full p-2 border bg-white hover:bg-gray-200 border-slate-200 cursor-pointer" wire:click="editorDetails({{ $key }});">
+                                <div class="w-full p-2 border bg-white hover:bg-gray-200 border-slate-200 cursor-pointer" wire:click="editorDetails({{ $key }})">
                                     <div class="font-semibold">
                                         {{ $j_user->user->salutation?->title }}
                                         {{ $j_user->user->first_name }}
@@ -402,6 +402,69 @@
                                         <div class="text-sm w-full">: {{ $j_user->user->interests }}</div>
                                     </div>
                                 </div>
+                            @endforeach 
+                        </div>
+
+
+
+                        <p class="text-lg font-bold mb-2">Advisory Board</p>
+    
+                        <div class="w-full mt-2 mb-8">
+                            @foreach ($record->journal_us()->whereHas('roles', function ($query) {
+                                $query->whereIn('name', ['Advisory Board']);
+                            })->get() as $k => $j_user)
+
+                            <div class="w-full p-2 border bg-white hover:bg-gray-200 border-slate-200 cursor-pointer" wire:click="editorDetails('{{ 'advisory'.$k }}')">
+                                <div class="font-semibold">
+                                    {{ $j_user->user->salutation?->title }}
+                                    {{ $j_user->user->first_name }}
+                                    {{ $j_user->user->middle_name }}
+                                    {{ $j_user->user->last_name }}
+
+                                    <span class="text-sm font-light">
+                                        {{ $j_user->user->affiliation != '' ? '('.$j_user->user->affiliation.')' : '' }}
+                                    </span>
+                                </div>
+
+                                
+
+                                @if ($j_user->hasRole('Chief Editor'))
+                                    <p class="text-xs text-green-900">Managing Editor</p>
+                                @elseif ($j_user->hasRole('Supporting Editor'))
+                                    <p class="text-xs text-green-400">Supporting Editor</p>
+                                @elseif ($j_user->hasRole('Associate Editor'))
+                                    <p class="text-xs text-blue-900">Associate Editor</p>
+                                @elseif ($j_user->hasRole('Advisory Board'))
+                                    <p class="text-xs text-blue-400">Advisory Board</p>
+                                @endif
+                            </div>
+
+                            <div class="p-2 text-sm border @if('advisory'.$k != $editor_detail) hidden @endif" >
+                                <div class="w-full flex">
+                                    <div class="text-sm w-1/5 ">Affiliation</div>
+                                    <div class="text-sm w-full">: {{ $j_user->user->affiliation }}</div>
+                                </div>
+                                <div class="w-full flex">
+                                    <div class="text-sm w-1/5 ">Country</div>
+                                    <div class="text-sm w-full">: {{ $j_user->user?->country?->name }}</div>
+                                </div>
+                                <div class="w-full flex">
+                                    <div class="text-sm w-1/5">Degree</div>
+                                    <div class="text-sm w-full">: {{ $j_user->user->degree }}</div>
+                                </div>
+                                <div class="w-full flex">
+                                    <div class="text-sm w-1/5">Email</div>
+                                    <div class="text-sm w-full">: {{ $j_user->user->email }}</div>
+                                </div>
+                                <div class="w-full flex">
+                                    <div class="text-sm w-1/5">Biography</div>
+                                    <div class="text-sm w-full">: {{ $j_user->user->biography }}</div>
+                                </div>
+                                <div class="w-full flex">
+                                    <div class="text-sm w-1/5">Interests</div>
+                                    <div class="text-sm w-full">: {{ $j_user->user->interests }}</div>
+                                </div>
+                            </div>
                             @endforeach 
                         </div>
                     </div>

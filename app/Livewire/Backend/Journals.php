@@ -259,6 +259,12 @@ class Journals extends Component
     }
 
 
+    public function gotoJournal(Journal $journal)
+    {
+        session(['journal' => $journal->uuid]);
+
+        return redirect(route('journals.dashboard'));
+    }
 
 
 

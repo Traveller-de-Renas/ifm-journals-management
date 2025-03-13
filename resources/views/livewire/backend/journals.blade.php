@@ -143,6 +143,9 @@
                             <li>
                                 <button type="button" class="block px-4 py-2 hover:bg-gray-100 w-full text-left" wire:click="confirmAssign({{ $data->id }})" wire:loading.attr="disabled" >Assign Chief Editor</button>
                             </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="gotoJournal({{ $data->id }})" wire:loading.attr="disabled">Go to Journal</a>
+                            </li>
                         </ul>
                     </div>
 

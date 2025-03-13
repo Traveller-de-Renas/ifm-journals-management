@@ -47,9 +47,12 @@
                 <td class="whitespace-nowrap px-6 py-3" >
                     <a href="{{ route('admin.user_profile', $item->uuid) }}">
                         <p class="text-blue-700 hover:text-blue-400 cursor-pointer">
-                    {{ ucwords(strtolower($item->first_name)) }} {{ ucwords(strtolower($item->last_name)) }}
-                </p>
-                </a>
+                            {{ $item->salutation?->title }}
+                            {{ ucwords(strtolower($item->first_name)) }}
+                            {{ ucwords(strtolower($item->middle_name)) }} 
+                            {{ ucwords(strtolower($item->last_name)) }}
+                        </p>
+                    </a>
                 </td>
                 <td class="whitespace-nowrap px-6 py-3">{{ $item->email }}</td>
                 <td class="whitespace-nowrap px-6 py-3">{{ $item->phone }}</td>
@@ -70,6 +73,9 @@
                             </li>
                             <li>
                                 <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="confirmDelete({{ $item->id }})" wire:loading.attr="disabled">Delete</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.user_profile', $item->uuid) }}" class="block px-4 py-2 hover:bg-gray-100 " wire:loading.attr="disabled">Profile</a>
                             </li>
                         </ul>
                     </div>

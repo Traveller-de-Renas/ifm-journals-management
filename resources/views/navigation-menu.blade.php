@@ -1,7 +1,7 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100 sm:ml-64">
     <!-- Primary Navigation Menu -->
     <div class="px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex justify-between items-center h-16">
             <div class="flex">
                 <!-- Navigation Links -->
                 <div class="hidden sm:flex pt-5">
@@ -9,7 +9,16 @@
                     @php
                         $journal = \App\Models\Journal::where('uuid', session('journal'))->first();
                     @endphp
-                    <p class="text-lg font-bold ">{{ $journal->title }} - {{ strtoupper($journal->code) }}</p>
+                    <div class="text-lg font-bold w-full">
+                        {{ $journal->title }} - {{ strtoupper($journal->code) }} 
+                        <div class="mt-1">
+                            <a href="{{ route('journals.exit_journal') }}">
+                                <span class="text-red-600 text-xs cursor-pointer bg-red-200 font-semibold rounded shadow-md p-2" >Exit From Journal</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    
                     @endif
                 </div>
             </div>
@@ -120,14 +129,33 @@
                 </div>
             </div>
 
+            <div class="font-semibold start-0 sm:hidden">
+
+                @if(session('journal'))
+                    @php
+                        $journal = \App\Models\Journal::where('uuid', session('journal'))->first();
+                    @endphp
+                    
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">{{ strtoupper($journal->code) }} </span>
+                        <a href="{{ route('journals.exit_journal') }}">
+                            <span class="text-red-600 text-xs cursor-pointer bg-red-200 font-semibold rounded shadow-md px-2 py-1" >Exit From Journal</span>
+                        </a>
+                    </div>
+                @endif
+                
+            </div>
+
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
+            <div class="flex items-center sm:hidden">
+
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="size-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
+
             </div>
         </div>
     </div>

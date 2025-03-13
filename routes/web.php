@@ -23,7 +23,7 @@ use App\Http\Controllers\AuthenticationController;
 Route::get('/', [FrontendController::class, 'index']);
 
 
-Route::get('/admin', [AuthenticationController::class, 'admin'])->name('admin');
+Route::get('/admin', [AuthenticationController::class, 'admin'])->name('admin')->middleware('auth');
 Route::get('/login/{journal?}', [AuthenticationController::class, 'login'])->name('login');
 Route::get('/register/{journal?}', [AuthenticationController::class, 'register'])->name('register');
 Route::post('/logout/{journal?}', [AuthenticationController::class, 'logout'])->name('logout');
@@ -51,10 +51,13 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/articles/{journal?}/{status?}', [JournalController::class, 'articles'])->name('journals.articles');
     Route::get('/publication/{journal?}', [JournalController::class, 'publication'])->name('journals.publication');
     Route::get('/reviewer/{journal?}', [JournalController::class, 'reviewers'])->name('journals.reviewer');
+    Route::get('/users/{journal?}', [JournalController::class, 'users'])->name('journals.users');
     Route::get('/team/{journal?}', [JournalController::class, 'team'])->name('journals.team');
 
     Route::get('/call_for_papers/{journal?}', [JournalController::class, 'call_for_papers'])->name('journals.call_for_papers');
     Route::get('/sliding_images', [FrontendController::class, 'sliding_images'])->name('journals.sliding_images')->middleware('permission:View Sliding Images');
+
+    Route::get('/exit_journal', [JournalController::class, 'exit_journal'])->name('journals.exit_journal');
 });
 
 

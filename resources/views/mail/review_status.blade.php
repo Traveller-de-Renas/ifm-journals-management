@@ -22,7 +22,7 @@
     @endif
 
 
-    <b>SPECIFIC REVISION POINTS FROM REVIEWERS</b>
+    <b>REVIEWER(S)' COMMENTS TO AUTHOR</b>
     <br>
 
     @foreach($reviewers as $key => $reviewer)
@@ -39,13 +39,14 @@
     <br>
 
     @endforeach
-
-    <br>
-    Yours sincerely,
-    <br>
-    From {{ $record->journal->title }} Editorial Team
-    <br>
-    Chief Editor's Office
 @endif
+
+
+DEADLINE: 03-May-2025. If you need additional time to complete your revision please visit our Online Submission System to apply for an extension. Please note that the deadline expires at the start of the day and not the end of the day.
+
+<br>
+
+To go straight to your paper, click this link: 
+<a href="https://journals.ifm.ac.tz/journal/detail/{{ $record->journal->uuid }}">https://journals.ifm.ac.tz/journal/detail/{{ $record->journal->uuid }}.</a>
 
 

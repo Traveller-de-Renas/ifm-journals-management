@@ -81,6 +81,12 @@ class JournalController extends Controller
         return view('backend.journal_reviewers');
     }
 
+
+    public function users()
+    {
+        return view('backend.journal_users');
+    }
+
     public function article()
     {
         return view('backend.article');
@@ -104,5 +110,14 @@ class JournalController extends Controller
     public function peer_review_process()
     {
         return view('frontend.peer_review_process');
+    }
+
+    public function exit_journal()
+    {
+        if(session()->has('journal')){
+            session()->forget('journal');
+
+            return redirect(route('journals.dashboard'));
+        }
     }
 }

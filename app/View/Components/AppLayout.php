@@ -40,7 +40,7 @@ class AppLayout extends Component
                     $query->where('code', '002');
                 })
                 ->whereHas('notifications', function ($query) {
-                    $juserid = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first()->id;
+                    $juserid = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first()?->id;
                     $query->where('journal_user_id', $juserid)->where('status', 1);
                 })
                 ->get()->count();
@@ -50,7 +50,7 @@ class AppLayout extends Component
                     $query->whereIn('code', ['006']);
                 })
                 ->whereHas('notifications', function ($query) {
-                    $juserid = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first()->id;
+                    $juserid = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first()?->id;
                     $query->where('journal_user_id', $juserid)->where('status', 1);
                 })
                 ->get()->count();
@@ -60,7 +60,7 @@ class AppLayout extends Component
                     $query->whereIn('code', ['003', '008', '009', '010']);
                 })
                 ->whereHas('notifications', function ($query) {
-                    $juserid = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first()->id;
+                    $juserid = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first()?->id;
                     $query->where('journal_user_id', $juserid)->where('status', 1);
                 })
                 ->get()->count();
@@ -72,7 +72,7 @@ class AppLayout extends Component
                 $query->whereIn('code', ['004', '019', '020']);
             })
             ->whereHas('notifications', function ($query) {
-                $juserid = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first()->id;
+                $juserid = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first()?->id;
                 $query->where('journal_user_id', $juserid)->where('status', 1);
             })
             ->where('user_id', auth()->user()->id)
@@ -92,7 +92,7 @@ class AppLayout extends Component
                 $query->whereIn('code', ['007', '014', '015']);
             })
             ->whereHas('notifications', function ($query) {
-                $juserid = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first()->id;
+                $juserid = $this->journal?->journal_us()->where('user_id', auth()->user()->id)->first()?->id;
                 $query->where('journal_user_id', $juserid)->where('status', 1);
             })
             ->where('user_id', auth()->user()->id)

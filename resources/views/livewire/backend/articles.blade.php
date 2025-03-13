@@ -50,7 +50,7 @@
             @endphp
             @foreach ($articles as $article)
 
-            <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 grey:border-neutral-500 grey:hover:bg-neutral-600 {{ $article->notifications()->where('status', 1)->where('journal_user_id', $journal->journal_us()->where('user_id', auth()->user()->id)->first()->id)->count() > 0 ? 'text-red-600 font-semibold' : '' }}">
+            <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 grey:border-neutral-500 grey:hover:bg-neutral-600 {{ $article->notifications()->where('status', 1)->where('journal_user_id', $journal->journal_us()->where('user_id', auth()->user()?->id)->first()?->id)->count() > 0 ? 'text-red-600 font-semibold' : '' }}">
                 <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $sn }}</td>
                 <td class="whitespace-normal px-6 py-3 break-words">
                     {{ $article->title }}
