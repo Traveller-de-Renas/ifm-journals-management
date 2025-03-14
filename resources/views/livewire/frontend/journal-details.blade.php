@@ -434,7 +434,7 @@
 
                                 
 
-                                @if ($j_user->hasRole('Chief Editor'))
+                                {{-- @if ($j_user->hasRole('Chief Editor'))
                                     <p class="text-xs text-green-900">Managing Editor</p>
                                 @elseif ($j_user->hasRole('Supporting Editor'))
                                     <p class="text-xs text-green-400">Supporting Editor</p>
@@ -442,7 +442,7 @@
                                     <p class="text-xs text-blue-900">Associate Editor</p>
                                 @elseif ($j_user->hasRole('Advisory Board'))
                                     <p class="text-xs text-blue-400">Advisory Board</p>
-                                @endif
+                                @endif --}}
                             </div>
 
                             <div class="p-2 text-sm border @if('advisory'.$k != $editor_detail) hidden @endif" >
