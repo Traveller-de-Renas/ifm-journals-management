@@ -431,7 +431,6 @@
                                         {{ $j_user->user->affiliation != '' ? '('.$j_user->user->affiliation.')' : '' }}
                                     </span>
                                 </div>
-
                                 
 
                                 {{-- @if ($j_user->hasRole('Chief Editor'))
