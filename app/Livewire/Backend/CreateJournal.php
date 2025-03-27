@@ -85,6 +85,7 @@ class CreateJournal extends Component
         $this->dispatch('contentChanged');
     }
 
+
     public function render()
     {
         $this->subjects   = JournalSubject::all();
@@ -235,7 +236,6 @@ class CreateJournal extends Component
             'code'        => 'required',
             'category'    => 'required',
             'status'      => 'required',
-            'description' => 'required',
         ]);
 
         try {
