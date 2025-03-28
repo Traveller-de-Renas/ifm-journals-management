@@ -149,4 +149,9 @@ class Article extends Model
         return $this->hasMany(MailLog::class);
     }
     
+
+    public function editorChecklists()
+    {
+        return $this->belongsToMany(EditorChecklist::class)->wherePivot('value', 1)->wherePivot('user_id', auth()->user()->id);
+    }
 }

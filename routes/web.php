@@ -58,6 +58,7 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/sliding_images', [FrontendController::class, 'sliding_images'])->name('journals.sliding_images')->middleware('permission:View Sliding Images');
 
     Route::get('/exit_journal', [JournalController::class, 'exit_journal'])->name('journals.exit_journal');
+    Route::get('/editor_checklist', [JournalController::class, 'editor_checklist'])->name('journals.editor_checklist');
 });
 
 
@@ -67,7 +68,6 @@ Route::group(['prefix' => 'users', 'middleware' => 'auth'], function () {
     Route::get('/salutations', [UserController::class, 'salutations'])->name('admin.salutations')->middleware('permission:View Salutations');
     Route::get('/roles', [UserController::class, 'roles'])->name('admin.roles')->middleware('permission:View Roles');
     Route::get('/permissions', [UserController::class, 'permissions'])->name('admin.permissions')->middleware('permission:View Permissions');
-
     Route::get('/user_profile/{user?}', [UserController::class, 'user_profile'])->name('admin.user_profile')->middleware('permission:View User Profile');
 });
 

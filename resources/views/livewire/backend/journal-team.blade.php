@@ -39,6 +39,9 @@
                         <button wire:click="sort('first_name')" >Full Name</button>
                     </th>
                     <th scope="col" class="px-6 py-4">
+                        <button wire:click="sort('email')" >Email</button>
+                    </th>
+                    <th scope="col" class="px-6 py-4">
                         <button >Affiliation</button>
                     </th>
                     <th scope="col" class="px-6 py-4">
@@ -62,6 +65,9 @@
                     <td class="whitespace-nowrap px-6 py-3">
                         {{ $data->user->salutation?->title }}
                         {{ $data->user->first_name }} {{ $data->user->middle_name }} {{ $data->user->last_name }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-3">
+                        {{ $data->user->email }}
                     </td>
                     <td class="whitespace-nowrap px-6 py-3">
                         {{ $data->user->affiliation }}

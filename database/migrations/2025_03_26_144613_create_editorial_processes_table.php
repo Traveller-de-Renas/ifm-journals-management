@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('editorial_processes', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('article_id')->constrained(table: 'articles');
-            $table->foreignId('journal_user_id')->constrained(table: 'journal_users');
-            $table->integer('status')->default(0);
+            $table->string('title')->nullable();
+            $table->string('code')->nullable();
+            $table->text('description')->nullable();
+            $table->integer('status')->default(1);
 
-            $table->timestamps(); 
+            $table->timestamps();
             $table->softDeletes();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('editorial_processes');
     }
 };

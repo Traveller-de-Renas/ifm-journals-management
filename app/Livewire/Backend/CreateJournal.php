@@ -232,10 +232,10 @@ class CreateJournal extends Component
     public function update(Journal $journal)
     {
         $this->validate([
-            'title'       => 'required',
-            'code'        => 'required',
-            'category'    => 'required',
-            'status'      => 'required',
+            'title'    => 'required',
+            'code'     => 'required',
+            'category' => 'required',
+            'status'   => 'required',
         ]);
 
         try {

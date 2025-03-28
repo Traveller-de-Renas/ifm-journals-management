@@ -120,4 +120,9 @@ class JournalController extends Controller
             return redirect(route('journals.dashboard'));
         }
     }
+
+    public function editor_checklist()
+    {
+        return view('backend.editor_checklist');
+    }
 }

@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('article_editor_checklist', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('article_id')->constrained(table: 'articles');
-            $table->foreignId('journal_user_id')->constrained(table: 'journal_users');
-            $table->integer('status')->default(0);
+            $table->foreignId('editor_checklist_id')->constrained(table: 'editor_checklists');
+            $table->foreignId('user_id')->constrained(table: 'users');
+            $table->integer('value')->default(0);
 
-            $table->timestamps(); 
-            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('article_editor_checklist');
     }
 };
