@@ -26,6 +26,6 @@
     @endif
 
     <div class="w-full mt-4">
-        <iframe src="{{ route('journals.editor_guideline', $journal->editor_guide) }}" width="100%" height="700px"></iframe>
+        <embed src="{{ route('journals.editor_guideline', $journal->editor_guide) }}" width="100%" height="700px">
     </div>
 </div>
