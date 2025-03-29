@@ -2,14 +2,11 @@
 
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
-            <p class="font-bold text-xl">{{ __('EDITOR CHECKLISTS') }}</p>
+            <p class="font-bold text-xl">{{ __('EDITOR GUIDELINES') }}</p>
         </div>
         <div class="">
-
         </div>
         <div class="flex gap-2 justify-end">
-            <x-button class="float-right" wire:click="openDrawer()" wire:loading.attr="disabled" >Create New</x-button>
-            <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
         </div>
     </div>
 
@@ -29,6 +26,6 @@
     @endif
 
     <div class="w-full mt-4">
-        <iframe src="{{ asset('storage/journals/'.$record->editor_guide) }}" width="100%" height="700px"></iframe>
+        <iframe src="{{ route('journals.editor_guideline', $journal->editor_guide) }}" width="100%" height="700px"></iframe>
     </div>
 </div>

@@ -60,6 +60,8 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
 
     Route::get('/exit_journal', [JournalController::class, 'exit_journal'])->name('journals.exit_journal');
     Route::get('/editor_checklist', [JournalController::class, 'editor_checklist'])->name('journals.editor_checklist');
+
+    Route::get('/editor_guideline/{document?}', [JournalController::class, 'editor_guideline'])->name('journals.editor_guideline');
 });
 
 
@@ -86,5 +88,5 @@ Route::group(['prefix' => 'journal'], function () {
     Route::get('/article_download/{article?}', [FrontendController::class, 'article_download'])->name('journal.article_download');
     Route::get('/article_evaluation/{article}/{reviewer}', [JournalController::class, 'article_evaluation'])->name('journal.article_evaluation');
     Route::get('/peer_review_process', [JournalController::class, 'peer_review_process'])->name('journal.peer_review_process');
-
+    Route::get('/author_guideline/{document?}', [JournalController::class, 'author_guideline'])->name('journals.author_guideline');
 });

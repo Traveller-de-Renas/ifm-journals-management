@@ -131,4 +131,21 @@ class JournalController extends Controller
     {
         return view('backend.editor_guide');
     }
+
+    public function editor_guideline()
+    {
+        $path = storage_path('app/public/journals/'.request()->document);
+        return response()->file($path);
+    }
+
+
+
+
+    public function author_guideline()
+    {
+        $path = storage_path('app/public/journals/'.request()->document);
+        return response()->file($path);
+    } 
+
+
 }

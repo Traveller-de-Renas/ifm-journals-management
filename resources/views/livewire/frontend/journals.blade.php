@@ -103,8 +103,6 @@
                                 <a href="{{ route('register', $row->uuid) }}" class="">
                                     <x-button>Register </x-button>
                                 </a>
-            
-                                
                             </div>
                         </div>
 
