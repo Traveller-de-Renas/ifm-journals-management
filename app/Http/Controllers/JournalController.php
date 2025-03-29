@@ -125,4 +125,10 @@ class JournalController extends Controller
     {
         return view('backend.editor_checklist');
     }
+
+
+    public function editor_guide()
+    {
+        return view('backend.editor_guide');
+    }
 }

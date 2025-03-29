@@ -6,13 +6,11 @@ use App\Models\Journal;
 use Livewire\Component;
 use App\Models\ArticleType;
 use Illuminate\Support\Str;
-use App\Models\FileCategory;
 use Illuminate\Http\Request;
 use Livewire\WithFileUploads;
 use App\Models\JournalSubject;
 use App\Models\AuthorGuideline;
 use App\Models\JournalCategory;
-use App\Models\SubmissionConfirmation;
 
 class CreateJournal extends Component
 {
@@ -26,43 +24,18 @@ class CreateJournal extends Component
     public $Edit;
     public $Delete;
 
-    public $record;
-    public $title;
-    public $code;
-    public $image;
-    public $status;
-    public $category;
-    public $description;
-    public $year;
-    public $publisher;
-    public $doi;
-    public $issn;
-    public $eissn;
-    public $email;
-    public $website;
-    public $scope;
+    public $record, $title, $code, $image, $status, $category, $description, $year, $publisher, $doi, $issn, $eissn, $email, $website, $scope, $editor_guide, $author_guide;
 
     public $instruction_title = [];
     public $instruction_description = [];
     public $confirmation_description = [];
 
-    public $index_title = [];
-    public $index_description = [];
-    public $index_link = [];
-
     public $type_name = [];
     public $type_description = [];
 
-    public $file_category_name = [];
-    public $file_category_description = [];
-
     public $subjects;
     public $categories;
-    public $panel;
-    public $indecies = [''];
     public $article_types = [''];
-    public $file_categories = [''];
-    public $confirmations = [''];
     public $instructions = [''];
 
 
@@ -99,10 +72,11 @@ class CreateJournal extends Component
         $this->validate([
             'title'       => 'required',
             'image'       => 'nullable|max:4024|mimes:jpg,png,JPG,PNG',
+            'author_guide' => 'nullable|max:4024|mimes:pdf',
+            'editor_guide' => 'nullable|max:4024|mimes:pdf',
             'code'        => 'required',
             'category'    => 'required',
             'status'      => 'required',
-            'description' => 'required',
         ]);
 
 
@@ -117,6 +91,30 @@ class CreateJournal extends Component
             $file->storeAs('public/journals/', $_file);
 
             $journal->image = $_file;
+        }
+
+
+        if($this->author_guide){
+            $file_ag  = $this->author_guide;
+            $_name_ag = $file_ag->getClientOriginalName();
+            $_type = $file_ag->getClientOriginalExtension();
+            $_file_ag = str_replace(' ', '_', $_name_ag);
+
+            $file_ag->storeAs('public/journals/', $_file_ag);
+
+            $journal->author_guide = $_file_ag;
+        }
+
+
+        if($this->editor_guide){
+            $file_eg  = $this->editor_guide;
+            $_name_eg = $file_eg->getClientOriginalName();
+            $_type = $file_eg->getClientOriginalExtension();
+            $_file_eg = str_replace(' ', '_', $_name_eg);
+
+            $file_eg->storeAs('public/journals/', $_file_eg);
+
+            $journal->editor_guide = $_file;
         }
 
         
@@ -145,24 +143,6 @@ class CreateJournal extends Component
                 'journal_id'  => $journal->id
             ]);
         }
-
-        // foreach($this->confirmation_description as $key => $description)
-        // {
-        //     SubmissionConfirmation::create([
-        //         'description' => $description,
-        //         'journal_id' => $journal->id
-        //     ]);
-        // }
-
-        // foreach($this->index_title as $key => $index)
-        // {
-        //     JournalIndex::create([
-        //         'title' => $index,
-        //         'description' => $this->index_description[$key],
-        //         'link' => $this->index_description[$key],
-        //         'journal_id' => $journal->id
-        //     ]);
-        // }
 
         if($this->type_name){
 
@@ -194,32 +174,6 @@ class CreateJournal extends Component
             }
         }
 
-        // if($this->file_category_name){
-        //     foreach($this->file_category_name as $key => $file_category)
-        //     {
-        //         FileCategory::create([
-        //             'name' => $file_category,
-        //             'description' => $this->file_category_description[$key],
-        //             'journal_id' => $journal->id
-        //         ]);
-        //     }
-        // }else{
-        //     $file_categories = [
-        //         'Title with author details',
-        //         'Manuscript Anonymous',
-        //         'Cover Letter',
-        //         'Supplementary File'
-        //     ];
-
-        //     foreach($file_categories as $key => $category)
-        //     {
-        //         FileCategory::create([
-        //             'name' => $category,
-        //             'description' => $category,
-        //             'journal_id' => $journal->id
-        //         ]);
-        //     }
-        // }
 
         session()->flash('response',[
             'status'  => 'success',
@@ -240,149 +194,113 @@ class CreateJournal extends Component
 
         try {
 
-        if($this->image){
-            $file  = $this->image;
-            $_name = $file->getClientOriginalName();
-            $_type = $file->getClientOriginalExtension();
-            $_file = str_replace(' ', '_', $_name);
+            if($this->image){
+                $file  = $this->image;
+                $_name = $file->getClientOriginalName();
+                $_type = $file->getClientOriginalExtension();
+                $_file = str_replace(' ', '_', $_name);
 
-            $file->storeAs('journals/', $_file);
+                $file->storeAs('journals/', $_file);
 
-            $journal->image = $_file;
-        }
-        
-        $journal->title     = $this->title;
-        $journal->code      = $this->code;
-        $journal->doi       = $this->doi;
-        $journal->issn      = $this->issn;
-        $journal->eissn     = $this->eissn;
-        $journal->journal_category_id  = $this->category;
-        $journal->status       = $this->status;
-        $journal->description  = $this->description;
-        $journal->scope     = $this->scope;
-        $journal->year      = $this->year;
-        $journal->publisher = $this->publisher;
-        $journal->email     = $this->email;
-        $journal->website   = $this->website;
-
-        $journal->update();
-
-        if(!empty($this->instruction_title)){
-            AuthorGuideline::where('journal_id', $journal->id)->delete();
-            foreach($this->instruction_title as $key => $instruction)
-            {
-                $ins = new AuthorGuideline;
-                
-                if($instruction != null){
-                    $ins->title         = $instruction;
-                    $ins->description   = (isset($this->instruction_description[$key]))? $this->instruction_description[$key] : null;
-                    $ins->journal_id    = $journal->id;
-                    $ins->save();
-                }
-                
+                $journal->image = $_file;
             }
-        }
-        
-        // if(!empty($this->confirmation_description)){
-        //     SubmissionConfirmation::where('journal_id', $journal->id)->delete();
-        //     foreach($this->confirmation_description as $key => $description)
-        //     {
-        //         $con = new SubmissionConfirmation;
-        //         if($description != null){
-        //             $con->description = $description;
-        //             $con->journal_id  = $journal->id;
-        //             $con->save();
-        //         }
-        //     }
-        // }
 
-        // if(!empty($this->index_title)){
-        //     JournalIndex::where('journal_id', $journal->id)->delete();
-        //     foreach($this->index_title as $key => $index)
-        //     {
-        //         $ind = new JournalIndex;
+            if($this->author_guide){
+                $file_ag  = $this->author_guide;
+                $_name_ag = $file_ag->getClientOriginalName();
+                $_type = $file_ag->getClientOriginalExtension();
+                $_file_ag = str_replace(' ', '_', $_name_ag);
 
-        //         if($index != null){
-        //             $ind->title         = $index;
-        //             $ind->description   = (isset($this->index_description[$key]))? $this->index_description[$key] : null;
-        //             $ind->link          = (isset($this->index_link[$key]))? $this->index_link[$key] : null;
-        //             $ind->journal_id    = $journal->id;
-        //             $ind->save();
-        //         }
-        //     }
-        // }
+                $file_ag->storeAs('journals/', $_file_ag);
 
-        if(!empty($this->type_name)){
-            ArticleType::where('journal_id', $journal->id)->delete();
-            foreach($this->type_name as $key => $type)
-            {
-                $typ = new ArticleType;
-                
-                if($type != null){
-                    $typ->name         = $type;
-                    $typ->description  = (isset($this->type_description[$key]))? $this->type_description[$key] : null;
-                    $typ->journal_id   = $journal->id;
-                    $typ->save();
+                $journal->author_guide = $_file_ag;
+            }
+
+            if($this->editor_guide){
+                $file_eg  = $this->editor_guide;
+                $_name_eg = $file_eg->getClientOriginalName();
+                $_type = $file_eg->getClientOriginalExtension();
+                $_file_eg = str_replace(' ', '_', $_name_eg);
+
+                $file_eg->storeAs('journals/', $_file_eg);
+
+                $journal->editor_guide = $_file_eg;
+            }
+            
+            $journal->title     = $this->title;
+            $journal->code      = $this->code;
+            $journal->doi       = $this->doi;
+            $journal->issn      = $this->issn;
+            $journal->eissn     = $this->eissn;
+            $journal->journal_category_id  = $this->category;
+            $journal->status       = $this->status;
+            $journal->description  = $this->description;
+            $journal->scope     = $this->scope;
+            $journal->year      = $this->year;
+            $journal->publisher = $this->publisher;
+            $journal->email     = $this->email;
+            $journal->website   = $this->website;
+
+            $journal->update();
+
+            if(!empty($this->instruction_title)){
+                AuthorGuideline::where('journal_id', $journal->id)->delete();
+                foreach($this->instruction_title as $key => $instruction)
+                {
+                    $ins = new AuthorGuideline;
+                    
+                    if($instruction != null){
+                        $ins->title         = $instruction;
+                        $ins->description   = (isset($this->instruction_description[$key]))? $this->instruction_description[$key] : null;
+                        $ins->journal_id    = $journal->id;
+                        $ins->save();
+                    }
+                    
                 }
             }
-        }else{
-            $article_types = [
-                'Original Article',
-                'Review Article',
-                'Case Study',
-                'Methodology',
-                'Other'
-            ];
+            
 
-            foreach($article_types as $key => $type)
-            {
-                ArticleType::create([
-                    'name' => $type,
-                    'description' => $type,
-                    'journal_id' => $journal->id
-                ]);
+            if(!empty($this->type_name)){
+                ArticleType::where('journal_id', $journal->id)->delete();
+                foreach($this->type_name as $key => $type)
+                {
+                    $typ = new ArticleType;
+                    
+                    if($type != null){
+                        $typ->name         = $type;
+                        $typ->description  = (isset($this->type_description[$key]))? $this->type_description[$key] : null;
+                        $typ->journal_id   = $journal->id;
+                        $typ->save();
+                    }
+                }
+            }else{
+                $article_types = [
+                    'Original Article',
+                    'Review Article',
+                    'Case Study',
+                    'Methodology',
+                    'Other'
+                ];
+
+                foreach($article_types as $key => $type)
+                {
+                    ArticleType::create([
+                        'name' => $type,
+                        'description' => $type,
+                        'journal_id' => $journal->id
+                    ]);
+                }
             }
+
+
+            session()->flash('response',[
+                'status'  => 'success',
+                'message' => 'Journal has been updated successfully!'
+            ]);
+
+        } catch (\Exception $e) {
+            session()->flash('error', 'Some Errors Occured: ' . $e->getMessage());
         }
-
-        // if(!empty($this->file_category_name)){
-        //     FileCategory::where('journal_id', $journal->id)->delete();
-        //     foreach($this->file_category_name as $key => $name)
-        //     {
-        //         $fil = new FileCategory;
-                
-        //         if($type != null){
-        //             $fil->name         = $name;
-        //             $fil->description  = (isset($this->file_category_description[$key]))? $this->file_category_description[$key] : null;
-        //             $fil->journal_id   = $journal->id;
-        //             $fil->save();
-        //         }
-        //     }
-        // }else{
-        //     $file_categories = [
-        //         'Title with author details',
-        //         'Manuscript Anonymous',
-        //         'Cover Letter',
-        //         'Supplementary File'
-        //     ];
-
-        //     foreach($file_categories as $key => $category)
-        //     {
-        //         FileCategory::create([
-        //             'name' => $category,
-        //             'description' => $category,
-        //             'journal_id' => $journal->id
-        //         ]);
-        //     }
-        // }
-
-        session()->flash('response',[
-            'status'  => 'success',
-            'message' => 'Journal has been updated successfully!'
-        ]);
-
-    } catch (\Exception $e) {
-        session()->flash('error', 'Some Errors Occured: ' . $e->getMessage());
-    }
     }
 
     public function edit(Journal $journal)
@@ -411,30 +329,12 @@ class CreateJournal extends Component
             }
         }
 
-        if($this->record->indecies){
-            foreach($this->record->indecies as $key => $ins){
-                $this->indecies[] = '';
-
-                $this->index_title[$key] = $ins->title;
-                $this->index_description[$key] = $ins->description;
-            }
-        }
-
         if($this->record->article_types){
             foreach($this->record->article_types as $key => $ins){
                 $this->article_types[] = '';
 
                 $this->type_name[$key] = $ins->name;
                 $this->type_description[$key] = $ins->description;
-            }
-        }
-
-        if($this->record->file_categories){
-            foreach($this->record->file_categories as $key => $ins){
-                $this->file_categories[] = '';
-
-                $this->file_category_name[$key] = $ins->name;
-                $this->file_category_description[$key] = $ins->description;
             }
         }
 

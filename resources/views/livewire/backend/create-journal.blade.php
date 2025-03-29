@@ -125,6 +125,24 @@
                         <x-input-error for="scope" />
                     </div>
 
+                    <div class="grid grid-cols-3 space-x-2">
+                        <div class="mt-4">
+                            <x-label for="author_guide" value="Author Guide" class="mb-2 block font-medium text-sm text-gray-700" />
+                            <x-input-file type="file" id="author_guide" class="w-full" wire:model="author_guide" />
+                            <x-input-error for="author_guide" />
+                        </div>
+
+                        <div class="mt-4">
+                            <x-label for="editor_guide" value="Editor Guide" class="mb-2 block font-medium text-sm text-gray-700" />
+                            <x-input-file type="file" id="editor_guide" class="w-full" wire:model="editor_guide" />
+                            <x-input-error for="editor_guide" />
+                        </div>
+                            
+                        <div class="mt-4">
+                            
+                        </div>
+                    </div>
+
                 </div>
             </li>
 
@@ -181,69 +199,6 @@
                     </div>
                 </div>
             </li>
-            
-
-            {{-- <li class="mb-10 ms-6">
-                <div class="flex items-center justify-start cursor-pointer" wire:click="setStep(3)">     
-                    <span class="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 ring-4 ring-white {{ $step >= 3 ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-600' }}" >
-                        <svg class="w-3.5 h-3.5 text-white dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                            <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"/>
-                        </svg>
-                    </span>
-                    <h3 class="font-semibold leading-tight hover:text-blue-700" >Indexing</h3>
-                </div>
-
-                <div class="@if ($step != 3) hidden @endif">
-                    <div class="grid grid-cols-12 gap-4">
-                        <div class="col-span-3">
-                            <x-label for="index_title" value="Title" class="mb-2 block font-medium text-sm text-gray-700" />
-                        </div>
-
-                        <div class="col-span-5">
-                            <x-label for="index_description" value="Description" class="mb-2 block font-medium text-sm text-gray-700" />
-                        </div>
-
-                        <div class="col-span-3">
-                            <x-label for="index_link" value="Link" class="mb-2 block font-medium text-sm text-gray-700" />
-                        </div>
-
-                        <div class="">
-                        </div>
-                    </div>
-                    @foreach ($indecies as $key => $index)
-                    
-                    <div class="grid grid-cols-12 gap-4 mb-2">
-                        <div class="col-span-3">
-                            <x-input type="text" id="index_title" class="w-full" wire:model="index_title.{{ $key }}" />
-                            <x-input-error for="index_title" />
-                        </div>
-
-                        <div class="col-span-5" @if(!$form) wire:ignore @endif>
-                            <x-textarea type="text" id="index_description" class="w-full h-10" wire:model="index_description.{{ $key }}" />
-                            <x-input-error for="index_description" />
-                        </div>
-
-                        <div class="col-span-3">
-                            <x-input type="text" id="index_link" class="w-full" wire:model="index_link.{{ $key }}" />
-                            <x-input-error for="index_link" />
-                        </div>
-
-                        <div class="text-right">
-                            <x-button class="bg-red-700" wire:click="removeRow({{ $key }}, 'instructions')">
-                                <svg class="h-5 w-5 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                            </x-button>
-                        </div>
-                    </div>
-
-                    @endforeach
-
-                    <div class="text-right mt-4">
-                        <x-button type="button" wire:click="addRows('indecies')" wire:loading.attr="disabled">
-                            {{ __('Add More') }}
-                        </x-button>
-                    </div>
-                </div>
-            </li> --}}
 
 
             <li class="mb-10 ms-6">
@@ -298,58 +253,6 @@
                 </div>
             </li>
 
-
-            {{-- <li class="mb-10 ms-6">
-                <div class="flex items-center justify-start cursor-pointer" wire:click="setStep(5)">     
-                    <span class="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 ring-4 ring-white {{ $step >= 5 ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-600' }}" >
-                        <svg class="w-3.5 h-3.5 text-white dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                            <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"/>
-                        </svg>
-                    </span>
-                    <h3 class="font-semibold leading-tight hover:text-blue-700" >File Categories</h3>
-                </div>
-
-                <div class="@if ($step != 5) hidden @endif">
-                    
-                </div>
-            </li> --}}
-
-
-            {{-- <li class="ms-6">
-                <div class="flex items-center justify-start cursor-pointer" wire:click="setStep(6)">     
-                    <span class="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 ring-4 ring-white {{ $step >= 6 ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-600' }}" >
-                        <svg class="w-3.5 h-3.5 text-white dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                            <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z"/>
-                        </svg>
-                    </span>
-                    <h3 class="font-semibold leading-tight mb-4 hover:text-blue-700" >Confirmation & Submission</h3>
-                </div>
-
-                <div class="@if ($step != 6) hidden @endif">
-                    @foreach ($confirmations as $key => $confirmation)
-                    
-                    <div class="grid grid-cols-12 gap-2 mb-2">
-                        <div class="col-span-11" wire:ignore>
-                            <x-textarea type="text" id="confirmation_description" class="w-full h-10" wire:model="confirmation_description.{{ $key }}" placeholder="Enter Confirmation Description" />
-                            <x-input-error for="confirmation_description" />
-                        </div>
-                        <div class="text-right">
-                            <x-button class="bg-red-500 hover:bg-red-700" wire:click="removeRow({{ $key }}, 'confirmations')">
-                                <svg class="h-5 w-5 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                            </x-button>
-                        </div>
-                    </div>
-
-                    @endforeach
-
-                    <div class="text-right mt-4 mb-4">
-                        <x-button type="button" wire:click="addRows('confirmations')" wire:loading.attr="disabled">
-                            {{ __('Add More') }}
-                        </x-button>
-                    </div>
-                </div>
-                
-            </li> --}}
         </ol>
 
         <hr>

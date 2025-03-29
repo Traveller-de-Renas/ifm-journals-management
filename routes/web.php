@@ -55,6 +55,7 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
     Route::get('/team/{journal?}', [JournalController::class, 'team'])->name('journals.team');
 
     Route::get('/call_for_papers/{journal?}', [JournalController::class, 'call_for_papers'])->name('journals.call_for_papers');
+    Route::get('/editor_guide/{journal?}', [JournalController::class, 'editor_guide'])->name('journals.editor_guide');
     Route::get('/sliding_images', [FrontendController::class, 'sliding_images'])->name('journals.sliding_images')->middleware('permission:View Sliding Images');
 
     Route::get('/exit_journal', [JournalController::class, 'exit_journal'])->name('journals.exit_journal');
@@ -85,4 +86,5 @@ Route::group(['prefix' => 'journal'], function () {
     Route::get('/article_download/{article?}', [FrontendController::class, 'article_download'])->name('journal.article_download');
     Route::get('/article_evaluation/{article}/{reviewer}', [JournalController::class, 'article_evaluation'])->name('journal.article_evaluation');
     Route::get('/peer_review_process', [JournalController::class, 'peer_review_process'])->name('journal.peer_review_process');
+
 });
