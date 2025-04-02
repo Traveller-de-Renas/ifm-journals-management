@@ -8,11 +8,17 @@
 
             <div class="w-full md:grid md:grid-cols-3 gap-4" >
                 <p class="col-span-2 text-justify">
-                    Choose which journal to publish in or search our active calls for papers. When you're ready, find out&nbsp;how to submit your paper.&nbsp;
+                    {{-- Choose which journal to publish in or search our active calls for papers. When you're ready, find out&nbsp;how to submit your paper.&nbsp;
                     <br>
                     <br>
                     
-                    Use our search to find your chosen journal and find out what is required to submit your paper in the author guidelines. You will then submit your paper online.&nbsp;You can only submit your paper to one journal at a time. Follow the guide to publishing your paper and find resources to support you. Our journal publishing guide/infographic will help you understand each step, from submission to publication.
+                    Use our search to find your chosen journal and find out what is required to submit your paper in the author guidelines. You will then submit your paper online.&nbsp;You can only submit your paper to one journal at a time. Follow the guide to publishing your paper and find resources to support you. Our journal publishing guide/infographic will help you understand each step, from submission to publication. --}}
+
+                    Publish Your Research<br>
+                    <br>
+Find the right journal for your research and explore our active calls for papers. Once you’ve made your choice, follow our step-by-step guide to submitting your paper.<br>
+Use our search tool to identify your preferred journal and review the submission requirements outlined in the author guidelines. Papers can only be submitted to one journal at a time. Submissions are made online, ensuring an efficient process.
+To support you through every stage, our Journal Publishing Guide and infographic provide  a clear overview of the journey from submission to publication. Explore our resources and take the next step in sharing your research with the world.
                 </p>
             </div>
 
