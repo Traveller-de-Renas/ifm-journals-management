@@ -64,13 +64,13 @@
                         {{ $article->article_status->name }}
                     </div>
                 </td>
-                <td class="whitespace-nowrap">
+                <td class="">
                     
                     <button id="dropdown{{ $article->id }}" data-dropdown-toggle="dropdownDots{{ $article->id }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900" type="button">
                         <svg class="h-6 w-6 text-gray-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="1" />  <circle cx="19" cy="12" r="1" />  <circle cx="5" cy="12" r="1" /></svg>
                     </button>
                     
-                    <div id="dropdownDots{{ $article->id }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 right-80">
+                    <div id="dropdownDots{{ $article->id }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow " >
                         <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdown{{ $article->id }}">
 
                             @if ($article->article_status->code == '001' || $article->article_status->code == '005')
@@ -116,22 +116,22 @@
                                 })->get()->pluck('user_id');
                             @endphp
 
-                            @if (($article->article_status->code == '003' || $article->article_status->code == '008') && $caeditors->contains(auth()->user()->id))
-                            <li>
-                                <button class="block px-4 py-2 hover:bg-gray-100" wire:click="openDrawerA({{ $article->id }})" wire:loading.attr="disabled">Assign Associate Editor</button>
-                            </li>
+                            @if (($article->article_status->code == '003' || $article->article_status->code == '008' || $article->article_status->code == '009') && $caeditors->contains(auth()->user()->id))
+                                <li>
+                                    <button class="block px-4 py-2 hover:bg-gray-100" wire:click="openDrawerA({{ $article->id }})" wire:loading.attr="disabled">Assign Associate Editor</button>
+                                </li>
                             @endif
 
 
                             @if ($article->article_status->code == '003' && $caeditors->contains(auth()->user()->id))
-                            <li>
-                                <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start" wire:click="openDrawerH({{ $article->id }})" wire:loading.attr="disabled">Reject Manuscript</button>
-                            </li>
+                                <li>
+                                    <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start" wire:click="openDrawerH({{ $article->id }})" wire:loading.attr="disabled">Reject Manuscript</button>
+                                </li>
                             @endif
 
                             @if ($article->article_status->code == '008' && $aeditors->contains(auth()->user()->id))
                                 <li>
-                                    <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start" wire:click="openDrawerC({{ $article->id }})" wire:loading.attr="disabled">Return to Chief Editor</button>
+                                    <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start" wire:click="openDrawerC({{ $article->id }})" wire:loading.attr="disabled">Return to Managing Editor</button>
                                 </li>
                             @endif
 
@@ -152,11 +152,18 @@
 
 
 
-                            @if(($article->article_status->code == '010' || $article->article_status->code == '013') && $aeditors->contains(auth()->user()->id))
-                            <li>
-                                <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start" wire:click="openDrawerE({{ $article->id }})" wire:loading.attr="disabled">Review Status</button>
-                            </li>
+                            @if($article->article_status->code == '009' && ($aeditors->contains(auth()->user()->id) || $caeditors->contains(auth()->user()->id)))
+                                <li>
+                                    <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start" wire:click="openDrawerE({{ $article->id }})" wire:loading.attr="disabled">Return to Author</button>
+                                </li>
                             @endif
+
+                            @if($article->article_status->code == '010' && $aeditors->contains(auth()->user()->id))
+                                <li class="ml-42">
+                                    <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start" wire:click="openDrawerI({{ $article->id }})" wire:loading.attr="disabled">Return to Managing Editor</button>
+                                </li>
+                            @endif
+                            
 
 
                             @if(($article->article_status->code == '018') && $aeditors->contains(auth()->user()->id))
@@ -230,28 +237,25 @@
             </p>
 
 
-            <div class="mt-2 mb-1 text-sm text-gray-500 font-bold">Editor Decisions</div>
+            @php
+                $to_author = \App\Models\EditorChecklist::whereHas('editorialProcess', function ($query){
+                    $query->where('code', '001');
+                })->get();
+            @endphp
+
+            @foreach ($to_author as $key => $checki)
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck({{ $checki->id }})">
+                    <x-input type="checkbox" value="rounded" class="" wire:model.live="check.{{ $checki->id }}" />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        {{ $checki->description }}
+                    </span>
+                </label>
+            @endforeach
+
+
+            
             <div class="mt-2 mb-6 flex flex-col justify-between gap-2">
-
-                <div class="flex items-center ps-2 border border-gray-200 rounded p-2 ">
-                    <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('meet_guidelines')">
-                        <span class="ms-3 text-sm font-medium text-gray-900 w-full">Manuscript Meets Guidelines</span>
-                        <div>
-                            <input type="checkbox" value="" class="sr-only peer" wire:model="meet_guidelines">
-                            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 "></div>
-                        </div>
-                    </label>
-                </div>
-
-                <div class="flex items-center ps-2 border border-gray-200 rounded  p-2 ">
-                    <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('plagiarism_check')">
-                        <span class="ms-3 text-sm font-medium text-gray-900 w-full">Plagiarism Check</span>
-                        <div>
-                            <input type="checkbox" value="" class="sr-only peer" wire:model="plagiarism_check">
-                            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 "></div>
-                        </div>
-                    </label>
-                </div>
+                
 
                 @if($compliance == '003')
 
@@ -312,47 +316,77 @@
                 Title : {{ $record?->title }}
             </p>
 
-            <p class="mb-6 mt-2 text-sm text-gray-500">
-                Search Associate Editor from Editorial Team of this journal.
+            <p class="mb-2 mt-2 text-sm text-gray-500">
+                Manuscript adheres to scientific quality (for further peer review processes).
             </p>
 
+
+
+            @php
+                $to_associate = \App\Models\EditorChecklist::whereHas('editorialProcess', function ($query){
+                    $query->where('code', '002');
+                })->get();
+            @endphp
+
+            @foreach ($to_associate as $key => $checki)
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck({{ $checki->id }})">
+                    <x-input type="checkbox" value="rounded" class="" wire:model="check.{{ $checki->id }}" />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        {{ $checki->description }}
+                    </span>
+                </label>
+            @endforeach
+            
+
+ 
+            
+
             @if($record)
-                @php
-                    $editor = $record->article_journal_users()->whereHas('roles', function ($query) {
-                        $query->where('name', 'Chief Editor');
-                    })->first();
-                @endphp
+                @if (empty(array_diff($to_associate->pluck('id')->toArray(), $record->editorChecklists->pluck('id')->toArray())))
                 
-                @if(!empty($editor))
-                <p class="mt-2 text-xs text-gray-500">
-                Currently Assigned Chief Editor is
-                </p>
-                <div class="mb-2 font-bold">
-                    {{ $editor->user->first_name }}
-                    {{ $editor->user->middle_name }}
-                    {{ $editor->user->last_name }}
-                </div>
-                @else
-                <div class="mb-2">
-                    No Associate Editor Assigned to this Article
-                </div>
+                    <p class="mb-6 mt-6 text-sm text-gray-500">
+                        Search Associate Editor from Editorial Team of this journal.
+                    </p>
+
+                    @if($record)
+                        @php
+                            $editor = $record->article_journal_users()->whereHas('roles', function ($query) {
+                                $query->where('name', 'Chief Editor');
+                            })->first();
+                        @endphp
+                        
+                        @if(!empty($editor))
+                        <p class="mt-2 text-xs text-gray-500">
+                        Currently Assigned Chief Editor is
+                        </p>
+                        <div class="mb-2 font-bold">
+                            {{ $editor->user->first_name }}
+                            {{ $editor->user->middle_name }}
+                            {{ $editor->user->last_name }}
+                        </div>
+                        @else
+                        <div class="mb-2">
+                            No Associate Editor Assigned to this Article
+                        </div>
+                        @endif
+                    @endif
+
+                    <x-input class="w-full" wire:model="username" wire:keyup="searchUser($event.target.value, 'Associate Editor')" placeholder="Search Associate Editor" />
+
+                    <div>
+                        @if(count($users) == 0 && $search_user != '')
+                            <p class="py-2 w-full text-center text-sm text-red-600 bg-gray-200 rounded">No Associate Editor Found</p>
+                        @else
+                            @foreach ($users as $user)
+                                <div class="py-2 flex border-b">
+                                    <div class="w-full">{{ $user->user->first_name }} {{ $user->user->middle_name }} {{ $user->user->last_name }}</div>
+                                    <x-button wire:click="assignEditor({{ $user->id }})">Assign</x-button>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
                 @endif
             @endif
-
-            <x-input class="w-full" wire:model="username" wire:keyup="searchUser($event.target.value, 'Associate Editor')" placeholder="Search Associate Editor" />
-
-            <div>
-                @if(count($users) == 0 && $search_user != '')
-                    <p class="py-2 w-full text-center text-sm text-red-600 bg-gray-200 rounded">No Associate Editor Found</p>
-                @else
-                    @foreach ($users as $user)
-                        <div class="py-2 flex border-b">
-                            <div class="w-full">{{ $user->user->first_name }} {{ $user->user->middle_name }} {{ $user->user->last_name }}</div>
-                            <x-button wire:click="assignEditor({{ $user->id }})">Assign</x-button>
-                        </div>
-                    @endforeach
-                @endif
-            </div>
 
         </div>
         
@@ -387,7 +421,49 @@
                 Title : {{ $record?->title }}
             </p>
 
-            <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-1">
+
+            {{-- <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('001', 'checklist2')">
+                <x-input type="checkbox" value="rounded" class="" wire:model="check.001" />
+                <span class="ms-3 text-sm font-medium text-gray-900 w-full">Coherence and Structure: manuscript presents a clear, logical, and well-structured argument throughout</span>
+            </label>
+
+            <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('002', 'checklist2')">
+                <x-input type="checkbox" value="rounded" class="" wire:model="check.002" />
+                <span class="ms-3 text-sm font-medium text-gray-900 w-full">Methodology and Findings: clear (well defined), appropriate, and robust methodology and findings are credible</span>
+            </label>
+
+            <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('003', 'checklist2')">
+                <x-input type="checkbox" value="rounded" class="" wire:model="check.003" />
+                <span class="ms-3 text-sm font-medium text-gray-900 w-full">Originality: manuscript’s topic is timely, significant, and pertinent to current research trends or practical issues within the field</span>
+            </label>
+
+            <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('004', 'checklist2')">
+                <x-input type="checkbox" value="rounded" class="" wire:model="check.004" />
+                <span class="ms-3 text-sm font-medium text-gray-900 w-full">Literature review: comprehensive and up-to-date</span>
+            </label>
+
+            <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('005', 'checklist2')">
+                <x-input type="checkbox" value="rounded" class="" wire:model="check.005" />
+                <span class="ms-3 text-sm font-medium text-gray-900 w-full">In case of revision: necessary corrections suggested by reviewers have been implemented.</span>
+            </label> --}}
+
+            @php
+                $to_reviewer = \App\Models\EditorChecklist::whereHas('editorialProcess', function ($query){
+                    $query->where('code', '002');
+                })->get();
+            @endphp
+
+            @foreach ($to_reviewer as $key => $checki)
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('001', 'checklist2')">
+                    <x-input type="checkbox" value="rounded" class="" wire:model="check.{{ $checki->id }}" />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        {{ $checki->description }}
+                    </span>
+                </label>
+            @endforeach
+
+
+            {{-- <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-1">
                 <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('scope')">
                     <span class="ms-3 text-sm font-medium text-gray-900 w-full">Paper is with Scope</span>
                     <div>
@@ -437,87 +513,93 @@
                         <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </div>
                 </label>
-            </div>
+            </div> --}}
             
 
-            @if($scope == true && $prior_publication == true && $methodology == true && $noverity == true && $tech_complete == true)
-            <p class="mb-2 mt-2 text-sm text-gray-500 ">
-                Search Reviwer from Journal Reviewers of this journal.
-            </p>
-
-            <x-input class="w-full" wire:model="username" wire:keyup="searchUser($event.target.value, 'Reviewer')" placeholder="Search Reviewers" />
-
-            <div>
-                @if(count($users) == 0 && $search_user != '')
-                    <p class="py-2 w-full text-center text-sm text-red-600 bg-gray-200 rounded">No Reviewer Found</p>
-                @else
-                    @foreach ($users as $user)
-                        <div class="py-2 flex border-b hover:bg-gray-100 cursor-pointer" wire:click="selectUser({{ $user->id }})">
-                            <div class="w-full px-2">{{ $user->user->first_name }} {{ $user->user->middle_name }} {{ $user->user->last_name }}</div>
-                        </div>
-                    @endforeach
-                @endif
-            </div>
-
-            @if(count($users_x) > 0)
-            <div class="mt-4">
-                @foreach ($users_x as $key => $user_s)
-                    <div class="flex gap-2 border-b pb-2">
-                        <div class="w-full">
-                            <x-label for="end_date" value="Reviewer" class="mb-1 block font-medium text-xs text-gray-700" />
-                            {{ $user_s->user->first_name }} {{ $user_s->user->middle_name }} {{ $user_s->user->last_name }}
-                        </div>
-                        <div class="">
-                            <x-label for="end_dates" value="Review End Date" class="mb-1 block font-medium text-xs text-gray-700" />
-                            <x-input type="date" class="w-full" wire:model="end_dates.{{ $key }}" />
-                            <x-input-error for="end_dates" />
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-            @endif
-
-
-            <div class="text-right">
-                <x-button class="mt-4 mb-4 bg-green-500 hover:bg-green-700" wire:click="sendToReviewer()" wire:loading.attr="disabled">Send to Reviewer(s)</x-button>
-            </div>
-            @endif
-
-            <hr>
+            {{-- @if($scope == true && $prior_publication == true && $methodology == true && $noverity == true && $tech_complete == true) --}}
 
             @if($record)
-                @php
-                    $reviewers = $record->article_journal_users()->whereHas('roles', function ($query) {
-                        $query->where('name', 'Reviewer');
-                    })->get();
-                @endphp
-                
-                @if(!empty($reviewers))
-                    <p class="mt-2 text-xs text-gray-500 ">Currently Assigned Reviewers</p>
-                    @foreach($reviewers as $key => $reviewer)
-                        <div class="mb-2 font-bold flex gap-2 w-full">
-                            <div>
-                                {{ ++$key }}
-                            </div>
-                            <div class="w-full">
-                                {{ $reviewer->user->first_name }}
-                                {{ $reviewer->user->middle_name }}
-                                {{ $reviewer->user->last_name }}
+                @if (empty(array_diff($to_associate->pluck('id')->toArray(), $record->editorChecklists->pluck('id')->toArray())))
+                    <p class="mb-2 mt-2 text-sm text-gray-500 ">
+                        Search Reviwer from Journal Reviewers of this journal.
+                    </p>
 
-                                @php
-                                    $rstatus = $reviewer->article_journal_users()->where('article_id', $record->id)->first()->pivot->review_status;
-                                @endphp
-                            </div>
-                            <div class="text-right {{ $rstatus == 'completed' ? 'text-green-700':''; }}">
-                                {{ $rstatus }}
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <div class="mb-2 mt-2 p-2 text-center bg-gray-200 rounded shadow-sm">
-                        No Reviewer any Reviewer was Requested to Review this Manuscript
+                    <x-input class="w-full" wire:model="username" wire:keyup="searchUser($event.target.value, 'Reviewer')" placeholder="Search Reviewers" />
+
+                    <div>
+                        @if(count($users) == 0 && $search_user != '')
+                            <p class="py-2 w-full text-center text-sm text-red-600 bg-gray-200 rounded">No Reviewer Found</p>
+                        @else
+                            @foreach ($users as $user)
+                                <div class="py-2 flex border-b hover:bg-gray-100 cursor-pointer" wire:click="selectUser({{ $user->id }})">
+                                    <div class="w-full px-2">{{ $user->user->first_name }} {{ $user->user->middle_name }} {{ $user->user->last_name }}</div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
-                @endif
+
+                    @if(count($users_x) > 0)
+                        <div class="mt-4">
+                            @foreach ($users_x as $key => $user_s)
+                                <div class="flex gap-2 border-b pb-2">
+                                    <div class="w-full">
+                                        <x-label for="end_date" value="Reviewer" class="mb-1 block font-medium text-xs text-gray-700" />
+                                        {{ $user_s->user->first_name }} {{ $user_s->user->middle_name }} {{ $user_s->user->last_name }}
+                                    </div>
+                                    <div class="">
+                                        <x-label for="end_dates" value="Review End Date" class="mb-1 block font-medium text-xs text-gray-700" />
+                                        <x-input type="date" class="w-full" wire:model="end_dates.{{ $key }}" />
+                                        <x-input-error for="end_dates" />
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+
+                        <div class="text-right">
+                            <x-button class="mt-4 mb-4 bg-green-500 hover:bg-green-700" wire:click="sendToReviewer()" wire:loading.attr="disabled">Send to Reviewer(s)</x-button>
+                        </div>
+                    @endif
+
+                    <hr>
+
+                    @if($record)
+                        @php
+                            $reviewers = $record->article_journal_users()->whereHas('roles', function ($query) {
+                                $query->where('name', 'Reviewer');
+                            })->get();
+                        @endphp
+                        
+                        @if(!empty($reviewers))
+                            <p class="mt-2 text-xs text-gray-500 ">Currently Assigned Reviewers</p>
+                            @foreach($reviewers as $key => $reviewer)
+                                <div class="mb-2 font-bold flex gap-2 w-full">
+                                    <div>
+                                        {{ ++$key }}
+                                    </div>
+                                    <div class="w-full">
+                                        {{ $reviewer->user->first_name }}
+                                        {{ $reviewer->user->middle_name }}
+                                        {{ $reviewer->user->last_name }}
+
+                                        {{-- {{ $reviewer->id }} --}}
+
+                                        @php
+                                            $rstatus = $reviewer->article_journal_users()->where('article_id', $record->id)->first()->pivot->review_status;
+                                        @endphp
+                                    </div>
+                                    <div class="text-right {{ $rstatus == 'completed' ? 'text-green-700':''; }}">
+                                        {{ $rstatus }}
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="mb-2 mt-2 p-2 text-center bg-gray-200 rounded shadow-sm">
+                                No Reviewer any Reviewer was Requested to Review this Manuscript
+                            </div>
+                        @endif
+                    @endif
             @endif
 
         </div>
@@ -653,7 +735,7 @@
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
-                Review Statuses
+                Return Manuscript to Author
             </h5>
     
             <button wire:click="closeDrawerE" 
@@ -723,9 +805,24 @@
             <div class="mt-8">
                 <div class="mt-4">
                     <x-label for="review_status" value="General Review Status" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-select id="review_status" class="w-full" :options="['018'=>'Accepted for Production', '019'=>'Accepted with minor Revisions', '020'=>'Accepted with major Revisions', '015'=>'Not Acceptable']" wire:model.live="review_status" />
+                    <x-select id="review_status" class="w-full" :options="['018'=>'Accepted for Production', '019'=>'Accepted with minor Revisions', '020'=>'Accepted with major Revisions', '015'=>'Not Acceptable']" wire:model.live="review_status" wire:change="getCheckList($event.target.value)" />
                     <x-input-error for="review_status" />
                 </div>
+
+                @php
+                    $to_author = \App\Models\EditorChecklist::whereHas('editorialProcess', function ($query){
+                        $query->where('code', $this->eprocess);
+                    })->get();
+                @endphp
+
+                @foreach ($to_author as $key => $checki)
+                    <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck({{ $checki->id }})">
+                        <x-input type="checkbox" value="rounded" class="" wire:model.live="check.{{ $checki->id }}" />
+                        <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                            {{ $checki->description }}
+                        </span>
+                    </label>
+                @endforeach
 
                 <div class="{{ $review_status == "018" ? 'hidden' : 'block'}}">
                     <div class="mt-4" wire:ignore >
@@ -738,12 +835,16 @@
 
             <div class="text-right">
                 @if ($review_status == "018")
-                    <x-button class="mt-4 mb-4" wire:click="acceptedForProduction()" wire:loading.attr="disabled" >
-                        Submit for Production
-                    </x-button>
+                    @if($record)
+                        @if (empty(array_diff($to_associate->pluck('id')->toArray(), $record->editorChecklists->pluck('id')->toArray())))
+                            <x-button class="mt-4 mb-4" wire:click="acceptedForProduction()" wire:loading.attr="disabled" >
+                                Submit for Production
+                            </x-button>
+                        @endif
+                    @endif
                 @else
                     <x-button class="mt-4 mb-4" wire:click="generalReviewStatus()" wire:loading.attr="disabled" >
-                        Send Review Comments
+                        Return Manuscript
                     </x-button>
                 @endif
                 
@@ -753,6 +854,95 @@
     </div>
     <!-- Backdrop -->
     <div wire:click="closeDrawerE" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenE ? 'block' : 'hidden' }}"></div>
+
+
+
+
+
+    <div>
+        <div 
+            class="fixed top-0 right-0 z-50 h-screen p-4 overflow-y-auto transition-transform bg-white w-5/12  {{ $isOpenI ? 'translate-x-0' : 'translate-x-full' }}" 
+            style="transition: transform 0.3s ease-in-out;"
+        >
+            <h5 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 ">
+                <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                Return Manuscript to Managing Editor
+            </h5>
+    
+            <button wire:click="closeDrawerI" 
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center  ">
+                <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+                <span class="sr-only">Close menu</span>
+            </button>
+
+            <hr>
+    
+            <p class="mb-6 mt-2 font-bold">
+                Title : {{ $record?->title }}
+            </p>
+            
+
+            <div class="mt-8">
+                <div class="mt-4">
+                    <x-label for="review_status" value="General Review Status" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-select id="review_status" class="w-full" :options="['018'=>'Accepted for Production', '019'=>'Accepted with minor Revisions', '020'=>'Accepted with major Revisions', '015'=>'Not Acceptable']" wire:model.live="review_status" wire:change="getCheckList($event.target.value)" />
+                    <x-input-error for="review_status" />
+                </div>
+
+
+                @php
+                    $to_associate = \App\Models\EditorChecklist::whereHas('editorialProcess', function ($query){
+                        $query->where('code', $this->eprocess);
+                    })->get();
+                @endphp
+
+                @foreach ($to_associate as $key => $checki)
+                    <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck({{ $checki->id }})">
+                        <x-input type="checkbox" value="rounded" class="" wire:model.live="check.{{ $checki->id }}" />
+                        <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                            {{ $checki->description }}
+                        </span>
+                    </label>
+                @endforeach
+
+                <div class="{{ $review_status == "018" ? 'hidden' : 'block'}}">
+                    <div class="mt-4" wire:ignore >
+                        <x-label for="editor_comments" value="Editor Comments" class="mb-2 block font-medium text-sm text-gray-700" />
+                        <x-textarea type="text" id="editor_comments" class="w-full" wire:model="editor_comments" placeholder="Enter Editor Comments" rows="7" />
+                        <x-input-error for="editor_comments" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="text-right">
+                @if ($review_status == "018")
+                    @if($record)
+                        @if (empty(array_diff($to_associate->pluck('id')->toArray(), $record->editorChecklists->pluck('id')->toArray())))
+                            <x-button class="mt-4 mb-4" wire:click="acceptedForProduction()" wire:loading.attr="disabled" >
+                                Submit for Production
+                            </x-button>
+                        @endif
+                    @endif
+                @else
+                    <x-button class="mt-4 mb-4" wire:click="returnManuscript('managing_editor')" wire:loading.attr="disabled" >
+                        Return Manuscript
+                    </x-button>
+                @endif
+                
+            </div>
+        </div>
+        
+    </div>
+    <!-- Backdrop -->
+    <div wire:click="closeDrawerI" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenI ? 'block' : 'hidden' }}"></div>
+
+
+
 
 
     <div>
@@ -811,7 +1001,7 @@
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
-                Reject Manuscript
+                Send Back Manuscript to Author
             </h5>
     
             <button wire:click="closeDrawerH" 
@@ -828,6 +1018,23 @@
                 Title : {{ $record?->title }}
             </p>
 
+
+            @php
+                $checklist = \App\Models\EditorChecklist::whereHas('editorialProcess', function ($query){
+                    $query->where('code', '003');
+                })->get();
+            @endphp
+
+            @foreach ($checklist as $key => $check)
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('001', 'checklist2')">
+                    <x-input type="checkbox" value="rounded" class="" wire:model="check.001" />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        {{ $check->description }}
+                    </span>
+                </label>
+            @endforeach
+
+            
            
             <div class="mt-4" wire:ignore >
                 <x-label for="editor_comments" value="Editor Comments" class="mb-2 block font-medium text-sm text-gray-700" /><span></span>

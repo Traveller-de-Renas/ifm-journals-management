@@ -10,6 +10,7 @@ use Livewire\Component;
 use App\Mail\ReviewStatus;
 use App\Mail\ReviewRequest;
 use App\Models\JournalUser;
+use App\Mail\ArticleReturns;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Livewire\WithPagination;
@@ -20,6 +21,7 @@ use App\Models\ReviewSection;
 use Livewire\WithFileUploads;
 use App\Models\ArticleComment;
 use App\Mail\ArticleAssignment;
+use App\Models\EditorChecklist;
 use Illuminate\Support\Facades\Mail;
 
 class Articles extends Component
@@ -35,6 +37,7 @@ class Articles extends Component
     public $deleteModal = false;
     public $description;
     public $journal;
+    public $checklist;
 
     public function mount(Request $request)
     {
@@ -43,6 +46,15 @@ class Articles extends Component
 
     public function render()
     {
+        $this->checklist = EditorChecklist::all();
+
+
+        if($this->record){
+            foreach($this->record->editorChecklists as $key => $value){
+                $this->check[$value->id] = true;
+            }
+        }
+
         $journal  = Journal::where('uuid', session('journal'))->first();
         $this->journal = $journal;
 
@@ -61,7 +73,7 @@ class Articles extends Component
 
 
         if($this->status == 'onprogress'){
-            $status = ArticleStatus::whereIn('code', ['002','006','011'])->get()->pluck('id')->toArray();
+            $status = ArticleStatus::whereIn('code', ['002','006','009','011'])->get()->pluck('id')->toArray();
 
             $articles->when($this->query, function ($query, $search) {
                 return $query->where(function($query){
@@ -387,6 +399,51 @@ class Articles extends Component
 
 
 
+    public $isOpenI = false;
+
+    public function openDrawerI(Article $article)
+    {
+        $this->dispatch('contentChanged');
+        $this->record  = $article;
+        $this->isOpenI = true;
+    }
+
+    public function closeDrawerI()
+    {
+        $this->isOpenI = false;
+    }
+
+
+
+    public $eprocess = null;
+    public function getCheckList()
+    {
+        // dd($this->review_status); 
+
+        if($this->review_status == '018'){
+            $this->eprocess = '009'; //Accepted
+
+        }else if($this->review_status == '019'){
+            $this->eprocess = '007'; //Minor
+
+        }else if($this->review_status == '020'){
+            $this->eprocess = '005'; //Major
+
+        }else if($this->review_status == '015'){
+            $this->eprocess = '004'; //Rejected
+        }
+
+
+        $status = \App\Models\EditorialProcess::whereIn('code', ['004','005', '007', '009'])->get()->pluck('id')->toArray();
+
+        $remove = EditorChecklist::whereIn('editorial_process_id', $status)->get()->pluck('id')->toArray();
+
+        $this->record->editorChecklists()->detach($remove);
+
+    }
+
+
+
     public function recommendations()
     {
         ArticleComment::create(
@@ -435,13 +492,67 @@ class Articles extends Component
     public $compliance = '004';
     public $plagiarism_check;
     public $meet_guidelines;
+    public $check = [];
 
-    public function selectCheck($key)
+    public $assign_assoc = false;
+    public $send_to_reviewers = false;
+
+    public $checklist1 = [
+        '001', '002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012', '013', '014', '015'
+    ];
+
+    public $checklist2 = [
+        '001', '002', '003', '004', '005'
+    ];
+
+    public function selectCheck($check)
     {
-        $this->compliance = '004';
-        if($this->meet_guidelines == true && $this->plagiarism_check == true){
-            $this->compliance = '003';
+        $value = 0;
+        if($this->check[$check]){
+            $value = 1;
         }
+
+        $this->record->editorChecklists()->sync([$check => [
+            'value'   => $value,
+            'user_id' => auth()->user()->id
+        ]], false);
+
+
+        // $this->compliance = '004';
+        // if($this->meet_guidelines == true && $this->plagiarism_check == true){
+        //     $this->compliance = '003';
+        // }
+
+        // dd($key->editorialProcess);
+        
+
+        // foreach($this->check as $k => $v){
+        //     if(!$v){
+        //         unset($this->check[$k]);
+        //     }
+        // }
+
+        // $unchecked = 0;
+        // foreach($this->{$category} as $ck => $cv){
+        //     if(!array_key_exists($cv, $this->check)){
+        //         $unchecked++;
+        //     }
+        // }
+
+
+        // if($category == 'checklist1'){
+
+        // }
+        
+
+        // $this->assign_assoc = false;
+        // $this->send_to_reviewers = false;
+        // $this->compliance = '004';
+        // if($unchecked == 0){
+        //     $this->compliance = '003';
+        //     $this->assign_assoc = true;
+        //     $this->send_to_reviewers = true;
+        // }
 
         $this->dispatch('contentChanged');
     }
@@ -449,8 +560,6 @@ class Articles extends Component
     public function guidelineCompliance()
     {
         $status = $this->articleStatus($this->compliance);
-
-        
 
         if($this->compliance == '004'){
 
@@ -473,16 +582,36 @@ class Articles extends Component
 
 
             //updating notification
-            $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id)->first()->update([
-                'status' => 0
-            ]);
+            $active_note = $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id)->first();
+
+            // dd(!is_null($active_note));
+
+            if(!is_null($active_note)){
+                $active_note->update([
+                    'status' => 0
+                ]);
+            }
+
 
             $journal_user = $this->journal->journal_us()->where('user_id', $this->record->user_id)->first();
-            Notification::create([
-                'article_id'      => $this->record->id,
-                'journal_user_id' => $journal_user->id,
-                'status'          => 1
-            ]);
+            $notify = new Notification;
+            $notify->article_id = $this->record->id;
+            $notify->journal_user_id = $journal_user->id;
+            $notify->status = 1;
+            $notify->save();
+            
+            // ::create([
+            //     'article_id'      => $this->record->id,
+            //     'journal_user_id' => $journal_user->id,
+            //     'status'          => 1
+            // ]);
+
+            
+
+            if(ReviewMessage::where('category', 'Article Return')->count() > 0){
+                Mail::to($this->record->author->email)
+                    ->send(new ArticleReturns($this->record, $this->description));
+            }
             
         }else{
             //updating notification
@@ -816,6 +945,60 @@ class Articles extends Component
 
 
 
+    
+    public function returnManuscript($to = null)
+    {
+        $this->validate([
+            'review_status' => 'required|in:018,019,020,015'
+        ]);
+
+        if($to == 'managing_editor'){
+            $status = $this->articleStatus('009');
+        }
+
+        $this->record->update([
+            'article_status_id' => $status->id,
+            'deadline'          => Carbon::now()->addDays($status->max_days)
+        ]);
+
+
+        ArticleComment::create(
+            [
+                'article_id'  => $this->record->id,
+                'user_id'     => auth()->user()->id,
+                'send_to'     => 'Chief Editor',
+                'description' => $this->description
+            ]
+        );
+
+
+        //updating notification
+        $note = $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id);
+
+        if($note->exists()){
+            $note->first()->update([
+                'status' => 0
+            ]);
+        }
+        
+        $journal_user = $this->journal->journal_us()->whereHas('roles', function ($query) {
+            $query->where('name', 'Chief Editor');
+        })->first();
+        Notification::updateOrCreate([
+            'article_id'      => $this->record->id,
+            'journal_user_id' => $journal_user->id
+        ],[
+            'article_id'      => $this->record->id,
+            'journal_user_id' => $journal_user->id,
+            'status'          => 1
+        ]);
+
+        session()->flash('response', [
+            'status'  => 'success',
+            'message' => 'This manuscript is successfully returned to Managing Editor'
+        ]);
+    }
+
 
     public $accept_for_production = false;
 
@@ -945,4 +1128,10 @@ class Articles extends Component
 
         $this->closeDrawerH();
     }
+
+
+
+
+
+
 }

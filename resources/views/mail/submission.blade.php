@@ -8,7 +8,7 @@
         str_replace('[Manuscript ID]', $record->paper_id,
         str_replace('[Title of the Paper]', $record->title, 
         str_replace('[AuthorsName]', $author, 
-        str_replace('[Journal UUID]'), $record->journal->uuid,
-        str_replace('[Journal Name]', $record->journal->title, $review_message->description)))))
+        str_replace('[Journal UUID]', $record->journal->uuid,
+        str_replace('[Journal Name]', $record->journal->title, $review_message->description))))))
     !!}
 <br>

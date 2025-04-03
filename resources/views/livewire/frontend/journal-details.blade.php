@@ -341,7 +341,7 @@
                     </div>
                     @endif
 
-                    <iframe src="{{ route('journals.author_guideline', $record->author_guide) }}" width="100%" height="700px"></iframe>
+                    <iframe src="{{ asset('storage/journals/'.$record->author_guide) }}" width="100%" height="700px"></iframe>
                 </div>
 
                 <div class="w-full mb-4 @if($tab != 'editorial_board') hidden @endif">

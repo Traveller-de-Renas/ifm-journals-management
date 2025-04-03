@@ -15,15 +15,17 @@ class ArticleReturns extends Mailable
     use Queueable, SerializesModels;
 
     public $record;
+    public $comments;
     public $review_message;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($record)
+    public function __construct($record, $comments)
     {
-        $this->record = $record;
-        $this->review_message = ReviewMessage::where('category', 'Article Returns')->first();
+        $this->record   = $record;
+        $this->comments = $comments;
+        $this->review_message = ReviewMessage::where('category', 'Article Return')->first();
     }
 
     /**
@@ -32,7 +34,7 @@ class ArticleReturns extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Article Returns',
+            subject: 'Manuscript Return to Author before peer review',
         );
     }
 
@@ -42,7 +44,7 @@ class ArticleReturns extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.article_returns',
+            view: 'mail.article_return',
         );
     }
 
