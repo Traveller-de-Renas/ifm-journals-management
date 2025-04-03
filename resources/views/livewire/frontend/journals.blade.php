@@ -4,7 +4,7 @@
 
             <p class="text-4xl font-bold mb-4">{{ __('JOURNALS') }} </p>
 
-            <p class="text-2xl font-bold">Publish in a journal</p>
+            <p class="text-2xl font-bold">Publish Your Research</p>
 
             <div class="w-full md:grid md:grid-cols-3 gap-4" >
                 <p class="col-span-2 text-justify">
@@ -14,7 +14,7 @@
                     
                     Use our search to find your chosen journal and find out what is required to submit your paper in the author guidelines. You will then submit your paper online.&nbsp;You can only submit your paper to one journal at a time. Follow the guide to publishing your paper and find resources to support you. Our journal publishing guide/infographic will help you understand each step, from submission to publication. --}}
 
-                    Publish Your Research<br>
+                    <br>
                     <br>
 Find the right journal for your research and explore our active calls for papers. Once you’ve made your choice, follow our step-by-step guide to submitting your paper.<br>
 Use our search tool to identify your preferred journal and review the submission requirements outlined in the author guidelines. Papers can only be submitted to one journal at a time. Submissions are made online, ensuring an efficient process.
