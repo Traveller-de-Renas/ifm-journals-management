@@ -26,8 +26,8 @@
     @endif
 
     <div class="w-full mt-4">
-        <embed src="{{ route('journals.editor_guideline', $journal->editor_guide) }}" width="100%" height="700px">
-            <embed src="{{ asset('storage/journals/'.$journal->editor_guide) }}" type="application/pdf" width="100%" height="600px">
-
+        {{-- <embed src="{{ route('journals.editor_guideline', $journal->editor_guide) }}" width="100%" height="700px">
+            <embed src="{{ asset('storage/journals/'.$journal->editor_guide) }}" type="application/pdf" width="100%" height="600px"> --}}
+        <iframe src="{{ asset('storage/journals/'.$journal->editor_guide) }}" width="100%" height="700px"></iframe>
     </div>
 </div>
