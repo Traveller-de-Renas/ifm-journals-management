@@ -99,7 +99,7 @@ To support you through every stage, our Journal Publishing Guide and infographic
                                 </a>
 
                                 <div class="text-sm text-slate-800 mb-6">
-                                    <p class="text-justify" style="text-align: justify">{!! $row->description !!}</p>
+                                    <p class="text-justify" style="text-align: justify">{{ $row->description }}</p>
                                 </div>
             
                                 <a href="{{ route('journal.detail', $row->uuid) }}">
