@@ -517,42 +517,14 @@ class Articles extends Component
             'user_id' => auth()->user()->id
         ]], false);
 
+        $to_author = \App\Models\EditorChecklist::whereHas('editorialProcess', function ($query){
+            $query->where('code', '001');
+        })->get();
 
-        // $this->compliance = '004';
-        // if($this->meet_guidelines == true && $this->plagiarism_check == true){
-        //     $this->compliance = '003';
-        // }
-
-        // dd($key->editorialProcess);
-        
-
-        // foreach($this->check as $k => $v){
-        //     if(!$v){
-        //         unset($this->check[$k]);
-        //     }
-        // }
-
-        // $unchecked = 0;
-        // foreach($this->{$category} as $ck => $cv){
-        //     if(!array_key_exists($cv, $this->check)){
-        //         $unchecked++;
-        //     }
-        // }
-
-
-        // if($category == 'checklist1'){
-
-        // }
-        
-
-        // $this->assign_assoc = false;
-        // $this->send_to_reviewers = false;
-        // $this->compliance = '004';
-        // if($unchecked == 0){
-        //     $this->compliance = '003';
-        //     $this->assign_assoc = true;
-        //     $this->send_to_reviewers = true;
-        // }
+        $this->compliance = '004';
+        if(empty(array_diff($to_author->pluck('id')->toArray(), $this->record->editorChecklists->pluck('id')->toArray()))){
+            $this->compliance = '003';
+        }
 
         $this->dispatch('contentChanged');
     }
