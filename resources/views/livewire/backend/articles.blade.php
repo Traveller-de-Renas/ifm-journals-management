@@ -283,11 +283,15 @@
             </div>
             
             @if($record)
-                <x-button class="float-right mt-4" wire:click="guidelineCompliance()" wire:loading.attr="disabled" >
-                        
-                    {{ empty(array_diff($to_author->pluck('id')->toArray(), $record->editorChecklists->pluck('id')->toArray())) ? 'Submit to Managing Editor' : 'Return back to Author' }}
-                    
-                </x-button>
+                @if(empty(array_diff($to_author->pluck('id')->toArray(), $record->editorChecklists->pluck('id')->toArray())))
+                    <x-button class="float-right mt-4" wire:click="guidelineCompliance('003')" wire:loading.attr="disabled" >
+                        {{ 'Submit to Managing Editor' }}
+                    </x-button>
+                @else
+                    <x-button class="float-right mt-4" wire:click="guidelineCompliance('004')" wire:loading.attr="disabled" >
+                        {{ 'Return back to Author' }}
+                    </x-button>
+                @endif
             @endif
 
                 

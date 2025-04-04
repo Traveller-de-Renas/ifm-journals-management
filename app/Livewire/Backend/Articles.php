@@ -487,23 +487,7 @@ class Articles extends Component
     }
 
 
-
-
-    public $compliance = '004';
-    public $plagiarism_check;
-    public $meet_guidelines;
     public $check = [];
-
-    public $assign_assoc = false;
-    public $send_to_reviewers = false;
-
-    public $checklist1 = [
-        '001', '002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012', '013', '014', '015'
-    ];
-
-    public $checklist2 = [
-        '001', '002', '003', '004', '005'
-    ];
 
     public function selectCheck($check)
     {
@@ -517,23 +501,15 @@ class Articles extends Component
             'user_id' => auth()->user()->id
         ]], false);
 
-        $to_author = \App\Models\EditorChecklist::whereHas('editorialProcess', function ($query){
-            $query->where('code', '001');
-        })->get();
-
-        $this->compliance = '004';
-        if(empty(array_diff($to_author->pluck('id')->toArray(), $this->record->editorChecklists->pluck('id')->toArray()))){
-            $this->compliance = '003';
-        }
-
         $this->dispatch('contentChanged');
+
     }
 
-    public function guidelineCompliance()
+    public function guidelineCompliance($compliance)
     {
-        $status = $this->articleStatus($this->compliance);
+        $status = $this->articleStatus($compliance);
 
-        if($this->compliance == '004'){
+        if($compliance == '004'){
 
             $this->validate([
                 'description' => 'required|string'
@@ -556,8 +532,6 @@ class Articles extends Component
             //updating notification
             $active_note = $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id)->first();
 
-            // dd(!is_null($active_note));
-
             if(!is_null($active_note)){
                 $active_note->update([
                     'status' => 0
@@ -571,13 +545,6 @@ class Articles extends Component
             $notify->journal_user_id = $journal_user->id;
             $notify->status = 1;
             $notify->save();
-            
-            // ::create([
-            //     'article_id'      => $this->record->id,
-            //     'journal_user_id' => $journal_user->id,
-            //     'status'          => 1
-            // ]);
-
             
 
             if(ReviewMessage::where('category', 'Article Return')->count() > 0){
