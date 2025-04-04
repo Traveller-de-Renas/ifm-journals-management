@@ -2,7 +2,7 @@
 
     <div class="w-full grid grid-cols-3 gap-4" >
         <div class="">
-            <p class="font-bold text-xl">{{ __('EDITOR CHECKLISTS') }}</p>
+            <p class="font-bold text-xl">{{ __('EDITORIAL CHECKLISTS') }}</p>
         </div>
         <div class="">
 

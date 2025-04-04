@@ -380,7 +380,7 @@
                                     @elseif ($j_user->hasRole('Associate Editor'))
                                         <p class="text-xs text-blue-900">Associate Editor</p>
                                     @elseif ($j_user->hasRole('Advisory Board'))
-                                        <p class="text-xs text-blue-400">Advisory Board</p>
+                                        <p class="text-xs text-blue-400">Advisory Board Member</p>
                                     @endif
                                 </div>
                             

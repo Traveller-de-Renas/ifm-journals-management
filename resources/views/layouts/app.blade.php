@@ -105,11 +105,11 @@
                                 </li>
                                 @endif
 
-
+                                
                                 <li>
                                     <a href="{{ route('journals.editor_checklist') }}" class="flex items-center px-4 py-2 text-white hover:text-gray-950 hover:bg-gray-100 group">
                                         <svg class="flex-shrink-0 w-4 h-5 text-white transition duration-75 group-hover:text-gray-900 "  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <line x1="8" y1="6" x2="21" y2="6" />  <line x1="8" y1="12" x2="21" y2="12" />  <line x1="8" y1="18" x2="21" y2="18" />  <line x1="3" y1="6" x2="3.01" y2="6" />  <line x1="3" y1="12" x2="3.01" y2="12" />  <line x1="3" y1="18" x2="3.01" y2="18" /></svg>
-                                        <span class="ms-3">Editor Checklist</span>
+                                        <span class="ms-3">Editorial Checklist</span>
                                     </a>
                                 </li>
 
