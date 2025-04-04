@@ -501,7 +501,7 @@ class Articles extends Component
             'user_id' => auth()->user()->id
         ]], false);
 
-        $this->dispatch('contentChanged');
+        // $this->dispatch('contentChanged');
 
     }
 

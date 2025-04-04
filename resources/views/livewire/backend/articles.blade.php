@@ -270,7 +270,7 @@
                             Status : Return this Manuscript to Author
                         </div>
                         
-                        <div class="mt-4" wire:ignore>
+                        <div class="mt-4">
                             <x-label for="description" value="Editor Comments" class="mb-2 block font-medium text-sm text-gray-700" />
                             <x-textarea type="text" id="description" class="w-full" wire:model="description" rows="6" />
                         </div>
