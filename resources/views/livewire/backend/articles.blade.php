@@ -257,30 +257,40 @@
             <div class="mt-2 mb-6 flex flex-col justify-between gap-2">
                 
 
-                @if($compliance == '003')
+                @if($record)
+                    @if (empty(array_diff($to_author->pluck('id')->toArray(), $record->editorChecklists->pluck('id')->toArray())))
 
-                    <div class="bg-green-500 text-white p-2 px-4 text-xs rounded">
-                        Status : Passed Screening Stage
-                    </div>
+                        <div class="bg-green-500 text-white p-2 px-4 text-xs rounded">
+                            Status : Passed Screening Stage
+                        </div>
 
-                @else
+                    @else
 
-                    <div class="bg-red-500 text-white p-2 px-4 text-xs rounded">
-                        Status : Return this Manuscript to Author
-                    </div>
-                    
-                    <div class="mt-4" wire:ignore>
-                        <x-label for="description" value="Editor Comments" class="mb-2 block font-medium text-sm text-gray-700" />
-                        <x-textarea type="text" id="description" class="w-full" wire:model="description" rows="6" />
-                    </div>
-                    <div class="mt-2">
-                        <x-input-error for="description" />
-                    </div>
+                        <div class="bg-red-500 text-white p-2 px-4 text-xs rounded">
+                            Status : Return this Manuscript to Author
+                        </div>
+                        
+                        <div class="mt-4" wire:ignore>
+                            <x-label for="description" value="Editor Comments" class="mb-2 block font-medium text-sm text-gray-700" />
+                            <x-textarea type="text" id="description" class="w-full" wire:model="description" rows="6" />
+                        </div>
+                        <div class="mt-2">
+                            <x-input-error for="description" />
+                        </div>
 
+                    @endif
                 @endif
             </div>
+            
+            @if($record)
+                <x-button class="float-right mt-4" wire:click="guidelineCompliance()" wire:loading.attr="disabled" >
+                        
+                    {{ empty(array_diff($to_author->pluck('id')->toArray(), $record->editorChecklists->pluck('id')->toArray())) ? 'Submit to Managing Editor' : 'Return back to Author' }}
+                    
+                </x-button>
+            @endif
 
-            <x-button class="float-right mt-4" wire:click="guidelineCompliance()" wire:loading.attr="disabled" >{{ $compliance == '003' ? 'Submit to Chief Editor' : 'Return back to Author' }}</x-button>
+                
         </div>
         
     </div>
@@ -357,7 +367,7 @@
                         
                         @if(!empty($editor))
                         <p class="mt-2 text-xs text-gray-500">
-                        Currently Assigned Chief Editor is
+                        Currently Assigned Managing Editor is
                         </p>
                         <div class="mb-2 font-bold">
                             {{ $editor->user->first_name }}
@@ -618,7 +628,7 @@
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
-                Send Recommendations to Chief Editor
+                Send Recommendations to Managing Editor
             </h5>
     
             <button wire:click="closeDrawerC" 
@@ -646,7 +656,7 @@
             </div>
 
             <div class="text-right">
-                <x-button class="mt-4 mb-4" wire:click="recommendations()" wire:loading.attr="disabled" >Send to Chief Editor</x-button>
+                <x-button class="mt-4 mb-4" wire:click="recommendations()" wire:loading.attr="disabled" >Send to Managing Editor</x-button>
             </div>
             
 
