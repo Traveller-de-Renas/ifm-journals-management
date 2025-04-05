@@ -658,7 +658,6 @@ class Articles extends Component
             'deadline'          => Carbon::now()->addDays($status->max_days)
         ]);
 
-
         //updating notification
         $note = $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id);
 
@@ -931,6 +930,7 @@ class Articles extends Component
         $journal_user = $this->journal->journal_us()->whereHas('roles', function ($query) {
             $query->where('name', 'Chief Editor');
         })->first();
+        
         Notification::updateOrCreate([
             'article_id'      => $this->record->id,
             'journal_user_id' => $journal_user->id
@@ -1079,7 +1079,12 @@ class Articles extends Component
 
     public function removeEditor($data)
     {
-        dd($data);
+        if($this->record->article_journal_users()->detach($data)){
+            session()->flash('response', [
+                'status'  => 'info',
+                'message' => 'The Associate Editor is now Removed From this Manuscript'
+            ]);
+        }
     }
 
 

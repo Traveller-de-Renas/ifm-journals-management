@@ -54,6 +54,25 @@
                 <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $sn }}</td>
                 <td class="whitespace-normal px-6 py-3 break-words">
                     {{ $article->title }}
+                    @php
+                        $ass_editor = $article->article_journal_users()->whereHas('roles', function ($query) {
+                            $query->where('name', 'Associate Editor');
+                        })->first();
+
+                        $m_editors = $article->journal->journal_us()->whereHas('roles', function ($query) {
+                            $query->where('name', 'Chief Editor');
+                        })->pluck('user_id')->toArray();
+                    @endphp
+
+                    @if($ass_editor->exists() && in_array(auth()->user()->id, $m_editor))
+                        <p class="text-xs">
+                            {{ $ass_editor->user->first_name }}
+                            {{ $ass_editor->user->middle_name }}
+                            {{ $ass_editor->user->last_name }}
+
+                            ({{ $ass_editor->user->email }})
+                        </p>
+                    @endif
                 </td>
                 <td class="whitespace-nowrap px-6 py-4">
                     {{ $article->paper_id }}
@@ -377,11 +396,9 @@
                                 {{ $editor->user->last_name }}
 
                                 ({{ $editor->user->email }})
-
-                                {{ $editor }}
                             </div>
 
-                            <x-button wire:click="removeEditor({{ $editor->id }})">Remove</x-button>
+                            <x-button class="bg-red-500 hover:bg-red-700" wire:click="removeEditor({{ $editor->id }})">Remove Associate Editor</x-button>
                         @else
                             <div class="mb-2">
                                 No Associate Editor Assigned to this Article
