@@ -65,7 +65,8 @@
                     @endphp
 
                     @if(!empty($ass_editor) && in_array(auth()->user()->id, $m_editors))
-                        <p class="text-xs">
+                        <p class="text-xs text-blue-900 font-semibold">
+                            Assoiate Editor:
                             {{ $ass_editor->user->first_name }}
                             {{ $ass_editor->user->middle_name }}
                             {{ $ass_editor->user->last_name }}
