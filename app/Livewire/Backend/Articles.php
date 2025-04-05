@@ -457,11 +457,15 @@ class Articles extends Component
 
         $status = $this->articleStatus('009');
 
+        //Update Notifications
+        $notified = $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id);
 
-
-        $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id)->first()->update([
-            'status' => 0
-        ]);
+        if($notified->exists()){
+            $notified->first()->update([
+                'status' => 0
+            ]);
+        }
+        
 
         $journal_user = $this->journal->journal_us()->whereHas('roles', function ($query) {
             $query->where('name', 'Chief Editor');
@@ -554,9 +558,13 @@ class Articles extends Component
             
         }else{
             //updating notification
-            $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id)->first()->update([
-                'status' => 0
-            ]);
+            $notefied = $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id);
+
+            if($notefied->exists()){
+                $notefied->first()->update([
+                    'status' => 0
+                ]);
+            }
 
             $journal_user = $this->journal->journal_us()->whereHas('roles', function ($query) {
                 $query->where('name', 'Chief Editor');
