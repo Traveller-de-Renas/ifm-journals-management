@@ -61,12 +61,12 @@
 
                         $m_editors = $article->journal->journal_us()->whereHas('roles', function ($query) {
                             $query->where('name', 'Chief Editor');
-                        })->pluck('user_id');
+                        })->pluck('user_id')->toArray();
                     @endphp
 
-                    {{ $m_editors }}
+                    {{ print_r($m_editors) }}
 
-                    {{-- @if(!empty($ass_editor) && in_array(auth()->user()->id, $m_editor))
+                    @if(!empty($ass_editor))
                         <p class="text-xs">
                             {{ $ass_editor->user->first_name }}
                             {{ $ass_editor->user->middle_name }}
@@ -74,7 +74,7 @@
 
                             ({{ $ass_editor->user->email }})
                         </p>
-                    @endif --}}
+                    @endif
                 </td>
                 <td class="whitespace-nowrap px-6 py-4">
                     {{ $article->paper_id }}
