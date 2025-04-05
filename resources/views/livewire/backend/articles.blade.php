@@ -365,7 +365,7 @@
                     @if($record)
                         @php
                             $editor = $record->article_journal_users()->whereHas('roles', function ($query) {
-                                $query->where('name', 'Chief Editor');
+                                $query->where('name', 'Associate Editor');
                             })->first();
                         @endphp
                         
