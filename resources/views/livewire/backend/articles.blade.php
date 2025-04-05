@@ -370,13 +370,15 @@
                         @endphp
                         
                         @if(!empty($editor))
-                            <p class="mt-2 text-xs text-gray-500">Currently Assigned Managing Editor is <                      </p>
+                            <p class="mt-2 text-xs text-gray-500">Currently Assigned Associate Editor is </p>
                             <div class="mb-2 font-bold">
                                 {{ $editor->user->first_name }}
                                 {{ $editor->user->middle_name }}
                                 {{ $editor->user->last_name }}
 
                                 ({{ $editor->user->email }})
+
+                                {{ $editor }}
                             </div>
 
                             <x-button wire:click="removeEditor({{ $editor->id }})">Remove</x-button>
