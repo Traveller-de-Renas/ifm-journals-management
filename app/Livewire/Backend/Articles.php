@@ -1077,6 +1077,12 @@ class Articles extends Component
     }
 
 
+    public function removeEditor($data)
+    {
+        dd($data);
+    }
+
+
 
 
 

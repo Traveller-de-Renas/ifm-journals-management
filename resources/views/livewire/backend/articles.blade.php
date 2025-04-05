@@ -370,35 +370,39 @@
                         @endphp
                         
                         @if(!empty($editor))
-                        <p class="mt-2 text-xs text-gray-500">
-                        Currently Assigned Managing Editor is
-                        </p>
-                        <div class="mb-2 font-bold">
-                            {{ $editor->user->first_name }}
-                            {{ $editor->user->middle_name }}
-                            {{ $editor->user->last_name }}
-                        </div>
+                            <p class="mt-2 text-xs text-gray-500">Currently Assigned Managing Editor is <                      </p>
+                            <div class="mb-2 font-bold">
+                                {{ $editor->user->first_name }}
+                                {{ $editor->user->middle_name }}
+                                {{ $editor->user->last_name }}
+
+                                ({{ $editor->user->email }})
+                            </div>
+
+                            <x-button wire:click="removeEditor({{ $editor->id }})">Remove</x-button>
                         @else
-                        <div class="mb-2">
-                            No Associate Editor Assigned to this Article
-                        </div>
+                            <div class="mb-2">
+                                No Associate Editor Assigned to this Article
+                            </div>
+
+                            <x-input class="w-full" wire:model="username" wire:keyup="searchUser($event.target.value, 'Associate Editor')" placeholder="Search Associate Editor" />
+
+                            <div>
+                                @if(count($users) == 0 && $search_user != '')
+                                    <p class="py-2 w-full text-center text-sm text-red-600 bg-gray-200 rounded">No Associate Editor Found</p>
+                                @else
+                                    @foreach ($users as $user)
+                                        <div class="py-2 flex border-b">
+                                            <div class="w-full">{{ $user->user->first_name }} {{ $user->user->middle_name }} {{ $user->user->last_name }}</div>
+                                            <x-button wire:click="assignEditor({{ $user->id }})">Assign</x-button>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
                         @endif
                     @endif
 
-                    <x-input class="w-full" wire:model="username" wire:keyup="searchUser($event.target.value, 'Associate Editor')" placeholder="Search Associate Editor" />
-
-                    <div>
-                        @if(count($users) == 0 && $search_user != '')
-                            <p class="py-2 w-full text-center text-sm text-red-600 bg-gray-200 rounded">No Associate Editor Found</p>
-                        @else
-                            @foreach ($users as $user)
-                                <div class="py-2 flex border-b">
-                                    <div class="w-full">{{ $user->user->first_name }} {{ $user->user->middle_name }} {{ $user->user->last_name }}</div>
-                                    <x-button wire:click="assignEditor({{ $user->id }})">Assign</x-button>
-                                </div>
-                            @endforeach
-                        @endif
-                    </div>
+                    
                 @endif
             @endif
 
