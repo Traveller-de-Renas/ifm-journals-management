@@ -84,10 +84,25 @@
         <div class="w-full mb-8 grid grid-cols-12 gap-2">
             <div class="col-span-12">
 
+                @php
+                    $teditor = $record->journal?->journal_us()->whereHas('roles', function ($query) {
+                        $query->whereIn('name', ['Chief Editor', 'Supporting Editor']);
+                    })->get()->pluck('user_id')->toArray();
+
+                    if(in_array(auth()->user()->id, $teditor) || (auth()->user()->hasRole('Administrator'))){
+                        $files_collect = $record?->files;
+                    }else{
+                        $files_collect = $record?->files()->whereHas('file_category', function ($query) {
+                                $query->where('name', '!=', 'Title Page');
+                            })->get();
+                    }
+                @endphp
+
                 <div class="w-full mb-4">
                     <p class="text-lg font-bold mb-4">Manuscript Documents</p>
                     @if(!empty($record?->files))
-                        @foreach ($record?->files as $key => $file)
+                        @foreach ($files_collect as $key => $file)
+                    
                             <div class="grid grid-cols-12  bg-gray-200 rounded-lg ">
                                 <div class="col-span-3 items-center  p-2 px-4">
                                     {{ $file->file_category->name }}
@@ -100,6 +115,7 @@
                                 <div class="col-span-1 p-2 px-4">
                                 </div>
                             </div>
+
                         @endforeach
                     @endif
                 </div>
