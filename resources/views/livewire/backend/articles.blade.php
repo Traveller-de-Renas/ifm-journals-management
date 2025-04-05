@@ -64,7 +64,7 @@
                         })->pluck('user_id')->toArray();
                     @endphp
 
-                    {{ $ass_editor }}
+                    {{ $m_editors }}
 
                     {{-- @if(!empty($ass_editor) && in_array(auth()->user()->id, $m_editor))
                         <p class="text-xs">
