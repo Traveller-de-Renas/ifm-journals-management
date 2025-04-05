@@ -61,10 +61,10 @@
 
                         $m_editors = $article->journal->journal_us()->whereHas('roles', function ($query) {
                             $query->where('name', 'Chief Editor');
-                        })->pluck('user_id')->toArray();
+                        })->get();
                     @endphp
 
-                    {{-- {{ $m_editors }} --}}
+                    {{ $m_editors }}
 
                     {{-- @if(!empty($ass_editor) && in_array(auth()->user()->id, $m_editor))
                         <p class="text-xs">
