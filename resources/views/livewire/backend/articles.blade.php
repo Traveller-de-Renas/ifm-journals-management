@@ -61,7 +61,7 @@
 
                         $m_editors = $article->journal->journal_us()->whereHas('roles', function ($query) {
                             $query->where('name', 'Chief Editor');
-                        })->get();
+                        })->pluck('user_id');
                     @endphp
 
                     {{ $m_editors }}
