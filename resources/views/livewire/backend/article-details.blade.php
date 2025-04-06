@@ -1,5 +1,10 @@
 <div class="bg-white shadow-md p-4 rounded">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        @php
+            $teditor = $record->journal?->journal_us()->whereHas('roles', function ($query) {
+                $query->whereIn('name', ['Chief Editor', 'Supporting Editor']);
+            })->get()->pluck('user_id')->toArray();
+        @endphp
         
         <div class="w-full flex text-lg mt-8">
             <p class="underline mr-1 cursor-pointer">
@@ -26,17 +31,21 @@
         <p> ISSN : {{ $record?->journal->issn }} </p>
 
         <div class="mt-6 mb-6">
-            @foreach ($record->article_journal_users()->orderBy('number', 'ASC')->get() as $key => $article_user)
-            <span class="hover:text-blue-600 hover:underline cursor-pointer mr-2">
-
-                @if($article_user->user->salutation) {{ $article_user->user->salutation?->title }}. @endif
-            
-                {{ $article_user->user->last_name }}, {{ strtoupper(substr($article_user->user->first_name, 0, 1)) }}.
+            @if(in_array(auth()->user()->id, $teditor) || (auth()->user()->hasRole('Administrator')))
                 
-                @if($article_user->user->affiliation) ({{ $article_user->user->affiliation }}) @endif
+            
+            @foreach ($record->article_journal_users()->orderBy('number', 'ASC')->get() as $key => $article_user)
+                <span class="hover:text-blue-600 hover:underline cursor-pointer mr-2">
 
-            </span>
-            @endforeach 
+                    @if($article_user->user->salutation) {{ $article_user->user->salutation?->title }}. @endif
+                
+                    {{ $article_user->user->last_name }}, {{ strtoupper(substr($article_user->user->first_name, 0, 1)) }}.
+                    
+                    @if($article_user->user->affiliation) ({{ $article_user->user->affiliation }}) @endif
+
+                </span>
+                @endforeach
+            @endif
 
             <p class="text-sm text-gray-400">Aticle Submission Date : {{ \Carbon\Carbon::parse($record->submission_date)->format('d-m-Y') }} </p>
 
@@ -85,10 +94,6 @@
             <div class="col-span-12">
 
                 @php
-                    $teditor = $record->journal?->journal_us()->whereHas('roles', function ($query) {
-                        $query->whereIn('name', ['Chief Editor', 'Supporting Editor']);
-                    })->get()->pluck('user_id')->toArray();
-
                     if(in_array(auth()->user()->id, $teditor) || (auth()->user()->hasRole('Administrator'))){
                         $files_collect = $record?->files;
                     }else{
