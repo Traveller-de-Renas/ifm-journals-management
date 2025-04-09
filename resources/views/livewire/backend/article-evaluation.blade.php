@@ -192,6 +192,21 @@
             </label>
             <br>
             <br>
+
+            <div class="text-justify">
+                <b>Accepted:</b> The paper is approved for publication with no further revisions or only minor editorial changes. The manuscript has merit, the research procedures are appropriate, the findings are credible, and it is well-structured and well-presented. The author may be required to submit a final version that adheres to formatting guidelines.
+                <br><br>
+
+                <b>Minor revisions:</b> Requires the author to make relatively small adjustments to the paper, which don’t take much time. They might be related to author guideline requirements, e.g., a slight reduction in word count; formatting changes, such as the labelling of tables or figures; further evidence of an understanding of the research literature in the field; or a slight elaboration on the research findings.
+                <br><br>
+
+                <b>Major revisions:</b> Requires the author to make more significant improvements, the type which take weeks or even months, rather than days. Authors may be asked to address flaws in the methodology; collect more data; conduct a more thorough analysis; or even adjust the research question to ensure the paper contributes something truly original to the body of work.
+                <br><br>
+
+                <b>Rejected:</b> The paper does not meet the journal's standards and will not be considered for publication due to fundamental flaws in the research, a lack of originality or poor methodology.
+            </div>
+            <br>
+            <br>
         </div>
 
 
