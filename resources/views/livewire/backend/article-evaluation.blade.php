@@ -105,57 +105,101 @@
     @if($juser->pivot->review_status == 'accepted')
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
 
-        <div class="p-3 bg-[#175883] text-white ">
+        {{-- <div class="p-3 bg-[#175883] text-white ">
             {{ "Article Evaluation Form" }}
+        </div> --}}
+
+        @foreach ($sections as $key => $sub_sections)
+
+            <div class="p-3 bg-[#175883] text-white ">
+                {{ $sub_sections->title }}
+            </div>
+
+            @foreach ($sub_sections->reviewSections as $skey => $section)
+                
+                <table class="min-w-full text-left text-sm font-light">
+                    <thead class="border-b font-medium grey:border-neutral-500">
+                        <tr class="bg-neutral-200 font-bold">
+                            <th scope="col" class="whitespace-nowrap px-6 py-4 font-bold">
+                                {{ $section->title }}
+                            </th>
+                            @foreach ($section->reviewSectionOption as $key => $option)
+                                <th scope="col" class="whitespace-nowrap px-6 py-4 font-bold text-center">
+                                    {{ $option->title }}
+                                </th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        @foreach ($section->reviewSectionQuery as $key => $data)
+                            <tr class="">
+                                <td class="whitespace-nowrap px-6 py-4 font-medium">
+                                    <p class="w-full">{{ $data->title }}</p>
+                                </td>
+                                
+                                @foreach ($section->reviewSectionOption as $key => $option)
+                                    <td class="whitespace-nowrap px-6 py-4 font-medium text-center">
+                                        <input type="radio" name="option{{ $data->id }}" wire:model.live="reviewOption.{{ $data->id }}" value="{{ $option->id }}" wire:click="upOptions({{ $data->id }}, {{ $option->id }})" />
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+
+                    </tbody>
+                </table>
+                            
+                <div class="mb-6">
+                    <x-textarea type="text" id="reviewSComment" class="w-full mt-2" wire:model="reviewSComment.{{ $section->id }}" placeholder="Enter Comments..........." rows="3" />
+                    <x-input-error for="reviewSComment" />
+                </div>
+
+            @endforeach
+        @endforeach
+
+        <div class="bg-gray-200 px-6 py-4 font-bold">
+            Decision
+        </div>
+        <div class="p-4 border-b">
+            <p>(Determine whether the article is publishable or not, tick the appropriate box)</p>
+
+            <label class="inline-flex items-center cursor-pointer w-full border-b py-2" >
+                <x-input type="radio" value="accepted" class="" wire:model.live="review_decision" name="decision" />
+                <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                    Accepted
+                </span>
+            </label>
+
+            <label class="inline-flex items-center cursor-pointer w-full border-b py-2" >
+                <x-input type="radio" value="minor revision" class="" wire:model.live="review_decision" name="decision" />
+                <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                    Minor Revision
+                </span>
+            </label>
+
+            <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
+                <x-input type="radio" value="major revision" class="" wire:model.live="review_decision" name="decision" />
+                <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                    Major Revision
+                </span>
+            </label>
+
+            <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
+                <x-input type="radio" value="rejected" class="" wire:model.live="review_decision" name="decision" />
+                <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                    Rejected
+                </span>
+            </label>
+            <br>
+            <br>
         </div>
 
-        @foreach ($sections as $key => $section)
-            
-            <table class="min-w-full text-left text-sm font-light">
-                <thead class="border-b font-medium grey:border-neutral-500">
-                    <tr class="bg-neutral-200 font-bold">
-                        <th scope="col" class="whitespace-nowrap px-6 py-4 font-bold">
-                            {{ $section->title }}
-                        </th>
-                        @foreach ($section->reviewSectionOption as $key => $option)
-                            <th scope="col" class="whitespace-nowrap px-6 py-4 font-bold text-center">
-                                {{ $option->title }}
-                            </th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    @foreach ($section->reviewSectionQuery as $key => $data)
-                    <tr class="border-b transition duration-300 ease-in-out @if($section->category == 'options') hover:bg-neutral-100 @endif grey:border-neutral-500 grey:hover:bg-neutral-600">
-                        <td class="whitespace-nowrap px-6 py-4 font-medium">
-                            <p class="w-full @if($section->category == 'comments') font-bold @endif">{{ $data->title }}</p>
-
-                            @if($section->category == 'comments')
-                                <x-textarea type="text" id="reviewComment" class="w-full mt-2" wire:model="reviewComment.{{ $data->id }}" placeholder="Enter Description" rows="5" />
-                                <x-input-error for="reviewComment" />
-                            @endif
-                        </td>
-                        @if($section->category == 'options')
-                            @foreach ($section->reviewSectionOption as $key => $option)
-                                <td class="whitespace-nowrap px-6 py-4 font-medium text-center">
-                                    <input type="radio" name="option{{ $data->id }}" wire:model.live="reviewOption.{{ $data->id }}" value="{{ $option->id }}" wire:click="upOptions({{ $data->id }}, {{ $option->id }})" />
-                                </td>
-                            @endforeach
-                        @endif
-                    </tr>
-                    @endforeach
-
-                </tbody>
-            </table>
-
-        @endforeach
 
         <div class="bg-gray-200 px-6 py-4 font-bold">
             Attachments
         </div>
 
-        <div class="p-6 border-b">
+        <div class="p-4 border-b">
             <x-input-file wire:model="review_attachment" id="review_attachment" multiple />
             <x-input-error for="review_attachment" />
 

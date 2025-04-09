@@ -12,7 +12,9 @@ use App\Models\ArticleStatus;
 use App\Models\ReviewSection;
 use Livewire\WithFileUploads;
 use App\Models\ReviewAttachment;
+use App\Models\ReviewSectionsGroup;
 use Illuminate\Support\Facades\Mail;
+use App\Models\ReviewSectionsComment;
 use Illuminate\Support\Facades\Storage;
 
 class ArticleEvaluation extends Component
@@ -21,11 +23,14 @@ class ArticleEvaluation extends Component
     
     public $record;
     public $reviewer;
-    public $reviewOption  = [];
-    public $reviewComment = [];
+    public $reviewOption   = [];
+    public $reviewComment  = [];
+    public $reviewSComment = [];
     public $review_attachment;
+    public $review_decision;
     public $user;
     public $journal_user;
+    public $article_journal_user;
 
     public $description;
     
@@ -56,12 +61,18 @@ class ArticleEvaluation extends Component
         $this->reviewOption = ArticleReview::where('article_id', $this->record->id)->where('user_id', $this->reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
 
         $this->reviewComment = ArticleReview::where('article_id', $this->record->id)->where('user_id', $this->reviewer->id)->pluck('comment', 'review_section_query_id')->toArray();
+
+        $this->reviewSComment = ReviewSectionsComment::where('article_id', $this->record->id)->where('user_id', $this->reviewer->id)->pluck('comment', 'review_section_id')->toArray();
+
+        $this->article_journal_user = $this->record->article_journal_users()->where('user_id', $this->reviewer->id)->first();
+
+        $this->review_decision = $this->article_journal_user->pivot->review_decision;
     }
     
     public function render()
     {
         $submission = $this->record->files()->first();
-        $sections   = ReviewSection::all();
+        $sections   = ReviewSectionsGroup::all();
 
         return view('livewire.backend.article-evaluation', compact('submission', 'sections'));
     }
@@ -82,6 +93,7 @@ class ArticleEvaluation extends Component
     {
         $options  = $this->reviewOption;
         $comments = $this->reviewComment;
+        $scomment = $this->reviewSComment;
 
         ArticleReview::where('article_id', $this->record->id)->where('user_id', $this->reviewer->id)->delete();
 
@@ -107,6 +119,23 @@ class ArticleEvaluation extends Component
             }
         }
 
+        foreach($scomment as $key => $value){
+            if($value != ''){
+                ReviewSectionsComment::create([
+                    'article_id' => $this->record->id,
+                    'review_section_id' => $key,
+                    'comment' => $value,
+                    'user_id' => $this->reviewer->id
+                ]);
+            }
+        }
+
+
+        $this->journal_user->article_journal_users()->sync([$this->record->id => [
+            'review_decision' => $this->review_decision
+        ]], false);
+
+
         if($this->review_attachment){
             $this->validate([
                 'review_attachment.*' => 'mimes:pdf|max:2048'
@@ -130,7 +159,7 @@ class ArticleEvaluation extends Component
         if($state == 'complete'){
             $this->description = 'This Article Review is Complete and Submitted Back to the Editor for Further Processes';
             $this->journal_user->article_journal_users()->sync([$this->record->id => [
-                'review_status' => 'completed'
+                'review_status'   => 'completed'
             ]], false);
 
             session()->flash('response',[

@@ -96,7 +96,7 @@ class Article extends Model
 
     public function article_journal_users()
     {
-        return $this->belongsToMany(JournalUser::class, 'article_journal_user', 'article_id', 'journal_user_id')->withPivot('review_start_date', 'review_end_date', 'review_status', 'number')->withTimestamps();
+        return $this->belongsToMany(JournalUser::class, 'article_journal_user', 'article_id', 'journal_user_id')->withPivot('review_start_date', 'review_end_date', 'review_status', 'review_decision', 'number')->withTimestamps();
     } 
 
 

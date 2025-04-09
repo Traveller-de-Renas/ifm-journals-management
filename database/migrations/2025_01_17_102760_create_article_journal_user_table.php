@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('review_end_date')->nullable();
 
             $table->string('review_status')->default('pending');
+            $table->string('review_decision')->nullable();
 
             $table->timestamps(); 
             $table->softDeletes(); 

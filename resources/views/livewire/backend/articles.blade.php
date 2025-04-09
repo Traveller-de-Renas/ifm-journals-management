@@ -460,39 +460,15 @@
             </p>
 
 
-            {{-- <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('001', 'checklist2')">
-                <x-input type="checkbox" value="rounded" class="" wire:model="check.001" />
-                <span class="ms-3 text-sm font-medium text-gray-900 w-full">Coherence and Structure: manuscript presents a clear, logical, and well-structured argument throughout</span>
-            </label>
-
-            <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('002', 'checklist2')">
-                <x-input type="checkbox" value="rounded" class="" wire:model="check.002" />
-                <span class="ms-3 text-sm font-medium text-gray-900 w-full">Methodology and Findings: clear (well defined), appropriate, and robust methodology and findings are credible</span>
-            </label>
-
-            <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('003', 'checklist2')">
-                <x-input type="checkbox" value="rounded" class="" wire:model="check.003" />
-                <span class="ms-3 text-sm font-medium text-gray-900 w-full">Originality: manuscript’s topic is timely, significant, and pertinent to current research trends or practical issues within the field</span>
-            </label>
-
-            <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('004', 'checklist2')">
-                <x-input type="checkbox" value="rounded" class="" wire:model="check.004" />
-                <span class="ms-3 text-sm font-medium text-gray-900 w-full">Literature review: comprehensive and up-to-date</span>
-            </label>
-
-            <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('005', 'checklist2')">
-                <x-input type="checkbox" value="rounded" class="" wire:model="check.005" />
-                <span class="ms-3 text-sm font-medium text-gray-900 w-full">In case of revision: necessary corrections suggested by reviewers have been implemented.</span>
-            </label> --}}
-
             @php
                 $to_reviewer = \App\Models\EditorChecklist::whereHas('editorialProcess', function ($query){
                     $query->where('code', '002');
                 })->get();
             @endphp
 
+
             @foreach ($to_reviewer as $key => $checki)
-                <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck('001', 'checklist2')">
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2" wire:click="selectCheck({{ $checki->id }})">
                     <x-input type="checkbox" value="rounded" class="" wire:model="check.{{ $checki->id }}" />
                     <span class="ms-3 text-sm font-medium text-gray-900 w-full">
                         {{ $checki->description }}
@@ -501,60 +477,7 @@
             @endforeach
 
 
-            {{-- <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-1">
-                <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('scope')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">Paper is with Scope</span>
-                    <div>
-                        <input type="checkbox" class="sr-only peer" wire:model="scope" {{ $rev_count > 0 ? 'disabled' : '' }} >
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 "></div>
-                    </div>
-                </label>
-            </div>
-
-            <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-1">
-                <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('tech_complete')">
-                    <span class="ms-3 text-sm font-medium text-gray-900  w-full">Is the Paper Technical Completeness</span>
-                    <div>
-                        <input type="checkbox" class="sr-only peer" wire:model="tech_complete">
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                    </div>
-                </label>
-            </div>
-
-            <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-1">
-                <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('noverity')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">Does the Paper has Noverity</span>
-                    <div>
-                        <input type="checkbox" class="sr-only peer" wire:model="noverity">
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 "></div>
-                    </div>
-                </label>
-            </div>
-
-
-            <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-1">
-                <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('prior_publication')">
-                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">Not Prior Published</span>
-                    <div>
-                        <input type="checkbox" class="sr-only peer" wire:model="prior_publication">
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 "></div>
-                    </div>
-                </label>
-            </div>
-
-
-            <div class="flex items-center ps-2 border border-gray-200 rounded p-2 mb-6">
-                <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('methodology')">
-                    <span class="ms-3 text-sm font-medium text-gray-900  w-full">Methodological Rigorous</span>
-                    <div>
-                        <input type="checkbox" class="sr-only peer" wire:model="methodology">
-                        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                    </div>
-                </label>
-            </div> --}}
             
-
-            {{-- @if($scope == true && $prior_publication == true && $methodology == true && $noverity == true && $tech_complete == true) --}}
 
             @if($record)
                 @if (empty(array_diff($to_associate->pluck('id')->toArray(), $record->editorChecklists->pluck('id')->toArray())))
@@ -582,12 +505,11 @@
                                 <div class="flex gap-2 border-b pb-2">
                                     <div class="w-full">
                                         <x-label for="end_date" value="Reviewer" class="mb-1 block font-medium text-xs text-gray-700" />
-                                        {{ $user_s->user->first_name }} {{ $user_s->user->middle_name }} {{ $user_s->user->last_name }}
+                                        {{ $user_s->user->first_name }} {{ $user_s->user->middle_name }} {{ $user_s->user->last_name }} - ({{ $user_s->user->email }})
                                     </div>
-                                    <div class="">
-                                        <x-label for="end_dates" value="Review End Date" class="mb-1 block font-medium text-xs text-gray-700" />
-                                        <x-input type="date" class="w-full" wire:model="end_dates.{{ $key }}" />
-                                        <x-input-error for="end_dates" />
+                                    <div class="w-4/12">
+                                        <x-label value="Expected Review End Date" class="mb-1 block font-medium text-xs text-gray-700" />
+                                        <p>{{ \Carbon\Carbon::now()->addDays(30)->format('d F Y') }}</p>
                                     </div>
                                 </div>
                             @endforeach
@@ -612,7 +534,7 @@
                         @if(!empty($reviewers))
                             <p class="mt-2 text-xs text-gray-500 ">Currently Assigned Reviewers</p>
                             @foreach($reviewers as $key => $reviewer)
-                                <div class="mb-2 font-bold flex gap-2 w-full">
+                                <div class="mb-4 font-bold flex gap-2 w-full">
                                     <div>
                                         {{ ++$key }}
                                     </div>
@@ -621,14 +543,19 @@
                                         {{ $reviewer->user->middle_name }}
                                         {{ $reviewer->user->last_name }}
 
-                                        {{-- {{ $reviewer->id }} --}}
-
                                         @php
-                                            $rstatus = $reviewer->article_journal_users()->where('article_id', $record->id)->first()->pivot->review_status;
+                                            $rstatus = $reviewer->article_journal_users()->where('article_id', $record->id)->first()->pivot;
                                         @endphp
+                                        
+                                        <div>
+                                            <a href="{{ route('journal.article_evaluation', [$record->uuid, $reviewer->user->uuid]) }}" target="_blank" ><u>Reviewer Manuscript Evaluation Form</u></a>
+                                        </div>
                                     </div>
-                                    <div class="text-right {{ $rstatus == 'completed' ? 'text-green-700':''; }}">
-                                        {{ $rstatus }}
+                                    <div class="text-right {{ $rstatus->review_status == 'completed' ? 'text-green-700':''; }} w-4/12">
+                                        {{ ucfirst($rstatus->review_status) }}
+                                        <div>
+                                            End Date {{ $rstatus->review_end_date }}
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach

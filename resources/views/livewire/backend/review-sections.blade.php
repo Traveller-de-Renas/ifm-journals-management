@@ -29,124 +29,106 @@
     @endif
 
     @if($form)
-
     <div class="w-full mt-4">
-        <x-input class="w-full" wire:model="title" type="text" placeholder="Section Title" />
-
-        <select wire:live.model="category" class="w-full mt-4 rounded-lg border-gray-200" wire:change="checkCategory($event.target.value)">
-            <option value="">Select Section Category</option>
-            <option value="options" @if($record?->category == 'options') selected @endif >Options</option>
-            <option value="comments" @if($record?->category == 'comments') selected @endif >Comments</option>
-        </select>
         
-        @if($category == 'options')
-        <div class="mt-2 p-2 bg-gray-200 mb-2">Options</div>
+            <x-input class="w-full" wire:model="title" type="text" placeholder="Section Title" />
 
-        <div class="">
+            @foreach ($sections as $skey => $section)
+                <div class="mb-6 ml-12 border-l-2 pl-4">
+                    <div class="grid grid-cols-12 gap-2 mt-4 ">
+                        <div class="col-span-9">
+                            <x-input class="w-full mb-2" wire:model="sub_title.{{ $skey }}" type="text" placeholder="Sub Section Title" />
+                        </div>
+                        <div class="col-span-3">
+                            <select wire:model="category.{{ $skey }}" class="w-full rounded-lg border-gray-200" wire:change="checkCategory($event.target.value, {{ $skey }})">
+                                <option value="">Select Section Category</option>
+                                <option value="options" @if($record?->category == 'options') selected @endif >Options</option>
+                                <option value="comments" @if($record?->category == 'comments') selected @endif >Comments</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    
+                    @if($category[$skey] == 'options')
+                        <div class="mt-2 p-2 bg-gray-200 mb-2">Add Options</div>
 
-            @if(!empty($saved_section_options))
+                        <div class="">
+                            @foreach ($options[$skey] as $key => $section_option)
+                            
+                            <div class="grid grid-cols-12 gap-2 mb-2">
+                                <div class="col-span-10">
+                                    <x-input type="text" id="options" class="w-full h-10" wire:model="options.{{ $skey }}.{{ $key }}" placeholder="Enter Option " />
+                                    <x-input-error for="options" />
+                                </div>
+                                <div class="col-span-2 flex justify-end">
+                                    <x-button class="bg-red-500 hover:bg-red-700" wire:click="removeRow({{ $key }}, 'options')">
+                                        <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
+                                    </x-button>
+                                </div>
+                            </div>
 
-            @foreach ($saved_section_options as $key => $section_option)
-            
-            <div class="grid grid-cols-12 gap-2 mb-2">
-                <div class="col-span-10">
-                    <x-input type="text" id="saved_option_title" class="w-full h-10" placeholder="Enter Option Title "  wire:model="saved_option_title.{{ $key }}"  />
-                    <x-input-error for="saved_option_title" />
-                </div>
-                <div class="col-span-2 flex justify-end">
-                    <x-button class="bg-green-700" wire:click="updateRow({{ $key }}, 'section_options')">
-                        <svg class="h-4 w-4 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M5 12l5 5l10 -10" /></svg>
+                            @endforeach
+
+                            <div class="text-right mt-4">
+                                <x-button type="button" wire:click="addRows('options', {{ $skey }})" wire:loading.attr="disabled">
+                                    {{ __('Add More') }}
+                                </x-button>
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="mt-2 p-2 bg-gray-200 grid grid-cols-12  gap-2 mb-2">
+                        <div class="col-span-10">
+                            Add Queries
+                        </div>
+                        <div class="col-span-2 flex justify-end">
+                        </div>
+                    </div>
+
+                    <div class="">
+                        @foreach ($queries[$skey] as $key => $query_data)
+                        
+                        <div class="grid grid-cols-12 gap-2 mb-2">
+                            <div class="col-span-10">
+                                <x-input type="text" id="queries" class="w-full h-10" wire:model="queries.{{ $skey }}.{{ $key }}" placeholder="Enter query title" />
+                                <x-input-error for="queries" />
+                            </div>
+                            <div class="col-span-2 flex justify-end">
+                                <x-button class="bg-red-500 hover:bg-red-700" wire:click="removeRow({{ $key }}, 'queries')">
+                                    <svg class="h-4 w-4 text-white" viewBox="0 0 24 24"  fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
+                                </x-button>
+                            </div>
+                        </div>
+
+                        @endforeach
+
+                        <div class="text-right mt-4">
+                            <x-button type="button" wire:click="addRows('queries', {{ $skey }})" wire:loading.attr="disabled">
+                                {{ __('Add More') }}
+                            </x-button>
+                        </div>
+                    </div>
+
+                    <x-button type="button" class="bg-red-500 hover:bg-red-700" wire:click="deleteRow({{ $skey }}, 'sub_sections')" wire:loading.attr="disabled">
+                        {{ __('Remove Section') }}
                     </x-button>
-                    <x-button class="bg-red-500 hover:bg-red-700" wire:click="deleteRow({{ $key }}, 'section_options')">
-                        <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                    </x-button>
                 </div>
-            </div>
-
             @endforeach
-
-            @endif
-
-            @foreach ($section_options as $key => $section_option)
             
-            <div class="grid grid-cols-12 gap-2 mb-2">
-                <div class="col-span-10">
-                    <x-input type="text" id="option_title" class="w-full h-10" wire:model="option_title.{{ $key }}" placeholder="Enter Option Title " />
-                    <x-input-error for="option_title" />
-                </div>
-                <div class="col-span-2 flex justify-end">
-                    <x-button class="bg-red-500 hover:bg-red-700" wire:click="removeRow({{ $key }}, 'section_options')">
-                        <svg class="h-4 w-4 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                    </x-button>
-                </div>
-            </div>
 
-            @endforeach
-
-            <div class="text-right mt-4">
-                <x-button type="button" wire:click="addRows('section_options')" wire:loading.attr="disabled">
-                    {{ __('Add More') }}
-                </x-button>
-            </div>
-        </div>
-        @endif
-
-        <div class="mt-2 p-2 bg-gray-200 grid grid-cols-12  gap-2 mb-2">
-            <div class="col-span-10">
-                Queries
-            </div>
-            <div class="col-span-2 flex justify-end">
-            </div>
-        </div>
-
-        <div class="">
-            @if(!empty($saved_queries))
-            @foreach ($saved_queries as $key => $query_data)
-            <div class="grid grid-cols-12 gap-2 mb-2">
-                <div class="col-span-10">
-                    <x-input type="text" id="saved_query_title" class="w-full h-10" placeholder="Enter query title" wire:model="saved_query_title.{{ $key }}" />
-                    <x-input-error for="saved_query_title" />
-                </div>
-                <div class="col-span-2 flex justify-end">
-                    <x-button class="bg-green-700 hover:bg-green-500" wire:click="updateRow({{ $key }}, 'queries')">
-                        <svg class="h-4 w-4 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M5 12l5 5l10 -10" /></svg>
-                    </x-button>
-                    <x-button class="bg-red-700 hover:bg-red-500" wire:click="deleteRow({{ $key }}, 'queries')">
-                        <svg class="h-4 w-4 text-white" viewBox="0 0 24 24"  fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                    </x-button>
-                </div>
-            </div>
-            @endforeach 
-            @endif
-
-            @foreach ($queries as $key => $query_data)
-            
-            <div class="grid grid-cols-12 gap-2 mb-2">
-                <div class="col-span-10">
-                    <x-input type="text" id="query_title" class="w-full h-10" wire:model="query_title.{{ $key }}" placeholder="Enter query title" />
-                    <x-input-error for="query_title" />
-                </div>
-                <div class="col-span-2 flex justify-end">
-                    <x-button class="bg-red-500 hover:bg-red-700" wire:click="removeRow({{ $key }}, 'queries')">
-                        <svg class="h-4 w-4 text-white" viewBox="0 0 24 24"  fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <polyline points="3 6 5 6 21 6" />  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" /></svg>
-                    </x-button>
-                </div>
-            </div>
-
-            @endforeach
-
-            <div class="text-right mt-4">
-                <x-button type="button" wire:click="addRows('queries')" wire:loading.attr="disabled">
-                    {{ __('Add More') }}
-                </x-button>
-            </div>
+        <div class="text-center mt-4 mb-4">
+            <x-button type="button" class="bg-green-500 hover:bg-green-700" wire:click="addRows('sections')" wire:loading.attr="disabled">
+                {{ __('Add More Sections') }}
+            </x-button>
         </div>
 
-        <div class="mt-4 text-right">
+        <hr>
+
+        <div class="mt-4 text-center">
             @if(!empty($record))
-            <x-button type="submit" wire:click="update()" wire:loading.attr="disabled">Update</x-button>
+                <x-button type="submit" wire:click="update()" wire:loading.attr="disabled">Update</x-button>
             @else
-            <x-button type="submit" wire:click="store()" wire:loading.attr="disabled">Submit</x-button>
+                <x-button type="submit" wire:click="store()" wire:loading.attr="disabled">Submit</x-button>
             @endif
 
             <x-button class="bg-red-500 hover:bg-red-700" wire:click="$toggle('form')" wire:loading.attr="disabled">Cancel</x-button>
@@ -179,7 +161,7 @@
             <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 grey:border-neutral-500 grey:hover:bg-neutral-600">
                 <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $sn }}</td>
                 <td class="whitespace-nowrap px-6 py-4">{{ $item->title }}</td>
-                <td class="whitespace-nowrap px-6 py-4">{{ $item->status }}</td>
+                <td class="whitespace-nowrap px-6 py-4">{{ $item->status() }}</td>
                 <td class="whitespace-nowrap ">
                     
                     <button id="dropdown{{ $item->id }}" data-dropdown-toggle="dropdownDots{{ $item->id }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50" type="button">

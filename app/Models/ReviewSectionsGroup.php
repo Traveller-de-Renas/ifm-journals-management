@@ -8,14 +8,13 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ReviewSection extends Model
+class ReviewSectionsGroup extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'title',
-        'category',
-        'review_sections_group_id'
+        'status'
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -24,18 +23,13 @@ class ReviewSection extends Model
         ->logAll();
     }
 
-    public function reviewSectionOption()
+    public function reviewSections()
     {
-        return $this->hasMany(ReviewSectionOption::class);
+        return $this->hasMany(ReviewSection::class);
     }
 
-    public function reviewSectionQuery()
+    public function status()
     {
-        return $this->hasMany(ReviewSectionQuery::class);
-    }
-
-    public function reviewSectionsGroup()
-    {
-        return $this->belongsTo(ReviewSectionsGroup::class);
+        return ($this->status == 1)? 'Active':'Inactive';
     }
 }

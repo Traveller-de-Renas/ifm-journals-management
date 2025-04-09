@@ -729,7 +729,7 @@ class Articles extends Component
         foreach($this->users_x as $key => $user_s){
             $user_s->article_journal_users()->sync([$this->record->id => [
                 'review_start_date' => now(),
-                'review_end_date'   => $this->end_dates[$key],
+                'review_end_date'   => Carbon::now()->addDays($status->max_days),
                 'review_status'     => 'pending'
             ]], false);
 
@@ -930,7 +930,7 @@ class Articles extends Component
         $journal_user = $this->journal->journal_us()->whereHas('roles', function ($query) {
             $query->where('name', 'Chief Editor');
         })->first();
-        
+
         Notification::updateOrCreate([
             'article_id'      => $this->record->id,
             'journal_user_id' => $journal_user->id

@@ -7,6 +7,7 @@ use Livewire\WithPagination;
 use App\Models\ReviewSection;
 use App\Models\ReviewSectionQuery;
 use App\Models\ReviewSectionOption;
+use App\Models\ReviewSectionsGroup;
 
 class ReviewSections extends Component
 {
@@ -21,17 +22,22 @@ class ReviewSections extends Component
 
     public $record;
     public $title;
-    public $query_title = [];
+    public $sub_title    = [];
+    public $sections     = [];
+    public $category     = [[]]; 
+
     public $option_title = [];
+    public $options      = [[]];
+    public $queries      = [[]];
+
+
+
+    
     public $query_confidential = [];
 
     public $saved_query_title = [];
-    public $saved_option_title = [];
+    public $saved_options = [];
     public $saved_query_confidential = [];
-
-    public $category;
-    public $section_options = [''];
-    public $queries = [''];
 
     public $saved_queries;
     public $saved_section_options;
@@ -40,11 +46,15 @@ class ReviewSections extends Component
 
     public function mount()
     {
+        if($this->record != ''){
+            $this->addRows('sections');
+        }
+        
     }
     
     public function render()
     {
-        $review_sections = ReviewSection::when($this->query, function($query){
+        $review_sections = ReviewSectionsGroup::when($this->query, function($query){
             return $query->where(function($query){
                 $query->where('title', 'ilike', '%'.$this->query.'%');
             });
@@ -56,54 +66,71 @@ class ReviewSections extends Component
 
     public function store()
     {
-        $this->validate([
-            'title' => 'required',
-            'category' => 'required',
+
+        $section_group = ReviewSectionsGroup::create([
+            'title' => $this->title
         ]);
 
-        $data = ReviewSection::create([
-            'title' => $this->title,
-            'category' => $this->category
-        ]);
+        foreach($this->sections as $skey => $section){
 
-        if(isset($this->option_title)){
-            foreach ($this->option_title as $key => $value) {
-                ReviewSectionOption::create([
+            $data = ReviewSection::create([
+                'title'    => $this->sub_title[$skey],
+                'category' => $this->category[$skey],
+                'review_sections_group_id' => $section_group->id
+            ]);
+
+
+            if(isset($this->options[$skey])){
+                foreach ($this->options[$skey] as $key => $value) {
+                    ReviewSectionOption::create([
+                        'review_section_id' => $data->id,
+                        'title' => $value
+                    ]);
+                }
+            }
+
+
+            foreach ($this->queries[$skey] as $key => $value) {
+                ReviewSectionQuery::create([
                     'review_section_id' => $data->id,
                     'title' => $value
                 ]);
             }
         }
-
-        foreach ($this->query_title as $key => $value) {
-            ReviewSectionQuery::create([
-                'review_section_id' => $data->id,
-                'title' => $value
-            ]);
-        }
+    
+        
 
         session()->flash('success', 'Saved successfully');
         $this->form = false;
     }
 
-    public function confirmEdit(ReviewSection $review_section)
+    public function confirmEdit(ReviewSectionsGroup $review_section_group)
     {
-        $this->record = $review_section;
+        $this->record = $review_section_group;
+        $this->title  = $review_section_group->title;
 
-        $this->title = $review_section->title;
-        $this->category = $review_section->category;
+        // $this->sections = $review_section_group->reviewSections;
 
-        $this->saved_section_options = $review_section->reviewSectionOption;
-        $this->saved_queries = $review_section->reviewSectionQuery;
 
-        foreach ($this->saved_section_options as $key => $value) {
-            $this->saved_option_title[$key] = $value->title;
+
+        foreach($review_section_group->reviewSections as $skey => $review_section)
+        {
+            $this->sections[$review_section->id]  = $review_section;
+            $this->sub_title[$review_section->id] = $review_section->title;
+            $this->category[$review_section->id]  = $review_section->category;
+
+            foreach ($review_section->reviewSectionOption as $key => $value) {
+                $this->options[$review_section->id][$value->id] = $value->title;
+            }
+
+
+            foreach ($review_section->reviewSectionQuery as $key => $value) {
+                $this->queries[$review_section->id][$value->id] = $value->title;
+            }
+
         }
 
-        foreach ($this->saved_queries as $key => $value) {
-            $this->saved_query_title[$key] = $value->title;
-            $this->saved_query_confidential[$key] = $value->confidential;
-        }
+       
 
         $this->form = true;
 
@@ -114,7 +141,7 @@ class ReviewSections extends Component
         if($category == 'section_options')
         {
             if($this->saved_section_options[$key]->update([
-                'title' => $this->saved_option_title[$key]
+                'title' => $this->saved_options[$key]
             ])){
                 session()->flash('success', 'Saved successfully');
             }
@@ -133,7 +160,7 @@ class ReviewSections extends Component
 
     public function deleteRow()
     {
-
+        
     }
 
     public function confirmDelete(ReviewSection $review_section)
@@ -148,9 +175,24 @@ class ReviewSections extends Component
         $this->record = '';
     }
 
-    public function addRows($x)
+    public function addRows($x, $key = null)
     {
-        $this->$x[] = '';
+        if($x == 'queries' || $x == 'options'){
+            $this->$x[$key][] = '';
+
+        }else if($x == 'sections'){
+            $this->$x[] = '';
+            $this->category[][] = '';
+            $this->queries[][]  = '';
+            $this->options[][]  = '';
+
+        }else{
+            $this->$x[] = '';
+        }
+
+
+
+        
     }
 
     public function removeRow($index, $x)
@@ -160,41 +202,44 @@ class ReviewSections extends Component
 
     public function update()
     {
-        $this->validate([
-            'title'    => 'required',
-            'category' => 'required',
-        ]);
+        // $this->validate([
+        //     'title'    => 'required',
+        //     'category' => 'required',
+        // ]);
 
-        $this->record->title    = $this->title;
-        $this->record->category = $this->category;
-        $this->record->update();
+        dd($this->sections);
 
-        if(isset($this->option_title)){
-            $this->record->reviewSectionOption()->delete();
+        foreach($this->sections as $skey => $section){
 
-            foreach ($this->option_title as $key => $value) {
-                ReviewSectionOption::create([
-                    'review_section_id' => $this->record->id,
+            $data = ReviewSection::create([
+                'title'    => $this->sub_title[$skey],
+                'category' => $this->category[$skey],
+                'review_sections_group_id' => $section_group->id
+            ]);
+
+            if(isset($this->options[$skey])){
+                foreach ($this->options[$skey] as $key => $value) {
+                    ReviewSectionOption::create([
+                        'review_section_id' => $data->id,
+                        'title' => $value
+                    ]);
+                }
+            }
+
+            foreach ($this->queries[$skey] as $key => $value) {
+                ReviewSectionQuery::create([
+                    'review_section_id' => $data->id,
                     'title' => $value
                 ]);
             }
-        }
-
-        foreach ($this->query_title as $key => $value) {
-            $this->record->reviewSectionQuery()->delete();
-
-            ReviewSectionQuery::create([
-                'review_section_id' => $this->record->id,
-                'title' => $value
-            ]);
         }
 
         session()->flash('success', 'Updated successfully');
         $this->form = false;
     }
 
-    public function checkCategory($category)
+    public function checkCategory($category, $skey)
     {
-        $this->category = $category;
+        $this->category[$skey] = $category;
     }
 }
