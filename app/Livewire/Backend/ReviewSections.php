@@ -66,7 +66,6 @@ class ReviewSections extends Component
 
     public function store()
     {
-
         $section_group = ReviewSectionsGroup::create([
             'title' => $this->title
         ]);
@@ -98,9 +97,12 @@ class ReviewSections extends Component
             }
         }
     
-        
 
-        session()->flash('success', 'Saved successfully');
+        session()->flash('response',[
+            'status'  => 'success',
+            'message' => 'Review Sections successfully Created'
+        ]);
+
         $this->form = false;
     }
 
