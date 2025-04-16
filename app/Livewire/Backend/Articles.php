@@ -60,7 +60,7 @@ class Articles extends Component
 
         $articles = $journal?->articles();
         if($this->status == 'pending'){
-            $status = ArticleStatus::whereIn('code', ['001', '005'])->get()->pluck('id')->toArray();
+            $status = ArticleStatus::whereIn('code', ['001', '005', '012'])->get()->pluck('id')->toArray();
         
             $articles->when($this->query, function ($query, $search) {
                 return $query->where(function($query){
@@ -73,7 +73,7 @@ class Articles extends Component
 
 
         if($this->status == 'onprogress'){
-            $status = ArticleStatus::whereIn('code', ['002','006', '008','009','011'])->get()->pluck('id')->toArray();
+            $status = ArticleStatus::whereIn('code', ['002','006', '008','009', '010', '011', '013', '018'])->get()->pluck('id')->toArray();
 
             $articles->when($this->query, function ($query, $search) {
                 return $query->where(function($query){
