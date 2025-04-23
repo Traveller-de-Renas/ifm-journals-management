@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Storage;
 class ArticleEvaluation extends Component
 {
     use WithFileUploads;
-    
+
     public $record;
     public $reviewer;
     public $reviewOption   = [];
@@ -33,28 +33,29 @@ class ArticleEvaluation extends Component
     public $article_journal_user;
 
     public $description;
-    
+
     public $declineModal = false;
-    
-    public function mount(Request $request){
 
-        if(!Str::isUuid($request->article)){
+    public function mount(Request $request)
+    {
+
+        if (!Str::isUuid($request->article)) {
             abort(404);
         }
 
-        if(!Str::isUuid($request->reviewer)){
+        if (!Str::isUuid($request->reviewer)) {
             abort(404);
         }
-        
+
         $this->record = Article::where('uuid', $request->article)->first();
-        if(empty($this->record)){
+        if (empty($this->record)) {
             abort(404);
         }
 
         $this->reviewer = User::where('uuid', $request->reviewer)->first();
-        if(empty($this->reviewer)){
+        if (empty($this->reviewer)) {
             abort(404);
-        } 
+        }
 
         $this->journal_user = $this->reviewer->journal_us()->where('journal_id', $this->record->journal_id)->first();
 
@@ -68,10 +69,14 @@ class ArticleEvaluation extends Component
 
         $this->review_decision = $this->article_journal_user->pivot->review_decision;
     }
-    
+
     public function render()
     {
-        $submission = $this->record->files()->first();
+        $submission = $this->record->files()->whereHas('file_category', function ($query) {
+            $query->where('code', '002');
+        })->first();
+
+
         $sections   = ReviewSectionsGroup::all();
 
         return view('livewire.backend.article-evaluation', compact('submission', 'sections'));
@@ -97,8 +102,8 @@ class ArticleEvaluation extends Component
 
         ArticleReview::where('article_id', $this->record->id)->where('user_id', $this->reviewer->id)->delete();
 
-        foreach($options as $key => $value){
-            if($value != ''){
+        foreach ($options as $key => $value) {
+            if ($value != '') {
                 ArticleReview::create([
                     'article_id' => $this->record->id,
                     'review_section_query_id' => $key,
@@ -108,8 +113,8 @@ class ArticleEvaluation extends Component
             }
         }
 
-        foreach($comments as $key => $value){
-            if($value != ''){
+        foreach ($comments as $key => $value) {
+            if ($value != '') {
                 ArticleReview::create([
                     'article_id' => $this->record->id,
                     'review_section_query_id' => $key,
@@ -119,8 +124,8 @@ class ArticleEvaluation extends Component
             }
         }
 
-        foreach($scomment as $key => $value){
-            if($value != ''){
+        foreach ($scomment as $key => $value) {
+            if ($value != '') {
                 ReviewSectionsComment::create([
                     'article_id' => $this->record->id,
                     'review_section_id' => $key,
@@ -136,16 +141,16 @@ class ArticleEvaluation extends Component
         ]], false);
 
 
-        if($this->review_attachment){
+        if ($this->review_attachment) {
             $this->validate([
                 'review_attachment.*' => 'mimes:pdf|max:2048'
             ]);
-        
-            foreach($this->review_attachment as $attachment){
+
+            foreach ($this->review_attachment as $attachment) {
                 $_name = $attachment->getClientOriginalName();
                 $_type = $attachment->getClientOriginalExtension();
                 $_file = str_replace(' ', '_', $_name);
-            
+
                 $attachment->storeAs('/review_attachments', $_file);
 
                 ReviewAttachment::create([
@@ -156,21 +161,21 @@ class ArticleEvaluation extends Component
             }
         }
 
-        if($state == 'complete'){
+        if ($state == 'complete') {
             $this->description = 'This Article Review is Complete and Submitted Back to the Editor for Further Processes';
             $this->journal_user->article_journal_users()->sync([$this->record->id => [
                 'review_status'   => 'completed'
             ]], false);
 
-            session()->flash('response',[
+            session()->flash('response', [
                 'status'  => 'success',
-                'message' => $this->description.', We would like to extend our sinciere thanks for your careful review of our manuscript. Your expert comments have been invaluable in refining the manuscript and ensuring its rigor and clarity.'
+                'message' => $this->description . ', We would like to extend our sinciere thanks for your careful review of our manuscript. Your expert comments have been invaluable in refining the manuscript and ensuring its rigor and clarity.'
             ]);
 
             // Mail::to('mrenatuskiheka@yahoo.com')
             //     ->send(new ReviewerResponse($this->record, $this->description));
-        }else{
-            session()->flash('response',[
+        } else {
+            session()->flash('response', [
                 'status'  => 'success',
                 'message' => 'Article Review is not Completed but Saved so that you can continue to review the Article'
             ]);
@@ -189,7 +194,7 @@ class ArticleEvaluation extends Component
             'review_status' => 'declined'
         ]], false);
 
-        session()->flash('response',[
+        session()->flash('response', [
             'status'  => 'success',
             'message' => 'This Article is Declined, Thanks we hope next time you will be able to assist us on reviewing relevant manuscript'
         ]);
@@ -211,18 +216,18 @@ class ArticleEvaluation extends Component
         //     ->send(new ReviewerResponse($this->record, $this->description));
     }
 
-    public function articleStatus($code){
+    public function articleStatus($code)
+    {
         return ArticleStatus::where('code', $code)->first();
     }
 
     public function removeAttachment(ReviewAttachment $attachment)
     {
-        if(file_exists(storage_path('app/public/review_attachments/'.$attachment->attachment))){
-            Storage::delete('public/review_attachments/'.$attachment->attachment);
-            if($attachment->delete()){
+        if (file_exists(storage_path('app/public/review_attachments/' . $attachment->attachment))) {
+            Storage::delete('public/review_attachments/' . $attachment->attachment);
+            if ($attachment->delete()) {
                 session()->flash('success', 'Attachment Deleted Successfully');
             }
         }
-    
     }
 }
