@@ -56,9 +56,13 @@
                             @foreach ($options[$skey] as $key => $section_option)
                             
                             <div class="grid grid-cols-12 gap-2 mb-2">
-                                <div class="col-span-10">
+                                <div class="col-span-9">
                                     <x-input type="text" id="options" class="w-full h-10" wire:model="options.{{ $skey }}.{{ $key }}" placeholder="Enter Option " />
                                     <x-input-error for="options" />
+                                </div>
+                                <div class="col-span-1">
+                                    <x-input type="number" id="option_value" class="w-full h-10" wire:model="option_value.{{ $skey }}.{{ $key }}" placeholder="Enter value " />
+                                    <x-input-error for="option_value" />
                                 </div>
                                 <div class="col-span-2 flex justify-end">
                                     <x-button class="bg-red-500 hover:bg-red-700" wire:click="removeRow({{ $key }}, 'options')">

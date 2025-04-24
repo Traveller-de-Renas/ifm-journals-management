@@ -15,6 +15,7 @@ class ReviewSectionOption extends Model
     protected $fillable = [
         'title',
         'review_section_id',
+        'option_value',
     ];
 
     public function getActivitylogOptions(): LogOptions

@@ -28,6 +28,7 @@ class ReviewSections extends Component
 
     public $option_title = [];
     public $options      = [[]];
+    public $option_value = [[]];
     public $queries      = [[]];
 
 
@@ -81,9 +82,11 @@ class ReviewSections extends Component
 
             if(isset($this->options[$skey])){
                 foreach ($this->options[$skey] as $key => $value) {
+                    $optionValue = $this->option_value[$skey][$key] ?? null;
                     ReviewSectionOption::create([
                         'review_section_id' => $data->id,
-                        'title' => $value
+                        'title' => $value,
+                        'option_value' => $optionValue
                     ]);
                 }
             }
@@ -123,6 +126,7 @@ class ReviewSections extends Component
 
             foreach ($review_section->reviewSectionOption as $key => $value) {
                 $this->options[$review_section->id][$value->id] = $value->title;
+                $this->option_value[$review_section->id][$value->id] = $value->option_value;
             }
 
 
@@ -187,6 +191,7 @@ class ReviewSections extends Component
             $this->category[][] = '';
             $this->queries[][]  = '';
             $this->options[][]  = '';
+            $this->option_value[][]  = '';
 
         }else{
             $this->$x[] = '';
@@ -221,9 +226,11 @@ class ReviewSections extends Component
 
             if(isset($this->options[$skey])){
                 foreach ($this->options[$skey] as $key => $value) {
+                    $optionValue = $this->option_value[$skey][$key] ?? null;
                     ReviewSectionOption::create([
                         'review_section_id' => $data->id,
-                        'title' => $value
+                        'title' => $value,
+                        'option_value' => $optionValue
                     ]);
                 }
             }

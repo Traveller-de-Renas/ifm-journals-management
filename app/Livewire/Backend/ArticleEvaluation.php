@@ -24,6 +24,7 @@ class ArticleEvaluation extends Component
     public $record;
     public $reviewer;
     public $reviewOption   = [];
+    public $reviewOptionValue   = [];
     public $reviewComment  = [];
     public $reviewSComment = [];
     public $review_attachment;
@@ -75,16 +76,15 @@ class ArticleEvaluation extends Component
         $submission = $this->record->files()->whereHas('file_category', function ($query) {
             $query->where('code', '002');
         })->first();
-
-
+        $article = $this->record;
         $sections   = ReviewSectionsGroup::all();
-
-        return view('livewire.backend.article-evaluation', compact('submission', 'sections'));
+        return view('livewire.backend.article-evaluation', compact('submission', 'sections', 'article'));
     }
 
-    public function upOptions($key, $value)
+    public function upOptions($key, $value, $optionValue)
     {
         $this->reviewOption[$key] = $value;
+        $this->reviewOptionValue[$key] = $optionValue;
     }
 
     public function rules()
@@ -97,10 +97,45 @@ class ArticleEvaluation extends Component
     public function store($state)
     {
         $options  = $this->reviewOption;
+        $optionValue = $this->reviewOptionValue;
         $comments = $this->reviewComment;
         $scomment = $this->reviewSComment;
 
+        // dd($options, $this->review_decision, $optionValue);
         ArticleReview::where('article_id', $this->record->id)->where('user_id', $this->reviewer->id)->delete();
+
+        if (count(array_unique($optionValue)) == 1 && in_array('5', $optionValue) && $this->review_decision != 'accepted' && $this->review_decision != 'minor revision') {
+            session()->flash('response', [
+                'status'  => 'error',
+                'message' => 'Review decision may not be rejected or major revision while all sections are indicated to be of the top quality'
+            ]);
+            return;
+        }
+
+        if (count(array_unique($optionValue)) == 1 && in_array('1', $optionValue) && $this->review_decision != 'rejected' && $this->review_decision != 'major revision') {
+            session()->flash('response', [
+                'status'  => 'error',
+                'message' => 'Review decision may not be accepted while all sections are indicated to be very poor'
+            ]);
+            return;
+        }
+
+        if ((in_array('4', $optionValue) || in_array('5', $optionValue)) && $this->review_decision == 'rejected') {
+            session()->flash('response', [
+                'status'  => 'error',
+                'message' => 'Review decision may not be rejected while sections are indicated to be of the top quality'
+            ]);
+            return;
+        }
+
+        if ((in_array('1', $optionValue) || in_array('2', $optionValue)) && ($this->review_decision == 'accepted' || $this->review_decision == 'minor revision')) {
+            session()->flash('response', [
+                'status'  => 'error',
+                'message' => 'Review decision may not be accepted or minor review while some sections are indicated to be very poor or they need major revision'
+            ]);
+            return;
+        }
+
 
         foreach ($options as $key => $value) {
             if ($value != '') {

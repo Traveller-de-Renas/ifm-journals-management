@@ -675,7 +675,7 @@
                                     <div>
                                         <button wire:click="removeSelectedUser('{{ $user_s->user_id }}','Reviewer')"
                                             class="text-red-500 hover:text-red-700 text-xl">
-                                            &times; <!-- X symbol -->
+                                            &times; 
                                         </button>
                                     </div>
                                 </div>
