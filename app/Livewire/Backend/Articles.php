@@ -295,11 +295,15 @@ class Articles extends Component
             $query->where('name', 'Reviewer');
         })->get()->count();
 
+        // dd($this->rev_count);
+
         $this->searchUser($string, $role);
 
         $this->scope   = true;
         $this->isOpenB = true;
     }
+
+
 
     public function closeDrawerB()
     {
@@ -497,6 +501,8 @@ class Articles extends Component
 
     public function selectCheck($check)
     {
+
+
         $value = 0;
         if ($this->check[$check]) {
             $value = 1;
@@ -615,7 +621,7 @@ class Articles extends Component
             $query->where('name', 'Reviewer');
         })->pluck('user_id');
 
-     
+
         $selectedUsers = collect($this->users_x)->pluck('user_id')->toArray();
 
         $this->users = JournalUser::whereHas('roles', function ($query) use ($role) {

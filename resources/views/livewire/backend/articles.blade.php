@@ -564,21 +564,30 @@
                 })->get();
             @endphp
 
-
             @foreach ($to_reviewer as $key => $checki)
-                <label class="inline-flex items-center cursor-pointer w-full border-b py-2"
-                    wire:click="selectCheck({{ $checki->id }})">
-                    <x-input type="checkbox" value="rounded" class=""
-                        wire:model="check.{{ $checki->id }}" />
-                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
-                        {{ $checki->description }}
-                    </span>
-                </label>
+                @if ($rev_count <= 0)
+                    <label class="inline-flex items-center cursor-pointer w-full border-b py-2"
+                        wire:click="selectCheck({{ $checki->id }})">
+                        <x-input type="checkbox" value="rounded" class=""
+                            wire:model="check.{{ $checki->id }}" />
+                        <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                            {{ $checki->description }}
+                        </span>
+                    </label>
+                @else
+                    <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
+
+                        <x-input type="checkbox" class="" wire:model="check.{{ $checki->id }}" disabled />
+
+                        <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                            {{ $checki->description }}
+                        </span>
+                    </label>
+                @endif
             @endforeach
 
 
             @if ($record)
-
                 @if ($record)
                     @php
                         $reviewers = $record
@@ -588,7 +597,6 @@
                             })
                             ->get();
                     @endphp
-
                     @if (!empty($reviewers))
                         <p class="mt-2 text-xs text-gray-500 ">Currently Assigned Reviewers</p>
                         @foreach ($reviewers as $key => $reviewer)
@@ -607,7 +615,6 @@
                                             ->where('article_id', $record->id)
                                             ->first()->pivot;
                                     @endphp
-
                                     <div>
                                         <a href="{{ route('journal.article_evaluation', [$record->uuid, $reviewer->user->uuid]) }}"
                                             target="_blank"><u>Reviewer Manuscript Evaluation Form</u></a>
@@ -675,7 +682,7 @@
                                     <div>
                                         <button wire:click="removeSelectedUser('{{ $user_s->user_id }}','Reviewer')"
                                             class="text-red-500 hover:text-red-700 text-xl">
-                                            &times; 
+                                            &times;
                                         </button>
                                     </div>
                                 </div>

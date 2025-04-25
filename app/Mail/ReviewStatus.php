@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ReviewStatus extends Mailable
+class ReviewStatus extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
