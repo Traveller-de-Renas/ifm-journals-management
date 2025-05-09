@@ -85,7 +85,7 @@ class Articles extends Component
         }
 
         if ($this->status == 'with_decisions') {
-            $status = ArticleStatus::whereIn('code', ['007', '014', '015'])->get()->pluck('id')->toArray();
+            $status = ArticleStatus::whereIn('code', ['007', '014', '015', '021'])->get()->pluck('id')->toArray();
 
             $articles->when($this->query, function ($query, $search) {
                 return $query->where(function ($query) {
@@ -1100,5 +1100,28 @@ class Articles extends Component
                 'message' => 'The Associate Editor is now Removed From this Manuscript'
             ]);
         }
+    }
+
+
+
+    public $dropManuscriptModal = false;
+    public function dropManuscript(Article $article)
+    {
+        $this->record = $article;
+        $this->dropManuscriptModal = true;
+    }
+
+
+    public function confirmDrop()
+    {
+        $status = $this->articleStatus('021');
+        $this->record->update([
+            'article_status_id' => $status->id
+        ]);
+
+        session()->flash('response', [
+            'status'  => 'info',
+            'message' => 'This Manuscript is dropped and sent back to Manuscripts with Decisions'
+        ]);
     }
 }
