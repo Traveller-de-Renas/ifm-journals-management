@@ -607,7 +607,7 @@
                                 <div class="w-full">
                                     {{ $reviewer->user->first_name }}
                                     {{ $reviewer->user->middle_name }}
-                                    {{ $reviewer->user->last_name }}
+                                    {{ $reviewer->user->last_name }} ({{ $reviewer->user->email }})
 
                                     @php
                                         $rstatus = $reviewer
