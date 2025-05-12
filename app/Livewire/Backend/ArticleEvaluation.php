@@ -37,6 +37,8 @@ class ArticleEvaluation extends Component
 
     public $declineModal = false;
 
+    public $totalOptions = 0;
+
     public function mount(Request $request)
     {
 
@@ -78,6 +80,9 @@ class ArticleEvaluation extends Component
         })->first();
         $article = $this->record;
         $sections   = ReviewSectionsGroup::all();
+        $this->totalOptions = ReviewSection::all()->count();
+       
+
         return view('livewire.backend.article-evaluation', compact('submission', 'sections', 'article'));
     }
 
@@ -100,6 +105,29 @@ class ArticleEvaluation extends Component
         $optionValue = $this->reviewOptionValue;
         $comments = $this->reviewComment;
         $scomment = $this->reviewSComment;
+
+        // Ensure all options are selected
+        $requiredOptionsCount = $this->totalOptions;
+        $selectedOptionsCount = collect($this->reviewOption)->filter()->count();
+
+        if ($selectedOptionsCount < $requiredOptionsCount) {
+            session()->flash('response', [
+                'status' => 'error',
+                'message' => 'Please respond to all review sections before submitting your review.'
+            ]);
+            return;
+        }
+
+        //and $this->review_decision
+
+        if ($this->review_decision == null) {
+            session()->flash('response', [
+                'status' => 'error',
+                'message' => 'Please select a review decision before submitting your review.'
+            ]);
+            return;
+        }
+
 
 
         // dd($options, $this->review_decision, $optionValue);

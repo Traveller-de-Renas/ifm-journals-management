@@ -192,6 +192,7 @@
                     </table>
 
                     <div class="mb-6">
+                        (<i class="text-ms text-red-500">Optional</i>)
                         <x-textarea type="text" id="reviewSComment" class="w-full mt-2"
                             wire:model="reviewSComment.{{ $section->id }}" placeholder="Enter Comments..........."
                             rows="3" />
