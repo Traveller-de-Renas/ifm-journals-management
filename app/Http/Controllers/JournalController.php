@@ -147,5 +147,4 @@ class JournalController extends Controller
         return response()->file($path);
     } 
 
-
 }

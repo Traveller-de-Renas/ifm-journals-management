@@ -101,6 +101,8 @@ class ArticleEvaluation extends Component
         $comments = $this->reviewComment;
         $scomment = $this->reviewSComment;
 
+        dd($comments, $scomment);
+
         // dd($options, $this->review_decision, $optionValue);
         ArticleReview::where('article_id', $this->record->id)->where('user_id', $this->reviewer->id)->delete();
 

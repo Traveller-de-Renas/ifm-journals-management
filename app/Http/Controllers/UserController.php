@@ -35,4 +35,10 @@ class UserController extends Controller
     {
         return view('backend.user_profile');
     }
+
+    //failed jobs
+    public function failed_jobs()
+    {
+        return view('backend.failed_jobs');
+    }
 }

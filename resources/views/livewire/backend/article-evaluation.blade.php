@@ -326,7 +326,6 @@
                 <x-button class="bg-green-700 hover:bg-green-600" wire:click="store('complete')">Save &
                     Submit</x-button>
             </div>
-            <div>
     @endif
 
     @if ($juser->pivot->review_status == 'declined')

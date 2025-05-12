@@ -6,6 +6,7 @@ use App\Http\Middleware\CheckPermission;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\AuthenticationController;
+use App\Models\User;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -72,6 +73,9 @@ Route::group(['prefix' => 'users', 'middleware' => 'auth'], function () {
     Route::get('/roles', [UserController::class, 'roles'])->name('admin.roles')->middleware('permission:View Roles');
     Route::get('/permissions', [UserController::class, 'permissions'])->name('admin.permissions')->middleware('permission:View Permissions');
     Route::get('/user_profile/{user?}', [UserController::class, 'user_profile'])->name('admin.user_profile')->middleware('permission:View User Profile');
+    // failed_jobs
+    Route::get('/failed_jobs', [UserController::class, 'failed_jobs'])->name('admin.failed_jobs')->middleware('permission:View Roles');
+
 });
 
 

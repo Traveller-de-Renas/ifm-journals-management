@@ -608,7 +608,6 @@
                                     {{ $reviewer->user->first_name }}
                                     {{ $reviewer->user->middle_name }}
                                     {{ $reviewer->user->last_name }} ({{ $reviewer->user->email }})
-
                                     @php
                                         $rstatus = $reviewer
                                             ->article_journal_users()
@@ -619,6 +618,11 @@
                                         <a href="{{ route('journal.article_evaluation', [$record->uuid, $reviewer->user->uuid]) }}"
                                             target="_blank"><u>Reviewer Manuscript Evaluation Form</u></a>
                                     </div>
+                                    @if ($rstatus->review_status == 'pending')
+                                        <x-button class="mt-2 bg-green-500 hover:bg-green-700"
+                                            wire:click="resendEmailLink({{ $reviewer->user->id }})"
+                                            wire:loading.attr="disabled">Resend Review Link</x-button>
+                                    @endif
                                 </div>
                                 <div
                                     class="text-right {{ $rstatus->review_status == 'completed' ? 'text-green-700' : '' }} w-4/12">
@@ -884,8 +888,8 @@
                                             wire:model="send.{{ $journal_user->id }}"
                                             id="send.{{ $journal_user->id }}" />
                                     @else
-                                        <x-input type="checkbox" value="{{ $journal_user->id }}" class="bg-gray-500"
-                                            wire:model="send.{{ $journal_user->id }}"
+                                        <x-input type="checkbox" value="{{ $journal_user->id }}"
+                                            class="bg-gray-500" wire:model="send.{{ $journal_user->id }}"
                                             id="send.{{ $journal_user->id }}" disabled />
                                     @endif
 

@@ -765,6 +765,42 @@ class Articles extends Component
         ]);
     }
 
+    public function resendEmailLink($userUuid)
+    {
+
+        $status = $this->articleStatus('010');
+        $user_s = JournalUser::with('user')
+            ->whereHas('user', fn($q) => $q->where('user_id', $userUuid))
+            ->first();
+
+        if (!$user_s) {
+            session()->flash('error', 'Reviewer not found.');
+            return;
+        }
+
+        // Update pivot (start and end date)
+        $user_s->article_journal_users()->sync([
+            $this->record->id => [
+                'review_start_date' => now(),
+                'review_end_date' => now()->addDays($status->max_days),
+                'review_status' => 'pending'
+            ]
+        ], false);
+
+
+        // Send the email if review message exists
+        if (ReviewMessage::where('category', 'Review Request')->exists()) {
+            Mail::to($user_s->user->email)
+                ->send(new ReviewRequest($this->record, $user_s));
+        }
+
+        session()->flash('response', [
+            'status' => 'success',
+            'message' => 'Review request resent to ' . $user_s->user->email,
+        ]);
+    }
+
+
 
 
 
