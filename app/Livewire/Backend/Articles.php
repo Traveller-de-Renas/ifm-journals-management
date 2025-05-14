@@ -891,6 +891,8 @@ class Articles extends Component
 
         $article_juser = $journal_user->article_journal_users()->where('article_id', $this->record->id)->first();
 
+        dd($article_juser->pivot->review_decision);
+
         $this->review_decision  = $article_juser->pivot->review_decision;
 
 
