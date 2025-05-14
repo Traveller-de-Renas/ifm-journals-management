@@ -1429,9 +1429,7 @@
 
                                         @foreach ($section->reviewSectionOption as $key => $option)
                                             <td class="whitespace-nowrap px-6 py-4 font-medium text-center">
-                                                <input type="radio" name="option{{ $data->id }}"
-                                                    wire:model.live="reviewOption.{{ $data->id }}"
-                                                    value="{{ $option->id }}" disabled />
+                                                <input type="radio" name="option{{ $data->id }}" wire:model.live="reviewOption.{{ $data->id }}" value="{{ $option->id }}" disabled />
                                             </td>
                                         @endforeach
                                     </tr>
@@ -1441,13 +1439,108 @@
 
                         <div class="mb-6">
                             (<i class="text-ms text-red-500">Optional</i>)
-                            <x-textarea type="text" id="reviewSComment" class="w-full mt-2 bg-gray-50"
-                                wire:model="reviewSComment.{{ $section->id }}" placeholder="Comments..........."
-                                rows="3" readonly />
+                            <x-textarea type="text" id="reviewSComment" class="w-full mt-2 bg-gray-50" wire:model="reviewSComment.{{ $section->id }}" placeholder="Comments..........." rows="3" readonly />
                             <x-input-error for="reviewSComment" />
                         </div>
                     @endforeach
                 @endforeach
+
+                <div class="bg-gray-200 px-6 py-4 font-bold">
+                Decision
+            </div>
+            <div class="p-4 border-b">
+                <div class="text-justify">
+                    <b>Accepted:</b> The paper is approved for publication with no further revisions or only minor
+                    editorial changes. The manuscript has merit, the research procedures are appropriate, the findings
+                    are credible, and it is well-structured and well-presented. The author may be required to submit a
+                    final version that adheres to formatting guidelines.
+                    <br><br>
+
+                    <b>Minor revisions:</b> Requires the author to make relatively small adjustments to the paper, which
+                    don’t take much time. They might be related to author guideline requirements, e.g., a slight
+                    reduction in word count; formatting changes, such as the labelling of tables or figures; further
+                    evidence of an understanding of the research literature in the field; or a slight elaboration on the
+                    research findings.
+                    <br><br>
+
+                    <b>Major revisions:</b> Requires the author to make more significant improvements, the type which
+                    take weeks or even months, rather than days. Authors may be asked to address flaws in the
+                    methodology; collect more data; conduct a more thorough analysis; or even adjust the research
+                    question to ensure the paper contributes something truly original to the body of work.
+                    <br><br>
+
+                    <b>Rejected:</b> The paper does not meet the journal's standards and will not be considered for
+                    publication due to fundamental flaws in the research, a lack of originality or poor methodology.
+                </div>
+                <br>
+                <br>
+                <p class="font-bold">(Determine whether the article is publishable or not, tick the appropriate box)</p>
+
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
+                    <x-input type="radio" value="accepted" class="" wire:model.live="review_decision"
+                        name="decision" />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        Accepted
+                    </span>
+                </label>
+
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
+                    <x-input type="radio" value="minor revision" class="" wire:model.live="review_decision"
+                        name="decision" />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        Minor Revision
+                    </span>
+                </label>
+
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
+                    <x-input type="radio" value="major revision" class="" wire:model.live="review_decision"
+                        name="decision" />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        Major Revision
+                    </span>
+                </label>
+
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
+                    <x-input type="radio" value="rejected" class="" wire:model.live="review_decision"
+                        name="decision" />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        Rejected
+                    </span>
+                </label>
+                <br>
+                <br>
+
+
+                <div class="bg-gray-200 px-6 py-4 font-bold">
+                    Attachment File (<i>Optional</i>)
+                </div>
+
+                <div class="p-4 border-b">
+                    <div class="mt-4 flex gap-2">
+                        @foreach ($record->review_attachments as $key => $file)
+                            <div class="flex">
+                                <a href=""
+                                    class="bg-yellow-400 hover:bg-yellow-600 shadow-md rounded-l p-2 cursor-pointer">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="h-6 w-6 text-gray-500" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                            <polyline points="14 2 14 8 20 8" />
+                                            <line x1="16" y1="13" x2="8" y2="13" />
+                                            <line x1="16" y1="17" x2="8" y2="17" />
+                                            <polyline points="10 9 9 9 8 9" />
+                                        </svg>
+
+                                        {{ $file->attachment }}
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+            </div>
 
             </div>
 
