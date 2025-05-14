@@ -1477,28 +1477,28 @@
                 <p class="font-bold">(Determine whether the article is publishable or not, tick the appropriate box)</p>
 
                 <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
-                    <x-input type="radio"  {{ $review_decision == 'accepted' ? 'checked' : '' }} disabled />
+                    <input type="radio"  {{ $review_decision == 'accepted' ? 'checked' : '' }} disabled />
                     <span class="ms-3 text-sm font-medium text-gray-900 w-full">
                         Accepted
                     </span>
                 </label>
 
                 <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
-                    <x-input type="radio" {{ $review_decision == 'minor revision' ? 'checked' : '' }} disabled />
+                    <input type="radio" {{ $review_decision == 'minor revision' ? 'checked' : '' }} disabled />
                     <span class="ms-3 text-sm font-medium text-gray-900 w-full">
                         Minor Revision
                     </span>
                 </label>
 
                 <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
-                    <x-input type="radio" {{ $review_decision == 'major revision' ? 'checked' : '' }} disabled />
+                    <input type="radio" {{ $review_decision == 'major revision' ? 'checked' : '' }} disabled />
                     <span class="ms-3 text-sm font-medium text-gray-900 w-full">
                         Major Revision
                     </span>
                 </label>
 
                 <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
-                    <x-input type="radio" {{ $review_decision == 'rejected' ? 'checked' : '' }} disabled />
+                    <input type="radio" {{ $review_decision == 'rejected' ? 'checked' : '' }} disabled />
                     <span class="ms-3 text-sm font-medium text-gray-900 w-full">
                         Rejected
                     </span>
