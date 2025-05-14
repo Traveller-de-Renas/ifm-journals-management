@@ -879,10 +879,8 @@ class Articles extends Component
     public $reviewerFeedback;
     public $review_decision;
 
-    public function reviewFeedback($reviewer)
+    public function reviewFeedback(User $reviewer)
     {
-        dd($reviewer);
-        
         $this->reviewOption     = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
         $this->reviewComment    = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_query_id')->toArray();
         $this->sections         = ReviewSectionsGroup::all();
@@ -892,6 +890,8 @@ class Articles extends Component
                             })->where('journal_id', $this->record->journal_id)->first();
 
         $this->review_decision  = $rev->article_journal_users()->where('article_id', $this->record->id)->first()->review_decision;
+
+        
 
         $this->reviewerFeedback = true;
 

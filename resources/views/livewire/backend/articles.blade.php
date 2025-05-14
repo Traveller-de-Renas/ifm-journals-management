@@ -634,7 +634,7 @@
 
                                     @if ($rstatus->review_status == 'completed')
                                         <x-button class="mt-2 bg-blue-500 hover:bg-blue-700"
-                                            wire:click="reviewFeedback({{ $reviewer }})"
+                                            wire:click="reviewFeedback({{ $reviewer->user->id }})"
                                             wire:loading.attr="disabled">Manuscript Review</x-button>
                                     @endif
                                 </div>
@@ -1475,6 +1475,8 @@
                 <br>
                 <br>
                 <p class="font-bold">(Determine whether the article is publishable or not, tick the appropriate box)</p>
+
+                {{ $review_decision }}
 
                 <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
                     <x-input type="radio" value="accepted" class="" wire:model.live="review_decision" name="decision" />
