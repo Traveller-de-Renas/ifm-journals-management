@@ -1507,10 +1507,11 @@
                 <br>
 
 
-                {{-- <div class="bg-gray-200 px-6 py-4 font-bold">
+                <div class="bg-gray-200 px-6 py-4 font-bold">
                     Attachment File (<i>Optional</i>)
                 </div>
 
+                @if(count($record->review_attachments) > 0)
                 <div class="p-4 border-b">
                     <div class="mt-4 flex gap-2">
                         @foreach ($record->review_attachments as $key => $file)
@@ -1534,7 +1535,12 @@
                             </div>
                         @endforeach
                     </div>
-                </div> --}}
+                </div>
+                @else
+                    <div class="p-4 text-sm mb-4 mt-2 shadow bg-red-400 w-full text-center">
+                        {{ __('No Attachment Found') }}
+                    </div>
+                @endif
 
             </div>
 
