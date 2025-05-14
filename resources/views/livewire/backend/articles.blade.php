@@ -1392,7 +1392,7 @@
     </x-dialog-modal>
 
 
-    <x-dialog-modal wire:model="reviewerFeedback" :maxWidth="'6xl'">
+    <x-dialog-modal wire:model="reviewerFeedback" :maxWidth="'7xl'">
         <x-slot name="title">
             {{ __('Manuscript Review') }}
         </x-slot>
