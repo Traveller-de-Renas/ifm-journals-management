@@ -885,11 +885,13 @@ class Articles extends Component
         $this->reviewComment    = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_query_id')->toArray();
         $this->sections         = ReviewSectionsGroup::all();
 
-        $rev = $reviewer->journal_us()->whereHas('roles', function ($query) {
+        $journal_user = $reviewer->journal_us()->whereHas('roles', function ($query) {
                                 $query->where('name', 'Reviewer');
                             })->where('journal_id', $this->record->journal_id)->first();
 
-                            dd($rev);
+        $article_juser = $journal_user->article_journal_users()->where('article_id', $this->record->id)->first();
+
+                            dd($article_juser);
 
         $this->review_decision  = $rev->article_journal_users()->where('article_id', $this->record->id)->first()->review_decision;
 
