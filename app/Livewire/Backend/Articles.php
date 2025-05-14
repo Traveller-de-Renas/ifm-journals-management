@@ -889,9 +889,11 @@ class Articles extends Component
                                 $query->where('name', 'Reviewer');
                             })->where('journal_id', $this->record->journal_id)->first();
 
+                            dd($rev);
+
         $this->review_decision  = $rev->article_journal_users()->where('article_id', $this->record->id)->first()->review_decision;
 
-        
+
 
         $this->reviewerFeedback = true;
 
