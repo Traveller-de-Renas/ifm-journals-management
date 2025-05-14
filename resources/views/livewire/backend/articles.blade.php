@@ -631,6 +631,12 @@
                                             wire:click="resendEmailLink({{ $reviewer->user->id }})"
                                             wire:loading.attr="disabled">Resend Review Link</x-button>
                                     @endif
+
+                                    @if ($rstatus->review_status == 'completed')
+                                        <x-button class="mt-2 bg-blue-500 hover:bg-blue-700"
+                                            wire:click="reviewFeedback({{ $reviewer->user->id }})"
+                                            wire:loading.attr="disabled">Manuscript Review</x-button>
+                                    @endif
                                 </div>
                                 <div
                                     class="text-right {{ $rstatus->review_status == 'completed' ? 'text-green-700' : '' }} w-4/12">
