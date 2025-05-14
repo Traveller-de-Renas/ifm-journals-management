@@ -22,6 +22,7 @@ use Livewire\WithFileUploads;
 use App\Models\ArticleComment;
 use App\Mail\ArticleAssignment;
 use App\Models\EditorChecklist;
+use App\Models\ReviewSectionsGroup;
 use Illuminate\Support\Facades\Mail;
 
 class Articles extends Component
@@ -881,7 +882,7 @@ class Articles extends Component
     {
         $this->reviewOption     = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
         $this->reviewComment    = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_query_id')->toArray();
-        $this->sections         = ReviewSection::all();
+        $this->sections         = ReviewSectionsGroup::all();
         $this->reviewerFeedback = true;
     }
 

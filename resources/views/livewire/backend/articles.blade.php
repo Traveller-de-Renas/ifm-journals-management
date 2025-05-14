@@ -1400,16 +1400,20 @@
 
             <div class="mt-4 text-xs">
 
-                @if (!empty($sections))
-                    @foreach ($sections as $key => $section)
-                        <table class="min-w-full text-left font-light">
+                @foreach ($sections as $key => $sub_sections)
+                    <div class="p-3 bg-[#175883] text-white ">
+                        {{ $sub_sections->title }}
+                    </div>
+
+                    @foreach ($sub_sections->reviewSections as $skey => $section)
+                        <table class="min-w-full text-left text-sm font-light">
                             <thead class="border-b font-medium grey:border-neutral-500">
                                 <tr class="bg-neutral-200 font-bold">
-                                    <th scope="col" class="whitespace-nowrap px-4 py-2 font-bold">
+                                    <th scope="col" class="whitespace-nowrap px-6 py-4 font-bold">
                                         {{ $section->title }}
                                     </th>
                                     @foreach ($section->reviewSectionOption as $key => $option)
-                                        <th scope="col" class="whitespace-nowrap px-4 py-2 font-bold text-center">
+                                        <th scope="col" class="whitespace-nowrap px-6 py-4 font-bold text-center">
                                             {{ $option->title }}
                                         </th>
                                     @endforeach
@@ -1418,36 +1422,33 @@
                             <tbody>
 
                                 @foreach ($section->reviewSectionQuery as $key => $data)
-                                    <tr
-                                        class="border-b transition duration-300 ease-in-out @if ($section->category == 'options') hover:bg-neutral-100 @endif grey:border-neutral-500 grey:hover:bg-neutral-600">
-                                        <td class="whitespace-nowrap px-4 py-2 font-medium">
-                                            <p class="w-full @if ($section->category == 'comments') font-bold @endif">
-                                                {{ $data->title }}</p>
-
-                                            @if ($section->category == 'comments')
-                                                <x-textarea type="text" id="description" class="w-full mt-2"
-                                                    wire:model="reviewComment.{{ $data->id }}"
-                                                    placeholder="Enter Description" rows="5" readonly />
-                                            @endif
+                                    <tr class="">
+                                        <td class="whitespace-nowrap px-6 py-4 font-medium">
+                                            <p class="w-full">{{ $data->title }}</p>
                                         </td>
-                                        @if ($section->category == 'options')
-                                            @foreach ($section->reviewSectionOption as $key => $option)
-                                                <td class="whitespace-nowrap px-4 py-2 font-medium text-center">
-                                                    <input type="radio" name="option{{ $data->id }}"
-                                                        wire:model.live="reviewOption.{{ $data->id }}"
-                                                        value="{{ $option->id }}"
-                                                        wire:click="upOptions({{ $data->id }}, {{ $option->id }})"
-                                                        disabled />
-                                                </td>
-                                            @endforeach
-                                        @endif
+
+                                        @foreach ($section->reviewSectionOption as $key => $option)
+                                            <td class="whitespace-nowrap px-6 py-4 font-medium text-center">
+                                                <input type="radio" name="option{{ $data->id }}"
+                                                    wire:model.live="reviewOption.{{ $data->id }}"
+                                                    value="{{ $option->id }}"
+                                                    wire:click="upOptions({{ $data->id }}, {{ $option->id }}, '{{ $option->option_value }}')" />
+                                            </td>
+                                        @endforeach
                                     </tr>
                                 @endforeach
-
                             </tbody>
                         </table>
+
+                        <div class="mb-6">
+                            (<i class="text-ms text-red-500">Optional</i>)
+                            <x-textarea type="text" id="reviewSComment" class="w-full mt-2"
+                                wire:model="reviewSComment.{{ $section->id }}" placeholder="Enter Comments..........."
+                                rows="3" />
+                            <x-input-error for="reviewSComment" />
+                        </div>
                     @endforeach
-                @endif
+                @endforeach
 
             </div>
 
