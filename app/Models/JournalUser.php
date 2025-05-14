@@ -30,6 +30,6 @@ class JournalUser extends Model
 
     public function article_journal_users()
     {
-        return $this->belongsToMany(Article::class)->withPivot('review_start_date', 'review_end_date', 'review_status', 'number')->withTimestamps();;
+        return $this->belongsToMany(Article::class)->withPivot('review_start_date', 'review_end_date', 'review_status', 'review_decision', 'number')->withTimestamps();;
     }
 }
