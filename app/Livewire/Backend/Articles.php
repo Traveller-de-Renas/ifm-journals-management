@@ -893,7 +893,7 @@ class Articles extends Component
 
         $this->review_decision  = $article_juser->pivot->review_decision;
 
-
+        dd($this->record->review_attachments);
 
         $this->reviewerFeedback = true;
 
