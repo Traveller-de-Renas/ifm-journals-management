@@ -1431,8 +1431,7 @@
                                             <td class="whitespace-nowrap px-6 py-4 font-medium text-center">
                                                 <input type="radio" name="option{{ $data->id }}"
                                                     wire:model.live="reviewOption.{{ $data->id }}"
-                                                    value="{{ $option->id }}"
-                                                    wire:click="upOptions({{ $data->id }}, {{ $option->id }}, '{{ $option->option_value }}')" />
+                                                    value="{{ $option->id }}" disabled />
                                             </td>
                                         @endforeach
                                     </tr>
@@ -1442,9 +1441,9 @@
 
                         <div class="mb-6">
                             (<i class="text-ms text-red-500">Optional</i>)
-                            <x-textarea type="text" id="reviewSComment" class="w-full mt-2"
-                                wire:model="reviewSComment.{{ $section->id }}" placeholder="Enter Comments..........."
-                                rows="3" />
+                            <x-textarea type="text" id="reviewSComment" class="w-full mt-2 bg-gray-50"
+                                wire:model="reviewSComment.{{ $section->id }}" placeholder="Comments..........."
+                                rows="3" readonly />
                             <x-input-error for="reviewSComment" />
                         </div>
                     @endforeach
