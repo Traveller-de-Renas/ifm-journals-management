@@ -1476,8 +1476,6 @@
                 <br>
                 <p class="font-bold">(Determine whether the article is publishable or not, tick the appropriate box)</p>
 
-                {{ $review_decision }}
-
                 <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
                     <x-input type="radio"  {{ $review_decision == 'accepted' ? 'checked' : '' }} disabled />
                     <span class="ms-3 text-sm font-medium text-gray-900 w-full">
