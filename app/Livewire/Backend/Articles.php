@@ -875,7 +875,7 @@ class Articles extends Component
 
     public $reviewOption;
     public $reviewComment;
-    public $sections;
+    public $sections = [];
     public $reviewerFeedback;
 
     public function reviewFeedback(User $reviewer)
