@@ -1413,7 +1413,7 @@
                                         {{ $section->title }}
                                     </th>
                                     @foreach ($section->reviewSectionOption as $key => $option)
-                                        <th scope="col" class="whitespace-nowrap px-2 py-4 font-bold ">
+                                        <th scope="col" class="whitespace-nowrap px-6 py-4 font-bold text-center">
                                             {{ $option->title }}
                                         </th>
                                     @endforeach
@@ -1428,7 +1428,7 @@
                                         </td>
 
                                         @foreach ($section->reviewSectionOption as $key => $option)
-                                            <td class="whitespace-nowrap px-2 py-4 font-medium ">
+                                            <td class="whitespace-nowrap px-6 py-4 font-medium text-center">
                                                 <input type="radio" name="option{{ $data->id }}"
                                                     wire:model.live="reviewOption.{{ $data->id }}"
                                                     value="{{ $option->id }}" disabled />
