@@ -1511,7 +1511,7 @@
                     Attachment File (<i>Optional</i>)
                 </div>
 
-                @if($record->review_attachments != '')
+                @if(isset($record->review_attachments))
                 <div class="p-4 border-b">
                     <div class="mt-4 flex gap-2">
                         @foreach ($record->review_attachments as $key => $file)
