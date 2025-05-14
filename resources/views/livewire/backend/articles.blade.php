@@ -634,7 +634,7 @@
 
                                     @if ($rstatus->review_status == 'completed')
                                         <x-button class="mt-2 bg-blue-500 hover:bg-blue-700"
-                                            wire:click="reviewFeedback({{ $reviewer->user->id }})"
+                                            wire:click="reviewFeedback({{ $reviewer }})"
                                             wire:loading.attr="disabled">Manuscript Review</x-button>
                                     @endif
                                 </div>

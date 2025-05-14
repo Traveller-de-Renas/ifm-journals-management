@@ -879,8 +879,10 @@ class Articles extends Component
     public $reviewerFeedback;
     public $review_decision;
 
-    public function reviewFeedback(User $reviewer)
+    public function reviewFeedback($reviewer)
     {
+        dd($reviewer);
+        
         $this->reviewOption     = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
         $this->reviewComment    = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_query_id')->toArray();
         $this->sections         = ReviewSectionsGroup::all();
