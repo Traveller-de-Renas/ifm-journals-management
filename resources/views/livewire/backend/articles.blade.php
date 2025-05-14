@@ -1507,7 +1507,7 @@
                 <br>
 
 
-                {{-- <div class="bg-gray-200 px-6 py-4 font-bold">
+                <div class="bg-gray-200 px-6 py-4 font-bold">
                     Attachment File (<i>Optional</i>)
                 </div>
 
@@ -1540,7 +1540,7 @@
                     <div class="p-4 text-sm mb-4 mt-2 shadow bg-red-400 w-full text-center">
                         {{ __('No Attachment Found') }}
                     </div>
-                @endif --}}
+                @endif
 
             </div>
 
