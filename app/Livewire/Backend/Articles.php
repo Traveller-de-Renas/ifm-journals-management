@@ -884,7 +884,12 @@ class Articles extends Component
         $this->reviewOption     = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
         $this->reviewComment    = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_query_id')->toArray();
         $this->sections         = ReviewSectionsGroup::all();
-        $this->review_decision  = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->first()->review_decision;
+
+        $rev = $reviewer->journal_us()->whereHas('roles', function ($query) {
+                                $query->where('name', 'Reviewer');
+                            })->where('journal_id', $this->record->journal_id)->first();
+
+        $this->review_decision  = $rev->article_journal_users()->where('article_id', $this->record->id)->first()->review_decision;
 
         $this->reviewerFeedback = true;
 
