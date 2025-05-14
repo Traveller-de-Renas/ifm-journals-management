@@ -1479,28 +1479,28 @@
                 {{ $review_decision }}
 
                 <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
-                    <x-input type="radio" value="accepted" class="" wire:model.live="review_decision" name="decision" disabled />
+                    <x-input type="radio" value="accepted" class="" wire:model.live="review_decision" name="decision" {{ $review_decision == 'accepted' ? 'checked' : '' }} disabled />
                     <span class="ms-3 text-sm font-medium text-gray-900 w-full">
                         Accepted
                     </span>
                 </label>
 
                 <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
-                    <x-input type="radio" value="minor revision" class="" wire:model.live="review_decision" name="decision" disabled />
+                    <x-input type="radio" value="minor revision" class="" wire:model.live="review_decision" name="decision" {{ $review_decision == 'minor revision' ? 'checked' : '' }} disabled />
                     <span class="ms-3 text-sm font-medium text-gray-900 w-full">
                         Minor Revision
                     </span>
                 </label>
 
                 <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
-                    <x-input type="radio" value="major revision" class="" wire:model.live="review_decision" name="decision" disabled />
+                    <x-input type="radio" value="major revision" class="" wire:model.live="review_decision" name="decision" {{ $review_decision == 'major revision' ? 'checked' : '' }} disabled />
                     <span class="ms-3 text-sm font-medium text-gray-900 w-full">
                         Major Revision
                     </span>
                 </label>
 
                 <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
-                    <x-input type="radio" value="rejected" class="" wire:model.live="review_decision" name="decision" disabled />
+                    <x-input type="radio" value="rejected" class="" wire:model.live="review_decision" name="decision" {{ $review_decision == 'rejected' ? 'checked' : '' }} disabled />
                     <span class="ms-3 text-sm font-medium text-gray-900 w-full">
                         Rejected
                     </span>
