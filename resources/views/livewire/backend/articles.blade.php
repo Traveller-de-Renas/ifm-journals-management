@@ -1438,7 +1438,7 @@
                         </table>
 
                         <div class="mb-6">
-                            (<i class="text-ms text-red-500">Optional</i>)
+                            (<i class="text-ms text-red-500">Optional {{ $section->id }}</i>)
                             <x-textarea type="text" id="reviewSComment" class="w-full mt-2 bg-gray-50" wire:model="reviewSComment.{{ $section->id }}" placeholder="Comments..........." rows="3" readonly />
                             <x-input-error for="reviewSComment" />
                         </div>
