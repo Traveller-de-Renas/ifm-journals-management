@@ -883,7 +883,11 @@ class Articles extends Component
     public function reviewFeedback(User $reviewer)
     {
         $this->reviewOption     = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
+
         $this->reviewComment    = ReviewSectionsComment::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_id')->toArray();
+
+        dd($this->reviewComment);
+
         $this->sections         = ReviewSectionsGroup::all();
 
         $journal_user = $reviewer->journal_us()->whereHas('roles', function ($query) {
