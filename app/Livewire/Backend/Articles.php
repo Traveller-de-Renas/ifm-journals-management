@@ -886,7 +886,7 @@ class Articles extends Component
 
         $this->reviewComment    = ReviewSectionsComment::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_id')->toArray();
 
-        dd($this->reviewComment);
+        // dd($this->reviewComment);
 
         $this->sections         = ReviewSectionsGroup::all();
 
