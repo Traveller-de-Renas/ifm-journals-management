@@ -22,6 +22,7 @@ use Livewire\WithFileUploads;
 use App\Models\ArticleComment;
 use App\Mail\ArticleAssignment;
 use App\Models\EditorChecklist;
+use App\Models\ReviewSectionsComment;
 use App\Models\ReviewSectionsGroup;
 use Illuminate\Support\Facades\Mail;
 
@@ -882,7 +883,7 @@ class Articles extends Component
     public function reviewFeedback(User $reviewer)
     {
         $this->reviewOption     = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
-        $this->reviewComment    = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_query_id')->toArray();
+        $this->reviewComment    = ReviewSectionsComment::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_id')->toArray();
         $this->sections         = ReviewSectionsGroup::all();
 
         $journal_user = $reviewer->journal_us()->whereHas('roles', function ($query) {
@@ -892,8 +893,6 @@ class Articles extends Component
         $article_juser = $journal_user->article_journal_users()->where('article_id', $this->record->id)->first();
 
         $this->review_decision  = $article_juser->pivot->review_decision;
-
-        // dd($this->record->review_attachments);
 
         $this->reviewerFeedback = true;
 
