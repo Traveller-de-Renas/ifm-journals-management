@@ -412,7 +412,6 @@ class Articles extends Component
 
     public function openDrawerI(Article $article)
     {
-        $this->dispatch('contentChanged');
         $this->record  = $article;
         $this->isOpenI = true;
     }
@@ -427,8 +426,6 @@ class Articles extends Component
     public $eprocess = null;
     public function getCheckList()
     {
-        // dd($this->review_status); 
-
         if ($this->review_status == '018') {
             $this->eprocess = '009'; //Accepted
 

@@ -1083,10 +1083,8 @@
 
                 <div class="{{ $review_status == '018' ? 'hidden' : 'block' }}">
                     <div class="mt-4" wire:ignore>
-                        <x-label for="editor_comments" value="Editor Comments"
-                            class="mb-2 block font-medium text-sm text-gray-700" />
-                        <x-textarea type="text" id="editor_comments" class="w-full" wire:model="editor_comments"
-                            placeholder="Enter Editor Comments" rows="7" />
+                        <x-label for="editor_comments" value="Editor Comments" class="mb-2 block font-medium text-sm text-gray-700" />
+                        <x-textarea type="text" id="editor_comments" class="w-full" wire:model="editor_comments" placeholder="Enter Editor Comments" rows="7" />
                         <x-input-error for="editor_comments" />
                     </div>
                 </div>
