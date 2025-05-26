@@ -319,7 +319,6 @@ class Articles extends Component
 
     public function openDrawerC(Article $article)
     {
-        $this->dispatch('contentChanged');
         $this->record  = $article;
         $this->isOpenC = true;
     }
@@ -450,14 +449,21 @@ class Articles extends Component
 
 
 
+    public $descriptions = null;
     public function recommendations()
     {
+        $this->validate([
+            'descriptions' => 'required|string'
+        ],[
+            'descriptions.required' => 'Please enter Recommendations to Managing Editor',
+        ]);
+
         ArticleComment::create(
             [
                 'article_id'  => $this->record->id,
                 'user_id'     => auth()->user()->id,
                 'send_to'     => 'Chief Editor',
-                'description' => $this->description
+                'description' => $this->descriptions
             ]
         );
 
@@ -484,7 +490,6 @@ class Articles extends Component
         ]);
 
 
-
         $this->record->update([
             'article_status_id' => $status->id,
             'deadline'          => Carbon::now()->addDays($status->max_days)
@@ -492,7 +497,7 @@ class Articles extends Component
 
         session()->flash('response', [
             'status'  => 'success',
-            'message' => 'This Manuscript is Returned back to Chief Editor successfully, with Recommendations'
+            'message' => 'This Manuscript is Returned back to Managing Editor successfully, with Recommendations'
         ]);
     }
 

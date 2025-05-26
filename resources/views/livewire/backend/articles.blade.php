@@ -740,10 +740,10 @@
 
             <div class="mb-2 w-full">
 
-                <div class="mt-4" wire:ignore>
-                    <x-label for="description" value="Description" class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-textarea type="text" id="description" class="w-full" wire:model="description" rows="6" />
-                    <x-input-error for="description" />
+                <div class="mt-4">
+                    <x-label for="descriptions" value="Recommendations" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-textarea type="text" id="descriptions" class="w-full" wire:model="descriptions" rows="6" />
+                    <x-input-error for="descriptions" />
                 </div>
 
             </div>
