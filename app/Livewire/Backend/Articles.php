@@ -22,6 +22,8 @@ use Livewire\WithFileUploads;
 use App\Models\ArticleComment;
 use App\Mail\ArticleAssignment;
 use App\Models\EditorChecklist;
+use App\Models\ReviewSectionsComment;
+use App\Models\ReviewSectionsGroup;
 use Illuminate\Support\Facades\Mail;
 
 class Articles extends Component
@@ -410,7 +412,6 @@ class Articles extends Component
 
     public function openDrawerI(Article $article)
     {
-        $this->dispatch('contentChanged');
         $this->record  = $article;
         $this->isOpenI = true;
     }
@@ -425,8 +426,6 @@ class Articles extends Component
     public $eprocess = null;
     public function getCheckList()
     {
-        // dd($this->review_status); 
-
         if ($this->review_status == '018') {
             $this->eprocess = '009'; //Accepted
 
@@ -870,15 +869,30 @@ class Articles extends Component
 
     public $reviewOption;
     public $reviewComment;
-    public $sections;
+    public $sections = [];
     public $reviewerFeedback;
+    public $review_decision;
 
     public function reviewFeedback(User $reviewer)
     {
         $this->reviewOption     = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
-        $this->reviewComment    = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_query_id')->toArray();
-        $this->sections         = ReviewSection::all();
+
+        $this->reviewComment    = ReviewSectionsComment::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_id')->toArray();
+
+        // dd($this->reviewComment);
+
+        $this->sections         = ReviewSectionsGroup::all();
+
+        $journal_user = $reviewer->journal_us()->whereHas('roles', function ($query) {
+                                $query->where('name', 'Reviewer');
+                            })->where('journal_id', $this->record->journal_id)->first();
+
+        $article_juser = $journal_user->article_journal_users()->where('article_id', $this->record->id)->first();
+
+        $this->review_decision  = $article_juser->pivot->review_decision;
+
         $this->reviewerFeedback = true;
+
     }
 
 

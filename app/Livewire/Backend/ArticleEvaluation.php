@@ -103,10 +103,10 @@ class ArticleEvaluation extends Component
 
     public function store($state)
     {
-        $options  = $this->reviewOption;
+        $options     = $this->reviewOption;
         $optionValue = $this->reviewOptionValue;
-        $comments = $this->reviewComment;
-        $scomment = $this->reviewSComment;
+        $comments    = $this->reviewComment;
+        $scomment    = $this->reviewSComment;
 
         $rules = [];
 
@@ -135,7 +135,6 @@ class ArticleEvaluation extends Component
         }
 
         //and $this->review_decision
-
         if ($this->review_decision == null) {
             session()->flash('response', [
                 'status' => 'error',
