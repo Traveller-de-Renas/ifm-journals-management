@@ -2,20 +2,20 @@
 
     @if ($form)
         <div class="w-full border-b pb-4">
-            
+             
             <div class="grid grid-cols-3 space-x-2">
                 <div class="mt-4">
                     <x-label for="name" value="Name" class="mb-2 block font-medium text-sm text-gray-700" />
                     <x-input type="text" id="name" class="w-full" wire:model="name" />
                     <x-input-error for="name" />
                 </div>
-
+ 
                 <div class="mt-4">
                     <x-label for="subject" value="Subject" class="mb-2 block font-medium text-sm text-gray-700" />
                     <x-select id="subject" class="w-full" :options="$subjects" wire:model="subject" />
                     <x-input-error for="subject" />
                 </div>
-                    
+                     
                 <div class="mt-4">
                     <x-label for="status" value="status" class="mb-2 block font-medium text-sm text-gray-700" />
                     <x-select id="status" class="w-full" :options="['1' => 'Active', '0' => 'Inactive']" wire:model="status" />

@@ -15,7 +15,7 @@ class ReviewMessage extends Model
     protected $fillable = [
         'description',
         'category',
-        'status'
+        'status' 
     ];
 
     public function getActivitylogOptions(): LogOptions

@@ -39,6 +39,8 @@ class ArticleEvaluation extends Component
 
     public $totalOptions = 0;
 
+    public $sections;
+
     public function mount(Request $request)
     {
 
@@ -79,11 +81,11 @@ class ArticleEvaluation extends Component
             $query->where('code', '002');
         })->first();
         $article = $this->record;
-        $sections   = ReviewSectionsGroup::all();
+        $this->sections   = ReviewSectionsGroup::all();
         $this->totalOptions = ReviewSection::all()->count();
-       
 
-        return view('livewire.backend.article-evaluation', compact('submission', 'sections', 'article'));
+
+        return view('livewire.backend.article-evaluation', compact('submission',  'article'));
     }
 
     public function upOptions($key, $value, $optionValue)
@@ -105,6 +107,20 @@ class ArticleEvaluation extends Component
         $optionValue = $this->reviewOptionValue;
         $comments = $this->reviewComment;
         $scomment = $this->reviewSComment;
+
+        $rules = [];
+
+        foreach ($this->sections as $subSection) {
+            foreach ($subSection->reviewSections as $section) {
+                $rules["reviewSComment.{$section->id}"] = 'required|string|min:5';
+            }
+        }
+
+        $this->validate($rules, [
+            'reviewSComment.*.required' => 'Please enter a comment.',
+            'reviewSComment.*.string' => 'Comment must be valid text.',
+        ]);
+
 
         // Ensure all options are selected
         $requiredOptionsCount = $this->totalOptions;

@@ -788,25 +788,21 @@ class Articles extends Component
         ], false);
 
 
+        
         // Send the email if review message exists
         if (ReviewMessage::where('category', 'Review Request')->exists()) {
             Mail::to($user_s->user->email)
                 ->send(new ReviewRequest($this->record, $user_s));
         }
-
+ 
         session()->flash('response', [
             'status' => 'success',
             'message' => 'Review request resent to ' . $user_s->user->email,
         ]);
     }
 
-
-
-
-
     public $editorial;
     public $type_setting;
-
 
     public function publicationCheck()
     {

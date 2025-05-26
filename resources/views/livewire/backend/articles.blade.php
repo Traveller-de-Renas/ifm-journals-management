@@ -602,7 +602,7 @@
                             ->article_journal_users()
                             ->whereHas('roles', function ($query) {
                                 $query->where('name', 'Reviewer');
-                            })
+                            }) 
                             ->get();
                     @endphp
                     @if (!empty($reviewers))

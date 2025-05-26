@@ -31,7 +31,7 @@ class FailedJobs extends Component
             session()->flash('error', 'Failed job not found.');
             return;
         }
-
+ 
         $payload = json_decode($failed->payload, true);
 
         if (isset($payload['data']['command'])) {
