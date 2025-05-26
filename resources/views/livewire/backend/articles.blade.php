@@ -1082,7 +1082,7 @@
                 <div class="{{ $review_status == '018' ? 'hidden' : 'block' }}">
                     <div class="mt-4">
                         <x-label for="editor_comments" value="Associate Editor Comments"
-                            class="mb-2 block font-medium text-sm text-gray-700" />
+                            class="mb-2 block font-medium text-sm text-gray-700" /><span class="text-xs text-red-600">Mandatory</span>
                         <x-textarea type="text" id="editor_comments" class="w-full" wire:model="editor_comments"
                             placeholder="Enter Associate Editor Comments" rows="7" />
                         <x-input-error for="editor_comments" />
@@ -1218,10 +1218,8 @@
 
 
             <div class="mt-4" wire:ignore>
-                <x-label for="editor_comments" value="Editor Comments"
-                    class="mb-2 block font-medium text-sm text-gray-700" /><span></span>
-                <x-textarea type="text" id="editor_comments" class="w-full" wire:model="editor_comments"
-                    placeholder="Enter Editor Comments" rows="7" />
+                <x-label for="editor_comments" value="Editor Comments" class="mb-2 block font-medium text-sm text-gray-700" /><span></span>
+                <x-textarea type="text" id="editor_comments" class="w-full" wire:model="editor_comments" placeholder="Enter Editor Comments" rows="7" />
             </div>
             <div class="mt-2">
                 <x-input-error for="editor_comments" />
@@ -1448,15 +1446,61 @@
                 <div class="bg-gray-200 px-6 py-4 font-bold">
                     Decision
                 </div>
+                <br>
+                <br>
+                <p class="font-bold">(Determine whether the article is publishable or not, tick the appropriate box)</p>
+
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
+                    <input type="radio"  {{ $review_decision == 'accepted' ? 'checked' : '' }} disabled />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        Accepted
+                    </span>
+                </label>
+
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
+                    <input type="radio" {{ $review_decision == 'minor revision' ? 'checked' : '' }} disabled />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        Minor Revision
+                    </span>
+                </label>
+
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
+                    <input type="radio" {{ $review_decision == 'major revision' ? 'checked' : '' }} disabled />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        Major Revision
+                    </span>
+                </label>
+
+                <label class="inline-flex items-center cursor-pointer w-full border-b py-2">
+                    <input type="radio" {{ $review_decision == 'rejected' ? 'checked' : '' }} disabled />
+                    <span class="ms-3 text-sm font-medium text-gray-900 w-full">
+                        Rejected
+                    </span>
+                </label>
+                <br>
+                <br>
+
+
+                <div class="bg-gray-200 px-6 py-4 font-bold">
+                    Attachment File (<i>Optional</i>)
+                </div>
+
+                @if(isset($record->review_attachments) )
                 <div class="p-4 border-b">
-                    <div class="text-justify">
-                        <b>Accepted:</b> The paper is approved for publication with no further revisions or only minor
-                        editorial changes. The manuscript has merit, the research procedures are appropriate, the
-                        findings
-                        are credible, and it is well-structured and well-presented. The author may be required to submit
-                        a
-                        final version that adheres to formatting guidelines.
-                        <br><br>
+                    <div class="mt-4 flex gap-2">
+                        @foreach ($record->review_attachments as $key => $file)
+                            <div class="flex">
+                                <a href="" class="bg-yellow-400 hover:bg-yellow-600 shadow-md rounded-l p-2 cursor-pointer">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="h-6 w-6 text-gray-500" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                            <polyline points="14 2 14 8 20 8" />
+                                            <line x1="16" y1="13" x2="8" y2="13" />
+                                            <line x1="16" y1="17" x2="8" y2="17" />
+                                            <polyline points="10 9 9 9 8 9" />
+                                        </svg>
 
                         <b>Minor revisions:</b> Requires the author to make relatively small adjustments to the paper,
                         which
