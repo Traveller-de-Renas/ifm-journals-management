@@ -27,6 +27,7 @@ class ArticleEvaluation extends Component
     public $reviewOptionValue   = [];
     public $reviewComment  = [];
     public $reviewSComment = [];
+    public $review_attachments = [];
     public $review_attachment;
     public $review_decision;
     public $user;
@@ -40,6 +41,8 @@ class ArticleEvaluation extends Component
     public $totalOptions = 0;
 
     public $sections;
+
+
 
     public function mount(Request $request)
     {
@@ -73,6 +76,11 @@ class ArticleEvaluation extends Component
         $this->article_journal_user = $this->record->article_journal_users()->where('user_id', $this->reviewer->id)->first();
 
         $this->review_decision = $this->article_journal_user->pivot->review_decision;
+
+        $this->review_attachments = ReviewAttachment::where('article_id', $this->record->id)
+            ->where('user_id', $this->reviewer->id)
+            ->whereNotNull('attachment')
+            ->get();
     }
 
     public function render()
@@ -119,6 +127,7 @@ class ArticleEvaluation extends Component
         $this->validate($rules, [
             'reviewSComment.*.required' => 'Please enter a comment.',
             'reviewSComment.*.string' => 'Comment must be valid text.',
+            'reviewSComment.*.min' => 'Comment must be at least 20 characters long.'
         ]);
 
 
@@ -180,6 +189,26 @@ class ArticleEvaluation extends Component
             return;
         }
 
+        if ($this->review_attachment) {
+
+            $this->validate($rules, [
+                'review_attachment' => 'mimes:pdf|max:10240'
+            ]);
+
+            foreach ($this->review_attachment as $attachment) {
+                $_name = $attachment->getClientOriginalName();
+                $_type = $attachment->getClientOriginalExtension();
+                $_file = time() . '_' . str_replace(' ', '_', $_name);
+
+                $attachment->storeAs('/review_attachments', $_file);
+                ReviewAttachment::create([
+                    'article_id' => $this->record->id,
+                    'attachment' => $_file,
+                    'user_id'    => $this->reviewer->id
+                ]);
+            }
+        }
+
 
         foreach ($options as $key => $value) {
             if ($value != '') {
@@ -220,25 +249,6 @@ class ArticleEvaluation extends Component
         ]], false);
 
 
-        if ($this->review_attachment) {
-            $this->validate([
-                'review_attachment.*' => 'mimes:pdf|max:2048'
-            ]);
-
-            foreach ($this->review_attachment as $attachment) {
-                $_name = $attachment->getClientOriginalName();
-                $_type = $attachment->getClientOriginalExtension();
-                $_file = str_replace(' ', '_', $_name);
-
-                $attachment->storeAs('/review_attachments', $_file);
-
-                ReviewAttachment::create([
-                    'article_id' => $this->record->id,
-                    'attachment' => $_name,
-                    'user_id'    => $this->reviewer->id
-                ]);
-            }
-        }
 
         if ($state == 'complete') {
             $this->description = 'This Article Review is Complete and Submitted Back to the Editor for Further Processes';
@@ -253,6 +263,8 @@ class ArticleEvaluation extends Component
 
             // Mail::to('mrenatuskiheka@yahoo.com')
             //     ->send(new ReviewerResponse($this->record, $this->description));
+
+
         } else {
             session()->flash('response', [
                 'status'  => 'success',

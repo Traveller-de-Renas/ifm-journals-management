@@ -277,9 +277,8 @@
             <div class="p-4 border-b">
                 <x-input-file wire:model="review_attachment" id="review_attachment" multiple />
                 <x-input-error for="review_attachment" />
-
                 <div class="mt-4 flex gap-2">
-                    @foreach ($record->review_attachments as $key => $file)
+                    @foreach ($review_attachments as $key => $file)
                         <div class="flex">
                             <a href=""
                                 class="bg-yellow-400 hover:bg-yellow-600 shadow-md rounded-l p-2 cursor-pointer">
@@ -293,7 +292,6 @@
                                         <line x1="16" y1="17" x2="8" y2="17" />
                                         <polyline points="10 9 9 9 8 9" />
                                     </svg>
-
                                     {{ $file->attachment }}
                                 </div>
                             </a>

@@ -22,6 +22,7 @@ use Livewire\WithFileUploads;
 use App\Models\ArticleComment;
 use App\Mail\ArticleAssignment;
 use App\Models\EditorChecklist;
+use App\Models\ReviewAttachment;
 use App\Models\ReviewSectionsComment;
 use App\Models\ReviewSectionsGroup;
 use Illuminate\Support\Facades\Mail;
@@ -787,13 +788,13 @@ class Articles extends Component
         ], false);
 
 
-        
+
         // Send the email if review message exists
         if (ReviewMessage::where('category', 'Review Request')->exists()) {
             Mail::to($user_s->user->email)
                 ->send(new ReviewRequest($this->record, $user_s));
         }
- 
+
         session()->flash('response', [
             'status' => 'success',
             'message' => 'Review request resent to ' . $user_s->user->email,
@@ -872,6 +873,7 @@ class Articles extends Component
     public $sections = [];
     public $reviewerFeedback;
     public $review_decision;
+    public $review_attachments = [];
 
     public function reviewFeedback(User $reviewer)
     {
@@ -879,23 +881,21 @@ class Articles extends Component
 
         $this->reviewComment    = ReviewSectionsComment::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_id')->toArray();
 
-        // dd($this->reviewComment);
+        $this->review_attachments = ReviewAttachment::where('article_id', $this->record->id)
+            ->where('user_id', $reviewer->id)
+            ->whereNotNull('attachment')
+            ->get();
 
         $this->sections         = ReviewSectionsGroup::all();
-
         $journal_user = $reviewer->journal_us()->whereHas('roles', function ($query) {
-                                $query->where('name', 'Reviewer');
-                            })->where('journal_id', $this->record->journal_id)->first();
-
+            $query->where('name', 'Reviewer');
+        })->where('journal_id', $this->record->journal_id)->first();
         $article_juser = $journal_user->article_journal_users()->where('article_id', $this->record->id)->first();
 
         $this->review_decision  = $article_juser->pivot->review_decision;
 
         $this->reviewerFeedback = true;
-
     }
-
-
 
 
 
@@ -906,7 +906,8 @@ class Articles extends Component
     public function generalReviewStatus()
     {
         $this->validate([
-            'review_status' => 'required|in:018,019,020,015'
+            'review_status' => 'required|in:018,019,020,015',
+            'editor_comments' => 'required|string|max:3',
         ]);
 
 
@@ -957,7 +958,8 @@ class Articles extends Component
     public function returnManuscript($to = null)
     {
         $this->validate([
-            'review_status' => 'required|in:018,019,020,015'
+            'review_status' => 'required|in:018,019,020,015',
+            'description'   => 'required|string'
         ]);
 
         if ($to == 'managing_editor') {
