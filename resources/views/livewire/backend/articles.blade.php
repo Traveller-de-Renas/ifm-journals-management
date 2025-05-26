@@ -238,8 +238,7 @@
                                 @endif
 
                                 @if (
-                                    $article->article_status->code == '009' &&
-                                        ($aeditors->contains(auth()->user()->id) || $caeditors->contains(auth()->user()->id)))
+                                    $article->article_status->code == '009' && $caeditors->contains(auth()->user()->id))
                                     <li>
                                         <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start"
                                             wire:click="openDrawerE({{ $article->id }})"
@@ -409,8 +408,7 @@
 
     </div>
     <!-- Backdrop -->
-    <div wire:click="closeDrawer"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpen ? 'block' : 'hidden' }}"></div>
+    <div wire:click="closeDrawer" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpen ? 'block' : 'hidden' }}"></div>
 
 
     <div>
@@ -532,8 +530,7 @@
 
     </div>
     <!-- Backdrop -->
-    <div wire:click="closeDrawerA"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenA ? 'block' : 'hidden' }}"></div>
+    <div wire:click="closeDrawerA" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenA ? 'block' : 'hidden' }}"></div>
 
 
     <div>
@@ -711,8 +708,7 @@
         </div>
     </div>
     <!-- Backdrop -->
-    <div wire:click="closeDrawerB"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenB ? 'block' : 'hidden' }}"></div>
+    <div wire:click="closeDrawerB" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenB ? 'block' : 'hidden' }}"></div>
 
 
     <div>
@@ -745,10 +741,8 @@
             <div class="mb-2 w-full">
 
                 <div class="mt-4" wire:ignore>
-                    <x-label for="description" value="Description"
-                        class="mb-2 block font-medium text-sm text-gray-700" />
-                    <x-textarea type="text" id="description" class="w-full" wire:model="description"
-                        rows="6" />
+                    <x-label for="description" value="Description" class="mb-2 block font-medium text-sm text-gray-700" />
+                    <x-textarea type="text" id="description" class="w-full" wire:model="description" rows="6" />
                     <x-input-error for="description" />
                 </div>
 
@@ -779,8 +773,7 @@
 
     </div>
     <!-- Backdrop -->
-    <div wire:click="closeDrawerC"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenC ? 'block' : 'hidden' }}"></div>
+    <div wire:click="closeDrawerC" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenC ? 'block' : 'hidden' }}"></div>
 
 
     <div>
@@ -843,8 +836,7 @@
 
     </div>
     <!-- Backdrop -->
-    <div wire:click="closeDrawerD"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenD ? 'block' : 'hidden' }}"></div>
+    <div wire:click="closeDrawerD" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenD ? 'block' : 'hidden' }}"></div>
 
 
     <div>
@@ -1012,10 +1004,7 @@
 
     </div>
     <!-- Backdrop -->
-    <div wire:click="closeDrawerE"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenE ? 'block' : 'hidden' }}"></div>
-
-
+    <div wire:click="closeDrawerE" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenE ? 'block' : 'hidden' }}"></div>
 
 
 
@@ -1081,8 +1070,7 @@
 
                 <div class="{{ $review_status == '018' ? 'hidden' : 'block' }}">
                     <div class="mt-4">
-                        <x-label for="editor_comments" value="Associate Editor Comments"
-                            class="mb-2 block font-medium text-sm text-gray-700" /><span class="text-xs text-red-500">Mandatory</span>
+                        <x-label for="editor_comments" value="Associate Editor Comments" class="mb-2 block font-medium text-sm text-gray-700" /><span class="text-xs text-red-500">This Field is Mandatory</span>
                         <x-textarea type="text" id="editor_comments" class="w-full" wire:model="editor_comments"
                             placeholder="Enter Associate Editor Comments" rows="7" />
                         <x-input-error for="editor_comments" />
@@ -1113,10 +1101,7 @@
 
     </div>
     <!-- Backdrop -->
-    <div wire:click="closeDrawerI"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenI ? 'block' : 'hidden' }}"></div>
-
-
+    <div wire:click="closeDrawerI" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenI ? 'block' : 'hidden' }}"></div>
 
 
 
@@ -1167,8 +1152,8 @@
 
     </div>
     <!-- Backdrop -->
-    <div wire:click="closeDrawerF"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenF ? 'block' : 'hidden' }}"></div>
+    <div wire:click="closeDrawerF" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenF ? 'block' : 'hidden' }}"></div>
+
 
 
     <div>
@@ -1235,8 +1220,7 @@
 
     </div>
     <!-- Backdrop -->
-    <div wire:click="closeDrawerH"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenH ? 'block' : 'hidden' }}"></div>
+    <div wire:click="closeDrawerH" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenH ? 'block' : 'hidden' }}"></div>
 
 
 
@@ -1360,8 +1344,7 @@
 
     </div>
     <!-- Backdrop -->
-    <div wire:click="closeDrawerG"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenG ? 'block' : 'hidden' }}"></div>
+    <div wire:click="closeDrawerG" class="fixed inset-0 bg-black bg-opacity-50 z-40 {{ $isOpenG ? 'block' : 'hidden' }}"></div>
 
 
     <x-dialog-modal wire:model="deleteModal">

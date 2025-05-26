@@ -958,8 +958,11 @@ class Articles extends Component
     public function returnManuscript($to = null)
     {
         $this->validate([
-            'review_status' => 'required|in:018,019,020,015',
-            'description'   => 'required|string'
+            'review_status'   => 'required|in:018,019,020,015',
+            'editor_comments' => 'required|string'
+        ],[
+            'review_status.required' => 'Please select a status',
+            'editor_comments.required' => 'Please enter a comments/Recommendations',
         ]);
 
         if ($to == 'managing_editor') {
