@@ -38,4 +38,9 @@ class ReviewSection extends Model
     {
         return $this->belongsTo(ReviewSectionsGroup::class);
     }
+
+    public function reviewSectionsComment()
+    {
+        return $this->hasMany(ReviewSectionsComment::class);
+    }
 }

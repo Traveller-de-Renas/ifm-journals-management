@@ -6,6 +6,7 @@ use App\Models\ReviewMessage;
 use App\Models\ReviewSection;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use App\Models\ReviewSectionsGroup;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
@@ -21,7 +22,7 @@ class ReviewStatus extends Mailable implements ShouldQueue
     public $reviewers;
 
     public $review_message;
-    public $subject;
+    public $subject = 'Manuscript Review Status';
 
     /**
      * Create a new message instance.
@@ -31,7 +32,7 @@ class ReviewStatus extends Mailable implements ShouldQueue
         $this->record    = $record;
         $this->comments  = $comments;
 
-        $this->sections  = ReviewSection::where('category', 'comments')->get();
+        // $this->sections  = ReviewSection::where('category', 'comments')->get();
         $this->reviewers = $this->record->article_journal_users()->whereIn('journal_user_id', $journal_users)->where('review_status', 'completed')->whereHas('roles', function ($query) {
             $query->where('name', 'Reviewer');
         })->get();
@@ -50,6 +51,9 @@ class ReviewStatus extends Mailable implements ShouldQueue
             $this->review_message = ReviewMessage::where('category', 'Acceptance Letter')->first();
             $this->subject = 'Manuscript Acceptance Notification';
         }
+
+
+        $this->sections = ReviewSectionsGroup::all();
         
     }
 

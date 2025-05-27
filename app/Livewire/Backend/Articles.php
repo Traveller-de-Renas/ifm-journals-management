@@ -350,7 +350,6 @@ class Articles extends Component
 
     public function openDrawerE(Article $article)
     {
-        $this->dispatch('contentChanged');
         $this->record  = $article;
         $this->isOpenE = true;
     }
@@ -882,14 +881,17 @@ class Articles extends Component
 
     public function reviewFeedback(User $reviewer)
     {
-        $this->reviewOption     = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
+        $this->reviewOption      = ArticleReview::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('review_section_option_id', 'review_section_query_id')->toArray();
 
-        $this->reviewComment    = ReviewSectionsComment::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_id')->toArray();
+
+        $this->reviewComment     = ReviewSectionsComment::where('article_id', $this->record->id)->where('user_id', $reviewer->id)->pluck('comment', 'review_section_id')->toArray();
+
 
         $this->review_attachments = ReviewAttachment::where('article_id', $this->record->id)
             ->where('user_id', $reviewer->id)
             ->whereNotNull('attachment')
             ->get();
+
 
         $this->sections         = ReviewSectionsGroup::all();
         $journal_user = $reviewer->journal_us()->whereHas('roles', function ($query) {
@@ -898,7 +900,6 @@ class Articles extends Component
         $article_juser = $journal_user->article_journal_users()->where('article_id', $this->record->id)->first();
 
         $this->review_decision  = $article_juser->pivot->review_decision;
-
         $this->reviewerFeedback = true;
     }
 
@@ -911,9 +912,19 @@ class Articles extends Component
     public function generalReviewStatus()
     {
         $this->validate([
-            'review_status' => 'required|in:018,019,020,015',
-            'editor_comments' => 'required|string|max:3',
+            'review_status'   => 'required|in:018,019,020,015',
+            'editor_comments' => 'required|string',
         ]);
+
+
+        ArticleComment::create(
+            [
+                'article_id'  => $this->record->id,
+                'user_id'     => auth()->user()->id,
+                'send_to'     => 'Author',
+                'description' => $this->editor_comments
+            ]
+        );
 
 
         $status = $this->articleStatus($this->review_status);

@@ -1114,7 +1114,7 @@
                     <path
                         d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
                 </svg>
-                Article Comments From Editorial Team
+                Article Comments by Editorial Team
             </h5>
 
             <button wire:click="closeDrawerF"
@@ -1133,20 +1133,47 @@
             </p>
 
             <div>
-                @if ($record?->article_comments->count() > 0)
-                    @foreach ($record?->article_comments()->orderBy('id', 'DESC')->get() as $comment)
-                        <div class="bg-gray-200 shadow-sm p-2 rounded mb-2">
-                            {!! $comment->description !!}
-                            <div class="text-gray-600 text-xs">
-                                {{ $comment->user->first_name }} {{ $comment->user->last_name }},
-                                {{ $comment->created_at }}
+                @php
+                    $geditors = $journal->journal_us()
+                                        ->whereHas('roles', function ($query) {
+                                            $query->whereIn('name', ['Chief Editor', 'Associate Editor']);
+                                        })
+                                        ->get()
+                                        ->pluck('user_id');
+                @endphp
+                @if($geditors->contains(auth()->user()->id) && $record?->author?->id != auth()->user()->id)
+                    This is an editor
+                    @if ($record?->article_comments->count() > 0)
+                        @foreach ($record?->article_comments()->orderBy('id', 'DESC')->get() as $comment)
+                            <div class="bg-gray-200 shadow-sm p-2 rounded mb-2">
+                                {!! $comment->description !!}
+                                <div class="text-gray-600 text-xs">
+                                    {{ $comment->user->first_name }} {{ $comment->user->last_name }},
+                                    {{ $comment->created_at }}
+                                </div>
                             </div>
+                        @endforeach
+                    @else
+                        <div class="bg-red-500 shadow-sm p-2 rounded mb-2 text-sm text-center text-white">No Comments Found
                         </div>
-                    @endforeach
+                    @endif
                 @else
-                    <div class="bg-red-500 shadow-sm p-2 rounded mb-2 text-sm text-center text-white">No Comments Found
-                    </div>
+                    @if ($record?->article_comments()->where('send_to', 'Author')->count() > 0)
+                        @foreach ($record?->article_comments()->where('send_to', 'Author')->orderBy('id', 'DESC')->get() as $comment)
+                            <div class="bg-gray-200 shadow-sm p-2 rounded mb-2">
+                                {!! $comment->description !!}
+                                <div class="text-gray-600 text-xs">
+                                    {{ $comment->user->first_name }} {{ $comment->user->last_name }},
+                                    {{ $comment->created_at }}
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="bg-red-500 shadow-sm p-2 rounded mb-2 text-sm text-center text-white">No Comments Found
+                        </div>
+                    @endif
                 @endif
+                
             </div>
         </div>
 
