@@ -1142,7 +1142,7 @@
                                         ->pluck('user_id');
                 @endphp
                 @if($geditors->contains(auth()->user()->id) && $record?->author?->id != auth()->user()->id)
-                    This is an editor
+                    
                     @if ($record?->article_comments->count() > 0)
                         @foreach ($record?->article_comments()->orderBy('id', 'DESC')->get() as $comment)
                             <div class="bg-gray-200 shadow-sm p-2 rounded mb-2">
