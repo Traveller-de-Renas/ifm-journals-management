@@ -990,13 +990,12 @@ class Articles extends Component
             'deadline'          => Carbon::now()->addDays($status->max_days)
         ]);
 
-
         ArticleComment::create(
             [
                 'article_id'  => $this->record->id,
                 'user_id'     => auth()->user()->id,
                 'send_to'     => 'Chief Editor',
-                'description' => $this->description
+                'description' => $this->editor_comments
             ]
         );
 
@@ -1027,6 +1026,8 @@ class Articles extends Component
             'status'  => 'success',
             'message' => 'This manuscript is successfully returned to Managing Editor'
         ]);
+
+        $this->isOpenI = false;
     }
 
 
