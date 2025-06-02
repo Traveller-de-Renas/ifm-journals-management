@@ -947,8 +947,8 @@
                         class="mb-2 block font-medium text-sm text-gray-700" />
                     <x-select id="review_status" class="w-full" :options="[
                         '018' => 'Accepted for Production',
-                        '019' => 'Accepted with minor Revisions',
-                        '020' => 'Accepted with major Revisions',
+                        '019' => 'Minor Revisions',
+                        '020' => 'Major Revisions',
                         '015' => 'Not Acceptable',
                     ]" wire:model.live="review_status"
                         wire:change="getCheckList($event.target.value)" />
@@ -1042,8 +1042,8 @@
                         class="mb-2 block font-medium text-sm text-gray-700" />
                     <x-select id="review_status" class="w-full" :options="[
                         '018' => 'Accepted for Production',
-                        '019' => 'Accepted with minor Revisions',
-                        '020' => 'Accepted with major Revisions',
+                        '019' => 'Minor Revisions',
+                        '020' => 'Major Revisions',
                         '015' => 'Not Acceptable',
                     ]" wire:model.live="review_status"
                         wire:change="getCheckList($event.target.value)" />

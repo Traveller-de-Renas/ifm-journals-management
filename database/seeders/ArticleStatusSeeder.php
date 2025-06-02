@@ -34,8 +34,8 @@ class ArticleStatusSeeder extends Seeder
             ['Returned with Reviewer Comments', '016', 'background-color:#641e16;color:white;', 5],
 
             ['On Production', '018', 'background-color: #2e86c1;color:white;', 5],
-            ['Accepted with Minor Revisions', '019', 'background-color: #2e86c1;color:white;', 5],
-            ['Accepted with Major Revisions', '020', 'background-color: #2e86c1;color:white;', 5],
+            ['Minor Revisions', '019', 'background-color: #2e86c1;color:white;', 5],
+            ['Major Revisions', '020', 'background-color: #2e86c1;color:white;', 5],
         );
 
         
