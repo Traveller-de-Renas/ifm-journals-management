@@ -15,6 +15,10 @@
                 </div>
             @endif
 
+            <div class="mt-4 text-sm text-blue-700">
+                Note : Password must be at least 8 characters, contain at least one uppercase letter, one lowercase letter, one number, and one special character
+            </div>
+
             <div class="mt-4">
                 <x-label for="password" value="{{ __('Password') }}" />
                 <x-input id="password" class="block mt-1 w-full" type="password" wire:model="password" required autocomplete="new-password" />

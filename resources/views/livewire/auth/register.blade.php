@@ -139,7 +139,7 @@
                         </div>
 
                         <div class="mt-4 text-sm text-blue-700">
-                            Note : Password must be at least 6 characters, contain at least one uppercase letter, one lowercase letter, one number, and one special character
+                            Note : Password must be at least 8 characters, contain at least one uppercase letter, one lowercase letter, one number, and one special character
                         </div>
         
                         <div class="mt-4">

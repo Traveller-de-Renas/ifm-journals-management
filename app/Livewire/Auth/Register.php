@@ -76,7 +76,7 @@ class Register extends Component
                 'nullable',
                 'required',
                 'confirmed',
-                'min:6',
+                'min:8',
                 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@$#%]).*$/'
             ],
         ];

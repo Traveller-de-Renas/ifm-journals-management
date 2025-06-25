@@ -51,7 +51,7 @@ class ResetPassword extends Component
 
     public function resetPassword()
     {
-        $this->validate(['password' => 'string|required|confirmed|min:6|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@$#%]).*$/']);
+        $this->validate(['password' => 'string|required|confirmed|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@$#%]).*$/']);
         
         if($this->prequest->user->update([
             'password' => Hash::make($this->password)
