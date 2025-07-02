@@ -76,7 +76,7 @@ class Articles extends Component
 
 
         if ($this->status == 'onprogress') {
-            $status = ArticleStatus::whereIn('code', ['002', '003', '006', '008', '009', '010', '011', '013', '018'])->get()->pluck('id')->toArray();
+            $status = ArticleStatus::whereIn('code', ['002', '006', '008', '009', '010', '011', '013', '018'])->get()->pluck('id')->toArray();
 
             $articles->when($this->query, function ($query, $search) {
                 return $query->where(function ($query) {
