@@ -201,7 +201,7 @@
                         $query->where('name', 'Chief Editor');
                     })->first();
                 @endphp
-                
+                 
                 @if(!empty($editor))
                     <p class="mt-2 text-sm text-gray-500"> Currently Assigned Chief Editor is </p>
                     <div class="flex mb-2 font-bold border-t pt-2">

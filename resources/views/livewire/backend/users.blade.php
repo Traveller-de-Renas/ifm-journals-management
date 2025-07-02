@@ -12,7 +12,6 @@
             <x-input wire:model.live.debounce.500ms="search" placeholder="search..." type="search" />
         </div>
     </div>
-
     <table class="min-w-full text-left text-sm font-light">
         <thead class="border-b font-medium grey:border-neutral-500">
             <tr>

@@ -157,7 +157,7 @@
                                         ->toArray();
                                 @endphp
 
-                                @if ($article->article_status->code == '002' && in_array(auth()->user()->id, $ceditor))
+                                @if ($article->article_status->code == '002' || $article->article_status->code == '003' && in_array(auth()->user()->id, $ceditor))
                                     <li>
                                         <button class="block px-4 py-2 hover:bg-gray-100 w-full text-start"
                                             wire:click="openDrawer({{ $article->id }})"

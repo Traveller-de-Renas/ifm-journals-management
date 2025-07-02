@@ -65,7 +65,7 @@
             </h5>
             <div class="mb-6 text-justify">
                 Welcome to the IFM Journals platform, your gateway to accessing high-quality academic and research publications. Whether you are looking to explore the latest research, respond to active calls for papers, or find the right journal for your work, our platform provides the tools and resources to support you.<br><br>
-We are committed to fostering academic excellence by offering engaging experience for researchers, authors, and readers. Our platform hosts three distinguished journals edited by the Institute of Finance Management (IFM): the Journal of Finance and Business Studies (JFBS), the Journal of Innovation and Social Science Research (JISSR),and the African Journal of Finance and Management (AJFM). Browse our journals, stay informed with recent publications, and contribute to advancing knowledge in your field.
+            We are committed to fostering academic excellence by offering engaging experience for researchers, authors, and readers. Our platform hosts three distinguished journals edited by the Institute of Finance Management (IFM): the Journal of Finance and Business Studies (JFBS), the Journal of Innovation and Social Science Research (JISSR),and the African Journal of Finance and Management (AJFM). Browse our journals, stay informed with recent publications, and contribute to advancing knowledge in your field.
 
             </div>
 
