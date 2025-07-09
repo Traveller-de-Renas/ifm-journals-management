@@ -36,29 +36,41 @@ class ForgotPassword extends Component
 
         $user = User::where('email', $this->email);
 
-        if(!$user->first()->journal_us()->where('journal_id', $this->journal->id)->where('status', 1)->exists()){
-            session()->flash('error_message', 'It seems you are not registered to this journal please register, or activate your account.');
+        if ($user->hasRole('Administrator')) {
+            $this->createRequest($user);
+        } else {
 
-            return redirect()->route('password_request', ['journal' => $this->journal->uuid]);
-        }else{
-            if($user->exists()){
-                session()->flash('success', 'A password reset link was successfully sent to your email address. Please check your inbox and follow the instructions.');
+            if(!$user->first()->journal_us()->where('journal_id', $this->journal->id)->where('status', 1)->exists()){
+                session()->flash('error_message', 'It seems you are not registered to this journal please register, or activate your account.');
 
-                $prequest = PasswordChangeRequest::firstOrCreate([
-                    'user_id' => $user->first()->id,
-                    'status'  => 1
-                ],[
-                    'user_id' => $user->first()->id,
-                    'journal' => session()->get('journal')
-                ]);
+                return redirect()->route('password_request', ['journal' => $this->journal->uuid]);
+            }else{
+                if($user->exists()){
+                    session()->flash('success', 'A password reset link was successfully sent to your email address. Please check your inbox and follow the instructions.');
 
-                if(ReviewMessage::where('category', 'Password Request')->count() > 0){
-                    Mail::to($this->email)
-                        ->send(new PasswordRequest($user->first(), $prequest));
+                    $this->createRequest($user);
                 }
             }
+
         }
 
     }
+
+
+    protected function createRequest($user)
+    {
+        $prequest = PasswordChangeRequest::firstOrCreate([
+            'user_id' => $user->first()->id,
+            'status'  => 1
+        ],[
+            'user_id' => $user->first()->id,
+            'journal' => session()->get('journal')
+        ]);
+
+        if(ReviewMessage::where('category', 'Password Request')->count() > 0){
+            Mail::to($this->email)
+                ->send(new PasswordRequest($user->first(), $prequest));
+        }
+    } 
 
 }
