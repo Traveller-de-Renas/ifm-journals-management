@@ -36,6 +36,8 @@ class ForgotPassword extends Component
 
         $user = User::where('email', $this->email);
 
+        dd($user->first()->roles);
+
         if ($user->first()->hasRole('Administrator')) {
             $this->createRequest($user);
         } else {
