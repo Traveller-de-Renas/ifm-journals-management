@@ -43,16 +43,16 @@ class Login extends Component
 
         $key = Str::lower($this->email).'|'.request()->ip();
 
-        if (RateLimiter::tooManyAttempts($key, 5)) {
-            event(new Lockout(request()));
+        // if (RateLimiter::tooManyAttempts($key, 5)) {
+        //     event(new Lockout(request()));
 
-            $seconds = RateLimiter::availableIn($key);
-            session()->flash('error_message', "Too many login attempts. Please try again in {$seconds} seconds.");
-            return;
-        }
+        //     $seconds = RateLimiter::availableIn($key);
+        //     session()->flash('error_message', "Too many login attempts. Please try again in {$seconds} seconds.");
+        //     return;
+        // }
 
         if (Auth::guard('web')->attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
-            RateLimiter::clear($key); // Clear attempts after success
+            //RateLimiter::clear($key); // Clear attempts after success
 
             session()->regenerate();
 
@@ -77,7 +77,7 @@ class Login extends Component
             }
         }
 
-        RateLimiter::hit($key, 900); // Add failed attempt, 60 seconds decay
+        //RateLimiter::hit($key, 900); // Add failed attempt, 60 seconds decay
         session()->flash('error_message', 'The provided credentials do not match our records.');
     }
 }
