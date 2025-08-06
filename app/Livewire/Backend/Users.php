@@ -118,8 +118,8 @@ class Users extends Component
                 'sometimes',
                 'nullable',
                 'required',
-                'min:6',
-                'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@$#%]).*$/'
+                'min:8',
+                'regex:/^(?=\S{8,})(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).*$/'
             ],
         ];
     }

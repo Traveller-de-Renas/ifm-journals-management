@@ -77,7 +77,7 @@ class Register extends Component
                 'required',
                 'confirmed',
                 'min:8',
-                'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!@$#%]).*$/'
+                'regex:/^(?=\S{8,})(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).*$/'
             ],
         ];
     }
