@@ -86,15 +86,15 @@
             <div class="w-full mb-8">
                 <p class="text-lg font-bold mb-2">Abstract</p>
                 <div class="w-full text-justify mb-4">
-                    {!! $submission?->article->abstract !!}
+                    {!! $record?->abstract !!}
                 </div>
             </div>
-            @if ($submission?->article->keywords != '')
+            @if ($record?->keywords != '')
                 <div class="w-full mb-4">
                     <p class="text-lg font-bold mb-4">Keywords</p>
                     <div class="flex gap-2">
                         @php
-                            $keywords = explode(',', $submission?->article->keywords);
+                            $keywords = explode(',', $record?->keywords);
                         @endphp
                         @foreach ($keywords as $key => $keyword)
                             <span class="shadow px-4 py-2 hover:bg-gray-100 cursor-pointer border rounded-xl">
@@ -138,16 +138,23 @@
                 days left)
             </span>
 
-            <div class="flex-1 flex items-center text-blue-700 hover:text-blue-600 cursor-pointer mb-4 mt-4">
-                <br>
-                <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5">
-                <p class="ml-2 text-lg font-bold">
+            <div class="flex-1 flex items-center" >
+                @foreach($submission as $key => $file)
 
-                    <a href="{{ asset('storage/articles/' . $submission?->file_path) }}" target="_blank"
-                        title="{{ $submission?->file_path }}" class="text-blue-700 hover:text-blue-600">
-                        Download Manuscript File
-                    </a>
-                </p>
+                <div class="flex-1 flex items-center text-blue-700 hover:text-blue-600 cursor-pointer mb-4 mt-4">
+                    <br>
+                    <img src="{{ asset('storage/favicon/pdf.png') }}" class="h-5">
+                    <p class="ml-2 text-lg font-bold">
+
+                        <a href="{{ asset('storage/articles/' . $file?->file_path) }}" target="_blank"
+                            title="{{ $file?->file_path }}" class="text-blue-700 hover:text-blue-600">
+                            {{ $file?->file_category?->name }}
+                        </a>
+
+                    </p>
+                </div>
+
+                @endforeach
             </div>
             <hr>
 
@@ -333,8 +340,8 @@
                 Dear Reviewer,
                 <br>
                 Thank you for taking the time to consider reviewing the manuscript titled
-                "{{ $submission?->article->title }}" (ID:
-                {{ $submission?->article->paper_id }}). We appreciate your transparency in declining and value the
+                "{{ $record?->title }}" (ID:
+                {{ $record->paper_id }}). We appreciate your transparency in declining and value the
                 feedback you provided in your
                 response.<br>
 
@@ -360,8 +367,8 @@
             <div class="flex-1 flex items-center text-justify">
                 Dear Reviewer,
                 <br>
-                Thank you for submitting your review for the manuscript titled "{{ $submission?->article->title }}"
-                (ID:{{ $submission?->article->paper_id }}). Your
+                Thank you for submitting your review for the manuscript titled "{{ $record?->title }}"
+                (ID:{{ $record?->paper_id }}). Your
                 thoughtful feedback and expertise are invaluable in maintaining the quality and rigor of our publication
                 process.<br>
                 The editorial team will now carefully evaluate your comments alongside other reviews to make a final

@@ -87,10 +87,12 @@ class ArticleEvaluation extends Component
     {
         $submission = $this->record->files()->whereHas('file_category', function ($query) {
             $query->where('code', '002')
+                ->orWhere('code', '004')
                 ->orWhere('code', '005');
-        })->first();
+        })->get();
+
         $article = $this->record;
-        $this->sections   = ReviewSectionsGroup::all();
+        $this->sections     = ReviewSectionsGroup::all();
         $this->totalOptions = ReviewSection::all()->count();
 
 
