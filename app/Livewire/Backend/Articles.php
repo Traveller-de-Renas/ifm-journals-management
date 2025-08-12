@@ -274,6 +274,7 @@ class Articles extends Component
 
     public function openDrawerA(Article $article)
     {
+        $this->users   = [];
         $this->record  = $article;
         $this->isOpenA = true;
     }
@@ -292,13 +293,13 @@ class Articles extends Component
     {
         $this->dispatch('contentChanged');
 
-        $this->record  = $article;
+        $this->users     = [];
+        $this->record    = $article;
 
         $this->rev_count = $article->article_journal_users()->whereHas('roles', function ($query) {
             $query->where('name', 'Reviewer');
         })->get()->count();
-
-        // dd($this->rev_count);
+        
 
         $this->searchUser($string, $role);
 
@@ -1190,6 +1191,33 @@ class Articles extends Component
         session()->flash('response', [
             'status'  => 'info',
             'message' => 'This Manuscript is dropped and sent back to Manuscripts with Decisions'
+        ]);
+    }
+
+
+    public function disableReview($userUuid, $status)
+    {
+        $user_s = JournalUser::with('user')
+            ->whereHas('user', fn($q) => $q->where('user_id', $userUuid))
+            ->first();
+
+        if (!$user_s) {
+            session()->flash('error', 'Reviewer not found.');
+            return;
+        }
+
+        // Update pivot (start and end date)
+        $user_s->article_journal_users()->sync([
+            $this->record->id => [
+                'review_status' => $status
+            ]
+        ], false);
+
+        $this->closeDrawerB();
+
+        session()->flash('response', [
+            'status'  => 'success',
+            'message' => 'Review is now '.$status.' for this link which was sent to ' . $user_s->user->email,
         ]);
     }
 }

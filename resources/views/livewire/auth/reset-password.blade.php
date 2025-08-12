@@ -1,5 +1,5 @@
 <div>
-    @if($prequest->status == 1)
+    @if($prequest->status == 0)
         @if (session('success'))
             <div class="p-4 text-sm mb-4 shadow bg-green-300 w-full text-center">
                 {{ session('success') }}

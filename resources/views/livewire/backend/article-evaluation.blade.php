@@ -57,6 +57,17 @@
         </div>
     </div>
 
+    @php
+        $file  = $record->files()->first();
+        $juser = $journal_user->article_journal_users()->where('article_id', $record->id)->first();
+    @endphp
+
+    @if ($juser->pivot->review_status == 'disabled')
+        <div class="p-4 text-sm mb-4 mt-2 shadow bg-blue-300 w-full text-center">
+            This Review link was mistakenly sent to you and its not available for now, sorry for the inconvenience
+        </div>
+    @else
+
     @if (session('response'))
         @php
             $bgClass = match (session('response.status')) {
@@ -72,16 +83,9 @@
         </div>
     @endif
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
-        @php
-            $file = $record->files()->first();
-        @endphp
-
-        @php
-            $juser = $journal_user->article_journal_users()->where('article_id', $record->id)->first();
-        @endphp
-        {{-- <div class="flex gap-2 items-center"> --}}
-        @if ($juser->pivot->review_status == 'pending')
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
+            {{-- <div class="flex gap-2 items-center"> --}}
+            @if ($juser->pivot->review_status == 'pending')
 
             <div class="w-full mb-8">
                 <p class="text-lg font-bold mb-2">Abstract</p>

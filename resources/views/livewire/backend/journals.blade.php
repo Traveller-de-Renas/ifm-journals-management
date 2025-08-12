@@ -83,7 +83,7 @@
                     <x-sort-icon class="float-right" sortField="code" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                 </th>
                 <th scope="col" class="px-6 py-4">
-                    Chief Editor
+                    Managing Editor
                 </th>
                 <th scope="col" class="px-6 py-4">
                     <button wire:click="sort('status')" >Status</button>
@@ -141,7 +141,7 @@
                                 <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="confirmDelete({{ $data->id }})" wire:loading.attr="disabled">Delete</a>
                             </li>
                             <li>
-                                <button type="button" class="block px-4 py-2 hover:bg-gray-100 w-full text-left" wire:click="confirmAssign({{ $data->id }})" wire:loading.attr="disabled" >Assign Chief Editor</button>
+                                <button type="button" class="block px-4 py-2 hover:bg-gray-100 w-full text-left" wire:click="confirmAssign({{ $data->id }})" wire:loading.attr="disabled" >Assign Managing Editor</button>
                             </li>
                             <li>
                                 <a href="#" class="block px-4 py-2 hover:bg-gray-100 " wire:click="gotoJournal({{ $data->id }})" wire:loading.attr="disabled">Go to Journal</a>
@@ -170,7 +170,7 @@
                 <svg class="w-4 h-4 me-2.5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
-                Assign Chief Editor
+                Assign Managing Editor
             </h5>
     
             <button wire:click="closeDrawer" 
@@ -203,7 +203,7 @@
                 @endphp
                  
                 @if(!empty($editor))
-                    <p class="mt-2 text-sm text-gray-500"> Currently Assigned Chief Editor is </p>
+                    <p class="mt-2 text-sm text-gray-500"> Currently Assigned Managing Editor is </p>
                     <div class="flex mb-2 font-bold border-t pt-2">
                         <div class="w-full">
                             {{ $editor->user->first_name }}
@@ -220,7 +220,7 @@
                     </div>
                 @else
                     <div class="mb-2">
-                        No Chief Editor Assigned to this Journal
+                        No Managing Editor Assigned to this Journal
                     </div>
                 @endif
             @endif
@@ -308,7 +308,7 @@
     
  
         
-    <x-dialog-modal wire:model="Delete">
+    <x-dialog-modal wire:model="DeleteJournal">
         <x-slot name="title">
             {{ __('Delete Data') }}
         </x-slot>

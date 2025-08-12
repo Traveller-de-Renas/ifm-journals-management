@@ -98,16 +98,16 @@
         </div>
 
         <div class="mt-4">
-            <x-button class="w-full mb-6 text-center" wire:click="login()">
+            <x-button class="w-full mb-6 text-center" wire:click="login()" id="login-btn">
                 {{ __('Sign in') }}
             </x-button>
 
             <div class="flex items-center border-t pt-5 gap-6">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('register', ['journal' => $journal?->uuid]) }}">
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('register', ['journal' => $journal?->uuid]) }}" >
                     {{ __('Register Here') }}
                 </a>
                 
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password_request', ['journal' => $journal?->uuid]) }}">
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password_request', ['journal' => $journal?->uuid]) }}" >
                     {{ __('Forgot your password?') }}
                 </a>
             </div>
@@ -116,3 +116,11 @@
     </x-authentication-card>
     </div>
 </div>
+
+<script>
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            document.getElementById('login-btn').click();
+        }
+    });
+</script>

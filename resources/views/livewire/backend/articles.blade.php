@@ -622,6 +622,16 @@
                                         <a href="{{ route('journal.article_evaluation', [$record->uuid, $reviewer->user->uuid]) }}"
                                             target="_blank"><u>Reviewer Manuscript Evaluation Form</u></a>
                                     </div>
+                                    @if ($rstatus->review_status == 'disabled')
+                                    <x-button class="mt-2 bg-yellow-500 hover:bg-yellow-700"
+                                        wire:click="disableEnableReview({{ $reviewer->user->id }}, 'pending')"
+                                        wire:loading.attr="disabled">Enable Review</x-button>
+                                    @else
+                                    <x-button class="mt-2 bg-red-500 hover:bg-red-700"
+                                        wire:click="disableEnableReview({{ $reviewer->user->id }}, 'disabled')"
+                                        wire:loading.attr="disabled">Disable Review</x-button>
+                                    @endif
+
                                     @if ($rstatus->review_status == 'pending')
                                         <x-button class="mt-2 bg-green-500 hover:bg-green-700"
                                             wire:click="resendEmailLink({{ $reviewer->user->id }})"

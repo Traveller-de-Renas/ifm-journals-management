@@ -269,14 +269,25 @@ class Journals extends Component
 
 
 
+    public $DeleteJournal = false;
+    public function confirmDelete(Journal $journal){
+        $this->record = $journal;
+        $this->DeleteJournal = true;
+    }
 
 
 
+    public function delete()
+    {
+        if($this->record->delete()){
+            session()->flash('response',[
+                'status'  => 'success', 
+                'message' => 'This Journal is successfully deleted'
+            ]);
 
-
-
-
-
+            $this->DeleteJournal = false;
+        }
+    }
 
 
 

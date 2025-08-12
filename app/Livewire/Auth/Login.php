@@ -23,6 +23,14 @@ class Login extends Component
             }
         }
 
+        if(auth()->user()){
+            $user = Auth::user();
+            if($user->hasRole('Administrator')){
+                return redirect(route('journals.dashboard'));
+            }
+            return redirect(route('journals.articles', ['journal' => $this->journal->uuid, 'status' => 'with_decisions']));
+        }
+
     }
 
     public function render()
