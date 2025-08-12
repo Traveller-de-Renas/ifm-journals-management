@@ -3,11 +3,9 @@
 namespace App\Livewire\Auth;
 
 use Carbon\Carbon;
-use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use App\Models\PasswordChangeRequest;
 
 class ResetPassword extends Component
@@ -29,7 +27,7 @@ class ResetPassword extends Component
             abort(404);
         }
 
-        $start = Carbon::parse($this->prequest->created_at);
+        $start = Carbon::parse($this->prequest->updated_at);
         $end   = Carbon::parse(now());
 
         $diff  = $start->diffInMinutes($end);
