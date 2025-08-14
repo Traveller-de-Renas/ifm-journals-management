@@ -5,12 +5,12 @@
             <p class="font-bold text-xl">{{ __('LIST OF JOURNALS') }}</p>
         </div>
         <div class="col-span-2 flex gap-2 justify-end">
-            <x-button class="flex gap-2 items-center" wire:click="$toggle('filters')" >
+            {{-- <x-button class="flex gap-2 items-center" wire:click="$toggle('filters')" >
                 <svg class="h-3 w-3 text-white"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                 </svg>
                 <span>Filter Journals</span>
-            </x-button>
+            </x-button> --}}
 
             {{-- <x-button class="" wire:click="loadJournals()" wire:loading.attr="disabled">Load Data</x-button> --}}
 
