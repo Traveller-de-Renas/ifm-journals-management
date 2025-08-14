@@ -632,7 +632,7 @@
                                         wire:loading.attr="disabled">Disable Review</x-button>
                                     @endif
 
-                                    @if ($rstatus->review_status == 'pending')
+                                    @if ($rstatus->review_status != 'completed')
                                         <x-button class="mt-2 bg-green-500 hover:bg-green-700"
                                             wire:click="resendEmailLink({{ $reviewer->user->id }})"
                                             wire:loading.attr="disabled">Resend Review Link</x-button>
