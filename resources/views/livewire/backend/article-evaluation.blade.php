@@ -83,53 +83,7 @@
         </div>
     @endif
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
-        {{-- <div class="flex gap-2 items-center"> --}}
-        @if ($juser->pivot->review_status == 'pending')
-
-            <div class="w-full mb-8">
-                <p class="text-lg font-bold mb-2">Abstract</p>
-                <div class="w-full text-justify mb-4">
-                    {!! $record?->abstract !!}
-                </div>
-            </div>
-            @if ($record?->keywords != '')
-                <div class="w-full mb-4">
-                    <p class="text-lg font-bold mb-4">Keywords</p>
-                    <div class="flex gap-2">
-                        @php
-                            $keywords = explode(',', $record?->keywords);
-                        @endphp
-                        @foreach ($keywords as $key => $keyword)
-                            <span class="shadow px-4 py-2 hover:bg-gray-100 cursor-pointer border rounded-xl">
-                                {{ $keyword }} </span>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-        @endif
-
-        <div class="flex-1 text-left w-full">
-            @if ($juser->pivot->review_status == 'pending')
-                <p class="text-lg font-bold mb-4">Decision for Reviewing</p>
-                <div>
-                    Based on your assessment of the abstract, please indicate whether you are willing to proceed with
-                    the
-                    full review or must decline at this time. Your expertise is greatly valued, and we appreciate your
-                    timely response.
-                </div>
-
-                <x-button class="bg-green-700 hover:bg-green-600 text-xs mt-4" wire:click="accept()">
-                    Accept
-                </x-button>
-                <x-button class="bg-red-700 hover:bg-red-600 text-xs" wire:click="declineArticle()">
-                    Decline
-                </x-button>
-            @endif
-        </div>
-
-        {{-- </div> --}}
-    </div>
+    
 
     <hr>
     @if ($juser->pivot->review_status == 'accepted')
