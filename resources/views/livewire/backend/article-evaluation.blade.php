@@ -83,9 +83,9 @@
         </div>
     @endif
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
-            {{-- <div class="flex gap-2 items-center"> --}}
-            @if ($juser->pivot->review_status == 'pending')
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 mb-8">
+        {{-- <div class="flex gap-2 items-center"> --}}
+        @if ($juser->pivot->review_status == 'pending')
 
             <div class="w-full mb-8">
                 <p class="text-lg font-bold mb-2">Abstract</p>
@@ -108,8 +108,6 @@
                 </div>
             @endif
         @endif
-
-
 
         <div class="flex-1 text-left w-full">
             @if ($juser->pivot->review_status == 'pending')
@@ -336,6 +334,7 @@
                 <x-button class="bg-green-700 hover:bg-green-600" wire:click="store('complete')">Save &
                     Submit</x-button>
             </div>
+        </div>
     @endif
 
     @if ($juser->pivot->review_status == 'declined')
