@@ -56,7 +56,7 @@
         </div>
     </div>
 
-        @php
+    @php
         $file  = $record->files()->first();
         $juser = $journal_user->article_journal_users()->where('article_id', $record->id)->first();
     @endphp
@@ -67,21 +67,6 @@
         </div>
     @else
 
-    @if (session('response'))
-        @php
-            $bgClass = match (session('response.status')) {
-                'success' => 'bg-green-300',
-                'error' => 'bg-red-300',
-                'warning' => 'bg-yellow-300',
-                'info' => 'bg-blue-300',
-                default => 'bg-gray-200',
-            };
-        @endphp
-        <div class="p-4 text-sm mb-4 mt-2 shadow {{ $bgClass }} w-full text-center">
-            {{ session('response.message') }}
-        </div>
-    @endif
-    
 </div>
 
 <script>
