@@ -1195,7 +1195,7 @@ class Articles extends Component
     }
 
 
-    public function disableReview($userUuid, $status)
+    public function disableEnableReview($userUuid, $status)
     {
         $user_s = JournalUser::with('user')
             ->whereHas('user', fn($q) => $q->where('user_id', $userUuid))
