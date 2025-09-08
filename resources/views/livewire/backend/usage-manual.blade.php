@@ -30,7 +30,7 @@
 
             <hr>
 
-            <iframe src="{{ asset('storage/manual.pdf') }}" width="100%" ></iframe>
+            <iframe src="{{ asset('storage/manual.pdf') }}" width="100%" height="100%"></iframe>
         </div>
 
     </div>
