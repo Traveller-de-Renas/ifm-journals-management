@@ -662,6 +662,8 @@
                 {{ $slot }}
             </div>
         </main>
+
+        @livewire('backend.usage_manual')
     </div>
 
     @stack('modals')

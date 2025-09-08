@@ -12,7 +12,7 @@
                                 $journal = \App\Models\Journal::where('uuid', session('journal'))->first();
                             @endphp
                             <div class="text-lg font-bold w-full">
-                                {{ $journal->title }} - {{ strtoupper($journal->code) }} 
+                                {{ $journal->title }} - {{ strtoupper($journal->code) }}
                                 <div class="mt-1">
                                     <a href="{{ route('journals.exit_journal') }}">
                                         <span class="text-red-600 text-xs cursor-pointer bg-red-200 font-semibold rounded shadow-md p-2" >Exit From Journal</span>
