@@ -45,7 +45,8 @@ class User extends Authenticatable
         'profile_photo_path',
         'status',
         'journal',
-        'added'
+        'added',
+        'areas_of_specialization'
     ];
 
     /**

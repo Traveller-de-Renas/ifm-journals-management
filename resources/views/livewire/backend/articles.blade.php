@@ -679,10 +679,9 @@
                                 Found</p>
                         @else
                             @foreach ($users as $user)
-                                <div class="py-2 flex border-b hover:bg-gray-100 cursor-pointer"
-                                    wire:click="selectUser({{ $user->id }})">
-                                    <div class="w-full px-2">{{ $user->user->first_name }}
-                                        {{ $user->user->middle_name }} {{ $user->user->last_name }}</div>
+                                <div class="py-2 border-b hover:bg-gray-100 cursor-pointer" wire:click="selectUser({{ $user->id }})">
+                                    <div class="w-full px-2">{{ $user->user->first_name }} {{ $user->user->middle_name }} {{ $user->user->last_name }}</div>
+                                    <div class="w-full px-2 text-xs text-blue-600 italic">{{ $user->user->areas_of_specialization }}</div>
                                 </div>
                             @endforeach
                         @endif

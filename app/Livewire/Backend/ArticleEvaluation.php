@@ -11,7 +11,9 @@ use App\Models\ArticleReview;
 use App\Models\ArticleStatus;
 use App\Models\ReviewSection;
 use Livewire\WithFileUploads;
+use App\Mail\ReviewerResponse;
 use App\Models\ReviewAttachment;
+use Illuminate\Support\Facades\DB;
 use App\Models\ReviewSectionsGroup;
 use Illuminate\Support\Facades\Mail;
 use App\Models\ReviewSectionsComment;
@@ -264,8 +266,8 @@ class ArticleEvaluation extends Component
                 'message' => $this->description . ', We would like to extend our sinciere thanks for your careful review of our manuscript. Your expert comments have been invaluable in refining the manuscript and ensuring its rigor and clarity.'
             ]);
 
-            // Mail::to('mrenatuskiheka@yahoo.com')
-            //     ->send(new ReviewerResponse($this->record, $this->description));
+            Mail::to('mrenatuskiheka@yahoo.com')
+                ->send(new ReviewerResponse($this->record, $this->journal_user, null));
 
 
         } else {
@@ -284,30 +286,34 @@ class ArticleEvaluation extends Component
 
     public function decline()
     {
-        $this->journal_user->article_journal_users()->sync([$this->record->id => [
-            'review_status' => 'declined'
-        ]], false);
+        DB::transaction(function () {
+            $this->journal_user->article_journal_users()->sync([$this->record->id => [
+                'review_status' => 'declined'
+            ]], false);
 
-        session()->flash('response', [
-            'status'  => 'success',
-            'message' => 'This Article is Declined, Thanks we hope next time you will be able to assist us on reviewing relevant manuscript'
-        ]);
+            session()->flash('response', [
+                'status'  => 'success',
+                'message' => 'This Article is Declined, Thanks we hope next time you will be able to assist us on reviewing relevant manuscript'
+            ]);
 
-        // Mail::to('mrenatuskiheka@yahoo.com')
-        //     ->send(new ReviewerResponse($this->record, $this->description));
+            Mail::to('mrenatuskiheka@yahoo.com')
+                ->send(new ReviewerResponse($this->record, $this->journal_user, $this->description));
 
-        $this->reset(['description']);
-        $this->declineModal = false;
+            $this->reset(['description']);
+            $this->declineModal = false;
+        });
     }
 
     public function accept()
     {
-        $this->journal_user->article_journal_users()->sync([$this->record->id => [
-            'review_status' => 'accepted'
-        ]], false);
+        DB::transaction(function () {
+            $this->journal_user->article_journal_users()->sync([$this->record->id => [
+                'review_status' => 'accepted'
+            ]], false);
 
-        // Mail::to('mrenatuskiheka@yahoo.com')
-        //     ->send(new ReviewerResponse($this->record, $this->description));
+            Mail::to('mrenatuskiheka@yahoo.com')
+                ->send(new ReviewerResponse($this->record, $this->journal_user, null));
+        });
     }
 
     public function articleStatus($code)

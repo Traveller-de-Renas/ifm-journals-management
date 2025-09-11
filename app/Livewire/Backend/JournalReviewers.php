@@ -32,7 +32,7 @@ class JournalReviewers extends Component
     public $password;
     public $password_confirmation;
     public $salutation;
-    public $salutations;
+    public $salutations, $areas_of_specialization;
 
 
     public function store()
@@ -59,6 +59,7 @@ class JournalReviewers extends Component
             $data->password      = Hash::make('jrev@123IFM');
             $data->salutation_id = $this->salutation;
             $data->affiliation   = $this->affiliation;
+            $data->areas_of_specialization = $this->areas_of_specialization;
 
             $data->save();
 
@@ -127,6 +128,7 @@ class JournalReviewers extends Component
         $this->user->phone         = $this->phone;
         $this->user->salutation_id = $this->salutation;
         $this->user->affiliation   = $this->affiliation;
+        $this->user->areas_of_specialization = $this->areas_of_specialization;
 
         $this->user->update();
 
@@ -189,6 +191,7 @@ class JournalReviewers extends Component
         $this->phone        = $user->phone;
         $this->affiliation  = $user->affiliation;
         $this->salutation   = $user->salutation_id;
+        $this->areas_of_specialization = $user->areas_of_specialization;
 
         $this->create  = true;
         $this->isOpen  = true;

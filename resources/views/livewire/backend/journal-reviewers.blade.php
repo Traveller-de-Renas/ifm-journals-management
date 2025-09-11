@@ -44,6 +44,9 @@
                     <th scope="col" class="px-6 py-4">
                         <button >Affiliation</button>
                     </th>
+                    <th scope="col" class="px-6 py-4">
+                        <button >Areas of Specialization</button>
+                    </th>
                     <th scope="col" class="py-4 w-2" ></th>
                 </tr>
             </thead>
@@ -66,6 +69,9 @@
 
                     <td class="whitespace-nowrap px-6 py-3">
                         {{ $data->user->affiliation }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-3">
+                        {{ $data->user->areas_of_specialization }}
                     </td>
                     <td class="whitespace-nowrap">
                         <button id="dropdown{{ $data->id }}" data-dropdown-toggle="dropdownDots{{ $data->id }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900" type="button">
@@ -159,10 +165,17 @@
                         </div>
                     </div>
     
-                    <div class="mt-4">
-                        <x-label for="last_name" class="text-xs">{{ __('Last Name') }} <span class="text-red-500">*</span></x-label>
-                        <x-input id="last_name" type="text" class="w-full" wire:model="last_name" required autofocus autocomplete="off" />
-                        <x-input-error for="last_name" />
+                    <div class="mt-4 grid grid-cols-2 gap-2">
+                        <div class="mt-4">
+                            <x-label for="last_name" class="text-xs">{{ __('Last Name') }} <span class="text-red-500">*</span></x-label>
+                            <x-input id="last_name" type="text" class="w-full" wire:model="last_name" required autofocus autocomplete="off" />
+                            <x-input-error for="last_name" />
+                        </div>
+                        <div class="mt-4">
+                            <x-label for="gender" value="Gender" class="text-xs text-gray-700" />
+                            <x-select id="gender" class="w-full" :options="['Male' => 'Male', 'Female' => 'Female']" wire:model="gender" />
+                            <x-input-error for="gender" />
+                        </div>
                     </div>
         
                     <div class="mt-4 grid grid-cols-2 gap-2">
@@ -177,12 +190,6 @@
                             <x-input-error for="phone" />
                         </div>
                     </div>
-        
-                    <div class="mt-4">
-                        <x-label for="gender" value="Gender" class="text-xs text-gray-700" />
-                        <x-select id="gender" class="w-full" :options="['Male' => 'Male', 'Female' => 'Female']" wire:model="gender" />
-                        <x-input-error for="gender" />
-                    </div>
 
                     <div class="mt-4">
                         <x-label for="affiliation" class="text-xs">{{ __('Affiliation') }} <span class="text-red-500">*</span></x-label>
@@ -190,18 +197,25 @@
                         <x-input-error for="affiliation" />
 
                         @if($affiliation != '')
-                        <div class="shadow mt-1 relative">
-                            <div class="absolute">
-                                @foreach ($affiliations as $affiliation)
-                                    
-                                    <div class="text-xs text-gray-700 bg-gray-200 hover:bg-gray-300 cursor-pointer p-2" wire:click="selectAffiliation('{{ $affiliation->affiliation }}')">
-                                        {{ $affiliation->affiliation }}
-                                    </div>
+                            <div class="shadow mt-1 relative">
+                                <div class="absolute">
+                                    @foreach ($affiliations as $affiliation)
+                                        
+                                        <div class="text-xs text-gray-700 bg-gray-200 hover:bg-gray-300 cursor-pointer p-2" wire:click="selectAffiliation('{{ $affiliation->affiliation }}')">
+                                            {{ $affiliation->affiliation }}
+                                        </div>
 
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
                         @endif
+                    </div>
+
+
+                    <div class="mt-4">
+                        <x-label for="areas_of_specialization" value="Areas of Specialization (Separate by Semicolon ';')" class="text-xs text-gray-700" />
+                        <x-input id="areas_of_specialization" type="text" class="w-full" wire:model="areas_of_specialization" required autocomplete="off" />
+                        <x-input-error for="areas_of_specialization" />
                     </div>
                 </div>
             @else
