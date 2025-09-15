@@ -27,10 +27,7 @@ class Home extends Component
             });
         });
 
-
         $this->journals_count = $journals->count();
-
-        
         $this->issues_count   = Issue::where('publication', 'Published')->count();
         $this->articles_count = Article::whereHas('article_status', function ($query) { 
             $query->where('code', '014'); 

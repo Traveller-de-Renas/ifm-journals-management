@@ -114,8 +114,8 @@
                 </div>
             </div>
 
+            
             <div class="grid grid-cols-12 w-full rounded-r-lg shadow">
-
                 <div class="col-span-4">
                     <img class="object-cover object-center w-full h-full" src="{{ asset('images/auth-image.jpg') }}" width="760" height="1024" alt="Authentication image" />
                 </div>
@@ -128,10 +128,9 @@
                     <a href="{{ route('journal.callfor_paper') }}" >
                         <p class="inline-flex font-medium items-center text-blue-600 hover:underline text-center w-full">Calls for papers </p>
                     </a>
-
                 </div>
-
             </div>
+
         </div>
     </div>
 

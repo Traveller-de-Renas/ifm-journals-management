@@ -229,7 +229,7 @@ class Articles extends Component
                 ->whereIn('article_status_id', $status);
         }
 
-        $articles = $articles->paginate(20);
+        $articles = $articles?->paginate(20);
 
         return view('livewire.backend.articles', compact('articles', 'journal'));
     }

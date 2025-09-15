@@ -29,7 +29,7 @@
             <nav class="bg-white border-gray-200">
                 <div class="w-full bg-[#175883]">
                     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
-                        <a href="{{ url('/') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
+                        <a href="https://ifm.ac.tz" target="_blank" class="flex items-center space-x-3 rtl:space-x-reverse">
                             <img src="{{ asset('storage/logo.png' ) }}" class="w-12 md:w-24 md:h-24" >
                             <div>
                                 <p class="text-white md:text-4xl text-md font-bold">The Institute of Finance Management</p>

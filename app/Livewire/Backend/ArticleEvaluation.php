@@ -266,8 +266,29 @@ class ArticleEvaluation extends Component
                 'message' => $this->description . ', We would like to extend our sinciere thanks for your careful review of our manuscript. Your expert comments have been invaluable in refining the manuscript and ensuring its rigor and clarity.'
             ]);
 
-            Mail::to('mrenatuskiheka@yahoo.com')
-                ->send(new ReviewerResponse($this->record, $this->journal_user, null));
+            $emails = [];
+
+            //Managing Editor
+            $managing_editor = $this->record->journal->journal_us()->whereHas('roles', function ($roles){ 
+                $roles->where('name', 'Chief Editor');
+            })->get();
+            foreach($managing_editor as $key => $editor){
+                $emails[] = $editor->user?->email;
+            }
+
+            //Associate Editor
+            $article_assoced = $this->record->article_journal_users()->whereHas('roles', function ($roles){ 
+                $roles->where('name', 'Associate Editor');
+            })->get();
+            
+            foreach($article_assoced as $key => $editor){
+                $emails[] = $editor->user?->email;
+            }
+
+            if(count($emails) > 0){
+                Mail::to($emails)
+                    ->send(new ReviewerResponse($this->record, $this->journal_user, null));
+            }
 
 
         } else {
@@ -296,8 +317,30 @@ class ArticleEvaluation extends Component
                 'message' => 'This Article is Declined, Thanks we hope next time you will be able to assist us on reviewing relevant manuscript'
             ]);
 
-            Mail::to('mrenatuskiheka@yahoo.com')
-                ->send(new ReviewerResponse($this->record, $this->journal_user, $this->description));
+
+            $emails = [];
+
+            //Managing Editor
+            $managing_editor = $this->record->journal->journal_us()->whereHas('roles', function ($roles){ 
+                $roles->where('name', 'Chief Editor');
+            })->get();
+            foreach($managing_editor as $key => $editor){
+                $emails[] = $editor->user?->email;
+            }
+
+            //Associate Editor
+            $article_assoced = $this->record->article_journal_users()->whereHas('roles', function ($roles){ 
+                $roles->where('name', 'Associate Editor');
+            })->get();
+            
+            foreach($article_assoced as $key => $editor){
+                $emails[] = $editor->user?->email;
+            }
+
+            if(count($emails) > 0){
+                Mail::to($emails)
+                    ->send(new ReviewerResponse($this->record, $this->journal_user, $this->description));
+            }
 
             $this->reset(['description']);
             $this->declineModal = false;
@@ -311,8 +354,30 @@ class ArticleEvaluation extends Component
                 'review_status' => 'accepted'
             ]], false);
 
-            Mail::to('mrenatuskiheka@yahoo.com')
-                ->send(new ReviewerResponse($this->record, $this->journal_user, null));
+
+            $emails = [];
+
+            //Managing Editor
+            $managing_editor = $this->record->journal->journal_us()->whereHas('roles', function ($roles){ 
+                $roles->where('name', 'Chief Editor');
+            })->get();
+            foreach($managing_editor as $key => $editor){
+                $emails[] = $editor->user?->email;
+            }
+
+            //Associate Editor
+            $article_assoced = $this->record->article_journal_users()->whereHas('roles', function ($roles){ 
+                $roles->where('name', 'Associate Editor');
+            })->get();
+            
+            foreach($article_assoced as $key => $editor){
+                $emails[] = $editor->user?->email;
+            }
+
+            if(count($emails) > 0){
+                Mail::to($emails)
+                    ->send(new ReviewerResponse($this->record, $this->journal_user, $this->description));
+            }
         });
     }
 

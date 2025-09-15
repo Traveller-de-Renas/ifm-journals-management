@@ -49,6 +49,7 @@
             @php
                 $sn = 1;
             @endphp
+            @if($articles)
             @foreach ($articles as $article)
                 <tr
                     class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 grey:border-neutral-500 grey:hover:bg-neutral-600 {{ $article->notifications()->where('status', 1)->where('journal_user_id',$journal->journal_us()->where('user_id', auth()->user()?->id)->first()?->id)->count() > 0? 'text-red-600 font-semibold': '' }}">
@@ -303,12 +304,12 @@
                     $sn++;
                 @endphp
             @endforeach
-
+            @endif
         </tbody>
     </table>
 
     <div class="mt-4 w-full">
-        {{ $articles->links() }}
+        {{ $articles?->links() }}
     </div>
 
 
@@ -1153,15 +1154,14 @@
 
             <div>
                 @php
-                    $geditors = $journal
-                        ->journal_us()
+                    $geditors = $journal?->journal_us()
                         ->whereHas('roles', function ($query) {
                             $query->whereIn('name', ['Chief Editor', 'Associate Editor']);
                         })
                         ->get()
                         ->pluck('user_id');
                 @endphp
-                @if ($geditors->contains(auth()->user()->id) && $record?->author?->id != auth()->user()->id)
+                @if ($geditors && $geditors->contains(auth()->user()->id) && $record?->author?->id != auth()->user()->id)
 
                     @if ($record?->article_comments->count() > 0)
                         @foreach ($record?->article_comments()->orderBy('id', 'DESC')->get() as $comment)

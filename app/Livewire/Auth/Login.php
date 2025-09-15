@@ -28,7 +28,7 @@ class Login extends Component
             if($user->hasRole('Administrator')){
                 return redirect(route('journals.dashboard'));
             }
-            return redirect(route('journals.articles', ['journal' => $this->journal->uuid, 'status' => 'with_decisions']));
+            return redirect(route('journals.articles', ['journal' => $this->journal?->uuid, 'status' => 'with_decisions']));
         }
 
     }
