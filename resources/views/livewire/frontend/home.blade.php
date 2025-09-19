@@ -1,5 +1,5 @@
 <div>
-    <div class="relative" wire:ignore >
+    {{-- <div class="relative" wire:ignore >
         <div id="default-carousel" class="relative w-full" data-carousel="slide">
             <!-- Carousel wrapper -->
             <div class="relative h-86 overflow-hidden h-[170px] md:h-dvh md:max-h-[620px]">
@@ -32,7 +32,93 @@
                 </span>
             </button>
         </div>
+    </div> --}}
+
+    <div class="relative w-full mx-auto" x-data x-init="initSlider()" wire:ignore>
+        <div id="custom-slider" class="relative h-86 overflow-hidden h-[170px] md:h-dvh md:max-h-[620px] rounded-xl shadow-lg group">
+            @foreach ($sliding_image as $index => $image)
+                <div class="absolute inset-0 transition-opacity duration-700 ease-in-out {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}" data-slide="{{ $index }}">
+                    <img src="{{ asset('storage/slider/'.$image->image) }}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 h-full" alt="...">
+                </div>
+            @endforeach
+
+            <button id="prevBtn" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" >
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30  group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
+                    <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                    </svg>
+                    <span class="sr-only">Previous</span>
+                </span>
+            </button>
+            <button id="nextBtn" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" >
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30  group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
+                    <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                    </svg>
+                    <span class="sr-only">Next</span>
+                </span>
+            </button>
+        </div>
     </div>
+
+    <script>
+        function initSlider() {
+            const slider  = document.getElementById("custom-slider");
+            const slides  = slider.querySelectorAll("[data-slide]");
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+
+            let current = 0;
+            let interval;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle("opacity-100", i === index);
+                    slide.classList.toggle("opacity-0", i !== index);
+                });
+                current = index;
+            }
+
+            function nextSlide() {
+                showSlide((current + 1) % slides.length);
+            }
+
+            function prevSlide() {
+                showSlide((current - 1 + slides.length) % slides.length);
+            }
+
+            function startAutoPlay() {
+                interval = setInterval(nextSlide, 6000);
+            }
+
+            function stopAutoPlay() {
+                console.log('stopping');
+                clearInterval(interval);
+                return false;
+            }
+
+            // Init
+            showSlide(0);
+            startAutoPlay();
+
+            // Controls
+            nextBtn.addEventListener("click", () => {
+                nextSlide();
+                stopAutoPlay();
+                startAutoPlay();
+            });
+
+            prevBtn.addEventListener("click", () => {
+                prevSlide();
+                stopAutoPlay();
+                startAutoPlay();
+            });
+
+            // Pause on hover
+            slider.addEventListener("mouseenter", stopAutoPlay);
+            slider.addEventListener("mouseleave", startAutoPlay);
+        }
+    </script>
 
     <div class="bg-[#175883] p-4">
         <label class="relative block">
