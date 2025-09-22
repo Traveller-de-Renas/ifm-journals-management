@@ -1,4 +1,4 @@
-<div>
+<div class="mt-0">
     {{-- <div class="relative" wire:ignore >
         <div id="default-carousel" class="relative w-full" data-carousel="slide">
             <!-- Carousel wrapper -->
@@ -34,7 +34,7 @@
         </div>
     </div> --}}
 
-    <div class="relative w-full md:mt-60 mt-32 mx-auto" x-data x-init="initSlider()" wire:ignore>
+    <div class="relative w-full mx-auto" x-data x-init="initSlider()" wire:ignore>
         <div id="custom-slider" class="relative h-86 overflow-hidden h-[170px] md:h-dvh md:max-h-[620px] shadow-lg group">
             @foreach ($sliding_image as $index => $image)
                 @if($image->url != "") <a href="{{ $image->url }}" target="_blank"> @endif
