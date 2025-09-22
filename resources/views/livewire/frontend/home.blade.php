@@ -246,7 +246,7 @@
                 </div>
             </div>
 
-            
+            @if($call_count > 0)
             <div class="grid grid-cols-12 w-full rounded-r-lg shadow">
                 <div class="col-span-4">
                     <img class="object-cover object-center w-full h-full" src="{{ asset('images/auth-image.jpg') }}" width="760" height="1024" alt="Authentication image" />
@@ -262,6 +262,7 @@
                     </a>
                 </div>
             </div>
+            @endif
 
         </div>
     </div>

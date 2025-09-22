@@ -6,6 +6,7 @@ use App\Models\Issue;
 use App\Models\Article;
 use App\Models\Journal;
 use Livewire\Component;
+use App\Models\CallForPaper;
 use App\Models\SlidingImage;
 
 class Home extends Component
@@ -14,9 +15,7 @@ class Home extends Component
     public $search;
     public $all_journals = [];
     
-    public $journals_count;
-    public $issues_count;
-    public $articles_count;
+    public $journals_count, $issues_count, $articles_count, $call_count;
 
     public function render()
     {
@@ -27,6 +26,7 @@ class Home extends Component
             });
         });
 
+        $this->call_count     = CallForPaper::whereDate('end_date', '<=', now())->count();
         $this->journals_count = $journals->count();
         $this->issues_count   = Issue::where('publication', 'Published')->count();
         $this->articles_count = Article::whereHas('article_status', function ($query) { 
