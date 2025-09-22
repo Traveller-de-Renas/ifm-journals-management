@@ -34,25 +34,43 @@
         </div>
     </div> --}}
 
-    <div class="relative w-full mx-auto" x-data x-init="initSlider()" wire:ignore>
-        <div id="custom-slider" class="relative h-86 overflow-hidden h-[170px] md:h-dvh md:max-h-[620px] rounded-xl shadow-lg group">
+    <div class="relative w-full md:mt-60 mt-32 mx-auto" x-data x-init="initSlider()" wire:ignore>
+        <div id="custom-slider" class="relative h-86 overflow-hidden h-[170px] md:h-dvh md:max-h-[620px] shadow-lg group">
             @foreach ($sliding_image as $index => $image)
-                <div class="absolute inset-0 transition-opacity duration-700 ease-in-out {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}" data-slide="{{ $index }}">
-                    <img src="{{ asset('storage/slider/'.$image->image) }}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 h-full" alt="...">
-                </div>
+                @if($image->url != "") <a href="{{ $image->url }}" target="_blank"> @endif
+                    <div class="absolute inset-0 transition-opacity duration-700 ease-in-out {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}" data-slide="{{ $index }}">
+                        <img src="{{ asset('storage/slider/'.$image->image) }}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 h-full" alt="...">
+                    </div>
+                @if($image->url != "") </a> @endif
             @endforeach
 
+            <!-- Overlay Pause/Play Button -->
+            <button id="pauseBtn"
+                class="absolute z-40 p-4 bg-white hover:bg-white/70 rounded-full shadow-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 focus:outline-none transition-all opacity-0 invisible duration-700 ease-in-out">
+                <!-- Default icon: Pause -->
+                <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-red-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
+                </svg>
+                <!-- Play icon (hidden by default) -->
+                <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-green-900 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5v14l11-7z" />
+                </svg>
+            </button>
+
+            <!-- Prev Button -->
             <button id="prevBtn" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" >
-                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30  group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
-                    <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white">
+                    <svg class="w-4 h-4 text-white rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
                     </svg>
                     <span class="sr-only">Previous</span>
                 </span>
             </button>
+
+            <!-- Next Button -->
             <button id="nextBtn" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" >
-                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30  group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
-                    <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white">
+                    <svg class="w-4 h-4 text-white rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                     </svg>
                     <span class="sr-only">Next</span>
@@ -63,13 +81,17 @@
 
     <script>
         function initSlider() {
-            const slider  = document.getElementById("custom-slider");
-            const slides  = slider.querySelectorAll("[data-slide]");
-            const prevBtn = document.getElementById("prevBtn");
-            const nextBtn = document.getElementById("nextBtn");
+            const slider    = document.getElementById("custom-slider");
+            const slides    = slider.querySelectorAll("[data-slide]");
+            const prevBtn   = document.getElementById("prevBtn");
+            const nextBtn   = document.getElementById("nextBtn");
+            const pauseBtn  = document.getElementById("pauseBtn");
+            const pauseIcon = document.getElementById("pauseIcon");
+            const playIcon  = document.getElementById("playIcon");
 
             let current = 0;
             let interval;
+            let isPlaying = true;
 
             function showSlide(index) {
                 slides.forEach((slide, i) => {
@@ -89,11 +111,16 @@
 
             function startAutoPlay() {
                 interval = setInterval(nextSlide, 6000);
+                isPlaying = true;
+                pauseIcon.classList.remove("hidden");
+                playIcon.classList.add("hidden");
             }
 
             function stopAutoPlay() {
-                console.log('stopping');
                 clearInterval(interval);
+                isPlaying = false;
+                pauseIcon.classList.add("hidden");
+                playIcon.classList.remove("hidden");
                 return false;
             }
 
@@ -104,19 +131,38 @@
             // Controls
             nextBtn.addEventListener("click", () => {
                 nextSlide();
-                stopAutoPlay();
-                startAutoPlay();
+                if (isPlaying) { stopAutoPlay(); startAutoPlay(); }
             });
 
             prevBtn.addEventListener("click", () => {
                 prevSlide();
-                stopAutoPlay();
-                startAutoPlay();
+                if (isPlaying) { stopAutoPlay(); startAutoPlay(); }
+            });
+
+            // Pause/Play Toggle
+            pauseBtn.addEventListener("click", () => {
+                if (isPlaying) {
+                    stopAutoPlay();
+                } else {
+                    startAutoPlay();
+                }
             });
 
             // Pause on hover
-            slider.addEventListener("mouseenter", stopAutoPlay);
-            slider.addEventListener("mouseleave", startAutoPlay);
+            slider.addEventListener("mouseenter", () => { 
+                // make sure button is visible
+                pauseBtn.classList.remove("opacity-0", "invisible");
+                setTimeout(() => {
+                    pauseBtn.classList.add("bottom-6", "left-6");
+                    pauseBtn.classList.remove("top-1/2", "left-1/2", "-translate-x-1/2", "-translate-y-1/2");
+                }, 5000);
+            });
+
+            // Hide button when mouse leaves
+            slider.addEventListener("mouseleave", () => { 
+                pauseBtn.classList.add("opacity-0", "invisible", "top-1/2", "left-1/2", "-translate-x-1/2", "-translate-y-1/2");
+                pauseBtn.classList.remove("bottom-6", "left-6");
+            });
         }
     </script>
 
