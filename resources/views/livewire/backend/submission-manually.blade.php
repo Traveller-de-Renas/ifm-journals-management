@@ -22,7 +22,7 @@
 
                 <div class="grid grid-cols-3 gap-2">
                     <div class="mt-4">
-                        <x-label for="submission_date" value="Title" class="mb-2 block font-medium text-sm text-gray-700" />
+                        <x-label for="submission_date" value="Date" class="mb-2 block font-medium text-sm text-gray-700" />
                         <x-input class="w-full" wire:model="submission_date" id="submission_date" type="date" />
                         <x-input-error for="submission_date" />
                     </div>
