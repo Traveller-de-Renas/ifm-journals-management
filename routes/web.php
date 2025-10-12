@@ -46,6 +46,7 @@ Route::group(['prefix' => 'journals', 'middleware' => 'auth'], function () {
 
     Route::get('/detail/{journal?}', [JournalController::class, 'detail'])->name('journals.detail');
     Route::get('/submission/{journal?}/{article?}', [JournalController::class, 'submission'])->name('journals.submission');
+    Route::get('/submission_manually/{journal?}', [JournalController::class, 'submission_manually'])->name('journals.submission_manually');
     Route::get('/submission_download/{article?}', [FrontendController::class, 'submission_download'])->name('journals.submission_download');
 
     Route::get('/article/{article?}', [JournalController::class, 'article'])->name('journals.article');

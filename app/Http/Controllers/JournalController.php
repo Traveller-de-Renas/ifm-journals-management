@@ -66,6 +66,11 @@ class JournalController extends Controller
         return view('backend.submission');
     }
 
+    public function submission_manually()
+    {
+        return view('backend.submission_manually');
+    }
+
     public function articles()
     {
         return view('backend.articles');

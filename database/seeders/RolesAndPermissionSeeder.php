@@ -59,6 +59,7 @@ class RolesAndPermissionSeeder extends Seeder
             'View Review Sections',
             'View File Categories',
             'View Submission Confirmation',
+            'Submit Manuscript Manually',
 
             'View Dashboard',
 

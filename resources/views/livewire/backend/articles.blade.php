@@ -10,20 +10,21 @@
 
         </div>
         <div class="flex gap-2 justify-end">
+            @if (auth()->user()->hasPermissionTo('Submit Manuscript Manually'))
+                <x-button class="float-right" wire:click="submitManually()" wire:loading.attr="disabled" >Submit Manuscript</x-button>
+            @endif
             <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
         </div>
     </div>
-
-
 
     @if (session('response'))
         @php
             $bgClass = match (session('response.status')) {
                 'success' => 'bg-green-300',
-                'danger' => 'bg-red-300',
+                'danger'  => 'bg-red-300',
                 'warning' => 'bg-yellow-300',
-                'info' => 'bg-blue-300',
-                default => 'bg-gray-200',
+                'info'    => 'bg-blue-300',
+                default   => 'bg-gray-200',
             };
         @endphp
         <div class="p-4 text-sm mb-4 mt-2 shadow {{ $bgClass }} w-full text-center">

@@ -66,7 +66,7 @@
                                 </button>
                                 <div class="">
 
-                                    @if($_issue->publication == 'Published')
+                                    @if($_issue->publication == 'Published' && !(auth()->user()->hasPermissionTo('Submit Manuscript Manually')))
                                         <div class="text-green-500 font-bold flex justify-center items-center h-full px-2">
                                             {{ $_issue->publication }}
                                         </div>

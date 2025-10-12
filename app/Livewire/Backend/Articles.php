@@ -1220,4 +1220,10 @@ class Articles extends Component
             'message' => 'Review is now '.$status.' for this link which was sent to ' . $user_s->user->email,
         ]);
     }
+
+
+    public function submitManually()
+    {
+        return redirect()->route('journals.submission_manually', $this->journal?->uuid);
+    }
 }

@@ -39,7 +39,7 @@ class PublicationProcess extends Component
 
 
 
-        $status = ArticleStatus::whereIn('code', ['011', '014'])->get()->pluck('id')->toArray();
+        $status = ArticleStatus::whereIn('code', ['011', '013', '014'])->get()->pluck('id')->toArray();
         $this->articles = $journal->articles()->when($this->search_manuscript, function ($query, $search) {
             return $query->where(function($query){
                 $query->where('title', 'ilike', '%'.$this->search_manuscript.'%');
@@ -79,7 +79,7 @@ class PublicationProcess extends Component
 
         session()->flash('response',[
             'status'  => '', 
-            'message' => 'Manuscript is Saved and Submitted successfully'
+            'message' => 'New volume is created successfully'
         ]);
 
     }
@@ -91,10 +91,11 @@ class PublicationProcess extends Component
     {
         if($category == 'normal'){
             $volume->issues()->create([
-                'number' => $volume->issues()->count() + 1,
+                'number'      => $volume->issues()->count() + 1,
                 'description' => 'Issue '.($volume->issues()->count() + 1),
-                'journal_id' => $this->journal->id,
-                'status' => 'Pending',
+                'journal_id'  => $this->journal->id,
+                'publication' => 'Pending',
+                'status'      => 'Open'
             ]);
         }
 
