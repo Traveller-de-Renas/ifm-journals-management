@@ -133,7 +133,7 @@ class SubmissionManually extends Component
 
         $journal_users = User::whereHas('journal_us', function ($query) {
             $query->where('journal_id', $this->journal->id);
-        })->get();
+        })->orderBy('first_name', 'ASC')->get();
 
         $this->journal_users = $journal_users->mapWithKeys(function ($user) {
             $fullName = trim(($user->salutation->title ?? '') . ' ' .
@@ -149,11 +149,6 @@ class SubmissionManually extends Component
     public function store()
     {
         DB::transaction(function () {
-            $date     = Carbon::parse($this->submission_date);
-            $month    = $date->format('M');
-            $year     = $date->format('Y');
-            $paper_id = strtoupper($this->journal->code).'-'.$month.'-'.$year.'-'.str_pad($this->journal->articles()->count() + 1, 5, '0', STR_PAD_LEFT);
-        
         
             $validator = Validator::make(
             [
@@ -167,9 +162,11 @@ class SubmissionManually extends Component
                 'words'           => $this->words,
                 'pages'           => $this->pages,
                 'manuscript_file' => $this->manuscript_file,
+                'submitted_by'    => $this->submitted_by,
+                'submission_date' => $this->submission_date
             ],
             [
-                'title'             => 'required',
+                'title'             => 'required|unique:articles',
                 'article_type_id'   => 'required',
                 'country_id'        => 'required|integer',
                 'keywords'          => 'required|string',
@@ -179,13 +176,21 @@ class SubmissionManually extends Component
                 'words'             => 'required|integer',
                 'pages'             => 'required|integer',
                 'manuscript_file'   => 'required|file|max:9024|mimes:pdf|mimetypes:application/pdf',
+                'submitted_by'      => 'required',
+                'submission_date'   => 'required'
             ], attributes: [
                 'article_type_id' => 'Article Type',
                 'country_id'      => 'Country',
-                'manuscript_file' => 'Manuscript File'
+                'manuscript_file' => 'Manuscript File',
+                'submitted_by'    => 'Author(Submitted)'
             ]);
             
             $validator->validate();
+
+            $date     = Carbon::parse($this->submission_date);
+            $month    = $date->format('M');
+            $year     = $date->format('Y');
+            $paper_id = strtoupper($this->journal->code).'-'.$month.'-'.$year.'-'.str_pad($this->journal->articles()->count() + 1, 5, '0', STR_PAD_LEFT);
 
             $author = User::find($this->submitted_by);
             $auth_journal_user = $author->journal_us()->where('journal_id', $this->journal->id)->first();
@@ -272,7 +277,6 @@ class SubmissionManually extends Component
     }
 
 
-
     public function deleteFile(File $file)
     {
         $file->delete();
@@ -335,33 +339,56 @@ class SubmissionManually extends Component
 
     public function storeJuser()
     {
+        
         $this->validate([
             'juser_fname'       => 'required',
             'juser_mname'       => 'nullable',
             'juser_lname'       => 'required',
-            'juser_email'       => 'nullable|email|unique:users,email',
+            'juser_email'       => 'nullable|email',
             'juser_phone'       => 'nullable|numeric',
             'juser_affiliation' => 'nullable'
         ]);
+        $juser_check = User::where('email', $this->juser_email);
+        if(!$juser_check->exists()){
+            
+            $juser = User::create([
+                'first_name'   => $this->juser_fname,
+                'middle_name'  => $this->juser_mname,
+                'last_name'    => $this->juser_lname,
+                'gender'       => $this->juser_gender,
+                'email'        => $this->juser_email,
+                'phone'        => $this->juser_phone,
+                'affiliation'  => $this->juser_affiliation,
+                'country_id'   => $this->juser_country_id,
+                'password'     => Hash::make('admin@ifm123EMS'),
+                'added'        => 1
+            ]);
 
-        $juser = User::create([
-            'first_name'   => $this->juser_fname,
-            'middle_name'  => $this->juser_mname,
-            'last_name'    => $this->juser_lname,
-            'gender'       => $this->juser_gender,
-            'email'        => $this->juser_email,
-            'phone'        => $this->juser_phone,
-            'affiliation'  => $this->juser_affiliation,
-            'country_id'   => $this->juser_country_id,
-            'password'     => Hash::make('admin@ifm123EMS'),
-            'added'        => 1
+        }else{
+            $juser = $juser_check->first();
+        }
+
+
+
+        $juser->journal_us()->create([
+            'journal_id' => $this->journal->id,
+            'status'     => 1,
+            'user_id'    => $juser->id
         ]);
+
+
+        if(!($juser->journal_us()->where('journal_id', $this->journal->id)->exists())){
+            $juser->journal_us()->attach($this->journal->id);
+        }
 
         $this->reset(['juser_fname', 'juser_mname', 'juser_lname', 'juser_email', 'juser_phone', 'juser_affiliation']);
 
-        $this->assignAuthor($juser);
-
         $this->create_juser = false;
+
+        session()->flash('response',[
+                'status'  => 'success',
+                'message' => 'Journal User is Created Successifully'
+            ]);
     }
 
 
