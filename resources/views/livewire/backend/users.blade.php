@@ -158,7 +158,7 @@
             <x-button type="submit" wire:click="store()" wire:loading.attr="disabled">
                 {{ __('Submit') }}
             </x-button>
-            <x-secondary-button class="ml-3" wire:click="$toggle('Add')" wire:loading.attr="disabled">
+            <x-secondary-button class="ml-3" wire:click="$toggle('regForm')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 
@@ -180,7 +180,7 @@
             <x-button type="submit" class="bg-red-500 hover:bg-red-700" wire:click="delete({{ $record }})" wire:loading.attr="disabled" >
                 {{ __('Delete') }}
             </x-button>
-            <x-secondary-button class="ml-3" wire:click="$toggle('Edit')" wire:loading.attr="disabled">
+            <x-secondary-button class="ml-3" wire:click="$toggle('Delete')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-secondary-button>
 
