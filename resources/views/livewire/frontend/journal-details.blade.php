@@ -160,7 +160,7 @@
                                         <span class="hover:text-green-600 hover:underline cursor-pointer mr-2">{{ $co_author->last_name }}, {{ strtoupper(substr($co_author->first_name, 0, 1)) }}.</span>
                                         @endforeach
                                     @else
-                                        @foreach ($article?->article_journal_users()->whereHas('roles', function($query){ $query->where('name', 'Author');})->get() as $key => $article_user)
+                                        @foreach ($article?->article_journal_users()->whereHas('roles', function($query){ $query->where('name', 'Author'); })->get() as $key => $article_user)
                                             {{ $article_user->user->first_name }} {{ $article_user->user->middle_name }} {{ $article_user->user->last_name }},
                                         @endforeach
                                     @endif

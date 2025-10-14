@@ -338,8 +338,7 @@ class SubmissionManually extends Component
     }
 
     public function storeJuser()
-    {
-        
+    { 
         $this->validate([
             'juser_fname'       => 'required',
             'juser_mname'       => 'nullable',
@@ -369,12 +368,13 @@ class SubmissionManually extends Component
         }
 
 
-
         $juser->journal_us()->create([
             'journal_id' => $this->journal->id,
             'status'     => 1,
             'user_id'    => $juser->id
         ]);
+
+        $juser->assignRole('Author');
 
 
         if(!($juser->journal_us()->where('journal_id', $this->journal->id)->exists())){
@@ -386,9 +386,9 @@ class SubmissionManually extends Component
         $this->create_juser = false;
 
         session()->flash('response',[
-                'status'  => 'success',
-                'message' => 'Journal User is Created Successifully'
-            ]);
+            'status'  => 'success',
+            'message' => 'Journal User is Created Successifully'
+        ]);
     }
 
 
