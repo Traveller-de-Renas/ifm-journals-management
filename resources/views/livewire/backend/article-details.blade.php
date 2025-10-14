@@ -133,6 +133,23 @@
                             </div>
                         @endforeach
                     @endif
+
+                    @if ($record?->manuscript_file != '')
+                    <div class="grid grid-cols-12  bg-gray-200 rounded-lg ">
+                        <div class="col-span-3 items-center  p-2 px-4">
+                            Manuscript File
+                        </div>
+
+                        <div class="col-span-8 p-2 px-4">
+                            <a href="{{ asset('storage/publications/' . $record?->manuscript_file) }}" target="_blank"><span
+                                    class="font-bold text-blue-500 hover:text-blue-700 cursor-pointer ml-4">Manuscript File for Publication/Published</span></a>
+                        </div>
+
+                        <div class="col-span-1 p-2 px-4">
+                        </div>
+                    </div>
+                    @endif
+
                 </div>
 
                 @php
