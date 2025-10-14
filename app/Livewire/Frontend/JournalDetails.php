@@ -43,7 +43,8 @@ class JournalDetails extends Component
 
         $this->countries   = Country::all()->pluck('name', 'id')->toArray();
         $this->salutations = Salutation::all()->pluck('title', 'id')->toArray();
-        $this->cissue      = $this->record->issues()->where('number', $this->record->issues()->max('number'))->first();
+        // $this->cissue      = $this->record->issues()->where('number', $this->record->issues()->max('number'))->first();
+        $this->cissue      = $this->record->volumes()->where('number', $this->record->volumes()->max('number'))->first();
     }
 
     public function render()

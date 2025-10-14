@@ -112,7 +112,7 @@
                             {!! $record->scope !!}
                         </div>
 
-
+                        @if($record->call_for_papers && count($record->call_for_papers) > 0)
                         <p class="text-lg font-bold mb-2 mt-6">Call for Papers</p>
                         <div class="mb-6">
                             @foreach ($record->call_for_papers as $call)
@@ -136,9 +136,12 @@
                                 </div>
                             @endforeach
                         </div>
+                        @endif
 
 
-                        <p class="text-lg font-bold mb-2">Current Issue <span class="text-gray-500 font-semibold text-sm">{{ $cissue->volume->description.' '.$cissue->description }}</span></p>
+                        {{-- <p class="text-lg font-bold mb-2">Current Issue <span class="text-gray-500 font-semibold text-sm">{{ $cissue->volume->description.' '.$cissue->description }}</span></p> --}}
+
+                        <p class="text-lg font-bold mb-2">Current Volume <span class="text-gray-500 font-semibold text-sm">{{ $cissue->description }}</span></p>
                         
                         @if ($cissue->articles->count() > 0)
                         @foreach ($cissue->articles as $key => $article)
