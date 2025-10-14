@@ -57,11 +57,11 @@
                 @endforeach
             @endif
 
-            <p class="text-sm text-gray-400">Aticle Submission Date :
+            <p class="text-sm text-gray-400">Article Submission Date :
                 {{ \Carbon\Carbon::parse($record->submission_date)->format('d-m-Y') }} </p>
 
             @if ($record->article_status->code == '014')
-                <p class="text-sm text-gray-400">Aticle Publication Date :
+                <p class="text-sm text-gray-400">Article Publication Date :
                     {{ \Carbon\Carbon::parse($record->publication_date)->format('d-m-Y') }}</p>
             @endif
         </div>
