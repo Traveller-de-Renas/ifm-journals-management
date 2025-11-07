@@ -1,5 +1,16 @@
 <div class="bg-white shadow-md p-4 rounded">
 
+    @php
+        $ceditor = $journal
+            ->journal_us()
+            ->whereHas('roles', function ($query) {
+                $query->whereIn('name', ['Chief Editor', 'Supporting Editor']);
+            })
+            ->get()
+            ->pluck('user_id')
+            ->toArray();
+    @endphp
+
     <div class="w-full grid grid-cols-3 gap-4">
         <div class="">
             <p class="font-bold text-xl">
@@ -10,7 +21,7 @@
 
         </div>
         <div class="flex gap-2 justify-end">
-            @if (auth()->user()->hasPermissionTo('Submit Manuscript Manually'))
+            @if (auth()->user()->hasPermissionTo('Submit Manuscript Manually') || in_array(auth()->user()->id, $ceditor))
                 <x-button class="float-right" wire:click="submitManually()" wire:loading.attr="disabled" >Submit Manuscript</x-button>
             @endif
             <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
@@ -148,16 +159,7 @@
                                     </li>
                                 @endif
 
-                                @php
-                                    $ceditor = $journal
-                                        ->journal_us()
-                                        ->whereHas('roles', function ($query) {
-                                            $query->whereIn('name', ['Chief Editor', 'Supporting Editor']);
-                                        })
-                                        ->get()
-                                        ->pluck('user_id')
-                                        ->toArray();
-                                @endphp
+                                
 
                                 @if ($article->article_status->code == '002' && in_array(auth()->user()->id, $ceditor))
                                     <li>
