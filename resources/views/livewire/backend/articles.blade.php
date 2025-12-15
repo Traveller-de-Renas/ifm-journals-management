@@ -506,6 +506,7 @@
 
                         @endif
 
+                        <div class="mt-4">
                             <x-input class="w-full" wire:model="username"
                                 wire:keyup="searchUser($event.target.value, 'Associate Editor')"
                                 placeholder="Search Associate Editor" />
@@ -529,6 +530,7 @@
                                     @endforeach
                                 @endif
                             </div>
+                        </div>
                         
                     @endif
 
