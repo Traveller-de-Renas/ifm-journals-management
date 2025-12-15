@@ -487,24 +487,7 @@
                                 ->first();
                         @endphp
 
-                        @if (!empty($editor))
-                            <p class="mt-2 text-xs text-gray-500">Currently Assigned Associate Editor is </p>
-                            <div class="mb-2 font-bold">
-                                {{ $editor->user->first_name }}
-                                {{ $editor->user->middle_name }}
-                                {{ $editor->user->last_name }}
-
-                                ({{ $editor->user->email }})
-                            </div>
-
-                            <x-button class="bg-red-500 hover:bg-red-700"
-                                wire:click="removeEditor({{ $editor->id }})">Remove Associate Editor</x-button>
-                        @else
-                            <div class="mb-2">
-                                No Associate Editor Assigned to this Article
-                            </div>
-
-                        @endif
+                        
 
                         <div class="mt-4">
                             <x-input class="w-full" wire:model="username"
@@ -531,6 +514,25 @@
                                 @endif
                             </div>
                         </div>
+
+                        @if (!empty($editor))
+                            <p class="mt-2 text-xs text-gray-500">Currently Assigned Associate Editor is </p>
+                            <div class="mb-2 font-bold">
+                                {{ $editor->user->first_name }}
+                                {{ $editor->user->middle_name }}
+                                {{ $editor->user->last_name }}
+
+                                ({{ $editor->user->email }})
+                            </div>
+
+                            <x-button class="bg-red-500 hover:bg-red-700"
+                                wire:click="removeEditor({{ $editor->id }})">Remove Associate Editor</x-button>
+                        @else
+                            <div class="mb-2">
+                                No Associate Editor Assigned to this Article
+                            </div>
+
+                        @endif
                         
                     @endif
 
