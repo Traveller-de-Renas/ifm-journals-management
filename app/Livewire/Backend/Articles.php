@@ -671,7 +671,6 @@ class Articles extends Component
 
     public function assignEditor(JournalUser $user, $mode)
     {
-        $user->article_journal_users()->attach($this->record->id);
 
         if($mode == 'assign'){
             $status = $this->articleStatus('008');
@@ -681,6 +680,22 @@ class Articles extends Component
                 'deadline'          => Carbon::now()->addDays($status->max_days)
             ]);
         }
+
+        if ($mode == 'reassign') {
+            // Detach all associate editors from this article
+            $associateEditors = $this->record->article_journal_users()
+                ->whereHas('roles', function ($query) {
+                    $query->where('name', 'Associate Editor');
+                })
+                ->get();
+            
+            foreach ($associateEditors as $editor) {
+                $this->record->article_journal_users()->detach($editor->id);
+            }
+        }
+
+        // Attach the new user
+        $user->article_journal_users()->attach($this->record->id);
 
         //updating notification
         $note = $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id);
