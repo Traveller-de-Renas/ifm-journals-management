@@ -190,7 +190,8 @@
                                 @if (
                                     ($article->article_status->code == '003' ||
                                         $article->article_status->code == '008' ||
-                                        $article->article_status->code == '009') &&
+                                        $article->article_status->code == '009' ||
+                                        $article->article_status->code == '010') &&
                                         $caeditors->contains(auth()->user()->id))
                                     <li>
                                         <button class="block px-4 py-2 hover:bg-gray-100"
@@ -469,8 +470,6 @@
 
 
 
-
-
             @if ($record)
                 @if (empty(array_diff($to_associate->pluck('id')->toArray(), $record->editorChecklists->pluck('id')->toArray())))
 
@@ -518,7 +517,12 @@
                                         <div class="py-2 flex border-b">
                                             <div class="w-full">{{ $user->user->first_name }}
                                                 {{ $user->user->middle_name }} {{ $user->user->last_name }}</div>
-                                            <x-button wire:click="assignEditor({{ $user->id }})">Assign</x-button>
+
+                                            @if (!empty($editor))
+                                                <x-button wire:click="assignEditor({{ $user->id }}, 'reassign')">Reassign</x-button>
+                                            @else
+                                                <x-button wire:click="assignEditor({{ $user->id }}, 'assign')">Assign</x-button>
+                                            @endif
                                         </div>
                                     @endforeach
                                 @endif

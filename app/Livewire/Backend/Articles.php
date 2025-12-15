@@ -669,16 +669,18 @@ class Articles extends Component
 
     public function cancelSelecet() {}
 
-    public function assignEditor(JournalUser $user)
+    public function assignEditor(JournalUser $user, $mode)
     {
         $user->article_journal_users()->attach($this->record->id);
 
-        $status = $this->articleStatus('008');
+        if($mode == 'assign'){
+            $status = $this->articleStatus('008');
 
-        $this->record->update([
-            'article_status_id' => $status->id,
-            'deadline'          => Carbon::now()->addDays($status->max_days)
-        ]);
+            $this->record->update([
+                'article_status_id' => $status->id,
+                'deadline'          => Carbon::now()->addDays($status->max_days)
+            ]);
+        }
 
         //updating notification
         $note = $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id);
