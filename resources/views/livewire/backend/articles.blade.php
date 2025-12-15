@@ -516,7 +516,7 @@
                         </div>
 
                         @if (!empty($editor))
-                            <p class="mt-2 text-xs text-gray-500">Currently Assigned Associate Editor is </p>
+                            <p class="mt-4 text-xs text-gray-500">Currently Assigned Associate Editor is </p>
                             <div class="mb-2 font-bold">
                                 {{ $editor->user->first_name }}
                                 {{ $editor->user->middle_name }}
