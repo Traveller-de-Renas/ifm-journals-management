@@ -296,9 +296,11 @@ class Articles extends Component
         $this->users     = [];
         $this->record    = $article;
 
-        $this->rev_count = $article->article_journal_users()->whereHas('roles', function ($query) {
+        $this->rev_count = $article->article_journal_users()
+        ->whereNot('review_status', 'disabled')
+        ->whereHas('roles', function ($query) {
             $query->where('name', 'Reviewer');
-        })->get()->count();
+        })->count();
         
 
         $this->searchUser($string, $role);

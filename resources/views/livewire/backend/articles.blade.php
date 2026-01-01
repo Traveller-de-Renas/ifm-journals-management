@@ -669,7 +669,7 @@
                         @endforeach
                     @else
                         <div class="mb-2 mt-2 p-2 text-center bg-gray-200 rounded shadow-sm">
-                            No Reviewer any Reviewer was Requested to Review this Manuscript
+                            No any Reviewer was Requested to Review this Manuscript
                         </div>
                     @endif
                 @endif
