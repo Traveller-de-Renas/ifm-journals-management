@@ -22,7 +22,7 @@
         </div>
         <div class="flex gap-2 justify-end">
             @if (auth()->user()->hasPermissionTo('Submit Manuscript Manually') || in_array(auth()->user()->id, $ceditor))
-                <x-button class="float-right" wire:click="submitManually()" wire:loading.attr="disabled" >Submit Manuscript</x-button>
+                {{-- <x-button class="float-right" wire:click="submitManually()" wire:loading.attr="disabled" >Submit Manuscript</x-button> --}}
             @endif
             <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
         </div>
