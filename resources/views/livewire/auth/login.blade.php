@@ -84,18 +84,18 @@
             <x-input-error for="email" />
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4 mb-6">
             <x-label for="password" value="{{ __('Password') }}" />
             <x-input id="password" class="block mt-1 w-full" type="password" wire:model="password" required autocomplete="current-password" />
             <x-input-error for="password" />
         </div>
 
-        <div class="block mt-4">
+        {{-- <div class="block mt-4">
             <label for="remember_me" class="flex items-center">
                 <x-checkbox id="remember_me" wire:model="remember" />
                 <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
-        </div>
+        </div> --}}
 
         <div class="mt-4">
             <x-button class="w-full mb-6 text-center" wire:click="login()" id="login-btn">
