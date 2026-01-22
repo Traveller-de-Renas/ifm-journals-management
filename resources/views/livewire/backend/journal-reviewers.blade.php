@@ -8,7 +8,7 @@
 
         </div>
         <div class="flex gap-2 justify-end">
-            <x-button class="float-right" wire:click="openDrawer()" wire:loading.attr="disabled" >Add Reviewer</x-button>
+            <x-button class="float-right" wire:click="createReviewer()" wire:loading.attr="disabled" >Add Reviewer</x-button>
             <x-input wire:model.live.debounce.500ms="query" placeholder="search..." type="search" />
         </div>
     </div>
@@ -128,18 +128,17 @@
             <hr>
     
             @if(!$update)
-            <p class="mb-6 mt-2 text-sm text-gray-500">
-                Search from the List of Users registered or create new user by clicking ADD NEW if you can not find the user u want, 
+            <p class="mb-6 mt-2 text-sm text-yellow-500">
+                You can Search a registered user from the List of all Users registered by clicking the Search From Users button, 
                 <br>
             </p>
 
             <div class="flex justify-end mb-2">
                 @if ($create)
-                    <x-button class="" wire:click="createnew(false)" wire:loading.attr="disabled" >Search User</x-button>
+                    <x-button class="" wire:click="createnew(false)" wire:loading.attr="disabled" >Search From User</x-button>
                 @else
-                    <x-button class="" wire:click="createnew(true)" wire:loading.attr="disabled" >Add New</x-button>
+                    <x-button class="" wire:click="createnew(true)" wire:loading.attr="disabled" >Add New Reviewer</x-button>
                 @endif
-                
             </div>
             @endif
 
@@ -224,7 +223,8 @@
                     <div>
                         @foreach ($users as $user)
                             <div class="py-2 flex border-b hover:bg-gray-100" wire:click="selectUser({{ $user->id }})">
-                                <div class="w-full px-2">{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}</div>
+                                <div class="w-full px-2">{{ $user->salutation?->title }} {{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}</div>
+                                {{ $user->email }}
                             </div>
                         @endforeach
                     </div>
@@ -232,13 +232,16 @@
             @endif
 
 
+            <div class="float-right text-right">
             @if(!$update)
-            <x-button class="float-right" wire:click="store()" wire:loading.attr="disabled" >Submit</x-button>
+            <x-button class="" wire:click="store()" wire:loading.attr="disabled" >Submit</x-button>
 
             @else
-            <x-button class="float-right" wire:click="updateMember()" wire:loading.attr="disabled" >Update</x-button>
+            <x-button class="" wire:click="updateMember()" wire:loading.attr="disabled" >Update</x-button>
 
             @endif
+            <x-button class="bg-red-500 hover:bg-red-700" wire:click="closeDrawer()" wire:loading.attr="disabled" >Cancel</x-button>
+            </div>
         </div>
         
     </div>

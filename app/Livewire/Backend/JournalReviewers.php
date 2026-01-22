@@ -175,6 +175,24 @@ class JournalReviewers extends Component
     public $create = false;
     public $update = false;
 
+    public function createReviewer()
+    {
+        $this->reset([
+            'user',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'gender',
+            'email',
+            'phone',
+            'affiliation',
+            'salutation',
+            'areas_of_specialization'
+        ]);
+        $this->create  = true;
+        $this->isOpen  = true;
+    }
+
     public function createnew($status)
     {
         $this->create = $status;
@@ -208,6 +226,19 @@ class JournalReviewers extends Component
 
     public function closeDrawer()
     {
+        $this->reset([
+            'user',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'gender',
+            'email',
+            'phone',
+            'affiliation',
+            'salutation',
+            'areas_of_specialization'
+        ]);
+
         $this->isOpen = false;
     }
 
