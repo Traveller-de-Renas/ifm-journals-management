@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Backend;
 
+use Log;
 use App\Models\User;
 use App\Models\Article;
 use Livewire\Component;
@@ -85,6 +86,12 @@ class ArticleEvaluation extends Component
             ->get();
     }
 
+    public function updated()
+    {
+        $this->store('autosave');
+    }
+    
+
     public function render()
     {
         $submission = $this->record->files()->whereHas('file_category', function ($query) {
@@ -129,18 +136,20 @@ class ArticleEvaluation extends Component
             }
         }
 
-        $this->validate($rules, [
-            'reviewSComment.*.required' => 'Please enter a comment.',
-            'reviewSComment.*.string' => 'Comment must be valid text.',
-            'reviewSComment.*.min' => 'Comment must be at least 20 characters long.'
-        ]);
+        if ($state == 'complete') {
+            $this->validate($rules, [
+                'reviewSComment.*.required' => 'Please enter a comment.',
+                'reviewSComment.*.string' => 'Comment must be valid text.',
+                'reviewSComment.*.min' => 'Comment must be at least 20 characters long.'
+            ]);
+        }
 
 
         // Ensure all options are selected
         $requiredOptionsCount = $this->totalOptions;
         $selectedOptionsCount = collect($this->reviewOption)->filter()->count();
 
-        if ($selectedOptionsCount < $requiredOptionsCount) {
+        if (($selectedOptionsCount < $requiredOptionsCount) && $state == 'complete') {
             session()->flash('response', [
                 'status' => 'error',
                 'message' => 'Please respond to all review sections before submitting your review.'
@@ -149,7 +158,7 @@ class ArticleEvaluation extends Component
         }
 
         //and $this->review_decision
-        if ($this->review_decision == null) {
+        if ($this->review_decision == null && $state == 'complete') {
             session()->flash('response', [
                 'status' => 'error',
                 'message' => 'Please select a review decision before submitting your review.'
@@ -218,10 +227,10 @@ class ArticleEvaluation extends Component
         foreach ($options as $key => $value) {
             if ($value != '') {
                 ArticleReview::create([
-                    'article_id' => $this->record->id,
-                    'review_section_query_id' => $key,
+                    'article_id'               => $this->record->id,
+                    'review_section_query_id'  => $key,
                     'review_section_option_id' => $value,
-                    'user_id' => $this->reviewer->id
+                    'user_id'                  => $this->reviewer->id
                 ]);
             }
         }
@@ -229,22 +238,36 @@ class ArticleEvaluation extends Component
         foreach ($comments as $key => $value) {
             if ($value != '') {
                 ArticleReview::create([
-                    'article_id' => $this->record->id,
+                    'article_id'              => $this->record->id,
                     'review_section_query_id' => $key,
-                    'comment' => $value,
-                    'user_id' => $this->reviewer->id
+                    'comment'                 => $value,
+                    'user_id'                 => $this->reviewer->id
                 ]);
             }
         }
 
         foreach ($scomment as $key => $value) {
-            if ($value != '') {
-                ReviewSectionsComment::create([
-                    'article_id' => $this->record->id,
-                    'review_section_id' => $key,
-                    'comment' => $value,
-                    'user_id' => $this->reviewer->id
-                ]);
+            if (!empty(trim($value))) {
+                try {
+                    // First, try to update all existing records
+                    $updatedCount = ReviewSectionsComment::where('article_id', $this->record->id)
+                        ->where('review_section_id', $key)
+                        ->where('user_id', $this->reviewer->id)
+                        ->update(['comment' => $value, 'updated_at' => now()]);
+                    
+                    // If nothing was updated, create a new record
+                    if ($updatedCount === 0) {
+                        ReviewSectionsComment::create([
+                            'article_id'        => $this->record->id,
+                            'review_section_id' => $key,
+                            'comment'           => $value,
+                            'user_id'           => $this->reviewer->id
+                        ]);
+                    }
+                    
+                } catch (\Exception $e) {
+                    Log::error("Auto-save failed for section {$key}: " . $e->getMessage());
+                }
             }
         }
 
@@ -292,10 +315,13 @@ class ArticleEvaluation extends Component
 
 
         } else {
-            session()->flash('response', [
-                'status'  => 'success',
-                'message' => 'Article Review is not Completed but Saved so that you can continue to review the Article'
-            ]);
+            if($state == 'incomplete'){
+                session()->flash('response', [
+                    'status'  => 'success',
+                    'message' => 'Article Review is not Completed but Saved so that you can continue to review the Article'
+                ]);
+            }
+            
         }
     }
 
