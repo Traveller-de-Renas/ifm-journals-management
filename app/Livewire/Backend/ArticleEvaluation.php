@@ -36,7 +36,6 @@ class ArticleEvaluation extends Component
     public $user;
     public $journal_user;
     public $article_journal_user;
-
     public $description;
 
     public $declineModal = false;
