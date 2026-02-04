@@ -1110,6 +1110,7 @@
                 </div>
             </div>
 
+            
 
             <div class="text-right">
                 @if ($review_status == '018')
@@ -1320,10 +1321,10 @@
                 checklist </p>
 
             <div class="flex items-center ps-2 border border-gray-200 rounded  p-2 mb-1">
-                <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('formatting')">
+                <label class="inline-flex items-center cursor-pointer w-full" >
                     <span class="ms-3 text-sm font-medium text-gray-900  w-full">Formatting</span>
                     <div>
-                        <input type="checkbox" class="sr-only peer" id="formatting" wire:model="formatting"
+                        <input type="checkbox" class="sr-only peer" id="formatting" wire:model.live="formatting"
                             {{ $rev_count > 0 ? 'disabled' : '' }}>
                         <div
                             class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300   peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-blue-600 ">
@@ -1334,10 +1335,10 @@
             <x-input-error for="formatting" />
 
             <div class="flex items-center ps-2 border border-gray-200 rounded  p-2 mb-1">
-                <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('copyediting')">
+                <label class="inline-flex items-center cursor-pointer w-full" >
                     <span class="ms-3 text-sm font-medium text-gray-900  w-full">Copyediting</span>
                     <div>
-                        <input type="checkbox" class="sr-only peer" id="copyediting" wire:model="copyediting">
+                        <input type="checkbox" class="sr-only peer" id="copyediting" wire:model.live="copyediting">
                         <div
                             class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300   peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-blue-600 ">
                         </div>
@@ -1347,10 +1348,10 @@
             <x-input-error for="copyediting" />
 
             <div class="flex items-center ps-2 border border-gray-200 rounded  p-2 mb-1">
-                <label class="inline-flex items-center cursor-pointer w-full" wire:click="selectCheck('typesetting')">
+                <label class="inline-flex items-center cursor-pointer w-full" >
                     <span class="ms-3 text-sm font-medium text-gray-900  w-full">Typesetting</span>
                     <div>
-                        <input type="checkbox" class="sr-only peer" id="typesetting" wire:model="typesetting">
+                        <input type="checkbox" class="sr-only peer" id="typesetting" wire:model.live="typesetting">
                         <div
                             class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300   peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-blue-600 ">
                         </div>
@@ -1361,10 +1362,10 @@
 
             <div class="flex items-center ps-2 border border-gray-200 rounded  p-2 mb-1">
                 <label class="inline-flex items-center cursor-pointer w-full"
-                    wire:click="selectCheck('proofreading')">
+                    >
                     <span class="ms-3 text-sm font-medium text-gray-900  w-full">Proofreading</span>
                     <div>
-                        <input type="checkbox" class="sr-only peer" id="proofreading" wire:model="proofreading">
+                        <input type="checkbox" class="sr-only peer" id="proofreading" wire:model.live="proofreading">
                         <div
                             class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300   peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-blue-600 ">
                         </div>
@@ -1373,7 +1374,7 @@
             </div>
             <x-input-error for="proofreading" />
 
-            @if ($proofreading == true && $typesetting == true && $copyediting == true && ($formatting = true))
+            @if ($proofreading == true && $typesetting == true && $copyediting == true && ($formatting == true))
                 <div class="mt-4">
                     <x-label for="manuscript_file" value="Select PDF file for Publication"
                         class="mb-2 block font-medium text-sm text-gray-700" />

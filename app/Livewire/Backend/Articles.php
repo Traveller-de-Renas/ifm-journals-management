@@ -17,7 +17,6 @@ use Livewire\WithPagination;
 use App\Models\ArticleReview;
 use App\Models\ArticleStatus;
 use App\Models\ReviewMessage;
-use App\Models\ReviewSection;
 use Livewire\WithFileUploads;
 use App\Models\ArticleComment;
 use App\Mail\ArticleAssignment;
@@ -933,18 +932,8 @@ class Articles extends Component
     {
         $this->validate([
             'review_status'   => 'required|in:018,019,020,015',
-            'editor_comments' => 'required|string',
+            'editor_comments' => 'required_if:review_status,019,020,015|string|nullable',
         ]);
-
-
-        ArticleComment::create(
-            [
-                'article_id'  => $this->record->id,
-                'user_id'     => auth()->user()->id,
-                'send_to'     => 'Author',
-                'description' => $this->editor_comments
-            ]
-        );
 
 
         $status = $this->articleStatus($this->review_status);
@@ -953,13 +942,19 @@ class Articles extends Component
             'deadline'          => Carbon::now()->addDays($status->max_days)
         ]);
 
-        Mail::to($this->record->author->email)
-            ->send(new ReviewStatus($this->record, $this->editor_comments, array_keys($this->send, true, true)));
 
 
-        if ($this->review_status == "018") {
+        if ($this->review_status == "018") { // Accepted for production
             $this->accept_for_production = false;
+
         } else {
+
+            ArticleComment::create([
+                'article_id'  => $this->record->id,
+                'user_id'     => auth()->user()->id,
+                'send_to'     => 'Author',
+                'description' => $this->editor_comments
+            ]);
 
             //updating notification
             $note = $this->record->notifications()->where('journal_user_id', $this->journal->journal_us()->where('user_id', auth()->user()->id)->first()->id);
@@ -979,6 +974,9 @@ class Articles extends Component
                 'journal_user_id' => $journal_user->id,
                 'status'          => 1
             ]);
+
+            Mail::to($this->record->author->email)
+            ->send(new ReviewStatus($this->record, $this->editor_comments, array_keys($this->send, true, true)));
         }
 
 
