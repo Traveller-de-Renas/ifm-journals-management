@@ -102,7 +102,7 @@ class Submission extends Component
 
         if($this->record){
             $uploaded   = $this->record?->files()->pluck('file_category_id')->toArray();
-            if(in_array($this->record->article_status->code, ['019', '020'])){
+            if(in_array($this->record->article_status->code, ['005', '019', '020'])){
                 $submission = 'resubmission';
             }
 
